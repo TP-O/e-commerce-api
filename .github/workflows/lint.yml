@@ -1,0 +1,34 @@
+name: Lint
+
+on:
+  push:
+    branches: [ dev ]
+  pull_request:
+
+jobs:
+  lint-code:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+
+      - name: Install dev dependencies
+        run: npm install --only=dev
+
+      - name: Lint code
+        run: npm run lint
+
+  lint-commit-msg:
+    if: ${{ github.event_name == 'push' }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Lint commit messages
+        uses: wagoid/commitlint-github-action@v2

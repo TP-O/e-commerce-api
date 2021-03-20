@@ -1,0 +1,120 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+
+  # Lint
+  lint-code:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+
+      - name: Install dev dependencies
+        run: npm install --only=dev
+
+      - name: Lint code
+        run: npm run lint
+
+  lint-commit-msg:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Lint commit messages
+        uses: wagoid/commitlint-github-action@v2
+
+  # Run test
+  unit-test:
+    needs:
+      - lint-code
+      - lint-commit-msg
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+
+      - name: Create .env file
+        run: cp .env.example .env
+
+      - name: Build docker containers
+        run: docker-compose -f docker-compose.test.yml up -d --build
+
+      - name: Wait 15 seconds
+        run: sleep 15
+
+      - name: Run Unit Test
+        run: docker-compose -f docker-compose.test.yml exec -T app npm run unit-test
+
+  coverage-test:
+    needs:
+      - lint-code
+      - lint-commit-msg
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+
+      - name: Create .env file
+        run: cp .env.example .env
+
+      - name: Build docker containers
+        run: docker-compose -f docker-compose.test.yml up -d --build
+
+      - name: Wait 15 seconds
+        run: sleep 15
+
+      - name: Run Coverage Test
+        run: docker-compose -f docker-compose.test.yml exec -T app npm run coverage-test
+
+  # Release docker image
+  release:
+    needs:
+      - unit-test
+      - coverage-test
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:latest
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
+
+  # Deploy to server
+  deploy:
+    needs: release
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy
+        run: echo 'Deployed'
