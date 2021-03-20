@@ -17,6 +17,7 @@
       "@controller/*": ["controller/*"],
       "@service/*": ["service/*"],
       "@model/*": ["model/*"],
+      "@database/*": ["database/*"],
     },
   },
   "plugins": [

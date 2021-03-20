@@ -29,6 +29,7 @@
     "@types/jest": "^26.0.20",
     "@types/morgan": "^1.9.2",
     "@types/node": "^14.14.26",
+    "@types/pluralize": "^0.0.29",
     "@types/supertest": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^4.15.0",
     "@typescript-eslint/parser": "^4.15.0",
@@ -49,11 +50,14 @@
   },
   "dependencies": {
     "app-root-path": "^3.0.0",
+    "collect.js": "^4.28.6",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "helmet": "^4.4.1",
     "laravel-expressjs-router": "^1.0.3",
     "morgan": "^1.10.0",
+    "mysql2": "^2.2.5",
+    "pluralize": "^8.0.0",
     "rotating-file-stream": "^2.1.4"
   }
 }
