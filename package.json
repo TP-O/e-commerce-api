@@ -9,7 +9,8 @@
     "unit-test": "jest",
     "coverage-test": "jest --coverage",
     "lint": "eslint \"src/**/*.{js,ts}\"",
-    "format": "prettier --write \"src/**/*.{js,ts}\""
+    "format": "prettier --write \"src/**/*.{js,ts}\"",
+    "db": "ts-node -r tsconfig-paths/register --files ./src/bin/db.ts"
   },
   "lint-staged": {
     "*.{js,ts}": [
