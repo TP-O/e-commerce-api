@@ -17,9 +17,11 @@ export class RefreshMigration extends Command {
       const files = await readdir(this._migrationDir);
 
       files.forEach((file) => {
-        this._migrations.push(
-          require(`@database/migrations/${file}`).default,
-        );
+        if (file !== '.gitkeep') {
+          this._migrations.push(
+            require(`@database/migrations/${file}`).default,
+          );
+        }
       });
     }
   }

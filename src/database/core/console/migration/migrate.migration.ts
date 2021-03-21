@@ -13,21 +13,29 @@ export class MigrateMigration extends Command {
    * Prepare data.
    */
   protected async prepare(): Promise<void> {
+    let migrated: any;
+
+    try {
+      const { data } = await Database.table('migrations')
+        .select('*')
+        .execute(true);
+      migrated = data;
+    } catch {
+      migrated = [];
+    }
+
     const files = await readdir(this._migrationDir);
-    const { data: migrated } = await Database.table('migrations')
-      .select('*')
-      .execute(true);
 
     files.forEach((file) => {
       let existed = false;
 
-      migrated?.map((m) => {
+      migrated?.map((m: any) => {
         if (m.migration === file.split('.')[0]) {
           existed = true;
         }
       });
 
-      if (!existed) {
+      if (!existed && file !== '.gitkeep') {
         this._migrations.push(
           require(`@database/migrations/${file}`).default,
         );
