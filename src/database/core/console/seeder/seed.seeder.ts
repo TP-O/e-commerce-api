@@ -21,11 +21,13 @@ export class SeedSeeder extends Command {
     try {
       await Connection.establish();
 
-      this.prepare();
+      if (await Connection.isConnected()) {
+        this.prepare();
 
-      await this._seeder?.seed();
+        await this._seeder?.seed();
 
-      console.log('Database seeding completed successfully!');
+        console.log('Database seeding completed successfully!');
+      }
     } catch (err) {
       console.log(err);
     }

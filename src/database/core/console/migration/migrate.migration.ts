@@ -46,13 +46,15 @@ export class MigrateMigration extends Command {
     try {
       await Connection.establish();
 
-      await this.prepare();
+      if (await Connection.isConnected()) {
+        await this.prepare();
 
-      let job = Promise.resolve();
+        let job = Promise.resolve();
 
-      Object.values(this._migrations).forEach((migration) => {
-        job = job.then(async () => await migration.create());
-      });
+        Object.values(this._migrations).forEach((migration) => {
+          job = job.then(async () => await migration.create());
+        });
+      }
     } catch (err) {
       console.log(err);
     }

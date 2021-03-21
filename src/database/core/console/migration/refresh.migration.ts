@@ -35,15 +35,17 @@ export class RefreshMigration extends Command {
 
       let job = Promise.resolve();
 
-      Object.values(this._migrations)
-        .reverse()
-        .forEach((migration) => {
-          job = job.then(async () => await migration.drop());
-        });
+      if (await Connection.isConnected()) {
+        Object.values(this._migrations)
+          .reverse()
+          .forEach((migration) => {
+            job = job.then(async () => await migration.drop());
+          });
 
-      job.then(async () => {
-        await new MigrateMigration().execute();
-      });
+        job.then(async () => {
+          await new MigrateMigration().execute();
+        });
+      }
     } catch (err) {
       console.log(err);
     }

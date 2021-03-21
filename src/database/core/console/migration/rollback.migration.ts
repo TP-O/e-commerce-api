@@ -54,15 +54,17 @@ export class RollbackMigration extends Command {
     try {
       await Connection.establish();
 
-      await this.prepare();
+      if (await Connection.isConnected()) {
+        await this.prepare();
 
-      let job = Promise.resolve();
+        let job = Promise.resolve();
 
-      Object.values(this._migrations)
-        .reverse()
-        .forEach((migration) => {
-          job = job.then(async () => await migration.drop());
-        });
+        Object.values(this._migrations)
+          .reverse()
+          .forEach((migration) => {
+            job = job.then(async () => await migration.drop());
+          });
+      }
     } catch (err) {
       console.log(err);
     }
