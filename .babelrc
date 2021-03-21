@@ -16,7 +16,8 @@
           "@exception": "./dist/exception",
           "@controller": "./dist/controller",
           "@service": "./dist/service",
-          "@model": "./dist/model"
+          "@model": "./dist/model",
+          "@database": "./dist/database"
         }
       }
     ]
