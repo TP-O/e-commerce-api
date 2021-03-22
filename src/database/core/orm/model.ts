@@ -31,7 +31,6 @@ export class Model {
    * Get data.
    */
   async get() {
-    console.log(Database.getQuery());
     Database.usingModel = this;
 
     const { data, error } = await Database.execute();
