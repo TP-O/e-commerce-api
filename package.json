@@ -54,6 +54,7 @@
     "collect.js": "^4.28.6",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
     "helmet": "^4.4.1",
     "laravel-expressjs-router": "^1.0.3",
     "morgan": "^1.10.0",
