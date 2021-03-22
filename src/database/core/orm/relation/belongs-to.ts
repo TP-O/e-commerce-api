@@ -12,11 +12,11 @@ export class BelongsTo extends Relation {
    */
   public constructor(
     table: string,
-    model: Model,
-    private readonly refereignKey: string,
+    relatedModel: Model,
+    private readonly relatedKey: string,
     private readonly ownerKey = 'id',
   ) {
-    super(table, model);
+    super(table, relatedModel);
   }
 
   /**
@@ -25,11 +25,11 @@ export class BelongsTo extends Relation {
    * @param table table instance.
    */
   protected withCondition() {
-    Database.join(this.model.table, 'left join').on([
+    Database.join(this.relatedModel.table, 'left join').on([
       [
-        `${this.table}.${this.refereignKey}`,
+        `${this.table}.${this.relatedKey}`,
         '=',
-        `${this.model.table}.${this.ownerKey}`,
+        `${this.relatedModel.table}.${this.ownerKey}`,
       ],
     ]);
   }

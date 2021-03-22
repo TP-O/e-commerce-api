@@ -11,7 +11,7 @@ export class RelationManager {
   /**
    * List of relationships.
    */
-  private _items: { [key: string]: RelationItem } = {};
+  public _items: { [key: string]: RelationItem } = {};
 
   /**
    *
@@ -33,11 +33,11 @@ export class RelationManager {
    */
   public hasOne(infor: RelationInfor): void {
     this._items[infor.name] = {
-      model: infor.model,
+      model: infor.relatedModel,
       relationship: new HasOne(
         this._table,
-        infor.model,
-        infor.refereignKey,
+        infor.relatedModel,
+        infor.relatedKey,
         infor.ownerKey,
       ),
     };
@@ -48,11 +48,11 @@ export class RelationManager {
    */
   public belongsTo(infor: RelationInfor): void {
     this._items[infor.name] = {
-      model: infor.model,
+      model: infor.relatedModel,
       relationship: new BelongsTo(
         this._table,
-        infor.model,
-        infor.refereignKey,
+        infor.relatedModel,
+        infor.relatedKey,
         infor.ownerKey,
       ),
     };
@@ -63,13 +63,15 @@ export class RelationManager {
    */
   public hasMany(infor: RelationInfor): void {
     this._items[infor.name] = {
-      model: infor.model,
+      model: infor.relatedModel,
       relationship: new HasMany(
         this._table,
-        infor.model,
-        infor.refereignKey,
+        infor.relatedModel,
+        infor.relatedKey,
         infor.ownerKey,
         infor.pivotTable,
+        infor.pivotModel,
+        infor.pivotName,
       ),
     };
   }
@@ -79,13 +81,15 @@ export class RelationManager {
    */
   public belongsToMany(infor: RelationInfor): void {
     this._items[infor.name] = {
-      model: infor.model,
+      model: infor.relatedModel,
       relationship: new BelongsToMany(
         this._table,
-        infor.model,
-        infor.refereignKey,
+        infor.relatedModel,
+        infor.relatedKey,
         infor.ownerKey,
         infor.pivotTable,
+        infor.pivotModel,
+        infor.pivotName,
       ),
     };
   }

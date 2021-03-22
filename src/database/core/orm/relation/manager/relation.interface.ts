@@ -3,13 +3,15 @@ import { Relation } from '@database/core/orm/relation';
 
 export interface RelationItem {
   model: any;
-  relationship: Relation;
+  relationship: Relation | undefined;
 }
 
 export interface RelationInfor {
   name: string;
-  refereignKey: string;
+  relatedModel: Model;
+  relatedKey: string;
   ownerKey?: string;
-  model: Model;
   pivotTable?: string;
+  pivotModel?: Model;
+  pivotName?: string;
 }

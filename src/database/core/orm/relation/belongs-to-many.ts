@@ -12,12 +12,14 @@ export class BelongsToMany extends Relation {
    */
   public constructor(
     table: string,
-    model: Model,
-    private readonly refereignKey: string,
+    relatedModel: Model,
+    private readonly relatedKey: string,
     private readonly ownerKey = 'id',
     private readonly pivotTable?: string,
+    private readonly pivotModel?: Model,
+    private readonly pivotName?: string,
   ) {
-    super(table, model);
+    super(table, relatedModel);
   }
 
   /**
@@ -27,28 +29,42 @@ export class BelongsToMany extends Relation {
    */
   protected withCondition() {
     if (this.pivotTable) {
+      if (this.pivotModel) {
+        this.relatedModel.relationship._items[
+          this.pivotName || 'pivot_table'
+        ] = {
+          model: this.pivotModel || 'pivot_table',
+          relationship: undefined,
+        };
+
+        Database.addSelection(
+          ...Object.keys(this.pivotModel.schema).map(
+            (c) =>
+              `${this.pivotModel?.table}.${c}:${this.relation}-${
+                this.pivotName || 'pivot_table'
+              }-${c}`,
+          ),
+        );
+      }
+
       Database.join(this.pivotTable, 'left join')
         .on([
-          [
-            `${this.table}.id`,
-            '=',
-            `${this.pivotTable}.${this.refereignKey}`,
-          ],
+          [`${this.table}.id`, '=', `${this.pivotTable}.${this.ownerKey}`],
         ])
-        .join(this.model.table, 'left join')
+        .join(this.relatedModel.table, 'left join')
         .on([
           [
-            `${this.model.table}.id`,
+            `${this.relatedModel.table}.id`,
             '=',
-            `${this.pivotTable}.${this.ownerKey}`,
+            `${this.pivotTable}.${this.relatedKey}`,
           ],
         ]);
     } else {
-      Database.join(this.model.table, 'left join').on([
+      Database.join(this.relatedModel.table, 'left join').on([
         [
-          `${this.table}.${this.refereignKey}`,
+          `${this.table}.${this.relatedKey}`,
           '=',
-          `${this.model.table}.${this.ownerKey}`,
+          `${this.relatedModel.table}.${this.ownerKey}`,
         ],
       ]);
     }

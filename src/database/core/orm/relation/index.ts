@@ -2,6 +2,8 @@ import { Model } from '@database/core';
 import { Database } from '@database/core/database';
 
 export abstract class Relation {
+  protected relation = '';
+
   /**
    *
    * @param table name of table having this relationship.
@@ -9,7 +11,7 @@ export abstract class Relation {
    */
   public constructor(
     protected readonly table: string,
-    protected readonly model: Model,
+    protected readonly relatedModel: Model,
   ) {}
 
   /**
@@ -18,10 +20,10 @@ export abstract class Relation {
    * @param table table instance.
    * @param relation name of relationship.
    */
-  protected selectColumns(relation: string): void {
+  protected selectColumns(): void {
     Database.addSelection(
-      ...Object.keys(this.model.schema).map(
-        (c) => `${this.model.table}.${c}:${relation}-${c}`,
+      ...Object.keys(this.relatedModel.schema).map(
+        (c) => `${this.relatedModel.table}.${c}:${this.relation}-${c}`,
       ),
     );
   }
@@ -39,7 +41,9 @@ export abstract class Relation {
    * @param relation name of relationship.
    */
   public create(relation: string) {
-    this.selectColumns(relation);
+    this.relation = relation;
+
+    this.selectColumns();
     this.withCondition();
   }
 }

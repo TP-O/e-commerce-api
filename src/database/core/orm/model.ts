@@ -258,7 +258,7 @@ export class Model {
       nestedRelations.forEach((nestedRelation, i) => {
         curModel.relationship
           .get(nestedRelation)
-          .relationship.create(nestedRelations.slice(0, i + 1).join('-'));
+          .relationship?.create(nestedRelations.slice(0, i + 1).join('-'));
 
         // Move on next model
         curModel = curModel.relationship.get(nestedRelation).model;
