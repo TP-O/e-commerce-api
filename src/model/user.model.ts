@@ -1,14 +1,18 @@
-export class User {
-  public constructor(
-    public id: number,
-    public name: string,
-    public password: string,
-  ) {}
-}
+import { Model } from '@database/core';
+import Product from '@model/product.model';
 
-export const users: User[] = [
-  new User(1, 'User 01', '001'),
-  new User(2, 'User 02', '002'),
-  new User(3, 'User 03', '003'),
-  new User(4, 'User 04', '004'),
-];
+const schema = {
+  id: '',
+  name: '',
+  password: '',
+};
+
+const user = new Model('users', schema);
+
+user.relationship.hasMany({
+  name: 'products',
+  relatedKey: 'user_id',
+  relatedModel: Product,
+});
+
+export default user;

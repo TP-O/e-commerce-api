@@ -21,6 +21,9 @@ router.group(
       () => {
         router.get('/', 'user.controller@all');
         router.get('/:id', 'user.controller@index');
+        router.post('/', 'user.controller@create');
+        router.put('/:id', 'user.controller@update');
+        router.delete('/:id', 'user.controller@delete');
       },
     );
   },
