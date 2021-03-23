@@ -4,8 +4,8 @@ import {
   Index,
   PrimaryKey,
   Unique,
-} from '@database/core/builder/interfaces/constraint.interface';
-import * as Types from '@database/core/builder/types/contraint.type';
+} from 'database/core/builder/interfaces/constraint.interface';
+import * as Types from 'database/core/builder/types/contraint.type';
 
 export class ConstraintBuilder {
   primaryKey({ name, columns }: PrimaryKey): string {

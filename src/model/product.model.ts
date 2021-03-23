@@ -1,5 +1,5 @@
-import { Model } from '@database/core';
-import User from '@model/user.model';
+import { Model } from 'database/core';
+import User from 'model/user.model';
 
 const schema = {
   id: '',

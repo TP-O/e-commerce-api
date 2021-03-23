@@ -1,5 +1,5 @@
-import { Model } from '@database/core/orm/model';
-import { Database } from '@database/core/database';
+import { Model } from 'database/core/orm/model';
+import { Database } from 'database/core/database';
 
 export class Instance {
   /**

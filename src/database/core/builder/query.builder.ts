@@ -1,14 +1,14 @@
-import { Column } from '@database/core/builder/interfaces/column.interface';
-import { ConstraintBuilder } from '@database/core/builder/constraint.builder';
-import { JoinTypes } from '@database/core/builder/types/join.type';
-import { OrderTypes } from '@database/core/builder/types/order.type';
-import { TableBuilder } from '@database/core/builder/table.builder';
+import { Column } from 'database/core/builder/interfaces/column.interface';
+import { ConstraintBuilder } from 'database/core/builder/constraint.builder';
+import { JoinTypes } from 'database/core/builder/types/join.type';
+import { OrderTypes } from 'database/core/builder/types/order.type';
+import { TableBuilder } from 'database/core/builder/table.builder';
 import {
   PrimaryKey,
   ForeignKey,
   Index,
   Unique,
-} from '@database/core/builder/interfaces/constraint.interface';
+} from 'database/core/builder/interfaces/constraint.interface';
 
 export class QueryBuilder {
   private querySentence = '';

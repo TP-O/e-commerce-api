@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import UserService from '@service/user.service';
-import { HttpRequestError } from '@exception/http-request-error';
+import UserService from 'service/user.service';
+import { HttpRequestError } from 'exception/http-request-error';
 import { format } from 'helper';
 
 class UserContrller {

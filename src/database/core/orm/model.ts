@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
-import { Database } from '@database/core/database';
-import { QueryBuilder } from '@database/core/builder/query.builder';
-import { RelationManager } from '@database/core/orm/relation/manager/relation.manager';
+import { Database } from 'database/core/database';
+import { QueryBuilder } from 'database/core/builder/query.builder';
+import { RelationManager } from 'database/core/orm/relation/manager/relation.manager';
 
 export class Model {
   /**

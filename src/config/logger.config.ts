@@ -1,4 +1,4 @@
-import { nodeConfig } from '@config/node.config';
+import { nodeConfig } from 'config/node.config';
 
 export const loggerConfig = {
   filename: 'access.log',

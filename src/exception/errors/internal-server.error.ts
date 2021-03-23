@@ -1,4 +1,4 @@
-import { HttpError } from '@exception/errors/http.error';
+import { HttpError } from 'exception/errors/http.error';
 
 class InternalServerError extends HttpError {
   /**

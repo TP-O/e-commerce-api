@@ -9,16 +9,6 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "paths": {
-      "@logger": ["logger/index"],
-      "@router": ["router/index"],
-      "@config/*": ["config/*"],
-      "@exception/*": ["exception/*"],
-      "@controller/*": ["controller/*"],
-      "@service/*": ["service/*"],
-      "@model/*": ["model/*"],
-      "@database/*": ["database/*"],
-    },
   },
   "plugins": [
     { "transform": "typescript-transform-paths" },

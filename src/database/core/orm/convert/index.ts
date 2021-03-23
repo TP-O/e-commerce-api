@@ -1,9 +1,9 @@
 import { isPlural } from 'pluralize';
 import { collect } from 'collect.js';
-import { Instance } from '@database/core/orm/instance';
-import { Model } from '@database/core/orm/model';
-import { Result } from '@database/core/orm/convert/interfaces/result.interface';
-import { Database } from '@database/core/database';
+import { Instance } from 'database/core/orm/instance';
+import { Model } from 'database/core/orm/model';
+import { Result } from 'database/core/orm/convert/interfaces/result.interface';
+import { Database } from 'database/core/database';
 
 export class Converter {
   /**

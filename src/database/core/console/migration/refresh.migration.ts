@@ -1,8 +1,8 @@
 import { readdir } from 'fs/promises';
-import { Connection } from '@database/core/connect/connection';
-import { Command } from '@database/core/console/command';
-import { Migration } from '@database/core/migration';
-import { MigrateMigration } from '@database/core/console/migration/migrate.migration';
+import { Connection } from 'database/core/connect/connection';
+import { Command } from 'database/core/console/command';
+import { Migration } from 'database/core/migration';
+import { MigrateMigration } from 'database/core/console/migration/migrate.migration';
 
 export class RefreshMigration extends Command {
   protected _migrations: Migration[] = [];

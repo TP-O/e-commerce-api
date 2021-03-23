@@ -1,11 +1,11 @@
-import { HasOne } from '@database/core/orm/relation/has-one';
-import { HasMany } from '@database/core/orm/relation/has-many';
-import { BelongsTo } from '@database/core/orm/relation/belongs-to';
-import { BelongsToMany } from '@database/core/orm/relation/belongs-to-many';
+import { HasOne } from 'database/core/orm/relation/has-one';
+import { HasMany } from 'database/core/orm/relation/has-many';
+import { BelongsTo } from 'database/core/orm/relation/belongs-to';
+import { BelongsToMany } from 'database/core/orm/relation/belongs-to-many';
 import {
   RelationItem,
   RelationInfor,
-} from '@database/core/orm/relation/manager/relation.interface';
+} from 'database/core/orm/relation/manager/relation.interface';
 
 export class RelationManager {
   /**

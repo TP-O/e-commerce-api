@@ -1,6 +1,6 @@
-import { Model } from '@database/core';
-import { Relation } from '@database/core/orm/relation';
-import { Database } from '@database/core/database';
+import { Model } from 'database/core';
+import { Relation } from 'database/core/orm/relation';
+import { Database } from 'database/core/database';
 
 export class BelongsToMany extends Relation {
   /**

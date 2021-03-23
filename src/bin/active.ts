@@ -1,6 +1,6 @@
 import { app } from '../app';
-import { nodeConfig } from '@config/node.config';
-import { DBConnection } from '@database/core';
+import { nodeConfig } from 'config/node.config';
+import { DBConnection } from 'database/core';
 
 // Activate server
 app.listen(nodeConfig.port, async () => {

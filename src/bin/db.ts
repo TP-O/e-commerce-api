@@ -1,9 +1,9 @@
-import { MakeSeeder } from '@database/core/console/seeder/make.seeder';
-import { SeedSeeder } from '@database/core/console/seeder/seed.seeder';
-import { MakeMigration } from '@database/core/console/migration/make.migration';
-import { MigrateMigration } from '@database/core/console/migration/migrate.migration';
-import { RefreshMigration } from '@database/core/console/migration/refresh.migration';
-import { RollbackMigration } from '@database/core/console/migration/rollback.migration';
+import { MakeSeeder } from 'database/core/console/seeder/make.seeder';
+import { SeedSeeder } from 'database/core/console/seeder/seed.seeder';
+import { MakeMigration } from 'database/core/console/migration/make.migration';
+import { MigrateMigration } from 'database/core/console/migration/migrate.migration';
+import { RefreshMigration } from 'database/core/console/migration/refresh.migration';
+import { RollbackMigration } from 'database/core/console/migration/rollback.migration';
 import { argv } from 'process';
 
 class Handler {
