@@ -36,7 +36,7 @@ class Handler {
           return res.status(err.status).json({ message: err.message });
         }
 
-        console.log(`Internal Error: ${err.message}`);
+        console.log(`Internal Error: ${err}`);
 
         return internalServer.handle(req, res);
       },

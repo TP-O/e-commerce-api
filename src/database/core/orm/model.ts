@@ -9,6 +9,8 @@ export class Model {
    */
   private readonly _relationManager: RelationManager;
 
+  public fillable: string[] = [];
+
   /**
    *
    * @param table name of the table that this model uses.
@@ -59,7 +61,9 @@ export class Model {
   async create(item: any) {
     const { status, error } = await Database.table(
       this.table,
-    ).insert(Object.keys(item), [Object.values(item)]);
+    ).insert(Object.keys(this.filter(item)), [
+      Object.values(this.filter(item)),
+    ]);
 
     return status && status.insertId !== 0 && status.affectedRows === 1
       ? { success: true }
@@ -73,7 +77,7 @@ export class Model {
    */
   async update(value: any) {
     const { status, error } = await Database.table(this.table).update(
-      value,
+      this.filter(value),
     );
 
     return status && status.affectedRows && status.affectedRows > 0
@@ -265,5 +269,22 @@ export class Model {
     });
 
     return this;
+  }
+
+  /**
+   * Filter user input.
+   *
+   * @param value user input.
+   */
+  private filter(value: any) {
+    const filterdValue: any = {};
+
+    this.fillable.forEach((f) => {
+      if (f in value) {
+        filterdValue[f] = value[f];
+      }
+    });
+
+    return filterdValue;
   }
 }

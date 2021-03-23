@@ -18,7 +18,7 @@ class UserService {
    */
   public async findOne(id: any) {
     const { data } = await User.select('*')
-      .with('product')
+      .with('products')
       .where([['users.id', '=', `v:${id}`]])
       .get();
 
@@ -51,7 +51,7 @@ class UserService {
 
     data.name = newData.name;
     data.password = newData.password;
-    const { success } = await data?.first().update();
+    const { success } = await data.update();
 
     return { success };
   }
