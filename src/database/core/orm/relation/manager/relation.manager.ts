@@ -5,7 +5,7 @@ import { BelongsToMany } from 'database/core/orm/relation/belongs-to-many';
 import {
   RelationItem,
   RelationInfor,
-} from 'database/core/orm/relation/manager/relation.interface';
+} from 'database/core/orm/interfaces/relation.interface';
 
 export class RelationManager {
   /**

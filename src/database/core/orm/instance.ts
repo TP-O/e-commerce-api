@@ -27,20 +27,10 @@ export class Instance {
     });
   }
 
-  private filteredData() {
-    const result: any = {};
-
-    for (const prop of Object.keys(this.model.schema)) {
-      result[prop] = this.data[prop];
-    }
-
-    return result;
-  }
-
   public async update() {
     return this.model
       .where([[this.model.primaryKey, '=', `v:${this.data.id}`]])
-      .update(this.filteredData());
+      .update(this.data);
   }
 
   public async delete() {

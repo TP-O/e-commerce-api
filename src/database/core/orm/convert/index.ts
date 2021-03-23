@@ -2,7 +2,7 @@ import { isPlural } from 'pluralize';
 import { collect } from 'collect.js';
 import { Instance } from 'database/core/orm/instance';
 import { Model } from 'database/core/orm/model';
-import { Result } from 'database/core/orm/convert/interfaces/result.interface';
+import { Result } from 'database/core/orm/interfaces/result.interface';
 import { Database } from 'database/core/database';
 
 export class Converter {
@@ -109,33 +109,6 @@ export class Converter {
   };
 
   /**
-   * Group duplicate relationships.
-   *
-   * @param data data containing relationships.
-   */
-  private groupRelationships(data: any, model: Model) {
-    if (!data) {
-      return data;
-    }
-
-    for (const prop of Object.keys(data)) {
-      if (Array.isArray(data[prop])) {
-        data[prop] = this.groupData(
-          data[prop],
-          model.relationship.get(prop).model,
-        );
-
-        // If prop is singular, get the first element
-        if (!isPlural(prop)) {
-          data[prop] = data[prop][0];
-        }
-      }
-    }
-
-    return data;
-  }
-
-  /**
    * Push data to Instance.
    *
    * @param data data of Instance.
@@ -159,19 +132,49 @@ export class Converter {
    * @param data data containing relationships.
    */
   private createRelationshipInstances(data: any, model: Model) {
+    for (const prop of Object.keys(data)) {
+      if (
+        typeof data[prop] === 'object' &&
+        data[prop] !== null &&
+        data[prop].constructor.name !== 'Date'
+      ) {
+        // Assign empty array for null value
+        data[prop] =
+          data[prop].id !== null
+            ? [
+                new Instance(
+                  data[prop],
+                  model.relationship.get(prop).model,
+                ),
+              ]
+            : [];
+      }
+    }
+
+    return data;
+  }
+
+  /**
+   * Group duplicate relationships.
+   *
+   * @param data data containing relationships.
+   */
+  private groupRelationships(data: any, model: Model) {
     if (!data) {
       return data;
     }
 
     for (const prop of Object.keys(data)) {
-      if (
-        typeof data[prop] === 'object' &&
-        data[prop] !== null &&
-        data[prop].getDate === undefined
-      ) {
-        data[prop] = [
-          new Instance(data[prop], model.relationship.get(prop).model),
-        ];
+      if (Array.isArray(data[prop])) {
+        data[prop] = this.groupData(
+          data[prop],
+          model.relationship.get(prop).model,
+        );
+
+        // If prop is singular, get the first element
+        if (!isPlural(prop)) {
+          data[prop] = data[prop][0];
+        }
       }
     }
 

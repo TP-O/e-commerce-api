@@ -9,8 +9,6 @@ export class Model {
    */
   private readonly _relationManager: RelationManager;
 
-  public fillable: string[] = [];
-
   /**
    *
    * @param table name of the table that this model uses.
@@ -21,6 +19,7 @@ export class Model {
     public readonly table: string,
     public readonly schema: { [key: string]: any },
     public readonly primaryKey = 'id',
+    public readonly fillable: string[] = [],
   ) {
     this._relationManager = new RelationManager(table);
   }

@@ -1,4 +1,4 @@
-import { Model } from 'database/core';
+import { Model } from 'database/core/orm/model';
 import { Relation } from 'database/core/orm/relation';
 import { Database } from 'database/core/database';
 
@@ -62,9 +62,9 @@ export class BelongsToMany extends Relation {
     } else {
       Database.join(this.relatedModel.table, 'left join').on([
         [
-          `${this.table}.${this.relatedKey}`,
+          `${this.table}.${this.ownerKey}`,
           '=',
-          `${this.relatedModel.table}.${this.ownerKey}`,
+          `${this.relatedModel.table}.${this.relatedKey}`,
         ],
       ]);
     }

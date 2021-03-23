@@ -1,4 +1,4 @@
-import { Model } from 'database/core';
+import { Model } from 'database/core/orm/model';
 import { Database } from 'database/core/database';
 
 export abstract class Relation {
