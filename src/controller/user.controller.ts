@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
-import { Controller } from '@controller/common.controller';
 import UserService from '@service/user.service';
 import { HttpRequestError } from '@exception/http-request-error';
+import { format } from 'helper';
 
-class UserContrller extends Controller {
+class UserContrller {
   private readonly userSerivce = UserService;
 
   public all = async (_: Request, res: Response) => {
     const { data } = await this.userSerivce.findAll();
 
     return res.status(200).json({
-      data: this.format(data?.all()),
+      data: format(data?.all()),
     });
   };
 
@@ -18,7 +18,7 @@ class UserContrller extends Controller {
     const { data } = await this.userSerivce.findOne(req.params.id);
 
     return res.status(200).json({
-      data: this.format(data),
+      data: format(data),
     });
   };
 
