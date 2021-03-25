@@ -2,10 +2,15 @@ import { Request, Response } from 'express';
 import UserService from 'service/user.service';
 import { HttpRequestError } from 'exception/http-request-error';
 import { format } from 'helper';
+import { creatingValidator } from 'validator/user/create.user';
+import { updatingValidator } from 'validator/user/update.user';
 
-class UserContrller {
+class UserController {
   private readonly userSerivce = UserService;
 
+  /**
+   * Get list of users.
+   */
   public all = async (_: Request, res: Response) => {
     const { data } = await this.userSerivce.findAll();
 
@@ -14,6 +19,9 @@ class UserContrller {
     });
   };
 
+  /**
+   * Get user by id.
+   */
   public index = async (req: Request, res: Response) => {
     const { data } = await this.userSerivce.findOne(req.params.id);
 
@@ -22,8 +30,13 @@ class UserContrller {
     });
   };
 
+  /**
+   * Store new user.
+   */
   public create = async (req: Request, res: Response) => {
-    const { success } = await this.userSerivce.create(req.body);
+    const value = await creatingValidator.validate(req.body);
+
+    const { success } = await this.userSerivce.create(value);
 
     if (!success) {
       throw new HttpRequestError(500, 'Can not create user');
@@ -32,10 +45,15 @@ class UserContrller {
     return res.status(201).json({ success });
   };
 
+  /**
+   * Update user.
+   */
   public update = async (req: Request, res: Response) => {
+    const value = await updatingValidator.validate(req.body);
+
     const { success } = await this.userSerivce.update(
       req.params.id,
-      req.body,
+      value,
     );
 
     if (!success) {
@@ -45,6 +63,9 @@ class UserContrller {
     return res.status(201).json({ success });
   };
 
+  /**
+   * Delete user.
+   */
   public delete = async (req: Request, res: Response) => {
     const { success } = await this.userSerivce.delete(req.params.id);
 
@@ -56,4 +77,4 @@ class UserContrller {
   };
 }
 
-export default new UserContrller();
+export default new UserController();

@@ -56,6 +56,7 @@
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "helmet": "^4.4.1",
+    "joi": "^17.4.0",
     "laravel-expressjs-router": "^1.0.3",
     "morgan": "^1.10.0",
     "mysql2": "^2.2.5",
