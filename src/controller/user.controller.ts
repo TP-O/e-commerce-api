@@ -51,10 +51,7 @@ class UserController {
   public update = async (req: Request, res: Response) => {
     const value = await updatingValidator.validate(req.body);
 
-    const { success } = await this.userSerivce.update(
-      req.params.id,
-      value,
-    );
+    const { success } = await this.userSerivce.update(req.params.id, value);
 
     if (!success) {
       throw new HttpRequestError(500, 'Can not update user');

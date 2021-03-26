@@ -51,13 +51,7 @@ export class Database {
     foreignKeys?: Cons.ForeignKey[],
     uniqueColumns?: Cons.Unique,
   ) {
-    this._builder.createTable(
-      table,
-      columns,
-      primaryKey,
-      foreignKeys,
-      uniqueColumns,
-    );
+    this._builder.createTable(table, columns, primaryKey, foreignKeys, uniqueColumns);
 
     return this.execute(true);
   }
@@ -186,9 +180,7 @@ export class Database {
    * Start conditions.
    */
   /* eslint-disable-next-line */
-  public static where(
-    conditions: string[][] | ((q: QueryBuilder) => void),
-  ) {
+  public static where(conditions: string[][] | ((q: QueryBuilder) => void)) {
     this._builder.where(conditions);
 
     return this;

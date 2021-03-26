@@ -17,8 +17,7 @@ export class Instance {
       },
       set: (target, prop, value) => {
         if (prop in target.data) {
-          target.data[prop] =
-            value !== undefined ? value : target.data[prop];
+          target.data[prop] = value !== undefined ? value : target.data[prop];
         } else {
           Reflect.set(target, prop, value);
         }
@@ -34,9 +33,7 @@ export class Instance {
   }
 
   public async delete() {
-    return this.model
-      .where([[this.model.primaryKey, '=', `v:${this.data.id}`]])
-      .delete();
+    return this.model.where([[this.model.primaryKey, '=', `v:${this.data.id}`]]).delete();
   }
 
   public async get(relation: string) {
@@ -45,13 +42,7 @@ export class Instance {
     return this.model
       .select('id')
       .with(relation)
-      .where([
-        [
-          `${this.model.table}.${this.model.primaryKey}`,
-          '=',
-          `v:${this.data.id}`,
-        ],
-      ])
+      .where([[`${this.model.table}.${this.model.primaryKey}`, '=', `v:${this.data.id}`]])
       .get();
   }
 }

@@ -40,11 +40,7 @@ export class MakeMigration extends Command {
     await this.prepare();
 
     try {
-      await writeFile(
-        `${this._distDir}${this._fileName}.ts`,
-        this._fileContent,
-        'utf8',
-      );
+      await writeFile(`${this._distDir}${this._fileName}.ts`, this._fileContent, 'utf8');
 
       console.log(`Created Migration: ${this._fileName}`);
     } catch (err) {

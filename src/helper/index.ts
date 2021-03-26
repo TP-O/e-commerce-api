@@ -8,10 +8,7 @@ export function format(data: any) {
 
   if (!Array.isArray(data)) {
     for (const [prop, value] of Object.entries(data.data)) {
-      if (
-        typeof value === 'object' &&
-        value?.constructor.name !== 'Date'
-      ) {
+      if (typeof value === 'object' && value?.constructor.name !== 'Date') {
         data[prop] = format(data[prop]);
       }
     }
@@ -21,10 +18,7 @@ export function format(data: any) {
 
   return data.map((d: any) => {
     for (const [prop, value] of Object.entries(d.data)) {
-      if (
-        typeof value === 'object' &&
-        value?.constructor.name !== 'Date'
-      ) {
+      if (typeof value === 'object' && value?.constructor.name !== 'Date') {
         d[prop] = format(d[prop]);
       }
     }

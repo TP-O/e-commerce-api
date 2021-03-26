@@ -16,9 +16,7 @@ export class MigrateMigration extends Command {
     let migrated: any;
 
     try {
-      const { data } = await Database.table('migrations')
-        .select('*')
-        .execute(true);
+      const { data } = await Database.table('migrations').select('*').execute(true);
       migrated = data;
     } catch {
       migrated = [];
@@ -36,9 +34,7 @@ export class MigrateMigration extends Command {
       });
 
       if (!existed && file !== '.gitkeep') {
-        this._migrations.push(
-          require(`@database/migrations/${file}`).default,
-        );
+        this._migrations.push(require(`@database/migrations/${file}`).default);
       }
     });
 

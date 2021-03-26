@@ -45,9 +45,7 @@ export class Model {
   async all() {
     Database.usingModel = this;
 
-    const { data, error } = await Database.table(this.table)
-      .select('*')
-      .execute();
+    const { data, error } = await Database.table(this.table).select('*').execute();
 
     return data && !error ? { data } : { error };
   }
@@ -58,11 +56,10 @@ export class Model {
    * @param item new data.
    */
   async create(item: any) {
-    const { status, error } = await Database.table(
-      this.table,
-    ).insert(Object.keys(this.filter(item)), [
-      Object.values(this.filter(item)),
-    ]);
+    const { status, error } = await Database.table(this.table).insert(
+      Object.keys(this.filter(item)),
+      [Object.values(this.filter(item))],
+    );
 
     return status && status.insertId !== 0 && status.affectedRows === 1
       ? { success: true }
@@ -75,9 +72,7 @@ export class Model {
    * @param value new values.
    */
   async update(value: any) {
-    const { status, error } = await Database.table(this.table).update(
-      this.filter(value),
-    );
+    const { status, error } = await Database.table(this.table).update(this.filter(value));
 
     return status && status.affectedRows && status.affectedRows > 0
       ? { success: true }

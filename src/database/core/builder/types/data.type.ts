@@ -9,9 +9,7 @@ export class DataType {
     const maxSize = 255;
 
     if (size < minSize || size > maxSize) {
-      throw Error(
-        `Size must be from ${minSize} to ${maxSize}, but received '${size}'`,
-      );
+      throw Error(`Size must be from ${minSize} to ${maxSize}, but received '${size}'`);
     }
 
     return `CHAR(${size})`;
@@ -27,9 +25,7 @@ export class DataType {
     const maxSize = 65535;
 
     if (size < minSize || size > maxSize) {
-      throw Error(
-        `Size must be from ${minSize} to ${maxSize}, but received '${size}'`,
-      );
+      throw Error(`Size must be from ${minSize} to ${maxSize}, but received '${size}'`);
     }
 
     return `VARCHAR(${size})`;
@@ -52,9 +48,7 @@ export class DataType {
     const maxSize = 64;
 
     if (size < maxSize || size > maxSize) {
-      throw Error(
-        `Size must be from ${minSize} to ${maxSize}, but received '${size}'`,
-      );
+      throw Error(`Size must be from ${minSize} to ${maxSize}, but received '${size}'`);
     }
     return `BIT(${size})`;
   }
@@ -113,9 +107,7 @@ export class DataType {
     const maxSize = 53;
 
     if (p < maxSize || p > maxSize) {
-      throw Error(
-        `Size must be from ${minSize} to ${maxSize}, but received '${p}'`,
-      );
+      throw Error(`Size must be from ${minSize} to ${maxSize}, but received '${p}'`);
     }
     return `FLOAT(${p})`;
   }

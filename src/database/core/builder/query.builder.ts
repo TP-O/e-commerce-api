@@ -56,13 +56,7 @@ export class QueryBuilder {
     foreignKeys?: ForeignKey[],
     uniqueColumns?: Unique,
   ) {
-    this.createTable(
-      table,
-      columns,
-      primaryKey,
-      foreignKeys,
-      uniqueColumns,
-    );
+    this.createTable(table, columns, primaryKey, foreignKeys, uniqueColumns);
 
     this.querySentence = this.querySentence.replace(
       'CREATE TABLE',
@@ -90,10 +84,7 @@ export class QueryBuilder {
   dropTableIfExists(table: string) {
     this.dropTable(table);
 
-    this.querySentence = this.querySentence.replace(
-      'DROP TABLE',
-      'DROP TABLE IF EXISTS',
-    );
+    this.querySentence = this.querySentence.replace('DROP TABLE', 'DROP TABLE IF EXISTS');
   }
 
   /**
@@ -117,9 +108,7 @@ export class QueryBuilder {
       c.push(`\`${key}\` = '${value}'`);
     }
 
-    this.querySentence = `UPDATE \`${table}\` SET ${c.join(', ')} ${
-      this.querySentence
-    }`;
+    this.querySentence = `UPDATE \`${table}\` SET ${c.join(', ')} ${this.querySentence}`;
   }
 
   /**
@@ -139,10 +128,7 @@ export class QueryBuilder {
       this.querySentence += 'SELECT *';
     } else {
       this.querySentence += `SELECT ${columns
-        .map(
-          (c) =>
-            `\`${c.split('.').join('`.`').split(':').join('` AS `')}\``,
-        )
+        .map((c) => `\`${c.split('.').join('`.`').split(':').join('` AS `')}\``)
         .join(', ')}`;
     }
 
@@ -158,9 +144,7 @@ export class QueryBuilder {
     const q = this.querySentence.split(' FROM ');
 
     q[0] += `, ${columns
-      .map(
-        (c) => `\`${c.split('.').join('`.`').split(':').join('` AS `')}\``,
-      )
+      .map((c) => `\`${c.split('.').join('`.`').split(':').join('` AS `')}\``)
       .join(', ')}`;
 
     this.querySentence = q.join(' FROM ');
