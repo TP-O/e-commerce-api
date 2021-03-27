@@ -1,4 +1,3 @@
-import { nodeConfig } from 'config/node.config';
 import { Converter } from 'database/core/orm/convert';
 import { Connection } from 'database/core/connect/connection';
 import { Column } from 'database/core/builder/interfaces/column.interface';
@@ -290,10 +289,6 @@ export class Database {
    */
   public static async execute(throwable = false) {
     try {
-      if (nodeConfig.env === 'development') {
-        console.log(this._builder.getQuery());
-      }
-
       const rows = await Connection.execute(this._builder.getQuery());
 
       this._builder.resetQuery();
