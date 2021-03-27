@@ -11,7 +11,7 @@ export class SeedSeeder extends Command {
    * Prepare data.
    */
   protected prepare(): void {
-    this._seeder = require(`@database/seeders/${this._seederFile}`).default;
+    this._seeder = require(`database/seeders/${this._seederFile}`).default;
   }
 
   /**

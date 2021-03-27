@@ -6,15 +6,15 @@ export class HasOne extends Relation {
   /**
    *
    * @param table name of table having the relationship.
-   * @param model related model.
-   * @param refereignKey refereign key of the relationship.
-   * @param ownerKey primary key of the realtionships.
+   * @param relatedModel related model.
+   * @param foreignKey foreign key of the relationship.
+   * @param localKey primary key of the relationship.
    */
   public constructor(
     table: string,
     relatedModel: Model,
-    private readonly relatedKey: string,
-    private readonly ownerKey = 'id',
+    private readonly foreignKey: string,
+    private readonly localKey = 'id',
   ) {
     super(table, relatedModel);
   }
@@ -27,9 +27,9 @@ export class HasOne extends Relation {
   protected withCondition() {
     Database.join(this.relatedModel.table, 'left join').on([
       [
-        `${this.table}.${this.ownerKey}`,
+        `${this.table}.${this.localKey}`,
         '=',
-        `${this.relatedModel.table}.${this.relatedKey}`,
+        `${this.relatedModel.table}.${this.foreignKey}`,
       ],
     ]);
   }

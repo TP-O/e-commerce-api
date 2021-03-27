@@ -35,7 +35,7 @@ export class RollbackMigration extends Command {
         });
 
         if (matched) {
-          this._migrations.push(require(`@database/migrations/${file}`).default);
+          this._migrations.push(require(`database/migrations/${file}`).default);
         }
       });
 

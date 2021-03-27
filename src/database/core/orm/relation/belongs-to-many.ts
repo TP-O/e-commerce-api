@@ -1,23 +1,23 @@
 import { Model } from 'database/core/orm/model';
 import { Relation } from 'database/core/orm/relation';
 import { Database } from 'database/core/database';
+import { Pivot } from '../interfaces/relation.interface';
 
 export class BelongsToMany extends Relation {
   /**
    *
    * @param table name of table having the relationship.
-   * @param model related model.
-   * @param refereignKey refereign key of the relationship.
-   * @param localKey primary key of the realtionships.
+   * @param relatedModel related model.
+   * @param assetKey asset key in pivot table of the relationship.
+   * @param ownerKey owner key in pivot table of the relationship.
+   * @param pivot information of pivot table.
    */
   public constructor(
     table: string,
     relatedModel: Model,
-    private readonly relatedKey: string,
+    private readonly assetKey = 'id',
     private readonly ownerKey = 'id',
-    private readonly pivotTable?: string,
-    private readonly pivotModel?: Model,
-    private readonly pivotName?: string,
+    private readonly pivot: Pivot,
   ) {
     super(table, relatedModel);
   }
@@ -28,45 +28,55 @@ export class BelongsToMany extends Relation {
    * @param table table instance.
    */
   protected withCondition() {
-    if (this.pivotTable) {
-      if (this.pivotModel) {
-        this.relatedModel.relationship._items[
-          this.pivotName || 'pivot_table'
-        ] = {
-          model: this.pivotModel || 'pivot_table',
-          relationship: undefined,
-        };
-
-        Database.addSelection(
-          ...Object.keys(this.pivotModel.schema).map(
-            (c) =>
-              `${this.pivotModel?.table}.${c}:${this.relation}-${
-                this.pivotName || 'pivot_table'
-              }-${c}`,
-          ),
-        );
-      }
-
-      Database.join(this.pivotTable, 'left join')
+    if (this.pivot.table) {
+      Database.join(this.pivot.table, 'left join')
         .on([
-          [`${this.table}.id`, '=', `${this.pivotTable}.${this.ownerKey}`],
+          [
+            `${this.table}.${this.assetKey}`,
+            '=',
+            `${this.pivot.table}.${this.pivot.assetKey}`,
+          ],
         ])
         .join(this.relatedModel.table, 'left join')
         .on([
           [
-            `${this.relatedModel.table}.id`,
+            `${this.relatedModel.table}.${this.ownerKey}`,
             '=',
-            `${this.pivotTable}.${this.relatedKey}`,
+            `${this.pivot.table}.${this.pivot.ownerKey}`,
+          ],
+        ]);
+    } else if (this.pivot.model) {
+      this.relatedModel.relationship._items[this.pivot.name || 'pivot_table'] = {
+        model: this.pivot.name || 'pivot_table',
+        relationship: undefined,
+      };
+
+      Database.addSelection(
+        ...Object.keys(this.pivot.model.schema).map(
+          (c) =>
+            `${this.pivot.table}.${c}:${this.relation}-${
+              this.pivot.name || 'pivot_table'
+            }-${c}`,
+        ),
+      )
+        .join(this.pivot.model.table, 'left join')
+        .on([
+          [
+            `${this.table}.${this.ownerKey}`,
+            '=',
+            `${this.pivot.model.table}.${this.pivot.ownerKey}`,
+          ],
+        ])
+        .join(this.relatedModel.table, 'left join')
+        .on([
+          [
+            `${this.relatedModel.table}.${this.assetKey}`,
+            '=',
+            `${this.pivot.model.table}.${this.pivot.assetKey}`,
           ],
         ]);
     } else {
-      Database.join(this.relatedModel.table, 'left join').on([
-        [
-          `${this.table}.${this.ownerKey}`,
-          '=',
-          `${this.relatedModel.table}.${this.relatedKey}`,
-        ],
-      ]);
+      throw new Error('`model` or `table` must be required in property `pivot`');
     }
   }
 }

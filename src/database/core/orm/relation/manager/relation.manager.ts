@@ -3,8 +3,11 @@ import { HasMany } from 'database/core/orm/relation/has-many';
 import { BelongsTo } from 'database/core/orm/relation/belongs-to';
 import { BelongsToMany } from 'database/core/orm/relation/belongs-to-many';
 import {
+  BelongsToManyRelationship,
+  BelongsToRelationship,
+  HasManyRelationship,
+  HasOneRelationship,
   RelationItem,
-  RelationInfor,
 } from 'database/core/orm/interfaces/relation.interface';
 
 export class RelationManager {
@@ -31,14 +34,14 @@ export class RelationManager {
   /**
    * Add HasOne relationship.
    */
-  public hasOne(infor: RelationInfor): void {
+  public hasOne(infor: HasOneRelationship) {
     this._items[infor.name] = {
       model: infor.relatedModel,
       relationship: new HasOne(
         this._table,
         infor.relatedModel,
-        infor.relatedKey,
-        infor.ownerKey,
+        infor.foreignKey,
+        infor.localKey,
       ),
     };
   }
@@ -46,13 +49,13 @@ export class RelationManager {
   /**
    * Add BelongsTo relationship.
    */
-  public belongsTo(infor: RelationInfor): void {
+  public belongsTo(infor: BelongsToRelationship) {
     this._items[infor.name] = {
       model: infor.relatedModel,
       relationship: new BelongsTo(
         this._table,
         infor.relatedModel,
-        infor.relatedKey,
+        infor.foreignKey,
         infor.ownerKey,
       ),
     };
@@ -61,17 +64,15 @@ export class RelationManager {
   /**
    * Add HasMany relationship.
    */
-  public hasMany(infor: RelationInfor): void {
+  public hasMany(infor: HasManyRelationship) {
     this._items[infor.name] = {
       model: infor.relatedModel,
       relationship: new HasMany(
         this._table,
         infor.relatedModel,
-        infor.relatedKey,
+        infor.foreignKey,
         infor.ownerKey,
-        infor.pivotTable,
-        infor.pivotModel,
-        infor.pivotName,
+        infor.pivot,
       ),
     };
   }
@@ -79,17 +80,15 @@ export class RelationManager {
   /**
    * Add BelongsToMany relationship.
    */
-  public belongsToMany(infor: RelationInfor): void {
+  public belongsToMany(infor: BelongsToManyRelationship) {
     this._items[infor.name] = {
       model: infor.relatedModel,
       relationship: new BelongsToMany(
         this._table,
         infor.relatedModel,
-        infor.relatedKey,
+        infor.assetKey,
         infor.ownerKey,
-        infor.pivotTable,
-        infor.pivotModel,
-        infor.pivotName,
+        infor.pivot,
       ),
     };
   }

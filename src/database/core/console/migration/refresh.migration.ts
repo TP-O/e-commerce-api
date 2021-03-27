@@ -18,7 +18,7 @@ export class RefreshMigration extends Command {
 
       files.forEach((file) => {
         if (file !== '.gitkeep') {
-          this._migrations.push(require(`@database/migrations/${file}`).default);
+          this._migrations.push(require(`database/migrations/${file}`).default);
         }
       });
     }

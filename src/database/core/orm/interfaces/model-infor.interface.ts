@@ -1,11 +1,21 @@
-import { RelationInfor } from 'database/core/orm/interfaces/relation.interface';
+import {
+  BelongsToManyRelationship,
+  BelongsToRelationship,
+  HasManyRelationship,
+  HasOneRelationship,
+} from 'database/core/orm/interfaces/relation.interface';
 
-export type RelationInfors = { type: string; infor: RelationInfor };
+export interface Relationship {
+  hasOne?: HasOneRelationship[];
+  hasMany?: HasManyRelationship[];
+  belongsTo?: BelongsToRelationship[];
+  belongsToMany?: BelongsToManyRelationship[];
+}
 
 export interface ModelInfor {
   table: string;
   schema: { [key: string]: any };
   primaryKey?: string;
   fillable: string[];
-  relationships: RelationInfors[];
+  relationships: Relationship;
 }

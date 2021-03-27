@@ -11,15 +11,13 @@ export const Product = ModelMaker.make({
     updated_at: '',
   },
   fillable: ['name', 'price'],
-  relationships: [
-    {
-      type: 'belongsTo',
-      infor: {
+  relationships: {
+    belongsTo: [
+      {
         name: 'user',
-        ownerKey: 'user_id',
-        relatedKey: 'id',
+        foreignKey: 'user_Id',
         relatedModel: User,
       },
-    },
-  ],
+    ],
+  },
 });

@@ -6,7 +6,7 @@ class UserService {
    * Get list of users.
    */
   public async findAll() {
-    const { data } = await User.select('*').with('products').get();
+    const { data } = await User.select('*').with('products', 'roles').get();
 
     return { data };
   }
@@ -18,7 +18,7 @@ class UserService {
    */
   public async findOne(id: any) {
     const { data } = await User.select('*')
-      .with('products')
+      .with('products', 'roles')
       .where([['users.id', '=', `v:${id}`]])
       .get();
 

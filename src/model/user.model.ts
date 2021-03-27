@@ -1,6 +1,7 @@
 import Joi from 'joi';
 import { ModelMaker } from 'database/core';
 import { Product } from 'model/product.model';
+import { Role } from 'model/role.model';
 
 export const User = ModelMaker.make({
   table: 'users',
@@ -12,14 +13,23 @@ export const User = ModelMaker.make({
     updated_at: Joi.date(),
   },
   fillable: ['name', 'password'],
-  relationships: [
-    {
-      type: 'hasMany',
-      infor: {
+  relationships: {
+    hasMany: [
+      {
         name: 'products',
-        relatedKey: 'user_id',
+        foreignKey: 'user_id',
         relatedModel: Product,
       },
-    },
-  ],
+      {
+        name: 'roles',
+        foreignKey: 'id',
+        relatedModel: Role,
+        pivot: {
+          table: 'role_users',
+          assetKey: 'role_id',
+          ownerKey: 'user_id',
+        },
+      },
+    ],
+  },
 });

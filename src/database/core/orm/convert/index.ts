@@ -14,9 +14,7 @@ export class Converter {
   convert(data: any): Result {
     if (this.isRowDataPacket(data)) {
       return {
-        data: collect(
-          this.groupData(this.parseData(data), Database.usingModel),
-        ),
+        data: collect(this.groupData(this.parseData(data), Database.usingModel)),
       };
     }
 
@@ -29,8 +27,7 @@ export class Converter {
    * @param data raw data of mysql2 package.
    */
   private isRowDataPacket(data: any) {
-    return Array.isArray(data) &&
-      (!data.length || data[0].constructor.name === 'TextRow')
+    return Array.isArray(data) && (!data.length || data[0].constructor.name === 'TextRow')
       ? true
       : false;
   }
@@ -80,19 +77,14 @@ export class Converter {
 
     data.forEach((_, key) => {
       // Wrap relationship data in Instances
-      data[key].data = this.createRelationshipInstances(
-        data[key].data,
-        model,
-      );
+      data[key].data = this.createRelationshipInstances(data[key].data, model);
 
       for (let nextKey = key + 1; nextKey < data.length; nextKey++) {
         // Group objects have the same id
         if (data[key].data.id === data[nextKey].data.id) {
           for (const prop of Object.keys(data[key].data)) {
             if (Array.isArray(data[key].data[prop])) {
-              data[key].data[prop].push(
-                new Instance(data[nextKey].data[prop], model),
-              );
+              data[key].data[prop].push(new Instance(data[nextKey].data[prop], model));
             }
           }
           // Delete dupicate object
@@ -132,6 +124,10 @@ export class Converter {
    * @param data data containing relationships.
    */
   private createRelationshipInstances(data: any, model: Model) {
+    if (!data) {
+      return data;
+    }
+
     for (const prop of Object.keys(data)) {
       if (
         typeof data[prop] === 'object' &&
@@ -141,12 +137,7 @@ export class Converter {
         // Assign empty array for null value
         data[prop] =
           data[prop].id !== null
-            ? [
-                new Instance(
-                  data[prop],
-                  model.relationship.get(prop).model,
-                ),
-              ]
+            ? [new Instance(data[prop], model.relationship.get(prop).model)]
             : [];
       }
     }
@@ -166,10 +157,7 @@ export class Converter {
 
     for (const prop of Object.keys(data)) {
       if (Array.isArray(data[prop])) {
-        data[prop] = this.groupData(
-          data[prop],
-          model.relationship.get(prop).model,
-        );
+        data[prop] = this.groupData(data[prop], model.relationship.get(prop).model);
 
         // If prop is singular, get the first element
         if (!isPlural(prop)) {

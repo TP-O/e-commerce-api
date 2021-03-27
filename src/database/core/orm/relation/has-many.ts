@@ -1,70 +1,86 @@
 import { Model } from 'database/core/orm/model';
 import { Relation } from 'database/core/orm/relation';
 import { Database } from 'database/core/database';
+import { Pivot } from 'database/core/orm/interfaces/relation.interface';
 
 export class HasMany extends Relation {
   /**
    *
    * @param table name of table having the relationship.
-   * @param model related model.
-   * @param refereignKey refereign key of the relationship.
-   * @param localKey primary key of the realtionships.
+   * @param relatedModel related model.
+   * @param foreignKey foreign key of the relationship.
+   * @param localKey primary key of the relationship.
+   * @param pivot information of pivot table.
    */
   public constructor(
     table: string,
     relatedModel: Model,
-    private readonly relatedKey: string,
-    private readonly ownerKey = 'id',
-    private readonly pivotTable?: string,
-    private readonly pivotModel?: Model,
-    private readonly pivotName?: string,
+    private readonly foreignKey: string,
+    private readonly localKey = 'id',
+    private readonly pivot?: Pivot,
   ) {
     super(table, relatedModel);
   }
 
   /**
-   * Join two tables with conditions.
-   *
-   * @param table table instance.
+   * Join tables with conditions.
    */
   protected withCondition() {
-    if (this.pivotTable) {
-      if (this.pivotModel) {
-        this.relatedModel.relationship._items[
-          this.pivotName || 'pivot_table'
-        ] = {
-          model: this.pivotModel || 'pivot_table',
+    if (this.pivot) {
+      if (this.pivot.table) {
+        Database.join(this.pivot.table, 'left join')
+          .on([
+            [
+              `${this.table}.${this.localKey}`,
+              '=',
+              `${this.pivot.table}.${this.pivot.ownerKey}`,
+            ],
+          ])
+          .join(this.relatedModel.table, 'left join')
+          .on([
+            [
+              `${this.relatedModel.table}.${this.foreignKey}`,
+              '=',
+              `${this.pivot.table}.${this.pivot.assetKey}`,
+            ],
+          ]);
+      } else if (this.pivot.model) {
+        this.relatedModel.relationship._items[this.pivot.name || 'pivot_table'] = {
+          model: this.pivot.name || 'pivot_table',
           relationship: undefined,
         };
 
         Database.addSelection(
-          ...Object.keys(this.pivotModel.schema).map(
+          ...Object.keys(this.pivot.model.schema).map(
             (c) =>
-              `${this.pivotModel?.table}.${c}:${this.relation}-${
-                this.pivotName || 'pivot_table'
+              `${this.pivot?.model?.table}.${c}:${this.relation}-${
+                this.pivot?.name || 'pivot_table'
               }-${c}`,
           ),
-        );
+        )
+          .join(this.pivot.model.table, 'left join')
+          .on([
+            [
+              `${this.table}.${this.localKey}`,
+              '=',
+              `${this.pivot.model.table}.${this.pivot.ownerKey}`,
+            ],
+          ])
+          .join(this.relatedModel.table, 'left join')
+          .on([
+            [
+              `${this.relatedModel.table}.${this.foreignKey}`,
+              '=',
+              `${this.pivot.model.table}.${this.pivot.assetKey}`,
+            ],
+          ]);
       }
-
-      Database.join(this.pivotTable, 'left join')
-        .on([
-          [`${this.table}.id`, '=', `${this.pivotTable}.${this.ownerKey}`],
-        ])
-        .join(this.relatedModel.table, 'left join')
-        .on([
-          [
-            `${this.relatedModel.table}.id`,
-            '=',
-            `${this.pivotTable}.${this.relatedKey}`,
-          ],
-        ]);
     } else {
       Database.join(this.relatedModel.table, 'left join').on([
         [
-          `${this.table}.${this.ownerKey}`,
+          `${this.table}.${this.localKey}`,
           '=',
-          `${this.relatedModel.table}.${this.relatedKey}`,
+          `${this.relatedModel.table}.${this.foreignKey}`,
         ],
       ]);
     }
