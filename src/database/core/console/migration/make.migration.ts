@@ -28,9 +28,13 @@ export class MakeMigration extends Command {
   protected async prepare(): Promise<void> {
     const data = await readFile(this._originFile, 'utf-8');
 
-    this._fileContent = data
-      .replace(/xxx/g, this._name)
-      .replace(/XXX/g, this._name[0].toUpperCase() + this._name.slice(1));
+    this._fileContent = data.replace(/xxx/g, this._name).replace(
+      /XXX/g,
+      this._name
+        .split('_')
+        .map((n) => n[0].toUpperCase() + n.slice(1))
+        .join(''),
+    );
   }
 
   /**
