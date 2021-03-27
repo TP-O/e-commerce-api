@@ -35,7 +35,7 @@ export class QueryBuilder {
     columns: { [key: string]: Column },
     primaryKey?: PrimaryKey,
     foreignKeys?: ForeignKey[],
-    uniqueColumns?: Unique,
+    uniqueColumns?: Unique[],
   ) {
     this.querySentence = new TableBuilder().build(
       table,
@@ -54,7 +54,7 @@ export class QueryBuilder {
     columns: { [key: string]: Column },
     primaryKey?: PrimaryKey,
     foreignKeys?: ForeignKey[],
-    uniqueColumns?: Unique,
+    uniqueColumns?: Unique[],
   ) {
     this.createTable(table, columns, primaryKey, foreignKeys, uniqueColumns);
 

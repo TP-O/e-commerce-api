@@ -17,7 +17,7 @@ export class TableBuilder {
     columns: { [key: string]: Column },
     primaryKey?: PrimaryKey,
     foreignKeys?: ForeignKey[],
-    uniqueColumns?: Unique,
+    uniqueColumns?: Unique[],
   ) {
     const c: string[] = [];
 
@@ -26,7 +26,7 @@ export class TableBuilder {
     }
 
     if (uniqueColumns) {
-      c.push(this.constraintBuilder.unique(uniqueColumns));
+      c.push(...this.constraintBuilder.unique(uniqueColumns));
     }
 
     if (primaryKey) {

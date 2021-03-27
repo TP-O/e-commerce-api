@@ -48,7 +48,7 @@ export class Database {
     columns: { [key: string]: Column },
     primaryKey?: Cons.PrimaryKey,
     foreignKeys?: Cons.ForeignKey[],
-    uniqueColumns?: Cons.Unique,
+    uniqueColumns?: Cons.Unique[],
   ) {
     this._builder.createTable(table, columns, primaryKey, foreignKeys, uniqueColumns);
 
@@ -63,7 +63,7 @@ export class Database {
     columns: { [key: string]: Column },
     primaryKey?: Cons.PrimaryKey,
     foreignKeys?: Cons.ForeignKey[],
-    uniqueColumns?: Cons.Unique,
+    uniqueColumns?: Cons.Unique[],
   ) {
     this._builder.createTableIfNotExists(
       table,

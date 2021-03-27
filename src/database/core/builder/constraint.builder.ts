@@ -25,8 +25,8 @@ export class ConstraintBuilder {
     } ${onDelete ? `ON DELETE ${onDelete}` : ''}`;
   }
 
-  unique({ name, columns }: Unique): string {
-    return `CONSTRAINT ${name} UNIQUE (${columns.join(', ')})`;
+  unique(unique: Unique[]): string[] {
+    return unique.map((u) => `CONSTRAINT ${u.name} UNIQUE (${u.columns.join(', ')})`);
   }
 
   index({ name, unique, table, columns }: Index) {
