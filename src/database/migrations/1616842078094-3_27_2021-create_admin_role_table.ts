@@ -3,11 +3,11 @@ import { Database } from 'database/core/database';
 import { Migration } from 'database/core/migration';
 import { DataType } from 'database/core/builder/types/data.type';
 
-export class CreateProductsTable extends Migration {
+export class CreateAdminRoleTable extends Migration {
   /**
    * Name of the table will be created.
    */
-  protected table = 'products';
+  protected table = 'admin_role';
 
   /**
    * Name of migration.
@@ -16,7 +16,7 @@ export class CreateProductsTable extends Migration {
 
   protected async up() {
     await Database.create(
-      'products',
+      'admin_role',
       // Columns
       {
         id: {
@@ -25,17 +25,14 @@ export class CreateProductsTable extends Migration {
           increment: true,
           required: true,
         },
-        user_id: {
+        admin_id: {
           type: DataType.bigInt(),
           unsigned: true,
           required: true,
         },
-        name: {
-          type: DataType.varChar(255),
-          required: true,
-        },
-        price: {
-          type: DataType.int(),
+        role_id: {
+          type: DataType.bigInt(),
+          unsigned: true,
           required: true,
         },
         created_at: {
@@ -55,18 +52,32 @@ export class CreateProductsTable extends Migration {
       // Foreign keys
       [
         {
-          column: 'user_id',
-          table: 'users',
+          name: 'FK_AdminRole_Admins',
+          column: 'admin_id',
+          table: 'admins',
           referencedColumn: 'id',
           onDelete: 'cascade',
+        },
+        {
+          name: 'FK_AdminRole_Roles',
+          column: 'role_id',
+          table: 'roles',
+          referencedColumn: 'id',
+          onDelete: 'cascade',
+        },
+      ],
+      [
+        {
+          name: 'UQ_AdminRole_AdminId_RoleId',
+          columns: ['admin_id', 'role_id'],
         },
       ],
     );
   }
 
   protected async down() {
-    await Database.dropIfExists('products');
+    await Database.dropIfExists('admin_role');
   }
 }
 
-export default new CreateProductsTable();
+export default new CreateAdminRoleTable();

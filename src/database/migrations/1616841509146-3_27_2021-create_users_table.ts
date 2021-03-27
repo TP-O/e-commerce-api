@@ -3,11 +3,11 @@ import { Database } from 'database/core/database';
 import { Migration } from 'database/core/migration';
 import { DataType } from 'database/core/builder/types/data.type';
 
-export class CreateRole_usersTable extends Migration {
+export class CreateUsersTable extends Migration {
   /**
    * Name of the table will be created.
    */
-  protected table = 'role_users';
+  protected table = 'users';
 
   /**
    * Name of migration.
@@ -16,7 +16,7 @@ export class CreateRole_usersTable extends Migration {
 
   protected async up() {
     await Database.create(
-      'role_users',
+      'users',
       // Columns
       {
         id: {
@@ -25,14 +25,17 @@ export class CreateRole_usersTable extends Migration {
           increment: true,
           required: true,
         },
-        role_id: {
-          type: DataType.bigInt(),
-          unsigned: true,
+        name: {
+          type: DataType.varChar(50),
           required: true,
         },
-        user_id: {
-          type: DataType.bigInt(),
-          unsigned: true,
+        email: {
+          type: DataType.varChar(255),
+          required: true,
+          unique: true,
+        },
+        password: {
+          type: DataType.varChar(255),
           required: true,
         },
         created_at: {
@@ -50,26 +53,13 @@ export class CreateRole_usersTable extends Migration {
         columns: ['id'],
       },
       // Foreign keys
-      [
-        {
-          name: 'FK_Users',
-          column: 'user_id',
-          table: 'users',
-          referencedColumn: 'id',
-        },
-        {
-          name: 'FK_Roles',
-          column: 'role_id',
-          table: 'roles',
-          referencedColumn: 'id',
-        },
-      ],
+      [],
     );
   }
 
   protected async down() {
-    await Database.dropIfExists('role_users');
+    await Database.dropIfExists('users');
   }
 }
 
-export default new CreateRole_usersTable();
+export default new CreateUsersTable();

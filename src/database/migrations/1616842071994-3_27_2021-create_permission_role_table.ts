@@ -3,11 +3,11 @@ import { Database } from 'database/core/database';
 import { Migration } from 'database/core/migration';
 import { DataType } from 'database/core/builder/types/data.type';
 
-export class CreateUsersTable extends Migration {
+export class CreatePermissionRoleTable extends Migration {
   /**
    * Name of the table will be created.
    */
-  protected table = 'users';
+  protected table = 'permission_role';
 
   /**
    * Name of migration.
@@ -16,7 +16,7 @@ export class CreateUsersTable extends Migration {
 
   protected async up() {
     await Database.create(
-      'users',
+      'permission_role',
       // Columns
       {
         id: {
@@ -25,12 +25,14 @@ export class CreateUsersTable extends Migration {
           increment: true,
           required: true,
         },
-        name: {
-          type: DataType.varChar(255),
+        permission_id: {
+          type: DataType.bigInt(),
+          unsigned: true,
           required: true,
         },
-        password: {
-          type: DataType.varChar(255),
+        role_id: {
+          type: DataType.bigInt(),
+          unsigned: true,
           required: true,
         },
         created_at: {
@@ -48,13 +50,34 @@ export class CreateUsersTable extends Migration {
         columns: ['id'],
       },
       // Foreign keys
-      [],
+      [
+        {
+          name: 'FK_PermissionRole_Permissions',
+          column: 'permission_id',
+          table: 'permissions',
+          referencedColumn: 'id',
+          onDelete: 'cascade',
+        },
+        {
+          name: 'FK_PermissionRole_Roles',
+          column: 'role_id',
+          table: 'roles',
+          referencedColumn: 'id',
+          onDelete: 'cascade',
+        },
+      ],
+      [
+        {
+          name: 'UQ_PermissionRole_PermissionId_Role_id',
+          columns: ['permission_id', 'role_id'],
+        },
+      ],
     );
   }
 
   protected async down() {
-    await Database.dropIfExists('users');
+    await Database.dropIfExists('permission_role');
   }
 }
 
-export default new CreateUsersTable();
+export default new CreatePermissionRoleTable();

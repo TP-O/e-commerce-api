@@ -1,27 +1,26 @@
 import { Database } from 'database/core/database';
 import { Seeder } from 'database/core/seeder';
 
-class UsersSeeder extends Seeder {
+class SalesmansSeeder extends Seeder {
   /**
    * Name of seeder.
    */
-  protected seederName = 'users';
+  protected seederName = 'salesmans';
 
   /**
    * Insert data to table.
    */
   protected async run() {
-    await Database.table('users').insert(
+    await Database.table('salesmans').insert(
       // Column names
       ['name', 'email', 'password'],
       // Inserted data
       [
-        ['User 01', 'user01@gmail.com', '0001'],
-        ['User 02', 'user02@gmail.com', '0002'],
-        ['User 03', 'user03@gmail.com', '0003'],
+        ['Salesman 01', 'salesman01@gmail.com', '0001'],
+        ['Salesman 02', 'salesman02@gmail.com', '0002'],
       ],
     );
   }
 }
 
-export default new UsersSeeder();
+export default new SalesmansSeeder();

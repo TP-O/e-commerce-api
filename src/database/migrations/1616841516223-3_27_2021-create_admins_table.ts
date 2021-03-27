@@ -3,11 +3,11 @@ import { Database } from 'database/core/database';
 import { Migration } from 'database/core/migration';
 import { DataType } from 'database/core/builder/types/data.type';
 
-export class CreateRolesTable extends Migration {
+export class CreateAdminsTable extends Migration {
   /**
    * Name of the table will be created.
    */
-  protected table = 'roles';
+  protected table = 'admins';
 
   /**
    * Name of migration.
@@ -16,7 +16,7 @@ export class CreateRolesTable extends Migration {
 
   protected async up() {
     await Database.create(
-      'roles',
+      'admins',
       // Columns
       {
         id: {
@@ -26,9 +26,17 @@ export class CreateRolesTable extends Migration {
           required: true,
         },
         name: {
+          type: DataType.varChar(50),
+          required: true,
+        },
+        email: {
           type: DataType.varChar(255),
           required: true,
           unique: true,
+        },
+        password: {
+          type: DataType.varChar(255),
+          required: true,
         },
         created_at: {
           type: DataType.timestamp(),
@@ -50,8 +58,8 @@ export class CreateRolesTable extends Migration {
   }
 
   protected async down() {
-    await Database.dropIfExists('roles');
+    await Database.dropIfExists('admins');
   }
 }
 
-export default new CreateRolesTable();
+export default new CreateAdminsTable();
