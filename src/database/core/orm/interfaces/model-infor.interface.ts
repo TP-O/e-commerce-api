@@ -14,7 +14,7 @@ export interface Relationship {
 
 export interface ModelInfor {
   table: string;
-  schema: { [key: string]: any };
+  columns: string[];
   primaryKey?: string;
   fillable: string[];
   relationships: Relationship;

@@ -51,7 +51,7 @@ export class HasMany extends Relation {
         };
 
         Database.addSelection(
-          ...Object.keys(this.pivot.model.schema).map(
+          ...this.pivot.model.columns.map(
             (c) =>
               `${this.pivot?.model?.table}.${c}:${this.relation}-${
                 this.pivot?.name || 'pivot_table'

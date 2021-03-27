@@ -52,7 +52,7 @@ export class BelongsToMany extends Relation {
       };
 
       Database.addSelection(
-        ...Object.keys(this.pivot.model.schema).map(
+        ...this.pivot.model.columns.map(
           (c) =>
             `${this.pivot.table}.${c}:${this.relation}-${
               this.pivot.name || 'pivot_table'

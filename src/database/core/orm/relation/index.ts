@@ -22,7 +22,7 @@ export abstract class Relation {
    */
   protected selectColumns(): void {
     Database.addSelection(
-      ...Object.keys(this.relatedModel.schema).map(
+      ...this.relatedModel.columns.map(
         (c) => `${this.relatedModel.table}.${c}:${this.relation}-${c}`,
       ),
     );

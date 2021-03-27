@@ -3,12 +3,7 @@ import { User } from 'model/user.model';
 
 export const Role = ModelMaker.make({
   table: 'roles',
-  schema: {
-    id: '',
-    name: '',
-    created_at: '',
-    updated_at: '',
-  },
+  columns: ['id', 'name', 'created_at', 'updated_at'],
   fillable: ['name'],
   relationships: {
     belongsToMany: [

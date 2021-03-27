@@ -12,12 +12,12 @@ export class Model {
   /**
    *
    * @param table name of the table that this model uses.
-   * @param schema schema of the table.
+   * @param columns colums of the table.
    * @param primaryKey primary key of the table.
    */
   constructor(
     public readonly table: string,
-    public readonly schema: { [key: string]: any },
+    public readonly columns: string[],
     public readonly primaryKey = 'id',
     public readonly fillable: string[] = [],
   ) {
@@ -98,7 +98,7 @@ export class Model {
   select(...columns: string[]): Model {
     // Add table name before each column.
     if (columns.includes('*')) {
-      columns = Object.keys(this.schema).map((c) => `${this.table}.${c}`);
+      columns = this.columns.map((c) => `${this.table}.${c}`);
     } else {
       columns = columns.map((c) => `${this.table}.${c}`);
     }

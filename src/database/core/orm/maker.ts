@@ -17,7 +17,7 @@ export class Maker {
    * @param infor information of created model.
    */
   public static make(infor: ModelInfor) {
-    const model = new Model(infor.table, infor.schema, infor.primaryKey, infor.fillable);
+    const model = new Model(infor.table, infor.columns, infor.primaryKey, infor.fillable);
 
     this.bindRelationships(model, infor.relationships);
 
