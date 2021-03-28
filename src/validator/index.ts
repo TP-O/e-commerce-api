@@ -42,7 +42,7 @@ export class Validator {
 
     const [message, name] = error.message.split('(');
 
-    formatedError[name.slice(0, -1)] = `"${name.slice(0, -1)}" ${message.slice(0, -1)}`;
+    formatedError[name.slice(0, -1)] = `${name.slice(0, -1)} ${message.slice(0, -1)}`;
 
     return formatedError;
   }
@@ -57,11 +57,7 @@ export class Validator {
 
     for (const value of error.details) {
       value.path.forEach((p: string) => {
-        if (formatedErrors[p]) {
-          formatedErrors[p].push(value.message);
-        } else {
-          formatedErrors[p] = [value.message];
-        }
+        formatedErrors[p] = value.message;
       });
     }
 
