@@ -90,7 +90,7 @@ class Handler {
 
         break;
 
-      case 'refesh':
+      case 'refresh':
         new RefreshMigration().execute();
 
         break;
