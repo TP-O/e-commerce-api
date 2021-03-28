@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { Validator } from 'validator';
+import { Validator } from '@validator';
 
 const rules = Joi.object().keys({
   name: Joi.string().min(5),

@@ -1,6 +1,6 @@
-import { ModelMaker } from 'database/core';
-import { Role } from 'model/role.model';
-import { Permission } from 'model/permission.model';
+import { ModelMaker } from '@database/core';
+import { Role } from '@model/role.model';
+import { Permission } from '@model/permission.model';
 
 export const Salesman = ModelMaker.make({
   table: 'salesmans',

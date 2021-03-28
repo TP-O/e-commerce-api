@@ -1,14 +1,14 @@
-import { Model } from 'database/core/orm/model';
+import { Model } from '@database/core/orm/model';
 import {
   Relationship,
   ModelInfor,
-} from 'database/core/orm/interfaces/model-infor.interface';
+} from '@database/core/orm/interfaces/model-infor.interface';
 import {
   BelongsToManyRelationship,
   BelongsToRelationship,
   HasManyRelationship,
   HasOneRelationship,
-} from 'database/core/orm/interfaces/relation.interface';
+} from '@database/core/orm/interfaces/relation.interface';
 
 export class Maker {
   /**

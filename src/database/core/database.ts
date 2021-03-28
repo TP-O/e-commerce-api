@@ -1,9 +1,9 @@
-import { Converter } from 'database/core/orm/convert';
-import { Connection } from 'database/core/connect/connection';
-import { Column } from 'database/core/builder/interfaces/column.interface';
-import { Model } from 'database/core/orm/model';
-import { QueryBuilder } from 'database/core/builder/query.builder';
-import * as Cons from 'database/core/builder/interfaces/constraint.interface';
+import { Converter } from '@database/core/orm/convert';
+import { Connection } from '@database/core/connect/connection';
+import { Column } from '@database/core/builder/interfaces/column.interface';
+import { Model } from '@database/core/orm/model';
+import { QueryBuilder } from '@database/core/builder/query.builder';
+import * as Cons from '@database/core/builder/interfaces/constraint.interface';
 
 export class Database {
   /**

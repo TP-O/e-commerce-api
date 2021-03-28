@@ -1,5 +1,5 @@
-import { HttpRequestError } from 'exception/http-request-error';
-import { User } from 'model/user.model';
+import { HttpRequestError } from '@exception/http-request-error';
+import { User } from '@model/user.model';
 
 class UserService {
   /**

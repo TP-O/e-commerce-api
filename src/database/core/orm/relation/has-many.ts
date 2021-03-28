@@ -1,7 +1,7 @@
-import { Model } from 'database/core/orm/model';
-import { Relation } from 'database/core/orm/relation';
-import { Database } from 'database/core/database';
-import { Pivot } from 'database/core/orm/interfaces/relation.interface';
+import { Model } from '@database/core/orm/model';
+import { Relation } from '@database/core/orm/relation';
+import { Database } from '@database/core/database';
+import { Pivot } from '@database/core/orm/interfaces/relation.interface';
 
 export class HasMany extends Relation {
   /**

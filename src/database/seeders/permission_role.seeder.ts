@@ -1,5 +1,5 @@
-import { Database } from 'database/core/database';
-import { Seeder } from 'database/core/seeder';
+import { Database } from '@database/core/database';
+import { Seeder } from '@database/core/seeder';
 
 class Permission_roleSeeder extends Seeder {
   /**

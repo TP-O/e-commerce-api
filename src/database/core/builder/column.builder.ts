@@ -1,5 +1,5 @@
-import { Constraint } from 'database/core/builder/interfaces/constraint.interface';
-import { ConstraintBuilder } from 'database/core/builder/constraint.builder';
+import { Constraint } from '@database/core/builder/interfaces/constraint.interface';
+import { ConstraintBuilder } from '@database/core/builder/constraint.builder';
 
 export class ColumnBuilder {
   private contraintBuilder = new ConstraintBuilder();

@@ -1,5 +1,5 @@
 import { readFile, writeFile } from 'fs/promises';
-import { Command } from 'database/core/console/command';
+import { Command } from '@database/core/console/command';
 
 export class MakeSeeder extends Command {
   private _fileName: string;

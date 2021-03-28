@@ -1,8 +1,8 @@
 import { readdir } from 'fs/promises';
-import { Command } from 'database/core/console/command';
-import { Migration } from 'database/core/migration';
-import { Connection } from 'database/core/connect/connection';
-import { Database } from 'database/core/database';
+import { Command } from '@database/core/console/command';
+import { Migration } from '@database/core/migration';
+import { Connection } from '@database/core/connect/connection';
+import { Database } from '@database/core/database';
 
 export class RollbackMigration extends Command {
   protected _migrations: Migration[] = [];
@@ -35,7 +35,7 @@ export class RollbackMigration extends Command {
         });
 
         if (matched) {
-          this._migrations.push(require(`database/migrations/${file}`).default);
+          this._migrations.push(require(`@database/migrations/${file}`).default);
         }
       });
 

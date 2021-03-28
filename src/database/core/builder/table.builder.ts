@@ -1,11 +1,11 @@
-import { Column } from 'database/core/builder/interfaces/column.interface';
+import { Column } from '@database/core/builder/interfaces/column.interface';
 import {
   ForeignKey,
   PrimaryKey,
   Unique,
-} from 'database/core/builder/interfaces/constraint.interface';
-import { ConstraintBuilder } from 'database/core/builder/constraint.builder';
-import { ColumnBuilder } from 'database/core/builder/column.builder';
+} from '@database/core/builder/interfaces/constraint.interface';
+import { ConstraintBuilder } from '@database/core/builder/constraint.builder';
+import { ColumnBuilder } from '@database/core/builder/column.builder';
 
 export class TableBuilder {
   private columnBuilder = new ColumnBuilder();

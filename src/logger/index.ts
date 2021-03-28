@@ -1,8 +1,8 @@
 import morgan from 'morgan';
 import { Express } from 'express';
 import { createStream, RotatingFileStream } from 'rotating-file-stream';
-import { nodeConfig } from 'config/node.config';
-import { loggerConfig } from 'config/logger.config';
+import { nodeConfig } from '@config/node.config';
+import { loggerConfig } from '@config/logger.config';
 
 class Logger {
   /**

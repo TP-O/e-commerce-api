@@ -1,5 +1,5 @@
-import { HttpRequestError } from 'exception/http-request-error';
-import { Admin } from 'model/admin.model';
+import { HttpRequestError } from '@exception/http-request-error';
+import { Admin } from '@model/admin.model';
 
 class AdminService {
   /**

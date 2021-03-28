@@ -3,7 +3,7 @@ import {
   BelongsToRelationship,
   HasManyRelationship,
   HasOneRelationship,
-} from 'database/core/orm/interfaces/relation.interface';
+} from '@database/core/orm/interfaces/relation.interface';
 
 export interface Relationship {
   hasOne?: HasOneRelationship[];

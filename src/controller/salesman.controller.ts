@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import SalesmanService from 'service/salesman.service';
-import { format } from 'helper';
-import { HttpRequestError } from 'exception/http-request-error';
-import { creatingValidator } from 'validator/salesman/create.validator';
-import { updatingValidator } from 'validator/salesman/update.validator';
+import SalesmanService from '@service/salesman.service';
+import { format } from '@helper';
+import { HttpRequestError } from '@exception/http-request-error';
+import { creatingValidator } from '@validator/salesman/create.validator';
+import { updatingValidator } from '@validator/salesman/update.validator';
 
 class SalesmanController {
   private readonly salesmanService = SalesmanService;

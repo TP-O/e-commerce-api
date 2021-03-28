@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { HttpRequestError } from 'exception/http-request-error';
+import { HttpRequestError } from '@exception/http-request-error';
 
 export class Validator {
   /**

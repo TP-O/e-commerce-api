@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import UserService from 'service/user.service';
-import { format } from 'helper';
-import { HttpRequestError } from 'exception/http-request-error';
-import { creatingValidator } from 'validator/user/create.validator';
-import { updatingValidator } from 'validator/user/update.validator';
+import UserService from '@service/user.service';
+import { format } from '@helper';
+import { HttpRequestError } from '@exception/http-request-error';
+import { creatingValidator } from '@validator/user/create.validator';
+import { updatingValidator } from '@validator/user/update.validator';
 
 class UserController {
   private readonly userSerivce = UserService;

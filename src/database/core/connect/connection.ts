@@ -1,5 +1,5 @@
 import { createPool, Pool } from 'mysql2/promise';
-import { databaseConfig } from 'config/database.config';
+import { databaseConfig } from '@config/database.config';
 
 export class Connection {
   /**

@@ -1,4 +1,4 @@
-import { ModelMaker } from 'database/core';
+import { ModelMaker } from '@database/core';
 
 export const Permission = ModelMaker.make({
   table: 'permissions',

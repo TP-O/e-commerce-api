@@ -1,5 +1,5 @@
-import { Database } from 'database/core/database';
-import { DataType } from 'database/core/builder/types/data.type';
+import { Database } from '@database/core/database';
+import { DataType } from '@database/core/builder/types/data.type';
 
 export abstract class Migration {
   /**

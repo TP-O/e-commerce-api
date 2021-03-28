@@ -1,5 +1,5 @@
-import { HttpRequestError } from 'exception/http-request-error';
-import { Salesman } from 'model/salesman.model';
+import { HttpRequestError } from '@exception/http-request-error';
+import { Salesman } from '@model/salesman.model';
 
 class SalesmanService {
   /**

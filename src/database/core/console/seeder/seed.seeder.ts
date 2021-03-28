@@ -1,6 +1,6 @@
-import { Connection } from 'database/core/connect/connection';
-import { Command } from 'database/core/console/command';
-import { Seeder } from 'database/core/seeder';
+import { Connection } from '@database/core/connect/connection';
+import { Command } from '@database/core/console/command';
+import { Seeder } from '@database/core/seeder';
 
 export class SeedSeeder extends Command {
   private _seeder: Seeder | undefined;
@@ -11,7 +11,7 @@ export class SeedSeeder extends Command {
    * Prepare data.
    */
   protected prepare(): void {
-    this._seeder = require(`database/seeders/${this._seederFile}`).default;
+    this._seeder = require(`@database/seeders/${this._seederFile}`).default;
   }
 
   /**

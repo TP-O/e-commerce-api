@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import AdminService from 'service/admin.service';
-import { format } from 'helper';
-import { HttpRequestError } from 'exception/http-request-error';
-import { creatingValidator } from 'validator/admin/create.validator';
-import { updatingValidator } from 'validator/admin/update.validator';
+import AdminService from '@service/admin.service';
+import { format } from '@helper';
+import { HttpRequestError } from '@exception/http-request-error';
+import { creatingValidator } from '@validator/admin/create.validator';
+import { updatingValidator } from '@validator/admin/update.validator';
 
 class AdminController {
   private readonly adminSerivce = AdminService;

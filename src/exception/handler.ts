@@ -1,7 +1,7 @@
 import { Request, Response, Express } from 'express';
-import { notFound } from 'exception/errors/not-found.error';
-import { internalServer } from './errors/internal-server.error';
-import { HttpRequestError } from './http-request-error';
+import { notFound } from '@exception/errors/not-found.error';
+import { internalServer } from '@exception/errors/internal-server.error';
+import { HttpRequestError } from '@exception/http-request-error';
 
 class Handler {
   /**

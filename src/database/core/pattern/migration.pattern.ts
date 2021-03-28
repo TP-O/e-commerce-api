@@ -1,7 +1,7 @@
 import { basename } from 'path';
-import { Database } from 'database/core/database';
-import { Migration } from 'database/core/migration';
-import { DataType } from 'database/core/builder/types/data.type';
+import { Database } from '@database/core/database';
+import { Migration } from '@database/core/migration';
+import { DataType } from '@database/core/builder/types/data.type';
 
 export class CreateXXXTable extends Migration {
   /**
