@@ -31,7 +31,7 @@ export class Model {
   /**
    * Get data.
    */
-  async get() {
+  public async get() {
     Database.usingModel = this;
 
     const { data, error } = await Database.execute();
@@ -42,7 +42,7 @@ export class Model {
   /**
    * Get all data.
    */
-  async all() {
+  public async all() {
     Database.usingModel = this;
 
     const { data, error } = await Database.table(this.table).select('*').execute();
@@ -55,7 +55,7 @@ export class Model {
    *
    * @param item new data.
    */
-  async create(items: any[]) {
+  public async create(items: any[]) {
     const { status, error } = await Database.table(this.table).insert(
       Object.keys(this.filter(items[0])),
       items.map((item) => Object.values(this.filter(item))),
@@ -71,7 +71,7 @@ export class Model {
    *
    * @param value new values.
    */
-  async update(value: any) {
+  public async update(value: any) {
     const { status, error } = await Database.table(this.table).update(this.filter(value));
 
     return status && status.affectedRows && status.affectedRows > 0
@@ -82,7 +82,7 @@ export class Model {
   /**
    * Delete data.
    */
-  async delete() {
+  public async delete() {
     const { status, error } = await Database.table(this.table).delete();
 
     return status && status.affectedRows && status.affectedRows > 0
@@ -95,7 +95,7 @@ export class Model {
    *
    * @param columns list of specific columns.
    */
-  select(...columns: string[]): Model {
+  public select(...columns: string[]): this {
     // Add table name before each column.
     if (columns.includes('*')) {
       columns = this.columns.map((c) => `${this.table}.${c}`);
@@ -113,7 +113,7 @@ export class Model {
    *
    * @param coditions list of conditions.
    */
-  where(conditions: string[][] | ((q: QueryBuilder) => void)): Model {
+  public where(conditions: string[][] | ((q: QueryBuilder) => void)): this {
     Database.table(this.table).where(conditions);
 
     return this;
@@ -124,7 +124,7 @@ export class Model {
    *
    * @param conditions list of conditions.
    */
-  orWhere(conditions: string[][]): Model {
+  public orWhere(conditions: string[][]): this {
     Database.orWhere(conditions);
 
     return this;
@@ -135,7 +135,7 @@ export class Model {
    *
    * @param conditions list of conditions.
    */
-  andWhere(conditions: string[][]): Model {
+  public andWhere(conditions: string[][]): this {
     Database.andWhere(conditions);
 
     return this;
@@ -146,7 +146,7 @@ export class Model {
    *
    * @param conditions list of conditions.
    */
-  notWhere(conditions: string[][]): Model {
+  public notWhere(conditions: string[][]): this {
     Database.notWhere(conditions);
 
     return this;
@@ -157,7 +157,7 @@ export class Model {
    *
    * @param column specified column.
    */
-  groupBy(column: string) {
+  public groupBy(column: string): this {
     Database.groupBy(column);
 
     return this;
@@ -169,7 +169,7 @@ export class Model {
    * @param column specified column.
    * @param type type of order.
    */
-  orderBy(column: string, type?: string) {
+  public orderBy(column: string, type?: string): this {
     Database.orderBy(column, type);
 
     return this;
@@ -180,7 +180,7 @@ export class Model {
    *
    * @param number maximum number of results.
    */
-  limit(number: number) {
+  public limit(number: number): this {
     Database.limit(number);
 
     return this;
@@ -191,7 +191,7 @@ export class Model {
    *
    * @param column specified column.
    */
-  min(column: string, alias?: string) {
+  public min(column: string, alias?: string): this {
     Database.min(column, alias);
 
     return this;
@@ -202,7 +202,7 @@ export class Model {
    *
    * @param column specified column.
    */
-  max(column: string, alias?: string) {
+  public max(column: string, alias?: string): this {
     Database.max(column, alias);
 
     return this;
@@ -213,7 +213,7 @@ export class Model {
    *
    * @param column specified column.
    */
-  sum(column: string, alias?: string) {
+  public sum(column: string, alias?: string): this {
     Database.sum(column, alias);
 
     return this;
@@ -224,7 +224,7 @@ export class Model {
    *
    * @param column specified column.
    */
-  avg(column: string, alias?: string) {
+  public avg(column: string, alias?: string): this {
     Database.avg(column, alias);
 
     return this;
@@ -235,7 +235,7 @@ export class Model {
    *
    * @param column specified column.
    */
-  count(column: string, alias?: string) {
+  public count(column: string, alias?: string): this {
     Database.count(column, alias);
 
     return this;
@@ -246,7 +246,7 @@ export class Model {
    *
    * @param relations list of relationship names.
    */
-  with(...relations: string[]): Model {
+  public with(...relations: string[]): this {
     relations.forEach((relation) => {
       let curModel: Model = this;
       const nestedRelations = relation.split('.');
@@ -270,7 +270,7 @@ export class Model {
    *
    * @param value user input.
    */
-  private filter(value: any) {
+  private filter(value: any): any {
     const filterdValue: any = {};
 
     this.fillable.forEach((f) => {

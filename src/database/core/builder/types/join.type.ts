@@ -1,17 +1,17 @@
 export class JoinTypes {
-  static inner(): string {
+  public static inner() {
     return 'INNER JOIN';
   }
 
-  static left(): string {
+  public static left() {
     return 'LEFT JOIN';
   }
 
-  static right(): string {
+  public static right() {
     return 'RIGHT JOIN';
   }
 
-  static full(): string {
+  public static full() {
     return 'FULL JOIN';
   }
 }

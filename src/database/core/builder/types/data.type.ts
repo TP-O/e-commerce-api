@@ -4,7 +4,7 @@ export class DataType {
    *
    * @param size The column length in characters.
    */
-  static char(size: 1) {
+  public static char(size: 1) {
     const minSize = 0;
     const maxSize = 255;
 
@@ -20,7 +20,7 @@ export class DataType {
    *
    * @param size The column length in characters.
    */
-  static varChar(size: number) {
+  public static varChar(size: number) {
     const minSize = 0;
     const maxSize = 65535;
 
@@ -34,7 +34,7 @@ export class DataType {
   /**
    * Holds a string with a maximum length of 65,535 bytes.
    */
-  static text() {
+  public static text() {
     return 'TEXT';
   }
 
@@ -43,7 +43,7 @@ export class DataType {
    *
    * @param size The number of bits per value.
    */
-  static bit(size = 1): string {
+  public static bit(size = 1): string {
     const minSize = 1;
     const maxSize = 64;
 
@@ -58,7 +58,7 @@ export class DataType {
    * Signed range is from -128 to 127.
    * Unsigned range is from 0 to 255.
    */
-  static tinyInt(): string {
+  public static tinyInt(): string {
     return 'TINYINT';
   }
 
@@ -67,7 +67,7 @@ export class DataType {
    * Signed range is from -32768 to 32767
    * Unsigned range is from 0 to 65535
    */
-  static smallInt(): string {
+  public static smallInt(): string {
     return 'SMALLINT';
   }
 
@@ -76,7 +76,7 @@ export class DataType {
    * Signed range is from -8388608 to 8388607.
    * Unsigned range is from 0 to 16777215.
    */
-  static mediumInt(): string {
+  public static mediumInt(): string {
     return 'MEDIUMINT';
   }
 
@@ -84,7 +84,7 @@ export class DataType {
    * Signed range is from -2147483648 to 2147483647.
    * Unsigned range is from 0 to 4294967295.
    */
-  static int(): string {
+  public static int(): string {
     return 'INT';
   }
 
@@ -93,7 +93,7 @@ export class DataType {
    * Signed range is from -9223372036854775808 to 9223372036854775807.
    * Unsigned range is from 0 to 18446744073709551615.
    */
-  static bigInt(): string {
+  public static bigInt(): string {
     return 'BIGINT';
   }
 
@@ -102,7 +102,7 @@ export class DataType {
    *
    * @param p (0-24) is FLOAT(), (25-53) is DOUBLE().
    */
-  static float(p = 24): string {
+  public static float(p = 24): string {
     const minSize = 0;
     const maxSize = 53;
 
@@ -118,7 +118,7 @@ export class DataType {
    * @param size The total number of digits.
    * @param p The number of digits after the decimal point.
    */
-  static double(size: number, d: number): string {
+  public static double(size: number, d: number): string {
     return `DOUBLE(${size}, ${d})`;
   }
 
@@ -128,14 +128,14 @@ export class DataType {
    * @param size The total number of digits is specified.
    * @param d The number of digits after the decimal point.
    */
-  static decimal(size: number, d: number): string {
+  public static decimal(size: number, d: number): string {
     return `DECIMAL(${size}, ${d})`;
   }
 
   /**
    * A boolean type.
    */
-  static bool(): string {
+  public static bool(): string {
     return 'BOOL';
   }
 
@@ -143,7 +143,7 @@ export class DataType {
    * A date. Format: YYYY-MM-DD.
    * The supported range is from '1000-01-01' to '9999-12-31'.
    */
-  static date(): string {
+  public static date(): string {
     return 'DATE';
   }
 
@@ -153,7 +153,7 @@ export class DataType {
    * The supported range is from '1000-01-01 00:00:00' to '9999-12-31 23:59:59'.
    * Use DEFAULT CURRENT_TIMESTAMP and ON UPDATE CURRENT_TIMESTAMP to update automatically.
    */
-  static dateTime(): string {
+  public static dateTime(): string {
     return 'DATETIME';
   }
 
@@ -164,7 +164,7 @@ export class DataType {
    * From '1970-01-01 00:00:01' UTC to '2038-01-09 03:14:07' UTC.
    * Use DEFAULT CURRENT_TIMESTAMP and ON UPDATE CURRENT_TIMESTAMP to update automatically.
    */
-  static timestamp(): string {
+  public static timestamp(): string {
     return 'TIMESTAMP';
   }
 
@@ -174,7 +174,7 @@ export class DataType {
    * The supported range is from '1970-01-01 00:00:01' UTC to '2038-01-09 03:14:07' UTC.
    * Use DEFAULT CURRENT_TIMESTAMP and ON UPDATE CURRENT_TIMESTAMP to update automatically.
    */
-  static time(): string {
+  public static time(): string {
     return 'TIME';
   }
 
@@ -183,7 +183,7 @@ export class DataType {
    * Values allowed in four-digit format: 1901 to 2155, and 0000.
    * MySQL 8.0 does not support year in two-digit format.
    */
-  static year(): string {
+  public static year(): string {
     return 'YEAR';
   }
 }

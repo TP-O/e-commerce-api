@@ -1,27 +1,56 @@
-export const required = () => {
-  return 'NOT NULL';
-};
+export class ConstraintType {
+  /**
+   * Ensure that a column cannot have a NULL value.
+   */
+  public static required() {
+    return 'NOT NULL';
+  }
 
-export const unique = () => {
-  return 'UNIQUE';
-};
+  /**
+   * Ensure that all values in a column are different.
+   */
+  public static unique() {
+    return 'UNIQUE';
+  }
 
-export const defaults = (value: string | number) => {
-  return `DEFAULT ${value}`;
-};
+  /**
+   * Set a default value for a column if no value is specified.
+   *
+   * @param value default value.
+   */
+  public static defaults(value: string | number) {
+    return `DEFAULT ${value}`;
+  }
 
-export const increment = () => {
-  return 'AUTO_INCREMENT';
-};
+  /**
+   * Increase by 1 if new column is added.
+   */
+  public static increment() {
+    return 'AUTO_INCREMENT';
+  }
 
-export const unsigned = () => {
-  return 'UNSIGNED';
-};
+  /**
+   * Set positive number.
+   */
+  public static unsigned() {
+    return 'UNSIGNED';
+  }
 
-export const onUpdate = (value: string | number) => {
-  return `ON UPDATE ${value}`;
-};
+  /**
+   * Set action when the primary key is updated.
+   *
+   * @param mode restrict | no action | cascade | set null.
+   */
+  public static onUpdate(mode: string) {
+    return `ON UPDATE ${mode}`;
+  }
 
-export const onDelete = (value: string | number) => {
-  return `ON DELETE ${value}`;
-};
+  /**
+   * Set action when the primary key is deleted.
+   *
+   * @param mode restrict | no action | cascade | set null.
+   */
+  public static onDelete(mode: string) {
+    return `ON DELETE ${mode}`;
+  }
+}

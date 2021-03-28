@@ -5,13 +5,23 @@ import {
   PrimaryKey,
   Unique,
 } from 'database/core/builder/interfaces/constraint.interface';
-import * as Types from 'database/core/builder/types/contraint.type';
+import { ConstraintType } from 'database/core/builder/types/contraint.type';
 
 export class ConstraintBuilder {
+  /**
+   * Create primary key.
+   *
+   * @param param0 primary key information.
+   */
   primaryKey({ name, columns }: PrimaryKey): string {
     return `CONSTRAINT ${name || ''} PRIMARY KEY (${columns.join(', ')})`;
   }
 
+  /**
+   * Create foreign key.
+   *
+   * @param param0 foreign key information.
+   */
   foreignKey({
     name,
     column,
@@ -25,39 +35,54 @@ export class ConstraintBuilder {
     } ${onDelete ? `ON DELETE ${onDelete}` : ''}`;
   }
 
+  /**
+   * Create unique constraint.
+   *
+   * @param unique unique constraint informations.
+   */
   unique(unique: Unique[]): string[] {
     return unique.map((u) => `CONSTRAINT ${u.name} UNIQUE (${u.columns.join(', ')})`);
   }
 
-  index({ name, unique, table, columns }: Index) {
+  /**
+   * Create index constraint.
+   *
+   * @param param0 index constraint informations.
+   */
+  index({ name, unique, table, columns }: Index): string {
     return unique
       ? `CREATE UNIQUE INDEX ${name} ON ${table} (${columns.join(', ')});`
       : `CREATE INDEX ${name} ON ${table} (${columns.join(', ')});`;
   }
 
+  /**
+   * Build contraints.
+   *
+   * @param constraints all contraints will be built.
+   */
   build(constraints: Constraint): string {
     const cons: string[] = [];
 
     if (constraints.unsigned) {
-      cons.push(Types.unsigned());
+      cons.push(ConstraintType.unsigned());
     }
     if (constraints.required) {
-      cons.push(Types.required());
+      cons.push(ConstraintType.required());
     }
     if (constraints.default) {
-      cons.push(Types.defaults(constraints.default));
+      cons.push(ConstraintType.defaults(constraints.default));
     }
     if (constraints.increment) {
-      cons.push(Types.increment());
+      cons.push(ConstraintType.increment());
     }
     if (constraints.unique) {
-      cons.push(Types.unique());
+      cons.push(ConstraintType.unique());
     }
     if (constraints.onUpdate) {
-      cons.push(Types.onUpdate(constraints.onUpdate));
+      cons.push(ConstraintType.onUpdate(constraints.onUpdate));
     }
     if (constraints.onDelete) {
-      cons.push(Types.onDelete(constraints.onDelete));
+      cons.push(ConstraintType.onDelete(constraints.onDelete));
     }
 
     return cons.join(' ');

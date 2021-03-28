@@ -12,6 +12,15 @@ export class TableBuilder {
 
   private constraintBuilder = new ConstraintBuilder();
 
+  /**
+   * Build query sentence creating table.
+   *
+   * @param table name of the table.
+   * @param columns column names of the table.
+   * @param primaryKey primary key of the table.
+   * @param foreignKeys foreign keys of the table.
+   * @param uniqueColumns unique columns of the table.
+   */
   build(
     table: string,
     columns: { [key: string]: Column },

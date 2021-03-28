@@ -35,7 +35,7 @@ export class Connection {
   }
 
   /**
-   *
+   * Check connection.
    */
   public static async isConnected(): Promise<boolean> {
     if (this.pool) {
