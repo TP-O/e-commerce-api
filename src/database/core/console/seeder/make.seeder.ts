@@ -15,7 +15,7 @@ export class MakeSeeder extends Command {
    * @param name name of table.
    */
   /* eslint-disable-next-line */
-  constructor(private _name: string) {
+  public constructor(private _name: string) {
     super();
 
     this._fileName = `${_name}.seeder`;
@@ -39,7 +39,7 @@ export class MakeSeeder extends Command {
   /**
    * Execute command.
    */
-  async execute(): Promise<void> {
+  public async execute(): Promise<void> {
     await this.prepare();
 
     try {

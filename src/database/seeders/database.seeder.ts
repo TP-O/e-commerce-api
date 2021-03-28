@@ -12,7 +12,7 @@ import PermissionUser from './permission_user.seeder';
 import PermissionSalesman from './permission_salesman.seeder';
 
 class DatabaseSeeder {
-  async seed(): Promise<void> {
+  public async seed(): Promise<void> {
     await Admin.seed();
     await User.seed();
     await Salesman.seed();

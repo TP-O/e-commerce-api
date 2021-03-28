@@ -62,6 +62,8 @@ export class RollbackMigration extends Command {
           .forEach((migration) => {
             job = job.then(async () => await migration.drop());
           });
+
+        return job;
       }
     } catch (err) {
       console.log(err);

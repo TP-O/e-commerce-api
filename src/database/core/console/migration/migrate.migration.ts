@@ -58,6 +58,8 @@ export class MigrateMigration extends Command {
         Object.values(this._migrations).forEach((migration) => {
           job = job.then(async () => await migration.create());
         });
+
+        return job;
       }
     } catch (err) {
       console.log(err);

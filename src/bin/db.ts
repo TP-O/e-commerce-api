@@ -1,10 +1,10 @@
+import { argv } from 'process';
 import { MakeSeeder } from '@database/core/console/seeder/make.seeder';
 import { SeedSeeder } from '@database/core/console/seeder/seed.seeder';
 import { MakeMigration } from '@database/core/console/migration/make.migration';
 import { MigrateMigration } from '@database/core/console/migration/migrate.migration';
 import { RefreshMigration } from '@database/core/console/migration/refresh.migration';
 import { RollbackMigration } from '@database/core/console/migration/rollback.migration';
-import { argv } from 'process';
 
 class Handler {
   /**
@@ -46,7 +46,7 @@ class Handler {
    * @param type type of maked thing.
    * @param name name of maked thing.
    */
-  public make(type: string, name: string) {
+  public async make(type: string, name: string) {
     if (!name) {
       console.log('Name is missing');
 
@@ -74,7 +74,7 @@ class Handler {
   /**
    * Handle seed commad.
    */
-  public seed() {
+  public async seed() {
     new SeedSeeder().execute();
   }
 
@@ -83,7 +83,7 @@ class Handler {
    *
    * @param option migrate option..
    */
-  public migrate(option = 'migrate') {
+  public async migrate(option = 'migrate') {
     switch (option) {
       case 'migrate':
         new MigrateMigration().execute();
@@ -108,6 +108,8 @@ class Handler {
   }
 }
 
-const hanler = new Handler();
+(async () => {
+  const hanler = new Handler();
 
-hanler.listen();
+  await hanler.listen();
+})();
