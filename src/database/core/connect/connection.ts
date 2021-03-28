@@ -12,7 +12,7 @@ export class Connection {
    *
    * @param tries number of retries when an error occurs.
    */
-  public static async establish(retries = 5): Promise<void> {
+  public static async establish(): Promise<void> {
     if (await this.isConnected()) {
       return;
     }
@@ -26,11 +26,9 @@ export class Connection {
 
       console.log('Database is connected');
     } catch (err) {
-      if (retries === 0) {
-        console.error(`Connection failed (${err.message})`);
-      } else {
-        await this.establish(--retries);
-      }
+      console.error(`Connection failed (${err.message})`);
+
+      await this.establish();
     }
   }
 
