@@ -1,12 +1,12 @@
 import { HttpRequestError } from 'exception/http-request-error';
-import { User } from 'model/user.model';
+import { Admin } from 'model/admin.model';
 
-class UserService {
+class AdminService {
   /**
-   * Get list of users.
+   * Get list of admins.
    */
   public async findAll() {
-    const { data } = await User.select('*').with('roles', 'permissions').get();
+    const { data } = await Admin.select('*').with('roles', 'permissions').get();
 
     return { data };
   }
@@ -14,37 +14,37 @@ class UserService {
   /**
    * Find user by id.
    *
-   * @param id user id.
+   * @param id admin id.
    */
   public async findOne(id: any) {
-    const { data } = await User.select('*')
+    const { data } = await Admin.select('*')
       .with('roles', 'permissions')
-      .where([['users.id', '=', `v:${id}`]])
+      .where([['admins.id', '=', `v:${id}`]])
       .get();
 
     if (!data?.count()) {
-      throw new HttpRequestError(404, 'User not found!');
+      throw new HttpRequestError(404, 'Admin not found!');
     }
 
     return { data: data?.first() };
   }
 
   /**
-   * Create user.
+   * Create admin.
    *
    * @param data user data.
    */
   public async create(data: any) {
-    const { success } = await User.create([data]);
+    const { success } = await Admin.create([data]);
 
     return { success };
   }
 
   /**
-   * Update user.
+   * Update admin.
    *
-   * @param id user id.
-   * @param data new user data.
+   * @param id admin id.
+   * @param data new admin data.
    */
   public async update(id: any, newData: any) {
     const { data } = await this.findOne(id);
@@ -58,7 +58,7 @@ class UserService {
   }
 
   /**
-   * Delete user.
+   * Delete admin.
    *
    * @param id user id.
    */
@@ -71,4 +71,4 @@ class UserService {
   }
 }
 
-export default new UserService();
+export default new AdminService();

@@ -55,10 +55,10 @@ export class Model {
    *
    * @param item new data.
    */
-  async create(item: any) {
+  async create(items: any[]) {
     const { status, error } = await Database.table(this.table).insert(
-      Object.keys(this.filter(item)),
-      [Object.values(this.filter(item))],
+      Object.keys(this.filter(items[0])),
+      items.map((item) => Object.values(this.filter(item))),
     );
 
     return status && status.insertId !== 0 && status.affectedRows === 1

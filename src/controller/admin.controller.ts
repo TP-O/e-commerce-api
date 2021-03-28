@@ -1,18 +1,18 @@
 import { Request, Response } from 'express';
-import UserService from 'service/user.service';
+import AdminService from 'service/admin.service';
 import { format } from 'helper';
 import { HttpRequestError } from 'exception/http-request-error';
-import { creatingValidator } from 'validator/user/create.validator';
-import { updatingValidator } from 'validator/user/update.validator';
+import { creatingValidator } from 'validator/admin/create.validator';
+import { updatingValidator } from 'validator/admin/update.validator';
 
-class UserController {
-  private readonly userSerivce = UserService;
+class AdminController {
+  private readonly adminSerivce = AdminService;
 
   /**
-   * Get list of users.
+   * Get list of admins.
    */
   public all = async (_: Request, res: Response) => {
-    const { data } = await this.userSerivce.findAll();
+    const { data } = await this.adminSerivce.findAll();
 
     return res.status(200).json({
       data: format(data?.all()),
@@ -20,10 +20,10 @@ class UserController {
   };
 
   /**
-   * Get user by id.
+   * Get admin by id.
    */
   public index = async (req: Request, res: Response) => {
-    const { data } = await this.userSerivce.findOne(req.params.id);
+    const { data } = await this.adminSerivce.findOne(req.params.id);
 
     return res.status(200).json({
       data: format(data),
@@ -31,15 +31,15 @@ class UserController {
   };
 
   /**
-   * Store new user.
+   * Store new admin.
    */
   public create = async (req: Request, res: Response) => {
     const value = await creatingValidator.validate(req.body);
 
-    const { success } = await this.userSerivce.create(value);
+    const { success } = await this.adminSerivce.create(value);
 
     if (!success) {
-      throw new HttpRequestError(500, 'Can not create user');
+      throw new HttpRequestError(500, 'Can not create admin');
     }
 
     return res.status(201).json({ success });
@@ -51,10 +51,10 @@ class UserController {
   public update = async (req: Request, res: Response) => {
     const value = await updatingValidator.validate(req.body);
 
-    const { success } = await this.userSerivce.update(req.params.id, value);
+    const { success } = await this.adminSerivce.update(req.params.id, value);
 
     if (!success) {
-      throw new HttpRequestError(500, 'Can not update user');
+      throw new HttpRequestError(500, 'Can not update admin');
     }
 
     return res.status(201).json({ success });
@@ -64,14 +64,14 @@ class UserController {
    * Delete user.
    */
   public delete = async (req: Request, res: Response) => {
-    const { success } = await this.userSerivce.delete(req.params.id);
+    const { success } = await this.adminSerivce.delete(req.params.id);
 
     if (!success) {
-      throw new HttpRequestError(500, 'Can not delete user');
+      throw new HttpRequestError(500, 'Can not delete admin');
     }
 
     return res.status(201).json({ success });
   };
 }
 
-export default new UserController();
+export default new AdminController();
