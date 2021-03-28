@@ -285,6 +285,15 @@ export class Database {
   }
 
   /**
+   * Raw query.
+   */
+  public static raw(querySentence: string) {
+    this._builder.setQuery(querySentence);
+
+    return this.execute();
+  }
+
+  /**
    * Execute with current query.
    */
   public static async execute(throwable = false) {

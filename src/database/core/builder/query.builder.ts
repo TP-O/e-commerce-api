@@ -21,6 +21,13 @@ export class QueryBuilder {
   }
 
   /**
+   * Set query sentences.
+   */
+  setQuery(querySentence: string) {
+    this.querySentence = querySentence;
+  }
+
+  /**
    * Reset query sentence.
    */
   resetQuery() {
