@@ -26,7 +26,7 @@ export class Instance {
     });
   }
 
-  public async update() {
+  public async save() {
     return this.model
       .where([[this.model.primaryKey, '=', `v:${this.data.id}`]])
       .update(this.data);

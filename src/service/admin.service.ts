@@ -52,7 +52,7 @@ class AdminService {
     data.name = newData.name;
     data.email = newData.email;
     data.password = newData.password;
-    const { success } = await data.update();
+    const { success } = await data.save();
 
     return { success };
   }
