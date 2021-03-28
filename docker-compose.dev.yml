@@ -2,12 +2,14 @@ version: "3.8"
 
 services:
   app:
-    image: e-commerce-server:test
+    image: e-commerce-server:development
     build:
       context: .
-      dockerfile: Dockerfile.test
+      dockerfile: Dockerfile.dev
     volumes:
       - ./:/app
+    ports:
+      - "${NODE_PORT}:${NODE_PORT}"
     env_file:
       - .env
     restart: unless-stopped
@@ -15,6 +17,11 @@ services:
       - db
     networks:
       - db-network
+    healthcheck:
+      test: wget --quiet --spider --tries=1 127.0.0.1:${NODE_PORT}
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   db:
     image: mysql:5.7
@@ -24,8 +31,15 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     restart: unless-stopped
+    volumes:
+      - ./.docker/data/dev/db:/var/lib/mysql
     networks:
       - db-network
+    healthcheck:
+      test: 'mysqladmin ping'
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
 networks:
   db-network:

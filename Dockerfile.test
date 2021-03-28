@@ -1,0 +1,11 @@
+FROM node:15.8.0-alpine
+
+WORKDIR /app
+
+COPY . .
+
+RUN yarn install
+
+RUN chmod +x __tests__/run.sh
+
+CMD [ "__tests__/run.sh" ]
