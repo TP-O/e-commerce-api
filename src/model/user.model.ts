@@ -1,14 +1,33 @@
-export class User {
-  public constructor(
-    public id: number,
-    public name: string,
-    public password: string,
-  ) {}
-}
+import { ModelMaker } from '@database/core';
+import { Role } from '@model/role.model';
+import { Permission } from '@model/permission.model';
 
-export const users: User[] = [
-  new User(1, 'User 01', '001'),
-  new User(2, 'User 02', '002'),
-  new User(3, 'User 03', '003'),
-  new User(4, 'User 04', '004'),
-];
+export const User = ModelMaker.make({
+  table: 'users',
+  columns: ['id', 'name', 'email', 'password', 'created_at', 'updated_at'],
+  fillable: ['name', 'email', 'password'],
+  relationships: {
+    hasMany: [
+      {
+        name: 'roles',
+        foreignKey: 'id',
+        relatedModel: Role,
+        pivot: {
+          table: 'role_user',
+          assetKey: 'role_id',
+          ownerKey: 'user_id',
+        },
+      },
+      {
+        name: 'permissions',
+        foreignKey: 'id',
+        relatedModel: Permission,
+        pivot: {
+          table: 'permission_user',
+          assetKey: 'permission_id',
+          ownerKey: 'user_id',
+        },
+      },
+    ],
+  },
+});

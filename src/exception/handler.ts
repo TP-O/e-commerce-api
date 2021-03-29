@@ -1,7 +1,7 @@
 import { Request, Response, Express } from 'express';
 import { notFound } from '@exception/errors/not-found.error';
-import { internalServer } from './errors/internal-server.error';
-import { HttpRequestError } from './http-request-error';
+import { internalServer } from '@exception/errors/internal-server.error';
+import { HttpRequestError } from '@exception/http-request-error';
 
 class Handler {
   /**
@@ -35,6 +35,8 @@ class Handler {
         if (err?.status && err.message) {
           return res.status(err.status).json({ message: err.message });
         }
+
+        console.log(`Internal Error: ${err}`);
 
         return internalServer.handle(req, res);
       },

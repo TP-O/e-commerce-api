@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import 'express-async-errors';
 import { logger } from '@logger';
 import { registerRouter } from '@router';
 import { handler } from '@exception/handler';

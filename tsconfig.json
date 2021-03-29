@@ -12,8 +12,12 @@
     "paths": {
       "@logger": ["logger/index"],
       "@router": ["router/index"],
+      "@helper": ["helper/index"],
+      "@validator": ["validator/index"],
       "@config/*": ["config/*"],
       "@exception/*": ["exception/*"],
+      "@database/*": ["database/*"],
+      "@validator/*": ["validator/*"],
       "@controller/*": ["controller/*"],
       "@service/*": ["service/*"],
       "@model/*": ["model/*"],

@@ -1,27 +1,77 @@
 import { Request, Response } from 'express';
 import UserService from '@service/user.service';
+import { format } from '@helper';
 import { HttpRequestError } from '@exception/http-request-error';
+import { creatingValidator } from '@validator/user/create.validator';
+import { updatingValidator } from '@validator/user/update.validator';
 
-class UserContrller {
+class UserController {
   private readonly userSerivce = UserService;
 
-  public index = (req: Request, res: Response) => {
-    const user = this.userSerivce.find(req.params.id);
+  /**
+   * Get list of users.
+   */
+  public all = async (_: Request, res: Response) => {
+    const { data } = await this.userSerivce.findAll();
 
-    if (user) {
-      return res.status(200).json({
-        data: user,
-      });
-    }
-
-    throw new HttpRequestError(404, 'User not found');
+    return res.status(200).json({
+      data: format(data?.all()),
+    });
   };
 
-  public all = (_: Request, res: Response) => {
+  /**
+   * Get user by id.
+   */
+  public index = async (req: Request, res: Response) => {
+    const { data } = await this.userSerivce.findOne(req.params.id);
+
     return res.status(200).json({
-      data: this.userSerivce.findAll(),
+      data: format(data),
     });
+  };
+
+  /**
+   * Store new user.
+   */
+  public create = async (req: Request, res: Response) => {
+    const value = await creatingValidator.validate(req.body);
+
+    const { success } = await this.userSerivce.create(value);
+
+    if (!success) {
+      throw new HttpRequestError(500, 'Can not create user');
+    }
+
+    return res.status(201).json({ success });
+  };
+
+  /**
+   * Update user.
+   */
+  public update = async (req: Request, res: Response) => {
+    const value = await updatingValidator.validate(req.body);
+
+    const { success } = await this.userSerivce.update(req.params.id, value);
+
+    if (!success) {
+      throw new HttpRequestError(500, 'Can not update user');
+    }
+
+    return res.status(201).json({ success });
+  };
+
+  /**
+   * Delete user.
+   */
+  public delete = async (req: Request, res: Response) => {
+    const { success } = await this.userSerivce.delete(req.params.id);
+
+    if (!success) {
+      throw new HttpRequestError(500, 'Can not delete user');
+    }
+
+    return res.status(201).json({ success });
   };
 }
 
-export default new UserContrller();
+export default new UserController();

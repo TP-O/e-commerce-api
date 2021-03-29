@@ -2,12 +2,10 @@ version: "3.8"
 
 services:
   app:
-    image: e-commerce-server:development
+    image: e-commerce-server:latest
     build:
       context: .
-      dockerfile: Dockerfile.dev
-    volumes:
-      - ./:/app
+      dockerfile: Dockerfile
     ports:
       - "${NODE_PORT}:${NODE_PORT}"
     env_file:
@@ -32,7 +30,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     restart: unless-stopped
     volumes:
-      - ./.docker/data/dev/db:/var/lib/mysql
+      - ./.docker/data/prod/db:/var/lib/mysql
     networks:
       - db-network
     healthcheck:

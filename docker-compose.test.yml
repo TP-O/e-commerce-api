@@ -5,9 +5,13 @@ services:
     image: e-commerce-server:test
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.test
+    volumes:
+      - ./:/app
     env_file:
       - .env
+    environment:
+      - NODE_ENV=test
     restart: unless-stopped
     depends_on:
       - db

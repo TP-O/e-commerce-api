@@ -12,11 +12,14 @@
         "alias": {
           "@logger": "./dist/logger",
           "@router": "./dist/router",
+          "@helper": "./dist/helper",
+          "@validator": "./dist/validator",
           "@config": "./dist/config",
           "@exception": "./dist/exception",
           "@controller": "./dist/controller",
           "@service": "./dist/service",
-          "@model": "./dist/model"
+          "@model": "./dist/model",
+          "@database": "./dist/database"
         }
       }
     ]

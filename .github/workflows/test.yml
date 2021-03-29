@@ -16,6 +16,9 @@ jobs:
       - name: Create .env file
         run: cp .env.example .env
 
+      - name: Install dependencies
+        run: npm install
+
       - name: Build docker containers
         run: docker-compose -f docker-compose.test.yml up -d --build
 
@@ -34,6 +37,9 @@ jobs:
 
       - name: Create .env file
         run: cp .env.example .env
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Build docker containers
         run: docker-compose -f docker-compose.test.yml up -d --build

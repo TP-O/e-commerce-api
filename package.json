@@ -6,10 +6,14 @@
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register --files ./src/bin/active.ts",
     "build": "tsc && babel dist -d dist",
     "prod": "pm2-runtime start ecosystem.config.js --env production",
-    "unit-test": "jest",
-    "coverage-test": "jest --coverage",
+    "docker:prod": "docker-compose -f docker-compose.yml",
+    "docker:dev": "docker-compose -f docker-compose.dev.yml",
+    "docker:test": "docker-compose -f docker-compose.test.yml",
+    "unit-test": "jest --forceExit",
+    "coverage-test": "jest --coverage --forceExit",
     "lint": "eslint \"src/**/*.{js,ts}\"",
-    "format": "prettier --write \"src/**/*.{js,ts}\""
+    "format": "prettier --write \"src/**/*.{js,ts}\"",
+    "db": "ts-node -r tsconfig-paths/register --files ./src/bin/db.ts"
   },
   "lint-staged": {
     "*.{js,ts}": [
@@ -29,6 +33,7 @@
     "@types/jest": "^26.0.20",
     "@types/morgan": "^1.9.2",
     "@types/node": "^14.14.26",
+    "@types/pluralize": "^0.0.29",
     "@types/supertest": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^4.15.0",
     "@typescript-eslint/parser": "^4.15.0",
@@ -49,11 +54,16 @@
   },
   "dependencies": {
     "app-root-path": "^3.0.0",
+    "collect.js": "^4.28.6",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
     "helmet": "^4.4.1",
+    "joi": "^17.4.0",
     "laravel-expressjs-router": "^1.0.3",
     "morgan": "^1.10.0",
+    "mysql2": "^2.2.5",
+    "pluralize": "^8.0.0",
     "rotating-file-stream": "^2.1.4"
   }
 }
