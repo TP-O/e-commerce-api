@@ -26,6 +26,10 @@ class Logger {
    * @param app Express app.
    */
   public applyFor(app: Express): void {
+    if (nodeConfig.env === 'test') {
+      return;
+    }
+
     app.use(
       nodeConfig.env === 'production'
         ? morgan('combined', { stream: this.startStream() })
