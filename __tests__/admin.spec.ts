@@ -8,13 +8,13 @@ beforeAll(async () => {
   await setUp();
 });
 
-describe('Users', () => {
+describe('Admins', () => {
   /**
    * GET methods.
    */
-  describe('/GET users', () => {
-    test('Should return a list of users', async () => {
-      const { status, body } = await request(app).get('/api/v1/users');
+  describe('/GET admins', () => {
+    test('Should return a list of admins', async () => {
+      const { status, body } = await request(app).get('/api/v1/admins');
       expect(status).toBe(200);
       expect(Array.isArray(body.data)).toBe(true);
     });
@@ -23,9 +23,9 @@ describe('Users', () => {
   /**
    * POST methods.
    */
-  describe('/POST users', () => {
+  describe('/POST admins', () => {
     test('Should return success: true', async () => {
-      const { status, body } = await request(app).post('/api/v1/users').send({
+      const { status, body } = await request(app).post('/api/v1/admins').send({
         name: '11111',
         email: 'email@gmail.com',
         password: '11111',
@@ -35,7 +35,7 @@ describe('Users', () => {
     });
 
     test('Should return error: name is required', async () => {
-      const { status, body } = await request(app).post('/api/v1/users').send({
+      const { status, body } = await request(app).post('/api/v1/admins').send({
         email: 'email@gmail.com',
         password: '11111',
       });
@@ -44,7 +44,7 @@ describe('Users', () => {
     });
 
     test('Should return error: name must be a string', async () => {
-      const { status, body } = await request(app).post('/api/v1/users').send({
+      const { status, body } = await request(app).post('/api/v1/admins').send({
         name: 11111,
         email: 'email@gmail.com',
         password: '11111',
@@ -54,7 +54,7 @@ describe('Users', () => {
     });
 
     test('Should return error: name length must be at least 5 characters long', async () => {
-      const { status, body } = await request(app).post('/api/v1/users').send({
+      const { status, body } = await request(app).post('/api/v1/admins').send({
         name: '1111',
         email: 'email@gmail.com',
         password: '11111',
@@ -64,7 +64,7 @@ describe('Users', () => {
     });
 
     test('Should return error: email is required', async () => {
-      const { status, body } = await request(app).post('/api/v1/users').send({
+      const { status, body } = await request(app).post('/api/v1/admins').send({
         name: '11111',
         password: '11111',
       });
@@ -73,7 +73,7 @@ describe('Users', () => {
     });
 
     test('Should return error: email must be a string', async () => {
-      const { status, body } = await request(app).post('/api/v1/users').send({
+      const { status, body } = await request(app).post('/api/v1/admins').send({
         name: '11111',
         email: 11111,
         password: '11111',
@@ -83,7 +83,7 @@ describe('Users', () => {
     });
 
     test('Should return error: password is required', async () => {
-      const { status, body } = await request(app).post('/api/v1/users').send({
+      const { status, body } = await request(app).post('/api/v1/admins').send({
         name: '11111',
         email: 'email@gmail.com',
       });
@@ -92,7 +92,7 @@ describe('Users', () => {
     });
 
     test('Should return error: password must be a string', async () => {
-      const { status, body } = await request(app).post('/api/v1/users').send({
+      const { status, body } = await request(app).post('/api/v1/admins').send({
         name: '11111',
         email: 'email@gmail.com',
         password: 11111,
@@ -102,7 +102,7 @@ describe('Users', () => {
     });
 
     test('Should return error: password length must be at least 5 characters long', async () => {
-      const { status, body } = await request(app).post('/api/v1/users').send({
+      const { status, body } = await request(app).post('/api/v1/admins').send({
         name: '1111',
         email: 'email@gmail.com',
         password: '1111',
@@ -115,17 +115,17 @@ describe('Users', () => {
   /**
    * GET methods.
    */
-  describe('/GET/:id users', () => {
-    test('Should return a user', async () => {
+  describe('/GET/:id admins', () => {
+    test('Should return a admin', async () => {
       const id = 1;
-      const { status, body } = await request(app).get(`/api/v1/users/${id}`);
+      const { status, body } = await request(app).get(`/api/v1/admins/${id}`);
       expect(status).toBe(200);
       expect(body.data.id).toBe(id);
     });
 
     test('Should return 404 error', async () => {
       const id = 99;
-      const { status } = await request(app).get(`/api/v1/users/${id}`);
+      const { status } = await request(app).get(`/api/v1/admins/${id}`);
       expect(status).toBe(404);
     });
   });
@@ -133,10 +133,10 @@ describe('Users', () => {
   /**
    * PUT methods.
    */
-  describe('/PUT/:id users', () => {
+  describe('/PUT/:id admins', () => {
     test('Should return success: true', async () => {
       const id = 1;
-      const { status, body } = await request(app).put(`/api/v1/users/${id}`).send({
+      const { status, body } = await request(app).put(`/api/v1/admins/${id}`).send({
         name: '11111',
         email: 'emaill@gmail.com',
         password: '11111',
@@ -147,7 +147,7 @@ describe('Users', () => {
 
     test('Should return error: name must be a string', async () => {
       const id = 1;
-      const { status, body } = await request(app).put(`/api/v1/users/${id}`).send({
+      const { status, body } = await request(app).put(`/api/v1/admins/${id}`).send({
         name: 11111,
         email: 'email@gmail.com',
         password: '11111',
@@ -158,7 +158,7 @@ describe('Users', () => {
 
     test('Should return error: name length must be at least 5 characters long', async () => {
       const id = 1;
-      const { status, body } = await request(app).put(`/api/v1/users/${id}`).send({
+      const { status, body } = await request(app).put(`/api/v1/admins/${id}`).send({
         name: '1111',
         email: 'email@gmail.com',
         password: '11111',
@@ -169,7 +169,7 @@ describe('Users', () => {
 
     test('Should return error: email must be a string', async () => {
       const id = 1;
-      const { status, body } = await request(app).put(`/api/v1/users/${id}`).send({
+      const { status, body } = await request(app).put(`/api/v1/admins/${id}`).send({
         name: '11111',
         email: 11111,
         password: '11111',
@@ -180,7 +180,7 @@ describe('Users', () => {
 
     test('Should return error: password must be a string', async () => {
       const id = 1;
-      const { status, body } = await request(app).put(`/api/v1/users/${id}`).send({
+      const { status, body } = await request(app).put(`/api/v1/admins/${id}`).send({
         name: '11111',
         email: 'email@gmail.com',
         password: 11111,
@@ -191,7 +191,7 @@ describe('Users', () => {
 
     test('Should return error: password length must be at least 5 characters long', async () => {
       const id = 1;
-      const { status, body } = await request(app).put(`/api/v1/users/${id}`).send({
+      const { status, body } = await request(app).put(`/api/v1/admins/${id}`).send({
         name: '1111',
         email: 'email@gmail.com',
         password: '1111',
@@ -202,7 +202,7 @@ describe('Users', () => {
 
     test('Should return 404 error', async () => {
       const id = 99;
-      const { status } = await request(app).put(`/api/v1/users/${id}`).send({
+      const { status } = await request(app).put(`/api/v1/admins/${id}`).send({
         name: '11111',
         email: 'email@gmail.com',
         password: '11111',
@@ -214,17 +214,17 @@ describe('Users', () => {
   /**
    * DELETE methods.
    */
-  describe('/DELETE/:id users', () => {
+  describe('/DELETE/:id admins', () => {
     test('Should return success: true', async () => {
       const id = 1;
-      const { status, body } = await request(app).delete(`/api/v1/users/${id}`);
+      const { status, body } = await request(app).delete(`/api/v1/admins/${id}`);
       expect(status).toBe(201);
       expect(body.success).toBe(true);
     });
 
     test('Should return 404 error', async () => {
       const id = 99;
-      const { status } = await request(app).delete(`/api/v1/users/${id}`);
+      const { status } = await request(app).delete(`/api/v1/admins/${id}`);
       expect(status).toBe(404);
     });
   });

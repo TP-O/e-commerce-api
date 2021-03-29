@@ -9,8 +9,8 @@
     "docker:prod": "docker-compose -f docker-compose.yml",
     "docker:dev": "docker-compose -f docker-compose.dev.yml",
     "docker:test": "docker-compose -f docker-compose.test.yml",
-    "unit-test": "jest",
-    "coverage-test": "jest --coverage",
+    "unit-test": "jest --forceExit",
+    "coverage-test": "jest --coverage --forceExit",
     "lint": "eslint \"src/**/*.{js,ts}\"",
     "format": "prettier --write \"src/**/*.{js,ts}\"",
     "db": "ts-node -r tsconfig-paths/register --files ./src/bin/db.ts"

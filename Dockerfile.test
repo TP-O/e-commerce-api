@@ -6,6 +6,5 @@ COPY . .
 
 RUN yarn install
 
-RUN chmod +x __tests__/run.sh
-
-CMD [ "__tests__/run.sh" ]
+# Keep container running
+CMD [ "tail",  "-F", "anything" ]
