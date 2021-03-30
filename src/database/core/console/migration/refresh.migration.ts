@@ -1,4 +1,3 @@
-import { exit } from 'process';
 import { readdir } from 'fs/promises';
 import { Connection } from '@database/core/connect/connection';
 import { Command } from '@database/core/console/command';
@@ -43,9 +42,8 @@ export class RefreshMigration extends Command {
             job = job.then(async () => await migration.drop());
           });
 
-        job.then(async () => {
+        return job.then(async () => {
           await new MigrateMigration().execute();
-          exit();
         });
       }
     } catch (err) {

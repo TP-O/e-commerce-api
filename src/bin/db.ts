@@ -1,4 +1,4 @@
-import { argv } from 'process';
+import { argv, exit } from 'process';
 import { MakeSeeder } from '@database/core/console/seeder/make.seeder';
 import { SeedSeeder } from '@database/core/console/seeder/seed.seeder';
 import { MakeMigration } from '@database/core/console/migration/make.migration';
@@ -16,19 +16,13 @@ class Handler {
 
       switch (p1) {
         case 'make':
-          this.make(p2, argv[3]);
-
-          break;
+          return this.make(p2, argv[3]);
 
         case 'seed':
-          this.seed();
-
-          break;
+          return this.seed();
 
         case 'migrate':
-          this.migrate(p2);
-
-          break;
+          return this.migrate(p2);
 
         default:
           console.log('Command does not exist');
@@ -55,14 +49,10 @@ class Handler {
 
     switch (type) {
       case 'migration':
-        new MakeMigration(name).execute();
-
-        break;
+        return new MakeMigration(name).execute();
 
       case 'seeder':
-        new MakeSeeder(name).execute();
-
-        break;
+        return new MakeSeeder(name).execute();
 
       default:
         console.log('Command does not exist');
@@ -75,7 +65,7 @@ class Handler {
    * Handle seed commad.
    */
   public async seed() {
-    new SeedSeeder().execute();
+    return new SeedSeeder().execute();
   }
 
   /**
@@ -86,19 +76,13 @@ class Handler {
   public async migrate(option = 'migrate') {
     switch (option) {
       case 'migrate':
-        new MigrateMigration().execute();
-
-        break;
+        return new MigrateMigration().execute();
 
       case 'refresh':
-        new RefreshMigration().execute();
-
-        break;
+        return new RefreshMigration().execute();
 
       case 'rollback':
-        new RollbackMigration().execute();
-
-        break;
+        return new RollbackMigration().execute();
 
       default:
         console.log('Command does not exist');
@@ -112,4 +96,6 @@ class Handler {
   const hanler = new Handler();
 
   await hanler.listen();
+
+  exit();
 })();

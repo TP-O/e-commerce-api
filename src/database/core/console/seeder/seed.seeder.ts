@@ -1,4 +1,3 @@
-import { exit } from 'process';
 import { Connection } from '@database/core/connect/connection';
 import { Command } from '@database/core/console/command';
 import { Seeder } from '@database/core/seeder';
@@ -28,8 +27,6 @@ export class SeedSeeder extends Command {
         await this._seeder?.seed();
 
         console.log('Database seeding completed successfully!');
-
-        exit();
       }
     } catch (err) {
       console.log(err);
