@@ -46,7 +46,7 @@ class AdminController {
   };
 
   /**
-   * Update user.
+   * Update admin.
    */
   public update = async (req: Request, res: Response) => {
     const value = await updatingValidator.validate(req.body);
@@ -61,7 +61,7 @@ class AdminController {
   };
 
   /**
-   * Delete user.
+   * Delete admin.
    */
   public delete = async (req: Request, res: Response) => {
     const { success } = await this.adminSerivce.delete(req.params.id);

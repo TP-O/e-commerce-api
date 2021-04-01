@@ -19,7 +19,8 @@
           "@controller": "./dist/controller",
           "@service": "./dist/service",
           "@model": "./dist/model",
-          "@database": "./dist/database"
+          "@database": "./dist/database",
+          "@auth": "./dist/auth"
         }
       }
     ]
