@@ -7,4 +7,4 @@ const rules = Joi.object().keys({
   password: Joi.string().min(5),
 });
 
-export const updatingValidator = new Validator(rules);
+export const UpdatingValidator = new Validator(rules);
