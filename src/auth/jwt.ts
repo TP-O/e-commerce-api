@@ -52,7 +52,7 @@ class JsonWebToken {
       if (payload.type !== 'access_token') {
         return {
           success: false,
-          message: 'Invaliad access token',
+          message: 'Invalid access token',
         };
       }
 
@@ -76,25 +76,22 @@ class JsonWebToken {
     try {
       const payload = jwt.verify(refreshToken, authConfig.jwtSecret) as Record<
         string,
-        any
+        string
       >;
 
       if (payload.type !== 'refresh_token') {
         return {
           success: false,
-          message: 'Invaliad refresh token',
+          message: 'Invalid refresh token',
         };
       }
 
-      const newRefreshToken = this.createRefreshToken(payload);
-      // Modify payload for new access token
-      payload.type = 'access_token';
-      const newAccessToken = this.create(payload);
+      const token = this.create(this.getData(payload));
 
       return {
         success: true,
-        accessToken: newAccessToken,
-        refreshToken: newRefreshToken,
+        accessToken: token.accessToken,
+        refreshToken: token.refreshToken,
       };
     } catch (err) {
       return {
@@ -102,6 +99,18 @@ class JsonWebToken {
         message: err.message,
       };
     }
+  }
+
+  /**
+   * Get the data in payload.
+   *
+   * @param payload jwt payload.
+   */
+  private getData(payload: Record<string, string>) {
+    delete payload.iat;
+    delete payload.exp;
+
+    return payload;
   }
 }
 
