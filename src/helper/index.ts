@@ -1,3 +1,5 @@
+import { Auth } from '@auth';
+
 /**
  * Only format data from model.
  */
@@ -25,4 +27,8 @@ export function format(data: any) {
 
     return d.data;
   });
+}
+
+export function auth(guard = 'default') {
+  return Auth.guard(guard);
 }
