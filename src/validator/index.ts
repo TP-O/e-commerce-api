@@ -42,7 +42,7 @@ export class Validator {
 
     const [message, name] = error.message.split('(');
 
-    formatedError[name.slice(0, -1)] = `${name.slice(0, -1)} ${message.slice(0, -1)}`;
+    formatedError[name.slice(0, -1)] = message.slice(0, -1);
 
     return formatedError;
   }
