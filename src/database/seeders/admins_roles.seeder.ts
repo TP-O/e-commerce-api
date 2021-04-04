@@ -1,27 +1,27 @@
 import { Database } from '@database/core/database';
 import { Seeder } from '@database/core/seeder';
 
-class Role_userSeeder extends Seeder {
+class AdminsRolesSeeder extends Seeder {
   /**
    * Name of seeder.
    */
-  protected seederName = 'role_user';
+  protected seederName = 'admins_roles';
 
   /**
    * Insert data to table.
    */
   protected async run() {
-    await Database.table('role_user').insert(
+    await Database.table('admins_roles').insert(
       // Column names
-      ['user_id', 'role_id'],
+      ['admin_id', 'role_id'],
       // Inserted data
       [
-        ['1', '3'],
-        ['2', '3'],
-        ['3', '4'],
+        ['1', '1'],
+        ['2', '2'],
+        ['3', '2'],
       ],
     );
   }
 }
 
-export default new Role_userSeeder();
+export default new AdminsRolesSeeder();

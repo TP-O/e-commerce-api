@@ -3,11 +3,11 @@ import { Database } from '@database/core/database';
 import { Migration } from '@database/core/migration';
 import { DataType } from '@database/core/builder/types/data.type';
 
-export class CreateSalesmansTable extends Migration {
+export class CreatePermissionsUsersTable extends Migration {
   /**
    * Name of the table will be created.
    */
-  protected table = 'salesmans';
+  protected table = 'permissions_users';
 
   /**
    * Name of migration.
@@ -16,7 +16,7 @@ export class CreateSalesmansTable extends Migration {
 
   protected async up() {
     await Database.create(
-      'salesmans',
+      'permissions_users',
       // Columns
       {
         id: {
@@ -25,17 +25,14 @@ export class CreateSalesmansTable extends Migration {
           increment: true,
           required: true,
         },
-        name: {
-          type: DataType.varChar(50),
+        permission_id: {
+          type: DataType.bigInt(),
+          unsigned: true,
           required: true,
         },
-        email: {
-          type: DataType.varChar(255),
-          required: true,
-          unique: true,
-        },
-        password: {
-          type: DataType.varChar(255),
+        user_id: {
+          type: DataType.bigInt(),
+          unsigned: true,
           required: true,
         },
         created_at: {
@@ -53,13 +50,34 @@ export class CreateSalesmansTable extends Migration {
         columns: ['id'],
       },
       // Foreign keys
-      [],
+      [
+        {
+          name: 'FK_PermissionsUsers_Permissions',
+          column: 'permission_id',
+          table: 'permissions',
+          referencedColumn: 'id',
+          onDelete: 'cascade',
+        },
+        {
+          name: 'FK_PermissionsUsers_Users',
+          column: 'user_id',
+          table: 'users',
+          referencedColumn: 'id',
+          onDelete: 'cascade',
+        },
+      ],
+      [
+        {
+          name: 'UQ_PermissionsUsers_PermissionId_UserId',
+          columns: ['permission_id', 'user_id'],
+        },
+      ],
     );
   }
 
   protected async down() {
-    await Database.dropIfExists('salesmans');
+    await Database.dropIfExists('permissions_users');
   }
 }
 
-export default new CreateSalesmansTable();
+export default new CreatePermissionsUsersTable();

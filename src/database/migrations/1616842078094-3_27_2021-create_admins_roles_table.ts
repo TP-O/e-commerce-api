@@ -3,11 +3,11 @@ import { Database } from '@database/core/database';
 import { Migration } from '@database/core/migration';
 import { DataType } from '@database/core/builder/types/data.type';
 
-export class CreateAdminRoleTable extends Migration {
+export class CreateAdminsRolesTable extends Migration {
   /**
    * Name of the table will be created.
    */
-  protected table = 'admin_role';
+  protected table = 'admins_roles';
 
   /**
    * Name of migration.
@@ -16,7 +16,7 @@ export class CreateAdminRoleTable extends Migration {
 
   protected async up() {
     await Database.create(
-      'admin_role',
+      'admins_roles',
       // Columns
       {
         id: {
@@ -52,14 +52,14 @@ export class CreateAdminRoleTable extends Migration {
       // Foreign keys
       [
         {
-          name: 'FK_AdminRole_Admins',
+          name: 'FK_AdminsRoles_Admins',
           column: 'admin_id',
           table: 'admins',
           referencedColumn: 'id',
           onDelete: 'cascade',
         },
         {
-          name: 'FK_AdminRole_Roles',
+          name: 'FK_AdminsRoles_Roles',
           column: 'role_id',
           table: 'roles',
           referencedColumn: 'id',
@@ -68,7 +68,7 @@ export class CreateAdminRoleTable extends Migration {
       ],
       [
         {
-          name: 'UQ_AdminRole_AdminId_RoleId',
+          name: 'UQ_AdminsRoles_AdminId_RoleId',
           columns: ['admin_id', 'role_id'],
         },
       ],
@@ -76,8 +76,8 @@ export class CreateAdminRoleTable extends Migration {
   }
 
   protected async down() {
-    await Database.dropIfExists('admin_role');
+    await Database.dropIfExists('admins_roles');
   }
 }
 
-export default new CreateAdminRoleTable();
+export default new CreateAdminsRolesTable();

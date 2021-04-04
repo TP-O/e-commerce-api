@@ -1,17 +1,17 @@
 import { Database } from '@database/core/database';
 import { Seeder } from '@database/core/seeder';
 
-class Permission_userSeeder extends Seeder {
+class PermissionsUsersSeeder extends Seeder {
   /**
    * Name of seeder.
    */
-  protected seederName = 'permission_user';
+  protected seederName = 'permissions_users';
 
   /**
    * Insert data to table.
    */
   protected async run() {
-    await Database.table('permission_user').insert(
+    await Database.table('permissions_users').insert(
       // Column names
       ['user_id', 'permission_id'],
       // Inserted data
@@ -20,4 +20,4 @@ class Permission_userSeeder extends Seeder {
   }
 }
 
-export default new Permission_userSeeder();
+export default new PermissionsUsersSeeder();

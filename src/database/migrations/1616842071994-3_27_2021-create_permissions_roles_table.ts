@@ -3,11 +3,11 @@ import { Database } from '@database/core/database';
 import { Migration } from '@database/core/migration';
 import { DataType } from '@database/core/builder/types/data.type';
 
-export class CreateRoleUserTable extends Migration {
+export class CreatePermissionsRolesTable extends Migration {
   /**
    * Name of the table will be created.
    */
-  protected table = 'role_user';
+  protected table = 'permissions_roles';
 
   /**
    * Name of migration.
@@ -16,7 +16,7 @@ export class CreateRoleUserTable extends Migration {
 
   protected async up() {
     await Database.create(
-      'role_user',
+      'permissions_roles',
       // Columns
       {
         id: {
@@ -25,12 +25,12 @@ export class CreateRoleUserTable extends Migration {
           increment: true,
           required: true,
         },
-        role_id: {
+        permission_id: {
           type: DataType.bigInt(),
           unsigned: true,
           required: true,
         },
-        user_id: {
+        role_id: {
           type: DataType.bigInt(),
           unsigned: true,
           required: true,
@@ -52,32 +52,32 @@ export class CreateRoleUserTable extends Migration {
       // Foreign keys
       [
         {
-          name: 'FK_RoleUser_Roles',
-          column: 'role_id',
-          table: 'roles',
+          name: 'FK_PermissionsRoles_Permissions',
+          column: 'permission_id',
+          table: 'permissions',
           referencedColumn: 'id',
           onDelete: 'cascade',
         },
         {
-          name: 'FK_RoleUser_Users',
-          column: 'user_id',
-          table: 'users',
+          name: 'FK_PermissionsRoles_Roles',
+          column: 'role_id',
+          table: 'roles',
           referencedColumn: 'id',
           onDelete: 'cascade',
         },
       ],
       [
         {
-          name: 'UQ_RoleUser_RoleId_UserId',
-          columns: ['role_id', 'user_id'],
+          name: 'UQ_PermissionsRoles_PermissionId_RoleId',
+          columns: ['permission_id', 'role_id'],
         },
       ],
     );
   }
 
   protected async down() {
-    await Database.dropIfExists('role_user');
+    await Database.dropIfExists('permissions_roles');
   }
 }
 
-export default new CreateRoleUserTable();
+export default new CreatePermissionsRolesTable();

@@ -2,8 +2,8 @@ import { ModelMaker } from '@database/core';
 import { Role } from '@model/role.model';
 import { Permission } from '@model/permission.model';
 
-export const Salesman = ModelMaker.make({
-  table: 'salesmans',
+export const Seller = ModelMaker.make({
+  table: 'sellers',
   columns: ['id', 'name', 'email', 'password', 'created_at', 'updated_at'],
   fillable: ['name', 'email', 'password'],
   relationships: {
@@ -13,9 +13,9 @@ export const Salesman = ModelMaker.make({
         foreignKey: 'id',
         relatedModel: Role,
         pivot: {
-          table: 'role_salesman',
+          table: 'roles_sellers',
           assetKey: 'role_id',
-          ownerKey: 'salesman_id',
+          ownerKey: 'seller_id',
         },
       },
       {
@@ -23,9 +23,9 @@ export const Salesman = ModelMaker.make({
         foreignKey: 'id',
         relatedModel: Permission,
         pivot: {
-          table: 'permission_salesman',
+          table: 'permissions_sellers',
           assetKey: 'permission_id',
-          ownerKey: 'salesman_id',
+          ownerKey: 'seller_id',
         },
       },
     ],

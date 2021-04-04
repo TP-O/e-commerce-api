@@ -3,11 +3,11 @@ import { Database } from '@database/core/database';
 import { Migration } from '@database/core/migration';
 import { DataType } from '@database/core/builder/types/data.type';
 
-export class CreateRoleSalesmanTable extends Migration {
+export class CreateRolesSellersTable extends Migration {
   /**
    * Name of the table will be created.
    */
-  protected table = 'role_salesman';
+  protected table = 'roles_sellers';
 
   /**
    * Name of migration.
@@ -16,7 +16,7 @@ export class CreateRoleSalesmanTable extends Migration {
 
   protected async up() {
     await Database.create(
-      'role_salesman',
+      'roles_sellers',
       // Columns
       {
         id: {
@@ -30,7 +30,7 @@ export class CreateRoleSalesmanTable extends Migration {
           unsigned: true,
           required: true,
         },
-        salesman_id: {
+        seller_id: {
           type: DataType.bigInt(),
           unsigned: true,
           required: true,
@@ -52,32 +52,32 @@ export class CreateRoleSalesmanTable extends Migration {
       // Foreign keys
       [
         {
-          name: 'FK_RoleSalesman_Roles',
+          name: 'FK_RolesSellers_Roles',
           column: 'role_id',
           table: 'roles',
           referencedColumn: 'id',
           onDelete: 'cascade',
         },
         {
-          name: 'FK_RoleSalesman_Salesmans',
-          column: 'salesman_id',
-          table: 'salesmans',
+          name: 'FK_RolesSellers_Sellers',
+          column: 'seller_id',
+          table: 'sellers',
           referencedColumn: 'id',
           onDelete: 'cascade',
         },
       ],
       [
         {
-          name: 'UQ_RoleSalesman_RoleId_SalesmanId',
-          columns: ['role_id', 'salesman_id'],
+          name: 'UQ_RolesSellers_RoleId_SellerId',
+          columns: ['role_id', 'seller_id'],
         },
       ],
     );
   }
 
   protected async down() {
-    await Database.dropIfExists('role_salesman');
+    await Database.dropIfExists('roles_sellers');
   }
 }
 
-export default new CreateRoleSalesmanTable();
+export default new CreateRolesSellersTable();

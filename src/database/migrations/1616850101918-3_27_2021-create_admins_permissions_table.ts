@@ -3,11 +3,11 @@ import { Database } from '@database/core/database';
 import { Migration } from '@database/core/migration';
 import { DataType } from '@database/core/builder/types/data.type';
 
-export class CreatePermissionSalesmanTable extends Migration {
+export class CreateAdminsPermissionsTable extends Migration {
   /**
    * Name of the table will be created.
    */
-  protected table = 'permission_salesman';
+  protected table = 'admins_permissions';
 
   /**
    * Name of migration.
@@ -16,7 +16,7 @@ export class CreatePermissionSalesmanTable extends Migration {
 
   protected async up() {
     await Database.create(
-      'permission_salesman',
+      'admins_permissions',
       // Columns
       {
         id: {
@@ -25,12 +25,12 @@ export class CreatePermissionSalesmanTable extends Migration {
           increment: true,
           required: true,
         },
-        permission_id: {
+        admin_id: {
           type: DataType.bigInt(),
           unsigned: true,
           required: true,
         },
-        salesman_id: {
+        permission_id: {
           type: DataType.bigInt(),
           unsigned: true,
           required: true,
@@ -52,32 +52,32 @@ export class CreatePermissionSalesmanTable extends Migration {
       // Foreign keys
       [
         {
-          name: 'FK_PermissionSalesman_Permissions',
-          column: 'permission_id',
-          table: 'permissions',
+          name: 'FK_AdminsPermissions_Admins',
+          column: 'admin_id',
+          table: 'admins',
           referencedColumn: 'id',
           onDelete: 'cascade',
         },
         {
-          name: 'FK_PermissionSalesman_Salesmans',
-          column: 'salesman_id',
-          table: 'salesmans',
+          name: 'FK_AdminsPermissions_Permissions',
+          column: 'permission_id',
+          table: 'permissions',
           referencedColumn: 'id',
           onDelete: 'cascade',
         },
       ],
       [
         {
-          name: 'UQ_PermissionSalesman_PermissionId_SalesmanId',
-          columns: ['permission_id', 'salesman_id'],
+          name: 'UQ_AdminsPermissions_AdminId_PermissionId',
+          columns: ['admin_id', 'permission_id'],
         },
       ],
     );
   }
 
   protected async down() {
-    await Database.dropIfExists('permission_salesman');
+    await Database.dropIfExists('admins_permissions');
   }
 }
 
-export default new CreatePermissionSalesmanTable();
+export default new CreateAdminsPermissionsTable();

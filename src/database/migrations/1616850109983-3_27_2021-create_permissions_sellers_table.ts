@@ -3,11 +3,11 @@ import { Database } from '@database/core/database';
 import { Migration } from '@database/core/migration';
 import { DataType } from '@database/core/builder/types/data.type';
 
-export class CreatePermissionUserTable extends Migration {
+export class CreatePermissionsSellersTable extends Migration {
   /**
    * Name of the table will be created.
    */
-  protected table = 'permission_user';
+  protected table = 'permissions_sellers';
 
   /**
    * Name of migration.
@@ -16,7 +16,7 @@ export class CreatePermissionUserTable extends Migration {
 
   protected async up() {
     await Database.create(
-      'permission_user',
+      'permissions_sellers',
       // Columns
       {
         id: {
@@ -30,7 +30,7 @@ export class CreatePermissionUserTable extends Migration {
           unsigned: true,
           required: true,
         },
-        user_id: {
+        seller_id: {
           type: DataType.bigInt(),
           unsigned: true,
           required: true,
@@ -52,32 +52,32 @@ export class CreatePermissionUserTable extends Migration {
       // Foreign keys
       [
         {
-          name: 'FK_PermissionUser_Permissions',
+          name: 'FK_PermissionsSellers_Permissions',
           column: 'permission_id',
           table: 'permissions',
           referencedColumn: 'id',
           onDelete: 'cascade',
         },
         {
-          name: 'FK_PermissionUser_Users',
-          column: 'user_id',
-          table: 'users',
+          name: 'FK_PermissionsSellers_Sellers',
+          column: 'seller_id',
+          table: 'sellers',
           referencedColumn: 'id',
           onDelete: 'cascade',
         },
       ],
       [
         {
-          name: 'UQ_PermissionUser_PermissionId_UserId',
-          columns: ['permission_id', 'user_id'],
+          name: 'UQ_PermissionsSellers_PermissionId_SalesmanId',
+          columns: ['permission_id', 'seller_id'],
         },
       ],
     );
   }
 
   protected async down() {
-    await Database.dropIfExists('permission_user');
+    await Database.dropIfExists('permissions_sellers');
   }
 }
 
-export default new CreatePermissionUserTable();
+export default new CreatePermissionsSellersTable();

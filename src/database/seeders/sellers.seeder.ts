@@ -1,17 +1,17 @@
 import { Database } from '@database/core/database';
 import { Seeder } from '@database/core/seeder';
 
-class SalesmansSeeder extends Seeder {
+class SellersSeeder extends Seeder {
   /**
    * Name of seeder.
    */
-  protected seederName = 'salesmans';
+  protected seederName = 'sellers';
 
   /**
    * Insert data to table.
    */
   protected async run() {
-    await Database.table('salesmans').insert(
+    await Database.table('sellers').insert(
       // Column names
       ['name', 'email', 'password'],
       // Inserted data
@@ -23,4 +23,4 @@ class SalesmansSeeder extends Seeder {
   }
 }
 
-export default new SalesmansSeeder();
+export default new SellersSeeder();

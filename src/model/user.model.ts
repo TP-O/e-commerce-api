@@ -13,7 +13,7 @@ export const User = ModelMaker.make({
         foreignKey: 'id',
         relatedModel: Role,
         pivot: {
-          table: 'role_user',
+          table: 'roles_users',
           assetKey: 'role_id',
           ownerKey: 'user_id',
         },
@@ -23,7 +23,7 @@ export const User = ModelMaker.make({
         foreignKey: 'id',
         relatedModel: Permission,
         pivot: {
-          table: 'permission_user',
+          table: 'permissions_users',
           assetKey: 'permission_id',
           ownerKey: 'user_id',
         },

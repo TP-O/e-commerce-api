@@ -3,11 +3,11 @@ import { Database } from '@database/core/database';
 import { Migration } from '@database/core/migration';
 import { DataType } from '@database/core/builder/types/data.type';
 
-export class CreateAdminPermissionTable extends Migration {
+export class CreateRolesUsersTable extends Migration {
   /**
    * Name of the table will be created.
    */
-  protected table = 'admin_permission';
+  protected table = 'roles_users';
 
   /**
    * Name of migration.
@@ -16,7 +16,7 @@ export class CreateAdminPermissionTable extends Migration {
 
   protected async up() {
     await Database.create(
-      'admin_permission',
+      'roles_users',
       // Columns
       {
         id: {
@@ -25,12 +25,12 @@ export class CreateAdminPermissionTable extends Migration {
           increment: true,
           required: true,
         },
-        admin_id: {
+        role_id: {
           type: DataType.bigInt(),
           unsigned: true,
           required: true,
         },
-        permission_id: {
+        user_id: {
           type: DataType.bigInt(),
           unsigned: true,
           required: true,
@@ -52,32 +52,32 @@ export class CreateAdminPermissionTable extends Migration {
       // Foreign keys
       [
         {
-          name: 'FK_AdminPermission_Admins',
-          column: 'admin_id',
-          table: 'admins',
+          name: 'FK_RolesUsers_Roles',
+          column: 'role_id',
+          table: 'roles',
           referencedColumn: 'id',
           onDelete: 'cascade',
         },
         {
-          name: 'FK_AdminPermission_Permissions',
-          column: 'permission_id',
-          table: 'permissions',
+          name: 'FK_RolesUsers_Users',
+          column: 'user_id',
+          table: 'users',
           referencedColumn: 'id',
           onDelete: 'cascade',
         },
       ],
       [
         {
-          name: 'UQ_AdminPermission_AdminId_PermissionId',
-          columns: ['admin_id', 'permission_id'],
+          name: 'UQ_RolesUsers_RoleId_UserId',
+          columns: ['role_id', 'user_id'],
         },
       ],
     );
   }
 
   protected async down() {
-    await Database.dropIfExists('admin_permission');
+    await Database.dropIfExists('roles_users');
   }
 }
 
-export default new CreateAdminPermissionTable();
+export default new CreateRolesUsersTable();
