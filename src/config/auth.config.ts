@@ -1,6 +1,6 @@
-import { Admin } from '@model/admin.model';
-import { Salesman } from '@model/salesman.model';
-import { User } from '@model/user.model';
+import { Admin } from '@model/auth/admin.model';
+import { Seller } from '@model/auth/seller.model';
+import { User } from '@model/auth/user.model';
 import { env } from 'process';
 
 export const authConfig = {
@@ -11,8 +11,8 @@ export const authConfig = {
     admin: {
       model: Admin,
     },
-    salesman: {
-      model: Salesman,
+    seller: {
+      model: Seller,
     },
   },
   accessTokenExpiresIn: '1d',
