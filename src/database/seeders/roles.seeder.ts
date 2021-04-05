@@ -13,15 +13,15 @@ class RolesSeeder extends Seeder {
   protected async run() {
     await Database.table('roles').insert(
       // Column names
-      ['name'],
+      ['name', 'type'],
       // Inserted data
       [
-        ['Administrator'],
-        ['Moderator'],
-        ['Normal User'],
-        ['VIP User'],
-        ['Normal Salesman'],
-        ['VIP Salesman'],
+        ['Administrator', 'admin'],
+        ['Moderator', 'admin'],
+        ['Normal User', 'user'],
+        ['VIP User', 'user'],
+        ['Normal Seller', 'seller'],
+        ['VIP Seller', 'seller'],
       ],
     );
   }

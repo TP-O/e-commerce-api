@@ -30,6 +30,10 @@ export class CreateRolesTable extends Migration {
           unique: true,
           required: true,
         },
+        type: {
+          type: DataType.varChar(50),
+          required: true,
+        },
         created_at: {
           type: DataType.timestamp(),
           default: 'current_timestamp',

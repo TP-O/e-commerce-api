@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import { Database } from '@database/core/database';
 import { Seeder } from '@database/core/seeder';
 
@@ -16,9 +17,9 @@ class UsersSeeder extends Seeder {
       ['name', 'email', 'password'],
       // Inserted data
       [
-        ['User 01', 'user01@gmail.com', '0001'],
-        ['User 02', 'user02@gmail.com', '0002'],
-        ['User 03', 'user03@gmail.com', '0003'],
+        ['User 01', 'user01@gmail.com', bcrypt.hashSync('0001', 10)],
+        ['User 02', 'user02@gmail.com', bcrypt.hashSync('0002', 10)],
+        ['User 03', 'user03@gmail.com', bcrypt.hashSync('0003', 10)],
       ],
     );
   }
