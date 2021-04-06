@@ -23,6 +23,7 @@
       "@service/*": ["service/*"],
       "@model/*": ["model/*"],
       "@auth/*": ["auth/*"],
+      "@middleware/*": ["middleware/*"],
     },
   },
   "plugins": [
