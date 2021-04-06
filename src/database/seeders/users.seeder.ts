@@ -17,9 +17,9 @@ class UsersSeeder extends Seeder {
       ['name', 'email', 'password'],
       // Inserted data
       [
-        ['User 01', 'user01@gmail.com', bcrypt.hashSync('0001', 10)],
-        ['User 02', 'user02@gmail.com', bcrypt.hashSync('0002', 10)],
-        ['User 03', 'user03@gmail.com', bcrypt.hashSync('0003', 10)],
+        ['User 01', 'user01@gmail.com', bcrypt.hashSync('00001', 10)],
+        ['User 02', 'user02@gmail.com', bcrypt.hashSync('00002', 10)],
+        ['User 03', 'user03@gmail.com', bcrypt.hashSync('00003', 10)],
       ],
     );
   }

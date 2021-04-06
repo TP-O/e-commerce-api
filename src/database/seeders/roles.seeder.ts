@@ -16,12 +16,12 @@ class RolesSeeder extends Seeder {
       ['name', 'type'],
       // Inserted data
       [
-        ['Administrator', 'admin'],
-        ['Moderator', 'admin'],
-        ['Normal User', 'user'],
-        ['VIP User', 'user'],
-        ['Normal Seller', 'seller'],
-        ['VIP Seller', 'seller'],
+        ['administrator', 'admin'],
+        ['moderator', 'admin'],
+        ['normal user', 'user'],
+        ['VIP user', 'user'],
+        ['individual', 'seller'],
+        ['company', 'seller'],
       ],
     );
   }

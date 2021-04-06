@@ -17,9 +17,9 @@ class AdminsSeeder extends Seeder {
       ['name', 'email', 'password'],
       // Inserted data
       [
-        ['Admin 01', 'admin01@gmail.com', bcrypt.hashSync('0001', 10)],
-        ['Moderator 01', 'moderator01@gmail.com', bcrypt.hashSync('0001', 10)],
-        ['Moderator 02', 'moderator02@gmail.com', bcrypt.hashSync('0002', 10)],
+        ['Admin 01', 'admin01@gmail.com', bcrypt.hashSync('00001', 10)],
+        ['Moderator 01', 'moderator01@gmail.com', bcrypt.hashSync('00001', 10)],
+        ['Moderator 02', 'moderator02@gmail.com', bcrypt.hashSync('00002', 10)],
       ],
     );
   }

@@ -38,6 +38,10 @@ export class CreateUsersTable extends Migration {
           type: DataType.varChar(255),
           required: true,
         },
+        active: {
+          type: DataType.bool(),
+          default: 'false',
+        },
         created_at: {
           type: DataType.timestamp(),
           default: 'current_timestamp',

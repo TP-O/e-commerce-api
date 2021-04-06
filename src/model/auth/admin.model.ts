@@ -1,6 +1,5 @@
 import { ModelMaker } from '@database/core';
-import { Role } from '@model/role.model';
-import { Permission } from '@model/permission.model';
+import { Role } from '@model/auth/role.model';
 
 export const Admin = ModelMaker.make({
   table: 'admins',
@@ -15,16 +14,6 @@ export const Admin = ModelMaker.make({
         pivot: {
           table: 'admins_roles',
           assetKey: 'role_id',
-          ownerKey: 'admin_id',
-        },
-      },
-      {
-        name: 'permissions',
-        foreignKey: 'id',
-        relatedModel: Permission,
-        pivot: {
-          table: 'admins_permissions',
-          assetKey: 'permission_id',
           ownerKey: 'admin_id',
         },
       },

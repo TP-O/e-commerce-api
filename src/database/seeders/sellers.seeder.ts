@@ -17,8 +17,8 @@ class SellersSeeder extends Seeder {
       ['name', 'email', 'password'],
       // Inserted data
       [
-        ['Salesman 01', 'salesman01@gmail.com', bcrypt.hashSync('0001', 10)],
-        ['Salesman 02', 'salesman02@gmail.com', bcrypt.hashSync('0002', 10)],
+        ['Salesman 01', 'salesman01@gmail.com', bcrypt.hashSync('00001', 10)],
+        ['Salesman 02', 'salesman02@gmail.com', bcrypt.hashSync('00002', 10)],
       ],
     );
   }

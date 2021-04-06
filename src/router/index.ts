@@ -11,42 +11,63 @@ router.get('/', (_: any, res: any) => {
 
 router.group({ prefix: '/api/v1' }, () => {
   /**
-   * Accounts.
+   * Authentications.
    */
-  router.group({ namespace: 'account' }, () => {
-    /**
-     * User resources.
-     */
-    router.group({ prefix: '/users' }, () => {
-      router.get('/', 'user.controller@all');
-      router.post('/', 'user.controller@create');
-      router.get('/:id', 'user.controller@index');
-      router.put('/:id', 'user.controller@update');
-      router.delete('/:id', 'user.controller@delete');
-    });
+  router.group(
+    {
+      prefix: '/auth',
+      namespace: 'auth',
+    },
+    () => {
+      /**
+       * Admin authentication.
+       */
+      router.group(
+        {
+          prefix: '/admin',
+          namespace: '/admin',
+        },
+        () => {
+          router.post('/login', 'login.controller@login');
+          router.post('/logout', 'login.controller@logout');
+          router.post('/refresh', 'login.controller@refresh');
+          router.post('/register', 'register.controller@register');
+        },
+      );
 
-    /**
-     * Admin resources.
-     */
-    router.group({ prefix: '/admins' }, () => {
-      router.get('/', 'admin.controller@all');
-      router.post('/', 'admin.controller@create');
-      router.get('/:id', 'admin.controller@index');
-      router.put('/:id', 'admin.controller@update');
-      router.delete('/:id', 'admin.controller@delete');
-    });
+      /**
+       * Seller authentication.
+       */
+      router.group(
+        {
+          prefix: '/seller',
+          namespace: '/seller',
+        },
+        () => {
+          router.post('/login', 'login.controller@login');
+          router.post('/logout', 'login.controller@logout');
+          router.post('/refresh', 'login.controller@refresh');
+          router.post('/register', 'register.controller@register');
+        },
+      );
 
-    /**
-     * Salesman resources.
-     */
-    router.group({ prefix: '/salesmans' }, () => {
-      router.get('/', 'salesman.controller@all');
-      router.post('/', 'salesman.controller@create');
-      router.get('/:id', 'salesman.controller@index');
-      router.put('/:id', 'salesman.controller@update');
-      router.delete('/:id', 'salesman.controller@delete');
-    });
-  });
+      /**
+       * User authentication.
+       */
+      router.group(
+        {
+          prefix: '/user',
+          namespace: '/user',
+        },
+        () => {
+          router.post('/login', 'login.controller@login');
+          router.post('/logout', 'login.controller@logout');
+          router.post('/refresh', 'login.controller@refresh');
+          router.post('/register', 'register.controller@register');
+        },
+      );
+    },
+  );
 });
 
 export const registerRouter = (app: Express) => {

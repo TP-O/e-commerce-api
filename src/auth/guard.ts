@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import { JWT } from '@auth/jwt';
 import { authConfig } from '@config/auth.config';
 import { Model } from '@database/core/orm/model';
@@ -59,10 +60,10 @@ export class Guard {
    * @param token access token.
    */
   public async verify(token: string) {
-    const { success, message, payload } = JWT.verify(token);
+    const { success, error, payload } = JWT.verify(token);
 
     if (!success) {
-      return { success, message };
+      return { success, error };
     }
 
     this._userData = await this.findUserById(payload?.sub);
@@ -73,7 +74,7 @@ export class Guard {
         }
       : {
           success: false,
-          message: 'Invalid information',
+          error: 'Invalid information',
         };
   }
 
@@ -92,12 +93,12 @@ export class Guard {
    * @param credentials login information.
    */
   public async validate(credentials: { email: string; password: string }) {
-    this._userData = await this.findUser(credentials);
+    this._userData = await this.findUserByEmail(credentials.email);
 
-    if (!this._userData) {
+    if (!this._userData || !this.checkPassword(credentials.password)) {
       return {
         success: false,
-        message: 'Invalid credentials',
+        error: 'Invalid credentials',
       };
     }
 
@@ -113,18 +114,19 @@ export class Guard {
     };
   }
 
+  private checkPassword(password: string) {
+    return bcrypt.compareSync(password, this._userData.password);
+  }
+
   /**
    * Find the user.
    *
-   * @param credentials login information.
+   * @param email user's email.
    */
-  private async findUser(credentials: { email: string; password: string }) {
+  private async findUserByEmail(email: string) {
     const { data } = await this._config.model
-      .select('id')
-      .where([
-        ['email', '=', `v:${credentials.email}`],
-        ['password', '=', `v:${credentials.password}`],
-      ])
+      .select('*')
+      .where([['email', '=', `v:${email}`]])
       .get();
 
     return data?.first();
@@ -137,7 +139,7 @@ export class Guard {
    */
   private async findUserById(id: string) {
     const { data } = await this._config.model
-      .select('id')
+      .select('*')
       .where([['id', '=', `v:${id}`]])
       .get();
 

@@ -52,7 +52,7 @@ class JsonWebToken {
       if (payload.type !== 'access_token') {
         return {
           success: false,
-          message: 'Invalid access token',
+          error: 'Invalid access token',
         };
       }
 
@@ -63,7 +63,7 @@ class JsonWebToken {
     } catch (err) {
       return {
         success: false,
-        message: err.message,
+        error: err.message,
       };
     }
   }
@@ -82,7 +82,7 @@ class JsonWebToken {
       if (payload.type !== 'refresh_token') {
         return {
           success: false,
-          message: 'Invalid refresh token',
+          error: 'Invalid refresh token',
         };
       }
 
@@ -96,7 +96,7 @@ class JsonWebToken {
     } catch (err) {
       return {
         success: false,
-        message: err.message,
+        error: err.message,
       };
     }
   }
