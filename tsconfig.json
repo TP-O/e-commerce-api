@@ -10,20 +10,10 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "@logger": ["logger/index"],
-      "@router": ["router/index"],
-      "@helper": ["helper/index"],
-      "@validator": ["validator/index"],
-      "@auth": ["auth/index"],
-      "@config/*": ["config/*"],
-      "@exception/*": ["exception/*"],
-      "@database/*": ["database/*"],
-      "@validator/*": ["validator/*"],
-      "@controller/*": ["controller/*"],
-      "@service/*": ["service/*"],
-      "@model/*": ["model/*"],
-      "@auth/*": ["auth/*"],
-      "@middleware/*": ["middleware/*"],
+      "@app/*": ["app/*"],
+      "@configs/*": ["configs/*"],
+      "@modules/*": ["modules/*"],
+      "@routers": ["routers/index"],
     },
   },
   "plugins": [
@@ -31,5 +21,6 @@
   ],
   "include": [
     "src/**/*",
+    "typings/**/*"
   ],
 }

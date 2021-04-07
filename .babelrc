@@ -10,17 +10,10 @@
       {
         "root": ["./dist"],
         "alias": {
-          "@logger": "./dist/logger",
-          "@router": "./dist/router",
-          "@helper": "./dist/helper",
-          "@validator": "./dist/validator",
-          "@config": "./dist/config",
-          "@exception": "./dist/exception",
-          "@controller": "./dist/controller",
-          "@service": "./dist/service",
-          "@model": "./dist/model",
-          "@database": "./dist/database",
-          "@auth": "./dist/auth"
+          "@app": "./dist/app",
+          "@configs": "./dist/configs",
+          "@modules": "./dist/modules",
+          "@routers": "./dist/routers"
         }
       }
     ]
