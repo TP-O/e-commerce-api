@@ -36,6 +36,6 @@ export class Auth {
 
     return user
       ? { success, user }
-      : { success: false, message: 'User not found' };
+      : { success: false, message: 'Invalid access token' };
   }
 }

@@ -22,7 +22,7 @@ class LoginController {
 
     res.status(200).json({
       success: true,
-      message: 'signed in successfully',
+      message: 'Signed in successfully',
     });
   };
 
@@ -34,7 +34,7 @@ class LoginController {
 
     res.status(200).json({
       success: true,
-      message: 'signed out successfully',
+      message: 'Signed out successfully',
     });
   };
 
@@ -52,7 +52,7 @@ class LoginController {
 
     res.status(200).json({
       success: true,
-      message: 'access token was refreshed',
+      message: 'Access token was refreshed',
     });
   };
 

@@ -13,7 +13,7 @@ class MustBeAdministrator {
         }
       }
     } catch {
-      throw new HttpRequestError(403, 'do not have permission');
+      throw new HttpRequestError(403, 'Do not have permission');
     }
   }
 }

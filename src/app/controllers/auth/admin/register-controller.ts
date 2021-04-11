@@ -15,14 +15,14 @@ class RegisterController {
     const success = await this.registerService.registerAccount(value);
 
     if (!success) {
-      throw new HttpRequestError(500, 'can not create account');
+      throw new HttpRequestError(500, 'Account creation failed');
     }
 
     await this.assignRole(value.email, value.role);
 
     res.status(200).json({
       success: true,
-      message: 'signed up successfully',
+      message: 'Signed up successfully',
     });
   };
 
@@ -36,10 +36,7 @@ class RegisterController {
     const error = await this.registerService.assignRole(admin.id, role.id);
 
     if (error) {
-      throw new HttpRequestError(
-        500,
-        'can not assign role to this account',
-      );
+      throw new HttpRequestError(500, 'Authorization failed');
     }
   };
 
@@ -52,7 +49,7 @@ class RegisterController {
     const role = await this.registerService.findRoleByName(name);
 
     if (!role) {
-      throw new HttpRequestError(404, 'role not found');
+      throw new HttpRequestError(404, 'Role not found');
     }
 
     return role;
@@ -67,7 +64,7 @@ class RegisterController {
     const admin = await this.registerService.findAdminByEmail(email);
 
     if (!admin) {
-      throw new HttpRequestError(404, 'admin not found');
+      throw new HttpRequestError(404, 'Admin not found');
     }
 
     return admin;

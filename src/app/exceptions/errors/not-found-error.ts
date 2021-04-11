@@ -9,7 +9,7 @@ class NotFoundError extends HttpError {
   /**
    * Error message.
    */
-  protected message = 'API not found!';
+  protected message = 'Not found!';
 }
 
 export const notFound = new NotFoundError();

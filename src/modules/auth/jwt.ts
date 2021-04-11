@@ -55,7 +55,7 @@ class JsonWebToken {
       if (payload.type !== 'access_token') {
         return {
           success: false,
-          error: 'Invalid access token',
+          error: 'Type of token is incorrect',
         };
       }
 
@@ -63,10 +63,10 @@ class JsonWebToken {
         success: true,
         payload: payload,
       };
-    } catch (err) {
+    } catch {
       return {
         success: false,
-        error: err.message,
+        error: 'Verification failed',
       };
     }
   }
@@ -85,7 +85,7 @@ class JsonWebToken {
       if (payload.type !== 'refresh_token') {
         return {
           success: false,
-          error: 'Invalid refresh token',
+          error: 'Type of token is incorrect',
         };
       }
 
@@ -96,10 +96,10 @@ class JsonWebToken {
         accessToken: token.accessToken,
         refreshToken: token.refreshToken,
       };
-    } catch (err) {
+    } catch {
       return {
         success: false,
-        error: err.message,
+        error: 'Verification failed',
       };
     }
   }

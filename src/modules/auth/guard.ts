@@ -50,7 +50,7 @@ export class Guard {
     ) {
       return {
         success: false,
-        error: 'email or password is incorrect',
+        error: 'Email or password is incorrect',
       };
     }
 

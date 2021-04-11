@@ -7,7 +7,7 @@ class RequireAccessToken {
     const accessToken = req.cookies.accessToken;
 
     if (!accessToken) {
-      throw new HttpRequestError(403, 'access token is missing');
+      throw new HttpRequestError(400, 'Access token is missing');
     }
 
     const { success, error, user } = await Auth.verify(accessToken);
