@@ -33,12 +33,12 @@ class RegisterController {
     const seller = await this.findSellerByEmail(email);
     const role = await this.findRoleByName(roleName);
 
-    const error = await this.registerService.assignRole(
+    const success = await this.registerService.assignRole(
       seller.id,
       role.id,
     );
 
-    if (error) {
+    if (!success) {
       throw new HttpRequestError(500, 'Authorization failed');
     }
   };

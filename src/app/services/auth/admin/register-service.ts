@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
-import { Database } from '@modules/database/core';
 import { Admin } from '@app/models/auth/admin';
 import { Role } from '@app/models/auth/role';
+import { AdminRole } from '@app/models/auth/pivot/admin-role';
 
 class RegisterService {
   /**
@@ -28,11 +28,14 @@ class RegisterService {
    * @param roleId ID's role.
    */
   public async assignRole(adminId: string, roleId: string) {
-    const { error } = await Database.raw(
-      `INSERT INTO admins_roles (role_id, admin_id) VALUES (${roleId}, ${adminId})`,
-    );
+    const { success } = await AdminRole.create([
+      {
+        admin_id: adminId,
+        role_id: roleId,
+      },
+    ]);
 
-    return error;
+    return success;
   }
 
   /**
