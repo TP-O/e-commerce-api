@@ -14,6 +14,7 @@ export class Model {
    * @param table name of the table that this model uses.
    * @param columns colums of the table.
    * @param primaryKey primary key of the table.
+   * @param fillable fillable columns.
    */
   constructor(
     public readonly table: string,

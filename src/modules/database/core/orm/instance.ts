@@ -4,8 +4,8 @@ import { Database } from '@modules/database/core/database';
 export class Instance {
   /**
    *
-   * @param data
-   * @param model
+   * @param data instance's data.
+   * @param model related model.
    */
   public constructor(public data: any, private model: Model) {
     return new Proxy(this, {
@@ -27,24 +27,34 @@ export class Instance {
     });
   }
 
-  public async save() {
+  /**
+   * Save instance with current data.
+   */
+  public save() {
     return this.model
       .where([[this.model.primaryKey, '=', `v:${this.data.id}`]])
       .update(this.data);
   }
 
-  public async delete() {
+  /**
+   * Delete instance.
+   */
+  public delete() {
     return this.model
       .where([[this.model.primaryKey, '=', `v:${this.data.id}`]])
       .delete();
   }
 
-  public async get(relation: string) {
+  /**
+   *
+   * @param relationship relationship's name.
+   */
+  public get(relationship: string) {
     Database.usingModel = this.model;
 
     return this.model
       .select('id')
-      .with(relation)
+      .with(relationship)
       .where([
         [
           `${this.model.table}.${this.model.primaryKey}`,

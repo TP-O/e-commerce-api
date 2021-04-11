@@ -56,6 +56,12 @@ export class Maker {
     }
   }
 
+  /**
+   * Create has-one relationships for the model.
+   *
+   * @param model related model.
+   * @param relationships list of has-one relationships.
+   */
   private static bindHasOneRelationship(
     model: Model,
     relationships: HasOneRelationship[],
@@ -63,6 +69,12 @@ export class Maker {
     relationships.forEach((r) => model.relationship.hasOne(r));
   }
 
+  /**
+   * Create has-many relationships for the model.
+   *
+   * @param model related model.
+   * @param relationships list of has-many relationships.
+   */
   private static bindHasManyRelationship(
     model: Model,
     relationships: HasManyRelationship[],
@@ -70,6 +82,12 @@ export class Maker {
     relationships.forEach((r) => model.relationship.hasMany(r));
   }
 
+  /**
+   * Create belongs-to relationships for the model.
+   *
+   * @param model related model.
+   * @param relationships list of belongs-to relationships.
+   */
   private static bindBelongsToRelationship(
     model: Model,
     relationships: BelongsToRelationship[],
@@ -77,6 +95,12 @@ export class Maker {
     relationships.forEach((r) => model.relationship.belongsTo(r));
   }
 
+  /**
+   * Create belongs-to-many relationships for the model.
+   *
+   * @param model related model.
+   * @param relationships list of belongs-to-many relationships.
+   */
   private static bindBelongsToManyRelationship(
     model: Model,
     relationships: BelongsToManyRelationship[],
