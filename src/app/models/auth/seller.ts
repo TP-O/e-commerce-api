@@ -3,8 +3,23 @@ import { Role } from '@app/models/auth/role';
 
 export const Seller = ModelMaker.make({
   table: 'sellers',
-  columns: ['id', 'name', 'email', 'password', 'created_at', 'updated_at'],
-  fillable: ['name', 'email', 'password'],
+  // prettier-ignore
+  columns: [
+    'id',
+    'name',
+    'email',
+    'password',
+    'active',
+    'created_at',
+    'updated_at',
+  ],
+  // prettier-ignore
+  fillable: [
+    'name',
+    'email',
+    'password',
+    'active'
+  ],
   relationships: {
     hasMany: [
       {

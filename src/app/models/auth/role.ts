@@ -3,8 +3,17 @@ import { Permission } from '@app/models/auth/permission';
 
 export const Role = ModelMaker.make({
   table: 'roles',
-  columns: ['id', 'name', 'created_at', 'updated_at'],
-  fillable: ['name'],
+  // prettier-ignore
+  columns: [
+    'id',
+    'name',
+    'created_at',
+    'updated_at'
+  ],
+  // prettier-ignore
+  fillable: [
+    'name'
+  ],
   relationships: {
     hasMany: [
       {

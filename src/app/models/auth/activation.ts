@@ -1,19 +1,20 @@
 import { ModelMaker } from '@modules/database/core';
 
-export const AdminRole = ModelMaker.make({
-  table: 'admins_roles',
+export const Activation = ModelMaker.make({
+  table: 'activations',
   // prettier-ignore
   columns: [
     'id',
-    'admin_id',
-    'role_id',
+    'account_id',
+    'code',
+    'type',
     'created_at',
-    'updated_at'
+    'updated_at',
   ],
   // prettier-ignore
   fillable: [
-    'admin_id',
-    'role_id'
+    'account_id',
+    'code','type'
   ],
   relationships: {},
 });

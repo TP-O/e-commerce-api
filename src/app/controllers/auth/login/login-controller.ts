@@ -2,17 +2,24 @@ import { Request, Response } from 'express';
 import { auth } from '@modules/helper';
 import { authConfig } from '@configs/auth';
 import { HttpRequestError } from 'app/exceptions/http-request-error';
-import { LoginValidator } from '@app/validators/auth/user/login-validator';
+import { LoginValidator } from '@app/validators/auth/seller/login-validator';
 
-class LoginController {
+export abstract class LoginController {
+  /**
+   * Constructor.
+   *
+   * @param guard guard's name.
+   */
+  public constructor(protected guard: string) {}
+
   /**
    * Log in to the system.
    */
   public login = async (req: Request, res: Response) => {
     const value = await LoginValidator.validate(req.body);
 
-    // Check user credentials
-    const result = await auth().validate(value);
+    // Check seller credentials
+    const result = await auth(this.guard).validate(value);
 
     if (!result.success) {
       throw new HttpRequestError(400, result.error);
@@ -42,7 +49,7 @@ class LoginController {
    * Refresh access token
    */
   public refresh = async (req: Request, res: Response) => {
-    const result = await auth().refresh(req.cookies.refreshToken);
+    const result = await auth('seller').refresh(req.cookies.refreshToken);
 
     if (!result.success) {
       throw new HttpRequestError(400, result.error);
@@ -61,7 +68,7 @@ class LoginController {
    *
    * @param token the tokens.
    */
-  private setTokens = (res: Response, token: any) => {
+  protected setTokens = (res: Response, token: any) => {
     res.cookie('accessToken', token.accessToken, {
       maxAge: authConfig.cookieExpriresIn,
       httpOnly: true,
@@ -76,10 +83,8 @@ class LoginController {
   /**
    * Clear access token and refresh token.
    */
-  private clearTokens = (res: Response) => {
+  protected clearTokens = (res: Response) => {
     res.cookie('accessToken', '', { maxAge: 0 });
     res.cookie('refreshToken', '', { maxAge: 0 });
   };
 }
-
-export default new LoginController();
