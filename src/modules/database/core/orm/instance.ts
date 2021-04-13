@@ -17,8 +17,7 @@ export class Instance {
       },
       set: (target, prop, value) => {
         if (prop in target.data) {
-          target.data[prop] =
-            value !== undefined ? value : target.data[prop];
+          target.data[prop] = value !== undefined ? value : target.data[prop];
         } else {
           Reflect.set(target, prop, value);
         }

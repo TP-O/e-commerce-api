@@ -17,14 +17,11 @@ const rules = Joi.object().keys({
     'string.min': 'Password must be at least 5 characters',
     'any.required': 'Password is required',
   }),
-  confirm_password: Joi.any()
-    .valid(Joi.ref('password'))
-    .required()
-    .messages({
-      'string.base': 'Confirmed password must be a string',
-      'any.required': 'Confirmed password is required',
-      'any.only': 'Password not matched',
-    }),
+  confirm_password: Joi.any().valid(Joi.ref('password')).required().messages({
+    'string.base': 'Confirmed password must be a string',
+    'any.required': 'Confirmed password is required',
+    'any.only': 'Password not matched',
+  }),
 });
 
 async function checkUnique(email: string) {

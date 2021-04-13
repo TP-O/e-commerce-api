@@ -77,10 +77,10 @@ class JsonWebToken {
    */
   public refresh(refreshToken: string) {
     try {
-      const payload = jwt.verify(
-        refreshToken,
-        authConfig.jwtSecret,
-      ) as Record<string, string>;
+      const payload = jwt.verify(refreshToken, authConfig.jwtSecret) as Record<
+        string,
+        string
+      >;
 
       if (payload.type !== 'refresh_token') {
         return {

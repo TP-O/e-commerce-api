@@ -118,9 +118,7 @@ export class Model {
    *
    * @param coditions list of conditions.
    */
-  public where(
-    conditions: string[][] | ((q: QueryBuilder) => void),
-  ): this {
+  public where(conditions: string[][] | ((q: QueryBuilder) => void)): this {
     Database.table(this.table).where(conditions);
 
     return this;

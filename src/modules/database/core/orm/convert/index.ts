@@ -80,10 +80,7 @@ export class Converter {
 
     data.forEach((_, key) => {
       // Wrap relationship data in Instances
-      data[key].data = this.createRelationshipInstances(
-        data[key].data,
-        model,
-      );
+      data[key].data = this.createRelationshipInstances(data[key].data, model);
 
       for (let nextKey = key + 1; nextKey < data.length; nextKey++) {
         // Group objects have the same id
@@ -145,12 +142,7 @@ export class Converter {
         // Assign empty array for null value
         data[prop] =
           data[prop].id !== null
-            ? [
-                new Instance(
-                  data[prop],
-                  model.relationship.get(prop).model,
-                ),
-              ]
+            ? [new Instance(data[prop], model.relationship.get(prop).model)]
             : [];
       }
     }

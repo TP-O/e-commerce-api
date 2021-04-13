@@ -35,10 +35,7 @@ export class Maker {
    * @param model created model.
    * @param relationships all of relationships.
    */
-  private static bindRelationships(
-    model: Model,
-    relationships: Relationship,
-  ) {
+  private static bindRelationships(model: Model, relationships: Relationship) {
     if (relationships.hasOne) {
       this.bindHasOneRelationship(model, relationships.hasOne);
     }
@@ -49,10 +46,7 @@ export class Maker {
       this.bindBelongsToRelationship(model, relationships.belongsTo);
     }
     if (relationships.belongsToMany) {
-      this.bindBelongsToManyRelationship(
-        model,
-        relationships.belongsToMany,
-      );
+      this.bindBelongsToManyRelationship(model, relationships.belongsToMany);
     }
   }
 

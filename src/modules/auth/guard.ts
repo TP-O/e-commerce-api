@@ -44,10 +44,7 @@ export class Guard {
   public async validate(credentials: { email: string; password: string }) {
     const user = await this.findUserByEmail(credentials.email);
 
-    if (
-      !user ||
-      !this.checkPassword(credentials.password, user.password)
-    ) {
+    if (!user || !this.checkPassword(credentials.password, user.password)) {
       return {
         success: false,
         error: 'Email or password is incorrect',

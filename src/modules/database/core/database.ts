@@ -224,9 +224,7 @@ export class Database {
    *
    * @param conditions list of conditions.
    */
-  public static where(
-    conditions: string[][] | ((q: QueryBuilder) => void),
-  ) {
+  public static where(conditions: string[][] | ((q: QueryBuilder) => void)) {
     this._builder.where(conditions);
 
     return this;

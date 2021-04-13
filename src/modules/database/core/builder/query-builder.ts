@@ -78,13 +78,7 @@ export class QueryBuilder {
     foreignKeys?: ForeignKey[],
     uniqueColumns?: Unique[],
   ): void {
-    this.createTable(
-      table,
-      columns,
-      primaryKey,
-      foreignKeys,
-      uniqueColumns,
-    );
+    this.createTable(table, columns, primaryKey, foreignKeys, uniqueColumns);
 
     this._querySentence = this._querySentence.replace(
       'CREATE TABLE',
@@ -131,11 +125,7 @@ export class QueryBuilder {
    * @param columns specified columns.
    * @param values list of array will be inserted.
    */
-  public insert(
-    table: string,
-    columns: string[],
-    values: string[][],
-  ): void {
+  public insert(table: string, columns: string[], values: string[][]): void {
     this._querySentence = `INSERT INTO ${table} (${columns
       .map((c) => `\`${c}\``)
       .join(', ')}) VALUES ("${values
@@ -180,10 +170,7 @@ export class QueryBuilder {
       this._querySentence += 'SELECT *';
     } else {
       this._querySentence += `SELECT ${columns
-        .map(
-          (c) =>
-            `\`${c.split('.').join('`.`').split(':').join('` AS `')}\``,
-        )
+        .map((c) => `\`${c.split('.').join('`.`').split(':').join('` AS `')}\``)
         .join(', ')}`;
     }
 
@@ -199,9 +186,7 @@ export class QueryBuilder {
     const q = this._querySentence.split(' FROM ');
 
     q[0] += `, ${columns
-      .map(
-        (c) => `\`${c.split('.').join('`.`').split(':').join('` AS `')}\``,
-      )
+      .map((c) => `\`${c.split('.').join('`.`').split(':').join('` AS `')}\``)
       .join(', ')}`;
 
     this._querySentence = q.join(' FROM ');
@@ -239,9 +224,7 @@ export class QueryBuilder {
    *
    * @param conditions list of conditions.
    */
-  public where(
-    conditions: string[][] | ((q: QueryBuilder) => void),
-  ): this {
+  public where(conditions: string[][] | ((q: QueryBuilder) => void)): this {
     if (typeof conditions === 'function') {
       conditions(this);
     } else {
@@ -337,10 +320,7 @@ export class QueryBuilder {
    * @param column specified column.
    * @param type type of order.
    */
-  public orderBy(
-    column: string,
-    type: string = OrderTypes.ascending(),
-  ): this {
+  public orderBy(column: string, type: string = OrderTypes.ascending()): this {
     this._querySentence += ` ORDER BY (${column}) ${type}`;
 
     return this;
