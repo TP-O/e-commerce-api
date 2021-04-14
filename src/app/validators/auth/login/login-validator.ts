@@ -14,4 +14,4 @@ const rules = Joi.object().keys({
   }),
 });
 
-export const LoginValidator = new Validator(rules);
+export const loginValidator = new Validator(rules);

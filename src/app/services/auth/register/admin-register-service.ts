@@ -1,8 +1,8 @@
 import { Admin } from '@app/models/auth/admin';
 import { AdminRole } from '@app/models/auth/pivot/admin-role';
-import { RegistrationService } from '@app/services/auth/registration/registration-service';
+import { RegisterService } from '@app/services/auth/register/register-service';
 
-class AdminRegistrationService extends RegistrationService {
+class AdminRegisterService extends RegisterService {
   /**
    * Constructor.
    */
@@ -28,4 +28,4 @@ class AdminRegistrationService extends RegistrationService {
   }
 }
 
-export const registrationService = new AdminRegistrationService();
+export const registerService = new AdminRegisterService();

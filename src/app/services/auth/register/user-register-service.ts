@@ -1,8 +1,8 @@
 import { RoleUser } from '@app/models/auth/pivot/role-user';
 import { User } from '@app/models/auth/user';
-import { RegistrationService } from '@app/services/auth/registration/registration-service';
+import { RegisterService } from '@app/services/auth/register/register-service';
 
-class UserRegistrationService extends RegistrationService {
+class UserRegisterService extends RegisterService {
   /**
    * Constructor.
    */
@@ -28,4 +28,4 @@ class UserRegistrationService extends RegistrationService {
   }
 }
 
-export const registrationService = new UserRegistrationService();
+export const registerService = new UserRegisterService();

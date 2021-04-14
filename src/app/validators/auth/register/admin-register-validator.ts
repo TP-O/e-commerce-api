@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { Validator } from '@app/validators';
+import { Admin } from '@app/models/auth/admin';
 import { Role } from '@app/models/auth/role';
-import { Seller } from '@app/models/auth/seller';
 
 const rules = Joi.object().keys({
   name: Joi.string().required().messages({
@@ -30,7 +30,7 @@ const rules = Joi.object().keys({
 });
 
 async function checkUnique(email: string) {
-  const { data } = await Seller.select('id')
+  const { data } = await Admin.select('id')
     .where([['email', '=', `v:${email}`]])
     .get();
 
@@ -43,7 +43,7 @@ async function checkRole(name: string) {
   const { data } = await Role.select('id')
     .where([
       ['name', '=', `v:${name}`],
-      ['type', '=', 'v:seller'],
+      ['type', '=', 'v:admin'],
     ])
     .get();
 
@@ -52,4 +52,4 @@ async function checkRole(name: string) {
   }
 }
 
-export const RegisterValidator = new Validator(rules);
+export const registerValidator = new Validator(rules);

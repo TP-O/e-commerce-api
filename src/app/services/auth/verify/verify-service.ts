@@ -1,7 +1,7 @@
 import { Activation } from '@app/models/auth/activation';
 import { Model } from '@modules/database/core/orm/model';
 
-export abstract class VerificationService {
+export abstract class VerifyService {
   /**
    * Constructor.
    *

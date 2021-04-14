@@ -1,14 +1,14 @@
 import { HttpRequestError } from '@app/exceptions/http-request-error';
-import { VerificationService } from '@app/services/auth/verification/verification-service';
+import { VerifyService } from '@app/services/auth/verify/verify-service';
 import { Request, Response } from 'express';
 
-export abstract class VerificationController {
+export abstract class VerifyController {
   /**
    * Constructor.
    *
    * @param service verification service.
    */
-  public constructor(protected service: VerificationService) {}
+  public constructor(protected service: VerifyService) {}
 
   /**
    * Find an activation information.

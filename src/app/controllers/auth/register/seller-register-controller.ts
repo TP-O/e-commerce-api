@@ -1,6 +1,6 @@
-import { RegistrationController } from '@app/controllers/auth/registration/registration-controller';
-import { registrationService } from '@app/services/auth/registration/seller-registration-service';
-import { RegisterValidator } from '@app/validators/auth/seller/register-validator';
+import { RegistrationController } from '@app/controllers/auth/register/register-controller';
+import { registerService } from '@app/services/auth/register/seller-register-service';
+import { registerValidator } from '@app/validators/auth/register/seller-register-validator';
 import { Request, Response } from 'express';
 
 class SellerRegistrationController extends RegistrationController {
@@ -8,7 +8,7 @@ class SellerRegistrationController extends RegistrationController {
    * Constructor.
    */
   public constructor() {
-    super(RegisterValidator, registrationService);
+    super(registerValidator, registerService);
   }
 
   /**

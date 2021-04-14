@@ -5,7 +5,7 @@ import { Role } from '@app/models/auth/role';
 import { Model } from '@modules/database/core/orm/model';
 import { Activation } from '@app/models/auth/activation';
 
-export abstract class RegistrationService {
+export abstract class RegisterService {
   /**
    * Constructor.
    *

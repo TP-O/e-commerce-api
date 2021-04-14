@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { HttpRequestError } from '@app/exceptions/http-request-error';
 import { Validator } from '@app/validators';
-import { RegistrationService } from '@app/services/auth/registration/registration-service';
+import { RegisterService } from '@app/services/auth/register/register-service';
 
 export abstract class RegistrationController {
   /**
@@ -12,7 +12,7 @@ export abstract class RegistrationController {
    */
   public constructor(
     protected validator: Validator,
-    protected service: RegistrationService,
+    protected service: RegisterService,
   ) {}
 
   /**

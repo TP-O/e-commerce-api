@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { auth } from '@modules/helper';
 import { authConfig } from '@configs/auth';
 import { HttpRequestError } from 'app/exceptions/http-request-error';
-import { LoginValidator } from '@app/validators/auth/seller/login-validator';
+import { loginValidator } from '@app/validators/auth/login/login-validator';
 
 export abstract class LoginController {
   /**
@@ -16,7 +16,7 @@ export abstract class LoginController {
    * Log in to the system.
    */
   public login = async (req: Request, res: Response) => {
-    const value = await LoginValidator.validate(req.body);
+    const value = await loginValidator.validate(req.body);
 
     // Check seller credentials
     const result = await auth(this.guard).validate(value);

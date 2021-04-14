@@ -1,6 +1,7 @@
 import Joi from 'joi';
 import { Validator } from '@app/validators';
-import { User } from '@app/models/auth/user';
+import { Role } from '@app/models/auth/role';
+import { Seller } from '@app/models/auth/seller';
 
 const rules = Joi.object().keys({
   name: Joi.string().required().messages({
@@ -11,6 +12,10 @@ const rules = Joi.object().keys({
     'string.base': 'Email must be a string',
     'string.email': 'Email is invalid',
     'any.required': 'Email is required',
+  }),
+  role: Joi.string().external(checkRole).required().messages({
+    'string.base': 'Role must be a string',
+    'any.required': 'Role is required',
   }),
   password: Joi.string().min(5).required().messages({
     'string.base': 'Password must be a string',
@@ -25,7 +30,7 @@ const rules = Joi.object().keys({
 });
 
 async function checkUnique(email: string) {
-  const { data } = await User.select('id')
+  const { data } = await Seller.select('id')
     .where([['email', '=', `v:${email}`]])
     .get();
 
@@ -34,4 +39,17 @@ async function checkUnique(email: string) {
   }
 }
 
-export const RegisterValidator = new Validator(rules);
+async function checkRole(name: string) {
+  const { data } = await Role.select('id')
+    .where([
+      ['name', '=', `v:${name}`],
+      ['type', '=', 'v:seller'],
+    ])
+    .get();
+
+  if (!data?.count()) {
+    throw Error('Role is unavailable');
+  }
+}
+
+export const registerValidator = new Validator(rules);

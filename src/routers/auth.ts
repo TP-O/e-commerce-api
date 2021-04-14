@@ -61,12 +61,12 @@ export function useAuthRouter(router: LRouter) {
       router.group(
         {
           prefix: '/register',
-          namespace: 'registration',
+          namespace: 'register',
         },
         () => {
-          router.post('/admin', 'admin-registration-controller@register');
-          router.post('/seller', 'seller-registration-controller@register');
-          router.post('/user', 'user-registration-controller@register');
+          router.post('/admin', 'admin-register-controller@register');
+          router.post('/seller', 'seller-register-controller@register');
+          router.post('/user', 'user-register-controller@register');
         },
       );
 
@@ -76,12 +76,12 @@ export function useAuthRouter(router: LRouter) {
       router.group(
         {
           prefix: '/verify',
-          namespace: 'verification',
+          namespace: 'verify',
         },
         () => {
-          router.post('/admin/:code', 'admin-verification-controller@verify');
-          router.post('/seller/:code', 'seller-verification-controller@verify');
-          router.post('/user/:code', 'user-verification-controller@verify');
+          router.post('/admin/:code', 'admin-verify-controller@verify');
+          router.post('/seller/:code', 'seller-verify-controller@verify');
+          router.post('/user/:code', 'user-verify-controller@verify');
         },
       );
     },

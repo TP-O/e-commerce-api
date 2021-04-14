@@ -1,8 +1,8 @@
 import { RoleSeller } from '@app/models/auth/pivot/role-seller';
 import { Seller } from '@app/models/auth/seller';
-import { RegistrationService } from '@app/services/auth/registration/registration-service';
+import { RegisterService } from '@app/services/auth/register/register-service';
 
-class SellerRegistrationService extends RegistrationService {
+class SellerRegisterService extends RegisterService {
   /**
    * Constructor.
    */
@@ -28,4 +28,4 @@ class SellerRegistrationService extends RegistrationService {
   }
 }
 
-export const registrationService = new SellerRegistrationService();
+export const registerService = new SellerRegisterService();
