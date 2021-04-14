@@ -47,6 +47,7 @@ export function useAuthRouter(router: LRouter) {
         {
           prefix: '/refresh',
           namespace: 'login',
+          middleware: ['require-refresh-token'],
         },
         () => {
           router.post('/admin', 'admin-login-controller@refresh');
@@ -64,7 +65,12 @@ export function useAuthRouter(router: LRouter) {
           namespace: 'register',
         },
         () => {
-          router.post('/admin', 'admin-register-controller@register');
+          router.post(
+            '/admin',
+            'admin-register-controller@register',
+            'require-access-token',
+            'must-be-administrator',
+          );
           router.post('/seller', 'seller-register-controller@register');
           router.post('/user', 'user-register-controller@register');
         },
