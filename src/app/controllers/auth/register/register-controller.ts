@@ -72,7 +72,7 @@ export abstract class RegistrationController {
     const account = await this.service.findAccountByEmail(email);
 
     if (!account) {
-      throw new HttpRequestError(404, 'Seller not found');
+      throw new HttpRequestError(404, 'Account not found');
     }
 
     return account;
@@ -108,4 +108,9 @@ export abstract class RegistrationController {
    * Register an account.
    */
   public abstract register(req: Request, res: Response): Promise<void>;
+
+  /**
+   * Resend activation email.
+   */
+  public abstract resendEmail(req: Request, res: Response): Promise<void>;
 }

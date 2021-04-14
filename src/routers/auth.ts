@@ -77,6 +77,36 @@ export function useAuthRouter(router: LRouter) {
       );
 
       /**
+       * Send activation email
+       */
+      router.group(
+        {
+          prefix: '/active',
+          namespace: 'register',
+        },
+        () => {
+          router.post(
+            '/admin',
+            'admin-register-controller@resendEmail',
+            'require-access-token',
+            'require-inactive-account',
+          );
+          router.post(
+            '/seller',
+            'seller-register-controller@resendEmail',
+            'require-access-token',
+            'require-inactive-account',
+          );
+          router.post(
+            '/user',
+            'user-register-controller@resendEmail',
+            'require-access-token',
+            'require-inactive-account',
+          );
+        },
+      );
+
+      /**
        * Verification routes.
        */
       router.group(

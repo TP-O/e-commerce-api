@@ -35,6 +35,23 @@ class UserRegistrationController extends RegistrationController {
       message: 'Signed up successfully',
     });
   };
+
+  /**
+   * Resend activation email.
+   */
+  public resendEmail = async (req: Request, res: Response) => {
+    // Check the account is exists
+    await this.findAccountByEmail(req.user.email);
+
+    const code = await this.createActivationCode(req.user.id, 'user');
+
+    this.sendEmail(req.user.email, code);
+
+    res.status(200).json({
+      success: true,
+      message: 'Activation email has been sent',
+    });
+  };
 }
 
 export default new UserRegistrationController();
