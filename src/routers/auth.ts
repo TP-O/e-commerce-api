@@ -120,6 +120,47 @@ export function useAuthRouter(router: LRouter) {
           router.post('/user/:code', 'user-verify-controller@verify');
         },
       );
+
+      /**
+       * Forgot password routes.
+       */
+      router.group({ namespace: 'password' }, () => {
+        /**
+         * Request reset password routes.
+         */
+        router.group({ prefix: '/forgot-password' }, () => {
+          router.post(
+            '/admin',
+            'admin-forgot-password-controller@forgotPassword',
+          );
+          router.post(
+            '/seller',
+            'seller-forgot-password-controller@forgotPassword',
+          );
+          router.post(
+            '/user',
+            'user-forgot-password-controller@forgotPassword',
+          );
+        });
+
+        /**
+         * Reset password routes.
+         */
+        router.group({ prefix: '/reset-password' }, () => {
+          router.post(
+            '/admin/:code',
+            'admin-forgot-password-controller@resetPassword',
+          );
+          router.post(
+            '/seller/:code',
+            'seller-forgot-password-controller@resetPassword',
+          );
+          router.post(
+            '/user/:code',
+            'user-forgot-password-controller@resetPassword',
+          );
+        });
+      });
     },
   );
 }
