@@ -1,13 +1,21 @@
-import { RegistrationController } from '@app/controllers/auth/register/register-controller';
-import { registerService } from '@app/services/auth/register/user-register-service';
-import { registerValidator } from '@app/validators/auth/register/user-register-validator';
+import { RegisterController } from '@app/controllers/auth/register/register-controller';
+import { UserRegisterService } from '@app/services/auth/register/user-register-service';
+import { UserRegisterValidator } from '@app/validators/auth/register/user-register-validator';
 import { Request, Response } from 'express';
+import { autoInjectable } from 'tsyringe';
 
-class UserRegistrationController extends RegistrationController {
+@autoInjectable()
+export class UserRegisterController extends RegisterController {
   /**
    * Constructor.
+   *
+   * @param registerValidator registration validator.
+   * @param registerService registration service.
    */
-  public constructor() {
+  public constructor(
+    registerValidator: UserRegisterValidator,
+    registerService: UserRegisterService,
+  ) {
     super(registerValidator, registerService);
   }
 
@@ -16,7 +24,7 @@ class UserRegistrationController extends RegistrationController {
    */
   public register = async (req: Request, res: Response) => {
     // Validate user's information
-    const user = await this.validator.validate(req.body);
+    const user = await this.registerValidator.validate(req.body);
 
     // Create user account
     await this.create(user);
@@ -53,5 +61,3 @@ class UserRegistrationController extends RegistrationController {
     });
   };
 }
-
-export default new UserRegistrationController();

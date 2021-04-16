@@ -1,8 +1,10 @@
 import { RoleSeller } from '@app/models/auth/pivot/role-seller';
 import { Seller } from '@app/models/auth/seller';
 import { RegisterService } from '@app/services/auth/register/register-service';
+import { singleton } from 'tsyringe';
 
-class SellerRegisterService extends RegisterService {
+@singleton()
+export class SellerRegisterService extends RegisterService {
   /**
    * Constructor.
    */
@@ -27,5 +29,3 @@ class SellerRegisterService extends RegisterService {
     return success ?? false;
   }
 }
-
-export const registerService = new SellerRegisterService();

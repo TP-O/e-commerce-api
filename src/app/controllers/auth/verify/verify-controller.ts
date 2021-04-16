@@ -6,9 +6,9 @@ export abstract class VerifyController {
   /**
    * Constructor.
    *
-   * @param service verification service.
+   * @param verifyService verification service.
    */
-  public constructor(protected service: VerifyService) {}
+  public constructor(protected verifyService: VerifyService) {}
 
   /**
    * Find an activation information.
@@ -16,7 +16,7 @@ export abstract class VerifyController {
    * @param code activation code.
    */
   protected findActivation = async (code: string) => {
-    const activation = await this.service.findActivation(code);
+    const activation = await this.verifyService.findActivation(code);
 
     if (!activation) {
       throw new HttpRequestError(404, 'Not found');
@@ -31,7 +31,7 @@ export abstract class VerifyController {
    * @param code activation code.
    */
   protected deleteActivation = async (code: string) => {
-    const success = await this.service.deleteActivation(code);
+    const success = await this.verifyService.deleteActivation(code);
 
     if (!success) {
       throw new HttpRequestError(500, 'Unable to delete activaion');
@@ -44,7 +44,7 @@ export abstract class VerifyController {
    * @param accountId account's ID.
    */
   protected activateAccount = async (accountId: number) => {
-    const success = await this.service.activateAccount(accountId);
+    const success = await this.verifyService.activateAccount(accountId);
 
     if (!success) {
       throw new HttpRequestError(500, 'Unable to activate account');

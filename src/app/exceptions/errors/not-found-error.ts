@@ -1,15 +1,15 @@
 import { HttpError } from '@app/exceptions/errors/http-error';
+import { singleton } from 'tsyringe';
 
-class NotFoundError extends HttpError {
+@singleton()
+export class NotFoundError extends HttpError {
   /**
    * Status code.
    */
-  protected status = 404;
+  protected readonly status = 404;
 
   /**
    * Error message.
    */
-  protected message = 'Not found!';
+  protected readonly message = 'Not found!';
 }
-
-export const notFound = new NotFoundError();

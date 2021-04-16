@@ -1,7 +1,9 @@
 import { Seller } from '@app/models/auth/seller';
 import { VerifyService } from '@app/services/auth/verify/verify-service';
+import { singleton } from 'tsyringe';
 
-class SellerVerifyService extends VerifyService {
+@singleton()
+export class SellerVerifyService extends VerifyService {
   /**
    * Constructor.
    */
@@ -9,5 +11,3 @@ class SellerVerifyService extends VerifyService {
     super(Seller, 'seller');
   }
 }
-
-export const verifyService = new SellerVerifyService();

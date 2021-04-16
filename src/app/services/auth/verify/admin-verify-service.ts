@@ -1,7 +1,9 @@
 import { Admin } from '@app/models/auth/admin';
 import { VerifyService } from '@app/services/auth/verify/verify-service';
+import { singleton } from 'tsyringe';
 
-class AdminVerifyService extends VerifyService {
+@singleton()
+export class AdminVerifyService extends VerifyService {
   /**
    * Constructor.
    */
@@ -9,5 +11,3 @@ class AdminVerifyService extends VerifyService {
     super(Admin, 'admin');
   }
 }
-
-export const verifyService = new AdminVerifyService();

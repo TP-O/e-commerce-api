@@ -1,7 +1,9 @@
 import { Seller } from '@app/models/auth/seller';
 import { ForgotPasswordService } from '@app/services/auth/password/forgot-password-service';
+import { singleton } from 'tsyringe';
 
-class SellerForgotPasswordService extends ForgotPasswordService {
+@singleton()
+export class SellerForgotPasswordService extends ForgotPasswordService {
   /**
    * Constructor.
    */
@@ -9,5 +11,3 @@ class SellerForgotPasswordService extends ForgotPasswordService {
     super(Seller, 'seller');
   }
 }
-
-export const sellerForgotPasswordService = new SellerForgotPasswordService();

@@ -1,16 +1,21 @@
 import { HttpRequestError } from '@app/exceptions/http-request-error';
 import { ForgotPasswordService } from '@app/services/auth/password/forgot-password-service';
-import { forgotPasswordValidator } from '@app/validators/auth/password/forgot-password-validator';
-import { resetPasswordValidator } from '@app/validators/auth/password/reset-password-validator';
+import { Validator } from '@app/validators';
 import { Request, Response } from 'express';
 
 export abstract class ForgotPasswordController {
   /**
    * Constructor.
    *
-   * @param service forgot password service.
+   * @param forgotPasswordservice forgot password service.
+   * @param forgotPasswordValidator forgot password validator.
+   * @param resetPasswordValidator reset password validator.
    */
-  protected constructor(protected service: ForgotPasswordService) {}
+  protected constructor(
+    protected forgotPasswordservice: ForgotPasswordService,
+    protected forgotPasswordValidator: Validator,
+    protected resetPasswordValidator: Validator,
+  ) {}
 
   /**
    * Find the account by something...
@@ -19,7 +24,10 @@ export abstract class ForgotPasswordController {
    * @param value field's value.
    */
   protected async findAccountBy(field: string, value: any) {
-    const account = await this.service.findAccountBy(field, value);
+    const account = await this.forgotPasswordservice.findAccountBy(
+      field,
+      value,
+    );
 
     if (!account) {
       throw new HttpRequestError(404, 'Email is unavailable');
@@ -34,7 +42,9 @@ export abstract class ForgotPasswordController {
    * @param code forgot password code.
    */
   protected async findForgotPassword(code: string) {
-    const forgotPassword = await this.service.findForgotPassword(code);
+    const forgotPassword = await this.forgotPasswordservice.findForgotPassword(
+      code,
+    );
 
     if (!forgotPassword) {
       throw new HttpRequestError(404, 'Not found');
@@ -49,7 +59,9 @@ export abstract class ForgotPasswordController {
    * @param accountId ID's account.
    */
   protected async createForgotPassword(accountId: number) {
-    const code = await this.service.createForgotPassword(accountId);
+    const code = await this.forgotPasswordservice.createForgotPassword(
+      accountId,
+    );
 
     if (code === '') {
       throw new HttpRequestError(500, 'Unable to change password');
@@ -64,7 +76,7 @@ export abstract class ForgotPasswordController {
    * @param code forgot password code.
    */
   protected async deleteForgotPassword(code: string) {
-    const success = await this.service.deleteForgotPassword(code);
+    const success = await this.forgotPasswordservice.deleteForgotPassword(code);
 
     if (!success) {
       throw new HttpRequestError(500, 'Unable to delete forgot password code');
@@ -78,7 +90,7 @@ export abstract class ForgotPasswordController {
    * @param password new password.
    */
   protected async resetAccountPassword(accountId: number, password: string) {
-    const success = await this.service.resetAccountPassword(
+    const success = await this.forgotPasswordservice.resetAccountPassword(
       accountId,
       password,
     );
@@ -95,7 +107,7 @@ export abstract class ForgotPasswordController {
    * @param content email's content.
    */
   protected sendEmail(email: string, content: string) {
-    this.service.sendEmail(email, content);
+    this.forgotPasswordservice.sendEmail(email, content);
   }
 
   /**
@@ -103,7 +115,7 @@ export abstract class ForgotPasswordController {
    */
   public forgotPassword = async (req: Request, res: Response) => {
     // Validate input
-    const input = await forgotPasswordValidator.validate(req.body);
+    const input = await this.forgotPasswordValidator.validate(req.body);
 
     // Find account by email
     const account = await this.findAccountBy('email', input.email);
@@ -125,7 +137,7 @@ export abstract class ForgotPasswordController {
     const forgotPassword = await this.findForgotPassword(req.params.code);
 
     // Validate input
-    const input = await resetPasswordValidator.validate(req.body);
+    const input = await this.resetPasswordValidator.validate(req.body);
 
     // Update account's password
     await this.resetAccountPassword(forgotPassword.account_id, input.password);

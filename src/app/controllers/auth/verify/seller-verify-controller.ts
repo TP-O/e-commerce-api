@@ -1,13 +1,15 @@
 import { VerifyController } from '@app/controllers/auth/verify/verify-controller';
-import { verifyService } from '@app/services/auth/verify/seller-verify-service';
+import { SellerVerifyService } from '@app/services/auth/verify/seller-verify-service';
+import { autoInjectable } from 'tsyringe';
 
-class SellerVerifyController extends VerifyController {
+@autoInjectable()
+export class SellerVerifyController extends VerifyController {
   /**
    * Constructor.
+   *
+   * @param verifyService verification service.
    */
-  public constructor() {
+  public constructor(verifyService: SellerVerifyService) {
     super(verifyService);
   }
 }
-
-export default new SellerVerifyController();

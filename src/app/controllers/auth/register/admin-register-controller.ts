@@ -1,13 +1,21 @@
-import { RegistrationController } from '@app/controllers/auth/register/register-controller';
-import { registerService } from '@app/services/auth/register/admin-register-service';
-import { registerValidator } from '@app/validators/auth/register/admin-register-validator';
+import { RegisterController } from '@app/controllers/auth/register/register-controller';
+import { AdminRegisterService } from '@app/services/auth/register/admin-register-service';
+import { AdminRegisterValidator } from '@app/validators/auth/register/admin-register-validator';
 import { Request, Response } from 'express';
+import { autoInjectable } from 'tsyringe';
 
-class AdminRegistrationController extends RegistrationController {
+@autoInjectable()
+export class AdminRegisterController extends RegisterController {
   /**
    * Constructor.
+   *
+   * @param registerValidator registration validator.
+   * @param registerService registration service.
    */
-  public constructor() {
+  public constructor(
+    registerValidator: AdminRegisterValidator,
+    registerService: AdminRegisterService,
+  ) {
     super(registerValidator, registerService);
   }
 
@@ -16,7 +24,7 @@ class AdminRegistrationController extends RegistrationController {
    */
   public register = async (req: Request, res: Response) => {
     // Validate admin's information
-    const admin = await this.validator.validate(req.body);
+    const admin = await this.registerValidator.validate(req.body);
 
     // Create admin account
     await this.create(admin);
@@ -53,5 +61,3 @@ class AdminRegistrationController extends RegistrationController {
     });
   };
 }
-
-export default new AdminRegistrationController();

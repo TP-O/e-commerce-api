@@ -1,22 +1,26 @@
 import { Request, Response } from 'express';
 import { auth } from '@modules/helper';
 import { authConfig } from '@configs/auth';
-import { HttpRequestError } from 'app/exceptions/http-request-error';
-import { loginValidator } from '@app/validators/auth/login/login-validator';
+import { HttpRequestError } from '@app/exceptions/http-request-error';
+import { Validator } from '@app/validators';
 
 export abstract class LoginController {
   /**
    * Constructor.
    *
    * @param guard guard's name.
+   * @param loginValidator login validator.
    */
-  public constructor(protected guard: string) {}
+  public constructor(
+    protected guard: string,
+    protected loginValidator: Validator,
+  ) {}
 
   /**
    * Log in to the system.
    */
   public login = async (req: Request, res: Response) => {
-    const value = await loginValidator.validate(req.body);
+    const value = await this.loginValidator.validate(req.body);
 
     // Check seller credentials
     const result = await auth(this.guard).validate(value);

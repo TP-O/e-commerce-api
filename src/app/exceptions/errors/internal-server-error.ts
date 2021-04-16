@@ -1,15 +1,15 @@
 import { HttpError } from '@app/exceptions/errors/http-error';
+import { singleton } from 'tsyringe';
 
-class InternalServerError extends HttpError {
+@singleton()
+export class InternalServerError extends HttpError {
   /**
    * Status code.
    */
-  protected status = 500;
+  protected readonly status = 500;
 
   /**
    * Error message.
    */
-  protected message = 'We are having some problems!';
+  protected readonly message = 'We are having some problems!';
 }
-
-export const internalServer = new InternalServerError();

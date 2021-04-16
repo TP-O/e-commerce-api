@@ -4,12 +4,12 @@ export abstract class HttpError {
   /**
    * Status code.
    */
-  protected abstract status: number;
+  protected abstract readonly status: number;
 
   /**
    * Error message.
    */
-  protected abstract message: string;
+  protected abstract readonly message: string;
 
   public handle = (_: Request, res: Response): void => {
     res.status(this.status).json({

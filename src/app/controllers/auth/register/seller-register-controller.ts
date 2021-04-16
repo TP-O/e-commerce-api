@@ -1,13 +1,21 @@
-import { RegistrationController } from '@app/controllers/auth/register/register-controller';
-import { registerService } from '@app/services/auth/register/seller-register-service';
-import { registerValidator } from '@app/validators/auth/register/seller-register-validator';
+import { RegisterController } from '@app/controllers/auth/register/register-controller';
+import { SellerRegisterService } from '@app/services/auth/register/seller-register-service';
+import { SellerRegisterValidator } from '@app/validators/auth/register/seller-register-validator';
 import { Request, Response } from 'express';
+import { autoInjectable } from 'tsyringe';
 
-class SellerRegistrationController extends RegistrationController {
+@autoInjectable()
+export class SellerRegisterController extends RegisterController {
   /**
    * Constructor.
+   *
+   * @param registerValidator registration validator.
+   * @param registerService registration service.
    */
-  public constructor() {
+  public constructor(
+    registerValidator: SellerRegisterValidator,
+    registerService: SellerRegisterService,
+  ) {
     super(registerValidator, registerService);
   }
 
@@ -16,7 +24,7 @@ class SellerRegistrationController extends RegistrationController {
    */
   public register = async (req: Request, res: Response) => {
     // Validate seller's information
-    const seller = await this.validator.validate(req.body);
+    const seller = await this.registerValidator.validate(req.body);
 
     // Create seller account
     await this.create(seller);
@@ -53,5 +61,3 @@ class SellerRegistrationController extends RegistrationController {
     });
   };
 }
-
-export default new SellerRegistrationController();

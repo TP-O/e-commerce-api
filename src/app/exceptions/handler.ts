@@ -1,9 +1,22 @@
 import { Request, Response, Express } from 'express';
-import { notFound } from '@app/exceptions/errors/not-found-error';
-import { internalServer } from '@app/exceptions/errors/internal-server-error';
+import { NotFoundError } from '@app/exceptions/errors/not-found-error';
+import { InternalServerError } from '@app/exceptions/errors/internal-server-error';
 import { HttpRequestError } from '@app/exceptions/http-request-error';
+import { autoInjectable } from 'tsyringe';
 
-class Handler {
+@autoInjectable()
+export class Handler {
+  /**
+   * Constructor.
+   *
+   * @param notFound not found error.
+   * @param internalServer internal server error.
+   */
+  public constructor(
+    private notFound: NotFoundError,
+    private internalServer: InternalServerError,
+  ) {}
+
   /**
    * Handle error for Express app.
    *
@@ -20,7 +33,7 @@ class Handler {
    * @param app Express app.
    */
   private handleNotFoundError(app: Express): void {
-    app.all('/*', notFound.handle);
+    app.all('/*', this.notFound.handle);
   }
 
   /**
@@ -38,10 +51,8 @@ class Handler {
 
         console.log(`Internal Error: ${err}`);
 
-        return internalServer.handle(req, res);
+        return this.internalServer.handle(req, res);
       },
     );
   }
 }
-
-export const handler = new Handler();

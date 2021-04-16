@@ -1,11 +1,18 @@
 import Joi from 'joi';
 import { HttpRequestError } from '@app/exceptions/http-request-error';
 
-export class Validator {
+export abstract class Validator {
   /**
-   * @param rules applied rules.
+   * Applied rules.
    */
-  public constructor(private rules: Joi.ObjectSchema) {}
+  protected rules: Joi.ObjectSchema = Joi.object().keys();
+
+  /**
+   * Constructor.
+   */
+  public constructor() {
+    this.makeRules();
+  }
 
   /**
    * Validate data.
@@ -63,4 +70,9 @@ export class Validator {
 
     return formatedErrors;
   }
+
+  /**
+   * Make rules for the validator.
+   */
+  protected abstract makeRules(): void;
 }

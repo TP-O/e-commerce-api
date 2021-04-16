@@ -1,11 +1,13 @@
+import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import 'express-async-errors';
+import { container } from 'tsyringe';
 import { logger } from '@modules/logger';
 import { registerRouter } from '@routers';
-import { handler } from '@app/exceptions/handler';
+import { Handler } from '@app/exceptions/handler';
 
 // Init app
 const app = express();
@@ -30,6 +32,6 @@ app.use(express.static('public'));
 registerRouter(app);
 
 // Handle exceptions
-handler.handleFor(app);
+container.resolve(Handler).handleFor(app);
 
 export { app };

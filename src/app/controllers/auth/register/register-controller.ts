@@ -3,16 +3,16 @@ import { HttpRequestError } from '@app/exceptions/http-request-error';
 import { Validator } from '@app/validators';
 import { RegisterService } from '@app/services/auth/register/register-service';
 
-export abstract class RegistrationController {
+export abstract class RegisterController {
   /**
    * Constructor.
    *
-   * @param validator registration validator.
-   * @param service registration service.
+   * @param registerValidator registration validator.
+   * @param registerService registration service.
    */
   public constructor(
-    protected validator: Validator,
-    protected service: RegisterService,
+    protected registerValidator: Validator,
+    protected registerService: RegisterService,
   ) {}
 
   /**
@@ -21,7 +21,7 @@ export abstract class RegistrationController {
    * @param account account's information.
    */
   protected create = async (account: any) => {
-    const success = await this.service.registerAccount(account);
+    const success = await this.registerService.registerAccount(account);
 
     if (!success) {
       throw new HttpRequestError(500, 'Account creation failed');
@@ -39,7 +39,7 @@ export abstract class RegistrationController {
     const role = await this.findRoleByName(roleName);
 
     // assign the role to the account.
-    const success = await this.service.assign(account.id, role.id);
+    const success = await this.registerService.assign(account.id, role.id);
 
     if (!success) {
       throw new HttpRequestError(500, 'Authorization failed');
@@ -54,7 +54,7 @@ export abstract class RegistrationController {
    * @param name role's name.
    */
   protected findRoleByName = async (name: string) => {
-    const role = await this.service.findRoleByName(name);
+    const role = await this.registerService.findRoleByName(name);
 
     if (!role) {
       throw new HttpRequestError(404, 'Role not found');
@@ -69,7 +69,7 @@ export abstract class RegistrationController {
    * @param email account's email.
    */
   protected findAccountByEmail = async (email: string) => {
-    const account = await this.service.findAccountByEmail(email);
+    const account = await this.registerService.findAccountByEmail(email);
 
     if (!account) {
       throw new HttpRequestError(404, 'Account not found');
@@ -85,7 +85,10 @@ export abstract class RegistrationController {
    * @param type type of account.
    */
   protected createActivationCode = async (accountId: number, type: string) => {
-    const code = await this.service.createActivationCode(accountId, type);
+    const code = await this.registerService.createActivationCode(
+      accountId,
+      type,
+    );
 
     if (code === '') {
       throw new HttpRequestError(500, 'Unable to send activation email');
@@ -101,7 +104,7 @@ export abstract class RegistrationController {
    * @param content email's content.
    */
   protected sendEmail = (email: string, content: string) => {
-    this.service.sendEmail(email, content);
+    this.registerService.sendEmail(email, content);
   };
 
   /**
