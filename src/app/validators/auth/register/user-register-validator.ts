@@ -1,10 +1,19 @@
 import Joi from 'joi';
 import { Validator } from '@app/validators';
-import { User } from '@app/models/auth/user';
 import { injectable } from 'tsyringe';
+import { UserRegisterService } from '@app/services/auth/register/user-register-service';
 
 @injectable()
 export class UserRegisterValidator extends Validator {
+  /**
+   * Constructor.
+   *
+   * @param userRegisterService user register service.
+   */
+  public constructor(private userRegisterService: UserRegisterService) {
+    super();
+  }
+
   /**
    * Make rules for the validator.
    */
@@ -16,7 +25,7 @@ export class UserRegisterValidator extends Validator {
       }),
       email: Joi.string()
         .email()
-        .external(this.checkUnique)
+        .external(this.checkUnique.bind(this))
         .required()
         .messages({
           'string.base': 'Email must be a string',
@@ -40,11 +49,9 @@ export class UserRegisterValidator extends Validator {
   }
 
   private async checkUnique(email: string) {
-    const { data } = await User.select('id')
-      .where([['email', '=', `v:${email}`]])
-      .get();
+    const admin = await this.userRegisterService.findAccountByEmail(email);
 
-    if (data?.count()) {
+    if (admin) {
       throw Error('Email is available');
     }
   }

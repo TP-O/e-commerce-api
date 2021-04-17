@@ -1,4 +1,4 @@
-import { RoleSeller } from '@app/models/auth/pivot/role-seller';
+import { RoleSeller } from '@app/models/auth/role-seller';
 import { Seller } from '@app/models/auth/seller';
 import { RegisterService } from '@app/services/auth/register/register-service';
 import { singleton } from 'tsyringe';
@@ -9,7 +9,7 @@ export class SellerRegisterService extends RegisterService {
    * Constructor.
    */
   public constructor() {
-    super(Seller);
+    super(Seller, 'seller');
   }
 
   /**
@@ -18,7 +18,7 @@ export class SellerRegisterService extends RegisterService {
    * @param accountId ID's account.
    * @param roleId ID's role.
    */
-  public async assign(userId: string, roleId: string) {
+  public async assign(userId: number, roleId: number) {
     const { success } = await RoleSeller.create([
       {
         seller_id: userId,

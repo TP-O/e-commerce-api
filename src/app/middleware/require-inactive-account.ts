@@ -6,7 +6,7 @@ import { injectable } from 'tsyringe';
 export class RequireInactiveAccount {
   public handle() {
     return function (req: Request, res: Response, next: NextFunction) {
-      if (req.user.active) {
+      if (req.user?.active) {
         throw new HttpRequestError(400, 'Your account has been activated');
       }
 

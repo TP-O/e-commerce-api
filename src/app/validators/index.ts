@@ -62,6 +62,8 @@ export abstract class Validator {
   private formatValidatorErrors(error: any) {
     const formatedErrors: any = {};
 
+    console.log(error);
+
     for (const value of error.details) {
       value.path.forEach((p: string) => {
         formatedErrors[p] = value.message;

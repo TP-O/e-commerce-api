@@ -7,6 +7,8 @@ import PermissionsRoles from './permissions_roles.seeder';
 import AdminsRoles from './admins_roles.seeder';
 import RolesUsers from './roles_users.seeder';
 import RolesSellers from './roles_sellers.seeder';
+import ForgotPasswords from './forgot_passwords.seeder';
+import Activations from './activations.seeder';
 
 class DatabaseSeeder {
   public async seed(): Promise<void> {
@@ -19,6 +21,8 @@ class DatabaseSeeder {
     await AdminsRoles.seed();
     await RolesUsers.seed();
     await RolesSellers.seed();
+    await ForgotPasswords.seed();
+    await Activations.seed();
   }
 }
 

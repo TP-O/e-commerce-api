@@ -23,8 +23,6 @@ export class Connection {
       const connection = await this.pool.getConnection();
 
       connection.release();
-
-      console.log('Database is connected');
     } catch (err) {
       console.error(`Connection failed (${err.message})`);
 

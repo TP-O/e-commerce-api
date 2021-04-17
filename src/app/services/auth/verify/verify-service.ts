@@ -11,7 +11,7 @@ export abstract class VerifyService {
   public constructor(protected model: Model, protected type: string) {}
 
   /**
-   * Find an activation information.
+   * Find an activation code.
    *
    * @param code activation code.
    */
@@ -27,7 +27,7 @@ export abstract class VerifyService {
   }
 
   /**
-   * Delete an activation information.
+   * Delete an activation code.
    *
    * @param code activation code.
    */
@@ -50,6 +50,10 @@ export abstract class VerifyService {
       .select('*')
       .where([['id', '=', `v:${accountId}`]])
       .get();
+
+    if (!data?.first()) {
+      return false;
+    }
 
     (data?.first()).active = 1;
 

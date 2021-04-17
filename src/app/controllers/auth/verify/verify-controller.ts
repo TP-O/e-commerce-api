@@ -11,11 +11,11 @@ export abstract class VerifyController {
   public constructor(protected verifyService: VerifyService) {}
 
   /**
-   * Find an activation information.
+   * Find the activation code.
    *
    * @param code activation code.
    */
-  protected findActivation = async (code: string) => {
+  public findActivation = async (code: string) => {
     const activation = await this.verifyService.findActivation(code);
 
     if (!activation) {
@@ -26,16 +26,18 @@ export abstract class VerifyController {
   };
 
   /**
-   * Delete an activation information.
+   * Delete the activation code.
    *
    * @param code activation code.
    */
-  protected deleteActivation = async (code: string) => {
+  public deleteActivation = async (code: string) => {
     const success = await this.verifyService.deleteActivation(code);
 
     if (!success) {
       throw new HttpRequestError(500, 'Unable to delete activaion');
     }
+
+    return success;
   };
 
   /**
@@ -43,18 +45,24 @@ export abstract class VerifyController {
    *
    * @param accountId account's ID.
    */
-  protected activateAccount = async (accountId: number) => {
+  public activateAccount = async (accountId: number) => {
     const success = await this.verifyService.activateAccount(accountId);
 
     if (!success) {
       throw new HttpRequestError(500, 'Unable to activate account');
     }
+
+    return success;
   };
 
   /**
    * Verify the account.
    */
   public verify = async (req: Request, res: Response) => {
+    if (!req.params.code) {
+      throw new HttpRequestError(500, 'Missing activation code');
+    }
+
     const activation = await this.findActivation(req.params.code);
 
     await this.activateAccount(activation.account_id);

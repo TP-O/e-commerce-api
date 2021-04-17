@@ -18,7 +18,7 @@ export const Seller = ModelMaker.make({
     'name',
     'email',
     'password',
-    'active'
+    'active',
   ],
   relationships: {
     hasMany: [

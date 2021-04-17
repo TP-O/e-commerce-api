@@ -18,7 +18,7 @@ export const User = ModelMaker.make({
     'name',
     'email',
     'password',
-    'active'
+    'active',
   ],
   relationships: {
     hasMany: [

@@ -14,7 +14,8 @@ export const Activation = ModelMaker.make({
   // prettier-ignore
   fillable: [
     'account_id',
-    'code','type'
+    'code',
+    'type',
   ],
   relationships: {},
 });

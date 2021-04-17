@@ -11,14 +11,14 @@ export const Admin = ModelMaker.make({
     'password',
     'active',
     'created_at',
-    'updated_at'
+    'updated_at',
   ],
   // prettier-ignore
   fillable: [
     'name',
     'email',
     'password',
-    'active'
+    'active',
   ],
   relationships: {
     hasMany: [

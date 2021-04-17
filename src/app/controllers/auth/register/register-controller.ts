@@ -20,21 +20,23 @@ export abstract class RegisterController {
    *
    * @param account account's information.
    */
-  protected create = async (account: any) => {
+  public create = async (account: any) => {
     const success = await this.registerService.registerAccount(account);
 
     if (!success) {
       throw new HttpRequestError(500, 'Account creation failed');
     }
+
+    return success;
   };
 
   /**
-   * Grant permissions for account.
+   * Assign permissions for account.
    *
    * @param email account's email.
    * @param role role's name.
    */
-  protected assign = async (email: string, roleName: string) => {
+  public assign = async (email: string, roleName: string) => {
     const account = await this.findAccountByEmail(email);
     const role = await this.findRoleByName(roleName);
 
@@ -53,7 +55,7 @@ export abstract class RegisterController {
    *
    * @param name role's name.
    */
-  protected findRoleByName = async (name: string) => {
+  public findRoleByName = async (name: string) => {
     const role = await this.registerService.findRoleByName(name);
 
     if (!role) {
@@ -68,7 +70,7 @@ export abstract class RegisterController {
    *
    * @param email account's email.
    */
-  protected findAccountByEmail = async (email: string) => {
+  public findAccountByEmail = async (email: string) => {
     const account = await this.registerService.findAccountByEmail(email);
 
     if (!account) {
@@ -79,16 +81,13 @@ export abstract class RegisterController {
   };
 
   /**
-   * Create an activation code for account.
+   * Create the activation code for account.
    *
    * @param accountId ID's account.
    * @param type type of account.
    */
-  protected createActivationCode = async (accountId: number, type: string) => {
-    const code = await this.registerService.createActivationCode(
-      accountId,
-      type,
-    );
+  public createActivationCode = async (accountId: number) => {
+    const code = await this.registerService.createActivationCode(accountId);
 
     if (code === '') {
       throw new HttpRequestError(500, 'Unable to send activation email');
@@ -103,17 +102,33 @@ export abstract class RegisterController {
    * @param email account's email.
    * @param content email's content.
    */
-  protected sendEmail = (email: string, content: string) => {
+  public sendEmail = (email: string, content: string) => {
     this.registerService.sendEmail(email, content);
   };
 
   /**
-   * Register an account.
+   * Resend the activation email.
    */
-  public abstract register(req: Request, res: Response): Promise<void>;
+  public resendEmail = async (req: Request, res: Response) => {
+    if (!req.user?.email) {
+      throw new HttpRequestError(500, 'Missing email address');
+    }
+
+    // Check the account is exists
+    await this.findAccountByEmail(req.user.email);
+
+    const code = await this.createActivationCode(req.user.id);
+
+    this.sendEmail(req.user.email, code);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Activation email has been sent',
+    });
+  };
 
   /**
-   * Resend activation email.
+   * Register the account.
    */
-  public abstract resendEmail(req: Request, res: Response): Promise<void>;
+  public abstract register(req: Request, res: Response): Promise<Response>;
 }

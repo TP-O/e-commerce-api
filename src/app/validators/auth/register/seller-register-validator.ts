@@ -1,11 +1,19 @@
 import Joi from 'joi';
 import { Validator } from '@app/validators';
-import { Seller } from '@app/models/auth/seller';
-import { Role } from '@app/models/auth/role';
 import { injectable } from 'tsyringe';
+import { SellerRegisterService } from '@app/services/auth/register/seller-register-service';
 
 @injectable()
 export class SellerRegisterValidator extends Validator {
+  /**
+   * Constructor.
+   *
+   * @param sellerRegisterService seller register service.
+   */
+  public constructor(private sellerRegisterService: SellerRegisterService) {
+    super();
+  }
+
   /**
    * Make rules for the validator.
    */
@@ -17,17 +25,20 @@ export class SellerRegisterValidator extends Validator {
       }),
       email: Joi.string()
         .email()
-        .external(this.checkUnique)
+        .external(this.checkUnique.bind(this))
         .required()
         .messages({
           'string.base': 'Email must be a string',
           'string.email': 'Email is invalid',
           'any.required': 'Email is required',
         }),
-      role: Joi.string().external(this.checkRole).required().messages({
-        'string.base': 'Role must be a string',
-        'any.required': 'Role is required',
-      }),
+      role: Joi.string()
+        .external(this.checkRole.bind(this))
+        .required()
+        .messages({
+          'string.base': 'Role must be a string',
+          'any.required': 'Role is required',
+        }),
       password: Joi.string().min(5).required().messages({
         'string.base': 'Password must be a string',
         'string.min': 'Password must be at least 5 characters',
@@ -45,24 +56,17 @@ export class SellerRegisterValidator extends Validator {
   }
 
   private async checkUnique(email: string) {
-    const { data } = await Seller.select('id')
-      .where([['email', '=', `v:${email}`]])
-      .get();
+    const admin = await this.sellerRegisterService.findAccountByEmail(email);
 
-    if (data?.count()) {
+    if (admin) {
       throw Error('Email is available');
     }
   }
 
   private async checkRole(name: string) {
-    const { data } = await Role.select('id')
-      .where([
-        ['name', '=', `v:${name}`],
-        ['type', '=', 'v:seller'],
-      ])
-      .get();
+    const role = await this.sellerRegisterService.findRoleByName(name);
 
-    if (!data?.count()) {
+    if (!role) {
       throw Error('Role is unavailable');
     }
   }

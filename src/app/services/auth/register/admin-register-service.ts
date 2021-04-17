@@ -1,5 +1,5 @@
 import { Admin } from '@app/models/auth/admin';
-import { AdminRole } from '@app/models/auth/pivot/admin-role';
+import { AdminRole } from '@app/models/auth/admin-role';
 import { RegisterService } from '@app/services/auth/register/register-service';
 import { singleton } from 'tsyringe';
 
@@ -9,7 +9,7 @@ export class AdminRegisterService extends RegisterService {
    * Constructor.
    */
   public constructor() {
-    super(Admin);
+    super(Admin, 'admin');
   }
 
   /**
@@ -18,7 +18,7 @@ export class AdminRegisterService extends RegisterService {
    * @param accountId ID's account.
    * @param roleId ID's role.
    */
-  public async assign(userId: string, roleId: string) {
+  public async assign(userId: number, roleId: number) {
     const { success } = await AdminRole.create([
       {
         admin_id: userId,

@@ -1,19 +1,19 @@
 import { ModelMaker } from '@modules/database/core';
 
-export const AdminRole = ModelMaker.make({
-  table: 'admins_roles',
+export const RoleSeller = ModelMaker.make({
+  table: 'roles_sellers',
   // prettier-ignore
   columns: [
     'id',
-    'admin_id',
+    'seller_id',
     'role_id',
     'created_at',
     'updated_at'
   ],
   // prettier-ignore
   fillable: [
-    'admin_id',
-    'role_id'
+    'seller_id',
+    'role_id',
   ],
   relationships: {},
 });

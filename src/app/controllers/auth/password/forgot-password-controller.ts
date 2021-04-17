@@ -7,12 +7,12 @@ export abstract class ForgotPasswordController {
   /**
    * Constructor.
    *
-   * @param forgotPasswordservice forgot password service.
+   * @param forgotPasswordService forgot password service.
    * @param forgotPasswordValidator forgot password validator.
    * @param resetPasswordValidator reset password validator.
    */
-  protected constructor(
-    protected forgotPasswordservice: ForgotPasswordService,
+  public constructor(
+    protected forgotPasswordService: ForgotPasswordService,
     protected forgotPasswordValidator: Validator,
     protected resetPasswordValidator: Validator,
   ) {}
@@ -23,26 +23,26 @@ export abstract class ForgotPasswordController {
    * @param field field's name.
    * @param value field's value.
    */
-  protected async findAccountBy(field: string, value: any) {
-    const account = await this.forgotPasswordservice.findAccountBy(
+  public async findAccountBy(field: string, value: any) {
+    const account = await this.forgotPasswordService.findAccountBy(
       field,
       value,
     );
 
     if (!account) {
-      throw new HttpRequestError(404, 'Email is unavailable');
+      throw new HttpRequestError(404, 'Account is unavailable');
     }
 
     return account;
   }
 
   /**
-   * Find an forgot password information.
+   * Find the forgot password code.
    *
    * @param code forgot password code.
    */
-  protected async findForgotPassword(code: string) {
-    const forgotPassword = await this.forgotPasswordservice.findForgotPassword(
+  public async findForgotPassword(code: string) {
+    const forgotPassword = await this.forgotPasswordService.findForgotPassword(
       code,
     );
 
@@ -54,12 +54,12 @@ export abstract class ForgotPasswordController {
   }
 
   /**
-   * Create an forgot password code for account.
+   * Create the forgot password code for the account.
    *
    * @param accountId ID's account.
    */
-  protected async createForgotPassword(accountId: number) {
-    const code = await this.forgotPasswordservice.createForgotPassword(
+  public async createForgotPassword(accountId: number) {
+    const code = await this.forgotPasswordService.createForgotPassword(
       accountId,
     );
 
@@ -71,26 +71,28 @@ export abstract class ForgotPasswordController {
   }
 
   /**
-   * Delete an forgot password information.
+   * Delete the forgot password code.
    *
    * @param code forgot password code.
    */
-  protected async deleteForgotPassword(code: string) {
-    const success = await this.forgotPasswordservice.deleteForgotPassword(code);
+  public async deleteForgotPassword(code: string) {
+    const success = await this.forgotPasswordService.deleteForgotPassword(code);
 
     if (!success) {
       throw new HttpRequestError(500, 'Unable to delete forgot password code');
     }
+
+    return success;
   }
 
   /**
-   * Reset password of the account.
+   * Change password of the account.
    *
    * @param accountId account's ID.
    * @param password new password.
    */
-  protected async resetAccountPassword(accountId: number, password: string) {
-    const success = await this.forgotPasswordservice.resetAccountPassword(
+  public async changeAccountPassword(accountId: number, password: string) {
+    const success = await this.forgotPasswordService.changeAccountPassword(
       accountId,
       password,
     );
@@ -98,6 +100,8 @@ export abstract class ForgotPasswordController {
     if (!success) {
       throw new HttpRequestError(500, 'Unable to update your password');
     }
+
+    return success;
   }
 
   /**
@@ -106,8 +110,8 @@ export abstract class ForgotPasswordController {
    * @param email account's email.
    * @param content email's content.
    */
-  protected sendEmail(email: string, content: string) {
-    this.forgotPasswordservice.sendEmail(email, content);
+  public sendEmail(email: string, content: string) {
+    this.forgotPasswordService.sendEmail(email, content);
   }
 
   /**
@@ -126,12 +130,15 @@ export abstract class ForgotPasswordController {
     // Send the password reset link to the email
     this.sendEmail(input.email, code);
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: 'Password reset link has been sent to your email',
     });
   };
 
+  /**
+   * Reset account's password.
+   */
   public resetPassword = async (req: Request, res: Response) => {
     // Check forgot password code exists
     const forgotPassword = await this.findForgotPassword(req.params.code);
@@ -140,12 +147,12 @@ export abstract class ForgotPasswordController {
     const input = await this.resetPasswordValidator.validate(req.body);
 
     // Update account's password
-    await this.resetAccountPassword(forgotPassword.account_id, input.password);
+    await this.changeAccountPassword(forgotPassword.account_id, input.password);
 
     // Delete forgot password code
     await this.deleteForgotPassword(req.params.code);
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: 'Password has been reset',
     });

@@ -7,11 +7,11 @@ export const Permission = ModelMaker.make({
     'id',
     'name',
     'created_at',
-    'updated_at'
+    'updated_at',
   ],
   // prettier-ignore
   fillable: [
-    'name'
+    'name',
   ],
   relationships: {},
 });

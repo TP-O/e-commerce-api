@@ -63,7 +63,7 @@ export abstract class ForgotPasswordService {
   }
 
   /**
-   * Delete an forgot password information.
+   * Delete a forgot password code.
    *
    * @param code forgot password code.
    */
@@ -77,12 +77,12 @@ export abstract class ForgotPasswordService {
   }
 
   /**
-   * Reset password of the account.
+   * Change password of the account.
    *
    * @param accountId account's ID.
    * @param password new password.
    */
-  public async resetAccountPassword(accountId: number, password: string) {
+  public async changeAccountPassword(accountId: number, password: string) {
     const { success } = await this.model
       .where([['id', '=', `v:${accountId}`]])
       .update({ password: bcrypt.hashSync(password, 10) });

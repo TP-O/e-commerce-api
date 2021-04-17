@@ -11,7 +11,7 @@ export abstract class RegisterService {
    *
    * @param model related model.
    */
-  public constructor(protected model: Model) {}
+  public constructor(protected model: Model, protected type: string) {}
 
   /**
    * Register an account.
@@ -27,7 +27,7 @@ export abstract class RegisterService {
       },
     ]);
 
-    return success;
+    return success ?? false;
   }
 
   /**
@@ -37,7 +37,10 @@ export abstract class RegisterService {
    */
   public async findRoleByName(name: string) {
     const { data } = await Role.select('id')
-      .where([['name', '=', `v:${name}`]])
+      .where([
+        ['name', '=', `v:${name}`],
+        ['type', '=', `v:${this.type}`],
+      ])
       .get();
 
     return data?.first();
@@ -58,18 +61,18 @@ export abstract class RegisterService {
   }
 
   /**
-   * Create an activation code for account.
+   * Create an activation code for the account.
    *
    * @param accountId ID's account.
    * @param type type of account.
    */
-  public async createActivationCode(accountId: number, type: string) {
+  public async createActivationCode(accountId: number) {
     const code = randomstring.generate({ length: 25 });
     const { success } = await Activation.create([
       {
         account_id: accountId,
-        code,
-        type,
+        code: code,
+        type: this.type,
       },
     ]);
 
@@ -91,10 +94,10 @@ export abstract class RegisterService {
   }
 
   /**
-   * Assign a role to the account account.
+   * Assign a role to the account.
    *
    * @param accountId ID's account.
    * @param roleId ID's role.
    */
-  public abstract assign(accountId: string, roleId: string): Promise<boolean>;
+  public abstract assign(accountId: number, roleId: number): Promise<boolean>;
 }

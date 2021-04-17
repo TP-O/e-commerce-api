@@ -7,12 +7,14 @@ export const Role = ModelMaker.make({
   columns: [
     'id',
     'name',
+    'type',
     'created_at',
-    'updated_at'
+    'updated_at',
   ],
   // prettier-ignore
   fillable: [
-    'name'
+    'name',
+    'type',
   ],
   relationships: {
     hasMany: [
