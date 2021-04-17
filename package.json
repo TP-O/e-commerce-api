@@ -4,7 +4,7 @@
   "description": "E-commerce API",
   "scripts": {
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register --files ./src/bin/active.ts",
-    "build": "tsc && babel dist -d dist",
+    "build": "webpack",
     "prod": "pm2-runtime start ecosystem.config.js --env production",
     "docker:prod": "docker-compose -f docker-compose.yml",
     "docker:dev": "docker-compose -f docker-compose.dev.yml",
@@ -67,7 +67,7 @@
     "helmet": "^4.4.1",
     "joi": "^17.4.0",
     "jsonwebtoken": "^8.5.1",
-    "laravel-expressjs-router": "^1.1.2",
+    "laravel-expressjs-router": "^2.0.0",
     "morgan": "^1.10.0",
     "mysql2": "^2.2.5",
     "nodemailer": "^6.5.0",

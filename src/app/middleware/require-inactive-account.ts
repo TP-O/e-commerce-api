@@ -1,14 +1,16 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpRequestError } from '@app/exceptions/http-request-error';
+import { injectable } from 'tsyringe';
 
-class MustBeAdministrator {
-  public async handle(req: Request, res: Response, next: NextFunction) {
-    if (req.user.active) {
-      throw new HttpRequestError(400, 'Your account has been activated');
-    }
+@injectable()
+export class RequireInactiveAccount {
+  public handle() {
+    return function (req: Request, res: Response, next: NextFunction) {
+      if (req.user.active) {
+        throw new HttpRequestError(400, 'Your account has been activated');
+      }
 
-    next();
+      next();
+    };
   }
 }
-
-export default new MustBeAdministrator();

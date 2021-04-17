@@ -1,14 +1,16 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpRequestError } from '@app/exceptions/http-request-error';
+import { injectable } from 'tsyringe';
 
-class RequireRefreshToken {
-  public async handle(req: Request, res: Response, next: NextFunction) {
-    if (!req.cookies.refreshToken) {
-      throw new HttpRequestError(400, 'Refresh token is missing');
-    }
+@injectable()
+export class RequireRefreshToken {
+  public handle() {
+    return function (req: Request, res: Response, next: NextFunction) {
+      if (!req.cookies.refreshToken) {
+        throw new HttpRequestError(400, 'Refresh token is missing');
+      }
 
-    next();
+      next();
+    };
   }
 }
-
-export default new RequireRefreshToken();

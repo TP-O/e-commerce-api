@@ -1,8 +1,9 @@
 import { LRouter } from 'laravel-expressjs-router';
 import * as Auth from '@app/controllers/auth';
+import * as Middleware from '@app/middleware';
 import { container } from 'tsyringe';
 
-export function useAuthRouter(router: LRouter) {
+export function useAuthRoutes(router: LRouter) {
   /**
    * Authentications.
    */
@@ -21,18 +22,18 @@ export function useAuthRouter(router: LRouter) {
           namespace: 'login',
         },
         () => {
-          router.post(
-            '/admin',
-            container.resolve(Auth.AdminLoginController).login,
-          );
-          router.post(
-            '/seller',
-            container.resolve(Auth.SellerLoginController).login,
-          );
-          router.post(
-            '/user',
-            container.resolve(Auth.UserLoginController).login,
-          );
+          router.post({
+            path: '/admin',
+            action: container.resolve(Auth.AdminLoginController).login,
+          });
+          router.post({
+            path: '/seller',
+            action: container.resolve(Auth.SellerLoginController).login,
+          });
+          router.post({
+            path: '/user',
+            action: container.resolve(Auth.UserLoginController).login,
+          });
         },
       );
 
@@ -45,18 +46,18 @@ export function useAuthRouter(router: LRouter) {
           namespace: 'login',
         },
         () => {
-          router.post(
-            '/admin',
-            container.resolve(Auth.AdminLoginController).logout,
-          );
-          router.post(
-            '/seller',
-            container.resolve(Auth.SellerLoginController).logout,
-          );
-          router.post(
-            '/user',
-            container.resolve(Auth.UserLoginController).logout,
-          );
+          router.post({
+            path: '/admin',
+            action: container.resolve(Auth.AdminLoginController).logout,
+          });
+          router.post({
+            path: '/seller',
+            action: container.resolve(Auth.SellerLoginController).logout,
+          });
+          router.post({
+            path: '/user',
+            action: container.resolve(Auth.UserLoginController).logout,
+          });
         },
       );
 
@@ -67,21 +68,23 @@ export function useAuthRouter(router: LRouter) {
         {
           prefix: '/refresh',
           namespace: 'login',
-          middleware: ['require-refresh-token'],
+          middleware: [
+            container.resolve(Middleware.RequireRefreshToken).handle(),
+          ],
         },
         () => {
-          router.post(
-            '/admin',
-            container.resolve(Auth.AdminLoginController).refresh,
-          );
-          router.post(
-            '/seller',
-            container.resolve(Auth.SellerLoginController).refresh,
-          );
-          router.post(
-            '/user',
-            container.resolve(Auth.UserLoginController).refresh,
-          );
+          router.post({
+            path: '/admin',
+            action: container.resolve(Auth.AdminLoginController).refresh,
+          });
+          router.post({
+            path: '/seller',
+            action: container.resolve(Auth.SellerLoginController).refresh,
+          });
+          router.post({
+            path: '/user',
+            action: container.resolve(Auth.UserLoginController).refresh,
+          });
         },
       );
 
@@ -94,20 +97,22 @@ export function useAuthRouter(router: LRouter) {
           namespace: 'register',
         },
         () => {
-          router.post(
-            '/admin',
-            container.resolve(Auth.AdminRegisterController).register,
-            'require-access-token',
-            'must-be-administrator',
-          );
-          router.post(
-            '/seller',
-            container.resolve(Auth.SellerRegisterController).register,
-          );
-          router.post(
-            '/user',
-            container.resolve(Auth.UserRegisterController).register,
-          );
+          router.post({
+            path: '/admin',
+            action: container.resolve(Auth.AdminRegisterController).register,
+            middleware: [
+              container.resolve(Middleware.RequireAccessToken).handle(),
+              container.resolve(Middleware.MustBeAdministrator).handle(),
+            ],
+          });
+          router.post({
+            path: '/seller',
+            action: container.resolve(Auth.SellerRegisterController).register,
+          });
+          router.post({
+            path: '/user',
+            action: container.resolve(Auth.UserRegisterController).register,
+          });
         },
       );
 
@@ -118,26 +123,25 @@ export function useAuthRouter(router: LRouter) {
         {
           prefix: '/active',
           namespace: 'register',
+          middleware: [
+            container.resolve(Middleware.RequireAccessToken).handle(),
+            container.resolve(Middleware.RequireInactiveAccount).handle(),
+          ],
         },
         () => {
-          router.post(
-            '/admin',
-            container.resolve(Auth.AdminRegisterController).resendEmail,
-            'require-access-token',
-            'require-inactive-account',
-          );
-          router.post(
-            '/seller',
-            container.resolve(Auth.SellerRegisterController).resendEmail,
-            'require-access-token',
-            'require-inactive-account',
-          );
-          router.post(
-            '/user',
-            container.resolve(Auth.UserRegisterController).resendEmail,
-            'require-access-token',
-            'require-inactive-account',
-          );
+          router.post({
+            path: '/admin',
+            action: container.resolve(Auth.AdminRegisterController).resendEmail,
+          });
+          router.post({
+            path: '/seller',
+            action: container.resolve(Auth.SellerRegisterController)
+              .resendEmail,
+          });
+          router.post({
+            path: '/user',
+            action: container.resolve(Auth.UserRegisterController).resendEmail,
+          });
         },
       );
 
@@ -150,18 +154,18 @@ export function useAuthRouter(router: LRouter) {
           namespace: 'verify',
         },
         () => {
-          router.post(
-            '/admin/:code',
-            container.resolve(Auth.AdminVerifyController).verify,
-          );
-          router.post(
-            '/seller/:code',
-            container.resolve(Auth.SellerVerifyController).verify,
-          );
-          router.post(
-            '/user/:code',
-            container.resolve(Auth.UserVerifyController).verify,
-          );
+          router.post({
+            path: '/admin/:code',
+            action: container.resolve(Auth.AdminVerifyController).verify,
+          });
+          router.post({
+            path: '/seller/:code',
+            action: container.resolve(Auth.SellerVerifyController).verify,
+          });
+          router.post({
+            path: '/user/:code',
+            action: container.resolve(Auth.UserVerifyController).verify,
+          });
         },
       );
 
@@ -173,40 +177,42 @@ export function useAuthRouter(router: LRouter) {
          * Request reset password routes.
          */
         router.group({ prefix: '/forgot-password' }, () => {
-          router.post(
-            '/admin',
-            container.resolve(Auth.AdminForgotPasswordController)
+          router.post({
+            path: '/admin',
+            action: container.resolve(Auth.AdminForgotPasswordController)
               .forgotPassword,
-          );
-          router.post(
-            '/seller',
-            container.resolve(Auth.SellerForgotPasswordController)
+          });
+          router.post({
+            path: '/seller',
+            action: container.resolve(Auth.SellerForgotPasswordController)
               .forgotPassword,
-          );
-          router.post(
-            '/user',
-            container.resolve(Auth.UserForgotPasswordController).forgotPassword,
-          );
+          });
+          router.post({
+            path: '/user',
+            action: container.resolve(Auth.UserForgotPasswordController)
+              .forgotPassword,
+          });
         });
 
         /**
          * Reset password routes.
          */
         router.group({ prefix: '/reset-password' }, () => {
-          router.post(
-            '/admin/:code',
-            container.resolve(Auth.AdminForgotPasswordController)
+          router.post({
+            path: '/admin/:code',
+            action: container.resolve(Auth.AdminForgotPasswordController)
               .forgotPassword,
-          );
-          router.post(
-            '/seller/:code',
-            container.resolve(Auth.SellerForgotPasswordController)
+          });
+          router.post({
+            path: '/seller/:code',
+            action: container.resolve(Auth.SellerForgotPasswordController)
               .forgotPassword,
-          );
-          router.post(
-            '/user/:code',
-            container.resolve(Auth.UserForgotPasswordController).forgotPassword,
-          );
+          });
+          router.post({
+            path: '/user/:code',
+            action: container.resolve(Auth.UserForgotPasswordController)
+              .forgotPassword,
+          });
         });
       });
     },
