@@ -6,22 +6,7 @@ import { NextFunction } from 'express';
 describe('Test RequireInactiveAccount', () => {
   const middleware = new RequireInactiveAccount();
 
-  it('Should throw the error - missing user information', () => {
-    let err;
-    const req = createRequest();
-    const res = createResponse();
-    const next = (jest.fn() as unknown) as NextFunction;
-
-    try {
-      middleware.handle()(req, res, next);
-    } catch (e) {
-      err = e;
-    }
-
-    expect(err).toHaveProperty('status');
-  });
-
-  it('Should throw the error - user has already activated', () => {
+  it('Should throw the error', () => {
     let err;
     const req = createRequest({
       user: {
