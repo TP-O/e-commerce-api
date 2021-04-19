@@ -18,7 +18,7 @@ jobs:
         run: npm install --only=dev && npm install --dev typescript
 
       - name: Lint code
-        run: npm run lint
+        run: npm run lint && npm run format --check
 
   lint-commit-msg:
     runs-on: ubuntu-latest
@@ -57,7 +57,7 @@ jobs:
         run: sleep 15
 
       - name: Run Unit Test
-        run: docker-compose -f docker-compose.test.yml exec -T app npm run unit-test
+        run: docker-compose -f docker-compose.test.yml exec -T app npm run test
 
   coverage-test:
     needs:
@@ -83,7 +83,7 @@ jobs:
         run: sleep 15
 
       - name: Run Coverage Test
-        run: docker-compose -f docker-compose.test.yml exec -T app npm run coverage-test
+        run: docker-compose -f docker-compose.test.yml exec -T app npm run test --coverage
 
   # Release docker image
   release:
@@ -123,4 +123,4 @@ jobs:
 
     steps:
       - name: Deploy
-        run: echo 'Deployed'
+        run: echo 'Poor'
