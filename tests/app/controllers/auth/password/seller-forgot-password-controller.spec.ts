@@ -139,7 +139,7 @@ describe('Test SellerForgotPasswordController', () => {
     });
   });
 
-  describe("Send reset password link to account's email", () => {
+  describe('Send reset password link to the email', () => {
     it('Should return response with success is true', async () => {
       const req = createRequest();
       const res = createResponse();
@@ -151,7 +151,7 @@ describe('Test SellerForgotPasswordController', () => {
     });
   });
 
-  describe("Reset account's password", () => {
+  describe('Reset the password', () => {
     it('Should return response with success is true', async () => {
       const req = createRequest();
       const res = createResponse();
