@@ -9,18 +9,13 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "paths": {
-      "@logger": ["logger/index"],
-      "@router": ["router/index"],
-      "@helper": ["helper/index"],
-      "@validator": ["validator/index"],
-      "@config/*": ["config/*"],
-      "@exception/*": ["exception/*"],
-      "@database/*": ["database/*"],
-      "@validator/*": ["validator/*"],
-      "@controller/*": ["controller/*"],
-      "@service/*": ["service/*"],
-      "@model/*": ["model/*"],
+      "@app/*": ["app/*"],
+      "@configs/*": ["configs/*"],
+      "@modules/*": ["modules/*"],
+      "@routers": ["routers/index"],
     },
   },
   "plugins": [
@@ -28,5 +23,7 @@
   ],
   "include": [
     "src/**/*",
+    "typings/**/*",
+    "tests/**/*",
   ],
 }

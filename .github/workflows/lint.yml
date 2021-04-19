@@ -17,7 +17,7 @@ jobs:
         run: npm install --only=dev && npm install --dev typescript
 
       - name: Lint code
-        run: npm run lint
+        run: npm run lint && npm run format --check
 
   lint-commit-msg:
     if: ${{ github.event_name == 'push' }}

@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'e-commerce_server',
-      script: 'dist/bin/active.js',
+      script: 'dist/bundle.js',
       time: true,
       exec_mode: 'fork',
       instances: 1,
