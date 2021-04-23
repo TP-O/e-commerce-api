@@ -3,7 +3,11 @@ name: Lint
 on:
   push:
     branches: [ dev ]
+    paths-ignore:
+      - '**.md'
   pull_request:
+    paths-ignore:
+      - '**.md'
 
 jobs:
   lint-code:
