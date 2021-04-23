@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import randomstring from 'randomstring';
 import mailer from '@modules/mailer';
 import { Role } from '@app/models/auth/role';

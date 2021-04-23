@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { Database } from '@modules/database/core/database';
 import { Seeder } from '@modules/database/core/seeder';
 

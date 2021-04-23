@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { JWT } from '@modules/auth/jwt';
 import { authConfig } from '@configs/auth';
 

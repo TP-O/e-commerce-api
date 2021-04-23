@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import mailer from '@modules/mailer';
 import randomstring from 'randomstring';
 import { ForgotPassword } from '@app/models/auth/forgot-password';
