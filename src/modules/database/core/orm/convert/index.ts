@@ -3,8 +3,9 @@ import { collect } from 'collect.js';
 import { Instance } from '@modules/database/core/orm/instance';
 import { Model } from '@modules/database/core/orm/model';
 import { Result } from '@modules/database/core/orm/interfaces/result';
-import { Database } from '@modules/database/core/database';
+import { singleton } from 'tsyringe';
 
+@singleton()
 export class Converter {
   /**
    * Handle raw data.
@@ -14,9 +15,7 @@ export class Converter {
   convert(data: any): Result {
     if (this.isRowDataPacket(data)) {
       return {
-        data: collect(
-          this.groupData(this.parseData(data), Database.usingModel),
-        ),
+        data: collect(this.groupData(this.parseData(data), Model.usingModel)),
       };
     }
 

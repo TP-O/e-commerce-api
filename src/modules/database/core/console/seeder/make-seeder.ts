@@ -2,12 +2,19 @@ import { readFile, writeFile } from 'fs/promises';
 import { Command } from '@modules/database/core/console/command';
 
 export class MakeSeeder extends Command {
-  private _fileName: string;
-
+  /**
+   * Content of seeder file.
+   */
   private _fileContent = '';
 
+  /**
+   * Content of seeder file.
+   */
   private _distDir = `${__dirname}/../../../seeders/`;
 
+  /**
+   * Path to pattern file.
+   */
   private _originFile = `${__dirname}/../../pattern/seeder.pattern.ts`;
 
   /**
@@ -17,8 +24,6 @@ export class MakeSeeder extends Command {
   /* eslint-disable-next-line */
   public constructor(private _name: string) {
     super();
-
-    this._fileName = `${_name}.seeder`;
   }
 
   /**
@@ -27,13 +32,15 @@ export class MakeSeeder extends Command {
   protected async prepare(): Promise<void> {
     const data = await readFile(this._originFile, 'utf-8');
 
-    this._fileContent = data.replace(/xxx/g, this._name).replace(
-      /XXX/g,
-      this._name
-        .split('_')
-        .map((n) => n[0].toUpperCase() + n.slice(1))
-        .join(''),
-    );
+    this._fileContent = data
+      .replace(/xxx/g, this._name.split('-').join('_'))
+      .replace(
+        /XXX/g,
+        this._name
+          .split('-')
+          .map((n) => n[0].toUpperCase() + n.slice(1))
+          .join(''),
+      );
   }
 
   /**
@@ -44,7 +51,7 @@ export class MakeSeeder extends Command {
 
     try {
       await writeFile(
-        `${this._distDir}${this._fileName}.ts`,
+        `${this._distDir}${this._name}.ts`,
         this._fileContent,
         'utf8',
       );

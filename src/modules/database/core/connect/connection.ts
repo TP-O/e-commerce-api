@@ -1,18 +1,20 @@
 import { createPool, Pool } from 'mysql2/promise';
 import { databaseConfig } from '@configs/database';
+import { singleton } from 'tsyringe';
 
+@singleton()
 export class Connection {
   /**
    * Request connection pool.
    */
-  private static pool: Pool;
+  private pool: Pool | any;
 
   /**
    * Establish connection with the database.
    *
    * @param tries number of retries when an error occurs.
    */
-  public static async establish(): Promise<void> {
+  public async establish(): Promise<void> {
     if (await this.isConnected()) {
       return;
     }
@@ -33,7 +35,7 @@ export class Connection {
   /**
    * Check connection.
    */
-  public static async isConnected(): Promise<boolean> {
+  public async isConnected(): Promise<boolean> {
     if (this.pool) {
       try {
         const connection = await this.pool.getConnection();
@@ -52,7 +54,7 @@ export class Connection {
   /**
    * Excute with the given query.
    */
-  public static async execute(querySentence: string) {
+  public async execute(querySentence: string) {
     const [rows] = await this.pool.query(querySentence);
 
     return rows;

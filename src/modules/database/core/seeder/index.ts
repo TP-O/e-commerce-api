@@ -1,8 +1,17 @@
+import { Database } from '@modules/database/core/database';
+
 export abstract class Seeder {
   /**
    * Name of seeder.
    */
   protected seederName = '';
+
+  /**
+   * Constructor.
+   *
+   * @param database database instance.
+   */
+  public constructor(protected database: Database) {}
 
   /**
    * Start seeding.

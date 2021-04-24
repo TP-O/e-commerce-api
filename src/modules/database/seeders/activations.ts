@@ -1,17 +1,28 @@
-import { Database } from '@modules/database/core/database';
 import { Seeder } from '@modules/database/core/seeder';
+import { autoInjectable } from 'tsyringe';
+import { Database } from '@modules/database/core/database';
 
-class ForgotPasswordsSeeder extends Seeder {
+@autoInjectable()
+export class ActivationsSeeder extends Seeder {
   /**
    * Name of seeder.
    */
-  protected seederName = 'forgot_passwords';
+  protected seederName = 'activations';
+
+  /**
+   * Constructor.
+   *
+   * @param database database instance.
+   */
+  public constructor(protected database: Database) {
+    super(database);
+  }
 
   /**
    * Insert data to table.
    */
   protected async run() {
-    await Database.table('forgot_passwords').insert(
+    await this.database.table('activations').insert(
       // Column names
       ['account_id', 'code', 'type'],
       // Inserted data
@@ -23,5 +34,3 @@ class ForgotPasswordsSeeder extends Seeder {
     );
   }
 }
-
-export default new ForgotPasswordsSeeder();

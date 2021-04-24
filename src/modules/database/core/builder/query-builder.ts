@@ -1,86 +1,92 @@
-import { Column } from '@modules/database/core/builder/interfaces/column-interface';
 import { ConstraintBuilder } from '@modules/database/core/builder/constraint-builder';
 import { JoinTypes } from '@modules/database/core/builder/types/join-type';
 import { OrderTypes } from '@modules/database/core/builder/types/order-type';
 import { TableBuilder } from '@modules/database/core/builder/table-builder';
-import {
-  PrimaryKey,
-  ForeignKey,
-  Index,
-  Unique,
-} from '@modules/database/core/builder/interfaces/constraint-interface';
+import { Index } from '@modules/database/core/builder/interfaces/constraint-interface';
+import { autoInjectable } from 'tsyringe';
+import { Builder } from '@modules/database/core/builder/interfaces/builder-interface';
+import { Table } from '@modules/database/core/builder/interfaces/table-interface';
 
-export class QueryBuilder {
+@autoInjectable()
+export class QueryBuilder implements Builder {
   /**
    * Current query sentence.
    */
-  private _querySentence = '';
+  private _query = '';
+
+  /**
+   * Constructor.
+   *
+   * @param _constraintBuilder constraint builder.
+   * @param _tableBuilder table builder.
+   */
+  public constructor(
+    private _constraintBuilder: ConstraintBuilder,
+    private _tableBuilder: TableBuilder,
+  ) {}
 
   /**
    * Get built query sentence.
    */
-  public get querySentence(): string {
-    return this._querySentence;
-  }
-
-  /**
-   * Set query sentences.
-   */
-  public set querySentence(querySentence: string) {
-    this._querySentence = querySentence;
-  }
-
-  /**
-   * Reset query sentence.
-   */
-  public resetQuery() {
-    this._querySentence = '';
+  public get query(): string {
+    return this._query;
   }
 
   /**
    * Create table.
    *
-   * @param table name of the table.
-   * @param columns column names of the table.
-   * @param primaryKey primary key of the table.
-   * @param foreignKeys foreign keys of the table.
-   * @param uniqueColumns unique columns of the table.
+   * @param table table's information.
    */
-  public createTable(
-    table: string,
-    columns: { [key: string]: Column },
-    primaryKey?: PrimaryKey,
-    foreignKeys?: ForeignKey[],
-    uniqueColumns?: Unique[],
-  ): void {
-    this._querySentence = new TableBuilder().build(
-      table,
-      columns,
-      primaryKey,
-      foreignKeys,
-      uniqueColumns,
-    );
+  public createTable(table: Table) {
+    const result = this._tableBuilder.table(table.table);
+
+    if (table.primaryKey) {
+      result.addPrimaryKey(table.primaryKey);
+    }
+
+    table.foreignKeys?.forEach((key) => {
+      result.addForeignKey(key);
+    });
+
+    table.uniqueColumns?.forEach((column) => {
+      result.addUniqueColumns(column);
+    });
+
+    Object.keys(table.columns).forEach((name) => {
+      result.column(name).type(table.columns[name].type);
+
+      if (table.columns[name].unsigned) {
+        result.unsigned();
+      }
+      if (table.columns[name].increment) {
+        result.increment();
+      }
+      if (table.columns[name].default) {
+        result.default(table.columns[name].default);
+      }
+      if (table.columns[name].required) {
+        result.required();
+      }
+      if (table.columns[name].onDelete) {
+        result.onDelete(table.columns[name].onDelete);
+      }
+      if (table.columns[name].onUpdate) {
+        result.onUpdate(table.columns[name].onUpdate);
+      }
+    });
+
+    this._query = result.build();
   }
 
   /**
    * Create non-existent table.
    *
-   * @param table name of the table.
-   * @param columns column names of the table.
-   * @param primaryKey primary key of the table.
-   * @param foreignKeys foreign keys of the table.
-   * @param uniqueColumns unique columns of the table.
+   * @param table table's information.
    */
-  public createTableIfNotExists(
-    table: string,
-    columns: { [key: string]: Column },
-    primaryKey?: PrimaryKey,
-    foreignKeys?: ForeignKey[],
-    uniqueColumns?: Unique[],
-  ): void {
-    this.createTable(table, columns, primaryKey, foreignKeys, uniqueColumns);
+  public createTableIfNotExists(table: Table) {
+    this.createTable(table);
 
-    this._querySentence = this._querySentence.replace(
+    this._query = this._query.replace(
       'CREATE TABLE',
       'CREATE TABLE IF NOT EXISTS',
     );
@@ -91,8 +97,8 @@ export class QueryBuilder {
    *
    * @param index index informations.
    */
-  public createIndex(index: Index): void {
-    this._querySentence = new ConstraintBuilder().index(index);
+  public createIndex(index: Index) {
+    this._query = this._constraintBuilder.createIndex(index);
   }
 
   /**
@@ -100,8 +106,8 @@ export class QueryBuilder {
    *
    * @param table name of the table.
    */
-  public dropTable(table: string): void {
-    this._querySentence = `DROP TABLE \`${table}\`;`;
+  public dropTable(table: string) {
+    this._query = `DROP TABLE \`${table}\`;`;
   }
 
   /**
@@ -109,13 +115,10 @@ export class QueryBuilder {
    *
    * @param table name of the table.
    */
-  public dropTableIfExists(table: string): void {
+  public dropTableIfExists(table: string) {
     this.dropTable(table);
 
-    this._querySentence = this._querySentence.replace(
-      'DROP TABLE',
-      'DROP TABLE IF EXISTS',
-    );
+    this._query = this._query.replace('DROP TABLE', 'DROP TABLE IF EXISTS');
   }
 
   /**
@@ -125,8 +128,8 @@ export class QueryBuilder {
    * @param columns specified columns.
    * @param values list of array will be inserted.
    */
-  public insert(table: string, columns: string[], values: string[][]): void {
-    this._querySentence = `INSERT INTO ${table} (${columns
+  public insert(table: string, columns: string[], values: string[][]) {
+    this._query = `INSERT INTO ${table} (${columns
       .map((c) => `\`${c}\``)
       .join(', ')}) VALUES ("${values
       .map((value) => value.join('","'))
@@ -139,16 +142,14 @@ export class QueryBuilder {
    * @param table name of the table.
    * @param data new data.
    */
-  public update(table: string, data: { [key: string]: any }): void {
+  public update(table: string, data: { [key: string]: any }) {
     const c: string[] = [];
 
     for (const [key, value] of Object.entries(data)) {
       c.push(`\`${key}\` = '${value}'`);
     }
 
-    this._querySentence = `UPDATE \`${table}\` SET ${c.join(', ')} ${
-      this._querySentence
-    }`;
+    this._query = `UPDATE \`${table}\` SET ${c.join(', ')} ${this._query}`;
   }
 
   /**
@@ -156,8 +157,8 @@ export class QueryBuilder {
    *
    * @param table name of the table.
    */
-  public delele(table: string): void {
-    this._querySentence = `DELETE FROM \`${table}\` ${this._querySentence}`;
+  public delele(table: string) {
+    this._query = `DELETE FROM \`${table}\` ${this._query}`;
   }
 
   /**
@@ -165,11 +166,11 @@ export class QueryBuilder {
    *
    * @param columns selected columns.
    */
-  public select(...columns: string[]): this {
+  public select(...columns: string[]) {
     if (columns.includes('*')) {
-      this._querySentence += 'SELECT *';
+      this._query += 'SELECT *';
     } else {
-      this._querySentence += `SELECT ${columns
+      this._query += `SELECT ${columns
         .map((c) => `\`${c.split('.').join('`.`').split(':').join('` AS `')}\``)
         .join(', ')}`;
     }
@@ -182,14 +183,14 @@ export class QueryBuilder {
    *
    * @param columns specified columns.
    */
-  public addSelection(...columns: string[]): this {
-    const q = this._querySentence.split(' FROM ');
+  public addSelection(...columns: string[]) {
+    const q = this._query.split(' FROM ');
 
     q[0] += `, ${columns
       .map((c) => `\`${c.split('.').join('`.`').split(':').join('` AS `')}\``)
       .join(', ')}`;
 
-    this._querySentence = q.join(' FROM ');
+    this._query = q.join(' FROM ');
 
     return this;
   }
@@ -199,8 +200,8 @@ export class QueryBuilder {
    *
    * @param tables selected tables.
    */
-  public from(...tables: string[]): this {
-    this._querySentence += ` FROM (${tables
+  public from(...tables: string[]) {
+    this._query += ` FROM (${tables
       .map((c) => `\`${c.split(':').join('` AS `')}\``)
       .join(', ')})`;
 
@@ -213,8 +214,8 @@ export class QueryBuilder {
    * @param table joined table.
    * @param type type of join.
    */
-  public join(table: string, type: string = JoinTypes.inner()): this {
-    this._querySentence += ` ${type} (\`${table}\`)`;
+  public join(table: string, type: string = JoinTypes.inner()) {
+    this._query += ` ${type} (\`${table.split(':').join('` AS `')}\`)`;
 
     return this;
   }
@@ -224,7 +225,7 @@ export class QueryBuilder {
    *
    * @param conditions list of conditions.
    */
-  public where(conditions: string[][] | ((q: QueryBuilder) => void)): this {
+  public where(conditions: string[][] | ((q: QueryBuilder) => void)) {
     if (typeof conditions === 'function') {
       conditions(this);
     } else {
@@ -239,8 +240,7 @@ export class QueryBuilder {
    *
    * @param conditions list of conditions.
    */
-  /* eslint-disable-next-line */
-  public on(conditions: string[][] | ((q: QueryBuilder) => void)): this {
+  public on(conditions: string[][] | ((q: QueryBuilder) => void)) {
     if (typeof conditions === 'function') {
       conditions(this);
     } else {
@@ -255,7 +255,7 @@ export class QueryBuilder {
    *
    * @param conditions list of conditions.
    */
-  public orWhere(conditions: string[][]): this {
+  public orWhere(conditions: string[][]) {
     return this.whereClause(conditions, 'OR');
   }
 
@@ -264,7 +264,7 @@ export class QueryBuilder {
    *
    * @param conditions list of conditions.
    */
-  public andWhere(conditions: string[][]): this {
+  public andWhere(conditions: string[][]) {
     return this.whereClause(conditions, 'AND');
   }
 
@@ -272,9 +272,10 @@ export class QueryBuilder {
    * Use NOT operator.
    *
    * @param conditions list of conditions.
+   * @param operator logical operator.
    */
-  public notWhere(conditions: string[][]): this {
-    return this.whereClause(conditions, 'NOT');
+  public whereNot(conditions: string[][], operator = 'AND') {
+    return this.whereClause(conditions, `${operator} NOT`);
   }
 
   /**
@@ -283,10 +284,19 @@ export class QueryBuilder {
    * @param conditions list of conditions.
    * @param prefix word preceded list of conditions.
    */
-  private whereClause(conditions: string[][], prefix: string): this {
-    this._querySentence += ` ${prefix} (${conditions
+  private whereClause(conditions: string[][], prefix: string) {
+    this._query += ` ${prefix} (${conditions
       .map((c) => {
-        c[0] = `\`${c[0].split('.').join('`.`')}\``;
+        if (prefix !== 'HAVING') {
+          c[0] = `\`${c[0].split('.').join('`.`')}\``;
+        } else {
+          const [aggregate, column] = c[0].split('(');
+
+          c[0] = `${aggregate}(\`${column
+            .slice(0, -1)
+            .split('.')
+            .join('`.`')}\`)`;
+        }
 
         const c2 = c[2].split(':');
 
@@ -308,8 +318,23 @@ export class QueryBuilder {
    *
    * @param column specified column.
    */
-  public groupBy(column: string): this {
-    this._querySentence += ` GROUP BY (${column})`;
+  public groupBy(column: string) {
+    this._query += ` GROUP BY (\`${column.split(':').join('` AS `')}\`)`;
+
+    return this;
+  }
+
+  /**
+   * Start conditions for having.
+   *
+   * @param conditions list of conditions.
+   */
+  public having(conditions: string[][] | ((q: QueryBuilder) => void)) {
+    if (typeof conditions === 'function') {
+      conditions(this);
+    } else {
+      return this.whereClause(conditions, 'HAVING');
+    }
 
     return this;
   }
@@ -320,8 +345,8 @@ export class QueryBuilder {
    * @param column specified column.
    * @param type type of order.
    */
-  public orderBy(column: string, type: string = OrderTypes.ascending()): this {
-    this._querySentence += ` ORDER BY (${column}) ${type}`;
+  public orderBy(column: string, type: string = OrderTypes.ascending()) {
+    this._query += ` ORDER BY (${column}) ${type}`;
 
     return this;
   }
@@ -331,8 +356,8 @@ export class QueryBuilder {
    *
    * @param number maximum number of results.
    */
-  public limit(number: number): this {
-    this._querySentence += ` LIMIT ${number}`;
+  public limit(number: number) {
+    this._query += ` LIMIT ${number}`;
 
     return this;
   }
@@ -342,7 +367,7 @@ export class QueryBuilder {
    *
    * @param column specified column.
    */
-  public min(column: string, alias?: string): this {
+  public min(column: string, alias?: string) {
     return this.func(column, 'MIN', alias);
   }
 
@@ -351,7 +376,7 @@ export class QueryBuilder {
    *
    * @param column specified column.
    */
-  public max(column: string, alias?: string): this {
+  public max(column: string, alias?: string) {
     return this.func(column, 'MAX', alias);
   }
 
@@ -360,7 +385,7 @@ export class QueryBuilder {
    *
    * @param column specified column.
    */
-  public sum(column: string, alias?: string): this {
+  public sum(column: string, alias?: string) {
     return this.func(column, 'SUM', alias);
   }
 
@@ -369,7 +394,7 @@ export class QueryBuilder {
    *
    * @param column specified column.
    */
-  public avg(column: string, alias?: string): this {
+  public avg(column: string, alias?: string) {
     return this.func(column, 'AVG', alias);
   }
 
@@ -378,7 +403,7 @@ export class QueryBuilder {
    *
    * @param column specified column.
    */
-  public count(column: string, alias?: string): this {
+  public count(column: string, alias?: string) {
     return this.func(column, 'COUNT', alias);
   }
 
@@ -388,12 +413,39 @@ export class QueryBuilder {
    * @param column specified column.
    * @param name name of SQL function.
    */
-  private func(column: string, name: string, alias = 'data'): this {
-    this._querySentence = this._querySentence.replace(
+  private func(column: string, name: string, alias = 'data') {
+    this._query = this._query.replace(
       `\`${column.split('.').join('`.`')}\``,
       `${name}(\`${column.split('.').join('`.`')}\`) AS \`${alias}\``,
     );
 
     return this;
+  }
+
+  /**
+   * Set query.
+   *
+   * @param query raw query.
+   */
+  public raw(query: string) {
+    this._query = query;
+  }
+
+  /**
+   * Build the query.
+   */
+  public build() {
+    const result = this._query;
+
+    this.resetQuery();
+
+    return result;
+  }
+
+  /**
+   * Reset query sentence.
+   */
+  private resetQuery() {
+    this._query = '';
   }
 }

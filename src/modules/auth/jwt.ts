@@ -1,7 +1,9 @@
 import jwt from 'jsonwebtoken';
 import { authConfig } from '@configs/auth';
+import { singleton } from 'tsyringe';
 
-class JsonWebToken {
+@singleton()
+export class JsonWebToken {
   /**
    *
    * @param payload
@@ -116,5 +118,3 @@ class JsonWebToken {
     return payload;
   }
 }
-
-export const JWT = new JsonWebToken();

@@ -106,18 +106,11 @@ export class DataType {
   /**
    * A floating point number.
    *
-   * @param p (0-24) is FLOAT(), (25-53) is DOUBLE().
+   * @param size The total number of digits.
+   * @param p The number of digits after the decimal point.
    */
-  public static float(p = 24): string {
-    const minSize = 0;
-    const maxSize = 53;
-
-    if (p < maxSize || p > maxSize) {
-      throw Error(
-        `Size must be from ${minSize} to ${maxSize}, but received '${p}'`,
-      );
-    }
-    return `FLOAT(${p})`;
+  public static float(size: number, d: number): string {
+    return `FLOAT(${size}, ${d})`;
   }
 
   /**

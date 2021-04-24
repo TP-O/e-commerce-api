@@ -10,7 +10,7 @@ import {
   RelationItem,
 } from '@modules/database/core/orm/interfaces/relation';
 
-export class RelationManager {
+export class RelationshipManager {
   /**
    * List of relationships.
    */

@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs';
-import mailer from '@modules/mailer';
 import randomstring from 'randomstring';
 import { ForgotPassword } from '@app/models/auth/forgot-password';
 import { Model } from '@modules/database/core/orm/model';
+import { sender } from '@modules/helper';
 
 export abstract class ForgotPasswordService {
   /**
@@ -97,7 +97,7 @@ export abstract class ForgotPasswordService {
    * @param content email's content.
    */
   public sendEmail(email: string, content: string) {
-    mailer.send({
+    sender({
       to: email,
       subject: 'Click this link to update your password',
       text: content,

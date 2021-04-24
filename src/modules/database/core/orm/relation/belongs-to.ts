@@ -1,8 +1,9 @@
 import { Model } from '@modules/database/core/orm/model';
-import { Relation } from '@modules/database/core/orm/relation';
+import { Relationship } from '@modules/database/core/orm/relation/relationship';
 import { Database } from '@modules/database/core/database';
+import { container } from 'tsyringe';
 
-export class BelongsTo extends Relation {
+export class BelongsTo extends Relationship {
   /**
    *
    * @param table name of table having the relationship.
@@ -25,12 +26,15 @@ export class BelongsTo extends Relation {
    * @param table table instance.
    */
   protected withCondition() {
-    Database.join(this.relatedModel.table, 'left join').on([
-      [
-        `${this.table}.${this.foreignKey}`,
-        '=',
-        `${this.relatedModel.table}.${this.ownerKey}`,
-      ],
-    ]);
+    container
+      .resolve(Database)
+      .join(this.relatedModel.table, 'left join')
+      .on([
+        [
+          `${this.table}.${this.foreignKey}`,
+          '=',
+          `${this.relatedModel.table}.${this.ownerKey}`,
+        ],
+      ]);
   }
 }

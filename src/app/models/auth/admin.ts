@@ -1,7 +1,7 @@
-import { ModelMaker } from '@modules/database/core';
+import { model } from '@modules/helper';
 import { Role } from '@app/models/auth/role';
 
-export const Admin = ModelMaker.make({
+export const Admin = model({
   table: 'admins',
   // prettier-ignore
   columns: [

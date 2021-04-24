@@ -5,7 +5,7 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import 'express-async-errors';
 import { container } from 'tsyringe';
-import { logger } from '@modules/logger';
+import { Logger } from '@modules/logger';
 import { registerRouter } from '@routers';
 import { Handler } from '@app/exceptions/handler';
 
@@ -16,7 +16,7 @@ const app = express();
 app.use(cookieParser());
 
 // Logger
-logger.applyFor(app);
+container.resolve(Logger).applyFor(app);
 
 // Security
 app.use(cors());

@@ -1,18 +1,21 @@
-import { JWT } from '@modules/auth/jwt';
 import { Guard } from '@modules/auth/guard';
+import { singleton } from 'tsyringe';
 
+@singleton()
 export class Auth {
   /**
-   * List of guards.
+   * Constructor.
+   *
+   * @param _guard guard.
    */
-  private static _guard = new Guard();
+  public constructor(private _guard: Guard) {}
 
   /**
    * Select guard.
    *
    * @param name guard's name.
    */
-  public static guard(name: string) {
+  public guard(name: string) {
     this._guard.switchTo(name);
 
     return this._guard;
@@ -23,8 +26,8 @@ export class Auth {
    *
    * @param token access token.
    */
-  public static async verify(token: string) {
-    const { success, error, payload } = JWT.verify(token);
+  public async verify(token: string) {
+    const { success, error, payload } = this._guard.jwt.verify(token);
 
     if (!success) {
       return { success, error };

@@ -1,17 +1,28 @@
-import { Database } from '@modules/database/core/database';
 import { Seeder } from '@modules/database/core/seeder';
+import { autoInjectable } from 'tsyringe';
+import { Database } from '@modules/database/core/database';
 
-class PermissionsSeeder extends Seeder {
+@autoInjectable()
+export class PermissionsSeeder extends Seeder {
   /**
    * Name of seeder.
    */
   protected seederName = 'permissions';
 
   /**
+   * Constructor.
+   *
+   * @param database database instance.
+   */
+  public constructor(protected database: Database) {
+    super(database);
+  }
+
+  /**
    * Insert data to table.
    */
   protected async run() {
-    await Database.table('permissions').insert(
+    await this.database.table('permissions').insert(
       // Column names
       ['name'],
       // Inserted data
@@ -32,5 +43,3 @@ class PermissionsSeeder extends Seeder {
     );
   }
 }
-
-export default new PermissionsSeeder();

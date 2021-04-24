@@ -1,18 +1,29 @@
 import bcrypt from 'bcryptjs';
-import { Database } from '@modules/database/core/database';
 import { Seeder } from '@modules/database/core/seeder';
+import { autoInjectable } from 'tsyringe';
+import { Database } from '@modules/database/core/database';
 
-class UsersSeeder extends Seeder {
+@autoInjectable()
+export class UsersSeeder extends Seeder {
   /**
    * Name of seeder.
    */
   protected seederName = 'users';
 
   /**
+   * Constructor.
+   *
+   * @param database database instance.
+   */
+  public constructor(protected database: Database) {
+    super(database);
+  }
+
+  /**
    * Insert data to table.
    */
   protected async run() {
-    await Database.table('users').insert(
+    await this.database.table('users').insert(
       // Column names
       ['name', 'email', 'password'],
       // Inserted data
@@ -24,5 +35,3 @@ class UsersSeeder extends Seeder {
     );
   }
 }
-
-export default new UsersSeeder();

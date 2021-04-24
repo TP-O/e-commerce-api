@@ -1,8 +1,10 @@
 import { basename } from 'path';
-import { Database } from '@modules/database/core/database';
 import { Migration } from '@modules/database/core/migration';
 import { DataType } from '@modules/database/core/builder/types/data-type';
+import { autoInjectable } from 'tsyringe';
+import { Database } from '@modules/database/core/database';
 
+@autoInjectable()
 export class CreatePermissionsRolesTable extends Migration {
   /**
    * Name of the table will be created.
@@ -14,11 +16,19 @@ export class CreatePermissionsRolesTable extends Migration {
    */
   protected migrationName = basename(__filename).split('.')[0];
 
+  /**
+   * Constructor.
+   *
+   * @param database database instance.
+   */
+  public constructor(protected database: Database) {
+    super(database);
+  }
+
   protected async up() {
-    await Database.create(
-      'permissions_roles',
-      // Columns
-      {
+    await this.database.create({
+      table: 'permissions_roles',
+      columns: {
         id: {
           type: DataType.bigInt(),
           unsigned: true,
@@ -45,39 +55,32 @@ export class CreatePermissionsRolesTable extends Migration {
           onUpdate: 'current_timestamp',
         },
       },
-      // Primary keys
-      {
+      primaryKey: {
         columns: ['id'],
       },
-      // Foreign keys
-      [
+      foreignKeys: [
         {
-          name: 'FK_PermissionsRoles_Permissions',
           column: 'permission_id',
           table: 'permissions',
           referencedColumn: 'id',
           onDelete: 'cascade',
         },
         {
-          name: 'FK_PermissionsRoles_Roles',
           column: 'role_id',
           table: 'roles',
           referencedColumn: 'id',
           onDelete: 'cascade',
         },
       ],
-      [
+      uniqueColumns: [
         {
-          name: 'UQ_PermissionsRoles_PermissionId_RoleId',
           columns: ['permission_id', 'role_id'],
         },
       ],
-    );
+    });
   }
 
   protected async down() {
-    await Database.dropIfExists('permissions_roles');
+    await this.database.dropIfExists('permissions_roles');
   }
 }
-
-export default new CreatePermissionsRolesTable();

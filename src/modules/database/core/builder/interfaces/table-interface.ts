@@ -2,11 +2,13 @@ import { Column } from '@modules/database/core/builder/interfaces/column-interfa
 import {
   ForeignKey,
   PrimaryKey,
+  Unique,
 } from '@modules/database/core/builder/interfaces/constraint-interface';
 
 export interface Table {
-  name: string;
-  colums: Column[];
-  primaryKey: PrimaryKey;
-  foreignKey: ForeignKey;
+  table: string;
+  columns: { [key: string]: Column };
+  primaryKey?: PrimaryKey;
+  foreignKeys?: ForeignKey[];
+  uniqueColumns?: Unique[];
 }

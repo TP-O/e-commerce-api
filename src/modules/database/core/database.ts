@@ -1,68 +1,44 @@
 import { Converter } from '@modules/database/core/orm/convert';
 import { Connection } from '@modules/database/core/connect/connection';
-import { Column } from '@modules/database/core/builder/interfaces/column-interface';
-import { Model } from '@modules/database/core/orm/model';
 import { QueryBuilder } from '@modules/database/core/builder/query-builder';
 import * as Cons from '@modules/database/core/builder/interfaces/constraint-interface';
+import { singleton } from 'tsyringe';
+import { Table } from '@modules/database/core/builder/interfaces/table-interface';
 
+@singleton()
 export class Database {
   /**
    * Name of table.
    */
-  private static _tableName = '';
+  private _tableName = '';
 
   /**
-   * Query builder.
+   * Constructor.
+   *
+   * @param _connection database connection.
+   * @param _builder query builder.
+   * @param _converter data converter.
    */
-  private static _builder = new QueryBuilder();
-
-  /**
-   * Data converter.
-   */
-  private static _converter = new Converter();
-
-  /**
-   * Mode calling Database.
-   */
-  public static usingModel: Model;
+  public constructor(
+    private _connection: Connection,
+    private _builder: QueryBuilder,
+    private _converter: Converter,
+  ) {}
 
   /**
    * Get current query sentence.
    */
-  public static getQuery() {
-    return this._builder.querySentence;
-  }
-
-  /**
-   * Reset query sentence.
-   */
-  public static resetQuery() {
-    this._builder.resetQuery();
+  public getQuery() {
+    return this._builder.query;
   }
 
   /**
    * Create table.
    *
-   * @param table name of the table.
-   * @param columns column names of the table.
-   * @param primaryKey primary key of the table.
-   * @param foreignKeys foreign keys of the table.
-   * @param uniqueColumns unique columns of the table.
+   * @param table table's information.
    */
-  public static create(
-    table: string,
-    columns: { [key: string]: Column },
-    primaryKey?: Cons.PrimaryKey,
-    foreignKeys?: Cons.ForeignKey[],
-    uniqueColumns?: Cons.Unique[],
-  ) {
-    this._builder.createTable(
-      table,
-      columns,
-      primaryKey,
-      foreignKeys,
-      uniqueColumns,
-    );
+  public create(table: Table) {
+    this._builder.createTable(table);
 
     return this.execute(true);
   }
@@ -70,26 +46,10 @@ export class Database {
   /**
    * Create non-existent table.
    *
-   * @param table name of the table.
-   * @param columns column names of the table.
-   * @param primaryKey primary key of the table.
-   * @param foreignKeys foreign keys of the table.
-   * @param uniqueColumns unique columns of the table.
+   * @param table table's information.
    */
-  public static createIfNotExists(
-    table: string,
-    columns: { [key: string]: Column },
-    primaryKey?: Cons.PrimaryKey,
-    foreignKeys?: Cons.ForeignKey[],
-    uniqueColumns?: Cons.Unique[],
-  ) {
-    this._builder.createTableIfNotExists(
-      table,
-      columns,
-      primaryKey,
-      foreignKeys,
-      uniqueColumns,
-    );
+  public createIfNotExists(table: Table) {
+    this._builder.createTableIfNotExists(table);
 
     return this.execute(true);
   }
@@ -99,7 +59,7 @@ export class Database {
    *
    * @param table name of the table.
    */
-  public static drop(table: string) {
+  public drop(table: string) {
     this._builder.dropTable(table);
 
     return this.execute(true);
@@ -110,7 +70,7 @@ export class Database {
    *
    * @param table name of the table.
    */
-  public static dropIfExists(table: string) {
+  public dropIfExists(table: string) {
     this._builder.dropTableIfExists(table);
 
     return this.execute(true);
@@ -121,7 +81,7 @@ export class Database {
    *
    * @param index index informations.
    */
-  public static createIndex(index: Cons.Index) {
+  public createIndex(index: Cons.Index) {
     this._builder.createIndex(index);
 
     return this.execute(true);
@@ -132,7 +92,7 @@ export class Database {
    *
    * @param tableName name of selected table.
    */
-  public static table(tableName: string) {
+  public table(tableName: string) {
     this._tableName = tableName;
 
     return this;
@@ -145,7 +105,7 @@ export class Database {
    * @param columns specified columns.
    * @param values list of array will be inserted.
    */
-  public static async insert(columns: string[], values: string[][]) {
+  public async insert(columns: string[], values: string[][]) {
     this._builder.insert(this._tableName, columns, values);
 
     return this.execute();
@@ -157,7 +117,7 @@ export class Database {
    * @param table name of the table.
    * @param data new data.
    */
-  public static async update(data: { [key: string]: any }) {
+  public async update(data: { [key: string]: any }) {
     this._builder.update(this._tableName, data);
 
     return this.execute();
@@ -168,7 +128,7 @@ export class Database {
    *
    * @param table name of the table.
    */
-  public static async delete() {
+  public async delete() {
     this._builder.delele(this._tableName);
 
     return this.execute();
@@ -179,7 +139,7 @@ export class Database {
    *
    * @param columns selected columns.
    */
-  public static select(...columns: string[]) {
+  public select(...columns: string[]) {
     this._builder.select(...columns).from(this._tableName);
 
     return this;
@@ -190,7 +150,7 @@ export class Database {
    *
    * @param columns specified columns.
    */
-  public static addSelection(...columns: string[]) {
+  public addSelection(...columns: string[]) {
     this._builder.addSelection(...columns);
 
     return this;
@@ -202,7 +162,7 @@ export class Database {
    * @param table joined table.
    * @param type type of join.
    */
-  public static join(table: string, type?: string) {
+  public join(table: string, type?: string) {
     this._builder.join(table, type);
 
     return this;
@@ -213,7 +173,7 @@ export class Database {
    *
    * @param conditions list of conditions.
    */
-  public static on(conditions: string[][] | ((q: QueryBuilder) => void)) {
+  public on(conditions: string[][] | ((q: QueryBuilder) => void)) {
     this._builder.on(conditions);
 
     return this;
@@ -224,7 +184,7 @@ export class Database {
    *
    * @param conditions list of conditions.
    */
-  public static where(conditions: string[][] | ((q: QueryBuilder) => void)) {
+  public where(conditions: string[][] | ((q: QueryBuilder) => void)) {
     this._builder.where(conditions);
 
     return this;
@@ -235,7 +195,7 @@ export class Database {
    *
    * @param conditions list of conditions.
    */
-  public static orWhere(conditions: string[][]) {
+  public orWhere(conditions: string[][]) {
     this._builder.orWhere(conditions);
 
     return this;
@@ -246,7 +206,7 @@ export class Database {
    *
    * @param conditions list of conditions.
    */
-  public static andWhere(conditions: string[][]) {
+  public andWhere(conditions: string[][]) {
     this._builder.andWhere(conditions);
 
     return this;
@@ -256,9 +216,10 @@ export class Database {
    * Use NOT operator.
    *
    * @param conditions list of conditions.
+   * @param operator logical operator.
    */
-  public static notWhere(conditions: string[][]) {
-    this._builder.notWhere(conditions);
+  public whereNot(conditions: string[][], operator = 'AND') {
+    this._builder.whereNot(conditions, operator);
 
     return this;
   }
@@ -268,8 +229,19 @@ export class Database {
    *
    * @param column specified column.
    */
-  public static groupBy(column: string) {
+  public groupBy(column: string) {
     this._builder.groupBy(column);
+
+    return this;
+  }
+
+  /**
+   * Start conditions for having.
+   *
+   * @param conditions list of conditions.
+   */
+  public having(conditions: string[][] | ((q: QueryBuilder) => void)) {
+    this._builder.having(conditions);
 
     return this;
   }
@@ -280,7 +252,7 @@ export class Database {
    * @param column specified column.
    * @param type type of order.
    */
-  public static orderBy(column: string, type?: string) {
+  public orderBy(column: string, type?: string) {
     this._builder.orderBy(column, type);
 
     return this;
@@ -291,7 +263,7 @@ export class Database {
    *
    * @param number maximum number of results.
    */
-  public static limit(number: number) {
+  public limit(number: number) {
     this._builder.limit(number);
 
     return this;
@@ -302,7 +274,7 @@ export class Database {
    *
    * @param column specified column.
    */
-  public static min(column: string, alias?: string) {
+  public min(column: string, alias?: string) {
     this._builder.min(column, alias);
 
     return this;
@@ -313,7 +285,7 @@ export class Database {
    *
    * @param column specified column.
    */
-  public static max(column: string, alias?: string) {
+  public max(column: string, alias?: string) {
     this._builder.max(column, alias);
 
     return this;
@@ -324,7 +296,7 @@ export class Database {
    *
    * @param column specified column.
    */
-  public static sum(column: string, alias?: string) {
+  public sum(column: string, alias?: string) {
     this._builder.sum(column, alias);
 
     return this;
@@ -335,7 +307,7 @@ export class Database {
    *
    * @param column specified column.
    */
-  public static avg(column: string, alias?: string) {
+  public avg(column: string, alias?: string) {
     this._builder.avg(column, alias);
 
     return this;
@@ -346,7 +318,7 @@ export class Database {
    *
    * @param column specified column.
    */
-  public static count(column: string, alias?: string) {
+  public count(column: string, alias?: string) {
     this._builder.count(column, alias);
 
     return this;
@@ -355,8 +327,8 @@ export class Database {
   /**
    * Raw query.
    */
-  public static raw(querySentence: string) {
-    this._builder.querySentence = querySentence;
+  public raw(query: string) {
+    this._builder.raw(query);
 
     return this.execute();
   }
@@ -364,16 +336,16 @@ export class Database {
   /**
    * Execute with current query.
    */
-  public static async execute(throwable = false) {
-    try {
-      const rows = await Connection.execute(this.getQuery());
+  public async execute(throwable = false) {
+    const query = this._builder.build();
 
-      this._builder.resetQuery();
+    try {
+      const rows = await this._connection.execute(query);
+
+      this._builder.build();
 
       return this._converter.convert(rows);
     } catch (err) {
-      this._builder.resetQuery();
-
       if (throwable) {
         throw err;
       }

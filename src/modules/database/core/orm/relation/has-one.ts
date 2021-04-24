@@ -1,8 +1,9 @@
 import { Model } from '@modules/database/core/orm/model';
-import { Relation } from '@modules/database/core/orm/relation';
+import { Relationship } from '@modules/database/core/orm/relation/relationship';
+import { container } from 'tsyringe';
 import { Database } from '@modules/database/core/database';
 
-export class HasOne extends Relation {
+export class HasOne extends Relationship {
   /**
    *
    * @param table name of table having the relationship.
@@ -25,12 +26,15 @@ export class HasOne extends Relation {
    * @param table table instance.
    */
   protected withCondition() {
-    Database.join(this.relatedModel.table, 'left join').on([
-      [
-        `${this.table}.${this.localKey}`,
-        '=',
-        `${this.relatedModel.table}.${this.foreignKey}`,
-      ],
-    ]);
+    container
+      .resolve(Database)
+      .join(this.relatedModel.table, 'left join')
+      .on([
+        [
+          `${this.table}.${this.localKey}`,
+          '=',
+          `${this.relatedModel.table}.${this.foreignKey}`,
+        ],
+      ]);
   }
 }

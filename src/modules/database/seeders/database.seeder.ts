@@ -1,29 +1,28 @@
-import Admins from './admins.seeder';
-import Users from './users.seeder';
-import Sellers from './sellers.seeder';
-import Roles from './roles.seeder';
-import Permissions from './permissions.seeder';
-import PermissionsRoles from './permissions_roles.seeder';
-import AdminsRoles from './admins_roles.seeder';
-import RolesUsers from './roles_users.seeder';
-import RolesSellers from './roles_sellers.seeder';
-import ForgotPasswords from './forgot_passwords.seeder';
-import Activations from './activations.seeder';
+import { AdminsSeeder } from './admins';
+import { UsersSeeder } from './users';
+import { SellersSeeder } from './sellers';
+import { RolesSeeder } from './roles';
+import { PermissionsSeeder } from './permissions';
+import { PermissionsRolesSeeder } from './permissions-roles';
+import { AdminsRolesSeeder } from './admins-roles';
+import { RolesUsersSeeder } from './roles-users';
+import { RolesSellersSeeder } from './roles-sellers';
+import { ForgotPasswordsSeeder } from './forgot-passwords';
+import { ActivationsSeeder } from './activations';
+import { container } from 'tsyringe';
 
-class DatabaseSeeder {
+export class DatabaseSeeder {
   public async seed(): Promise<void> {
-    await Admins.seed();
-    await Users.seed();
-    await Sellers.seed();
-    await Roles.seed();
-    await Permissions.seed();
-    await PermissionsRoles.seed();
-    await AdminsRoles.seed();
-    await RolesUsers.seed();
-    await RolesSellers.seed();
-    await ForgotPasswords.seed();
-    await Activations.seed();
+    await container.resolve(AdminsSeeder).seed();
+    await container.resolve(UsersSeeder).seed();
+    await container.resolve(SellersSeeder).seed();
+    await container.resolve(RolesSeeder).seed();
+    await container.resolve(PermissionsSeeder).seed();
+    await container.resolve(PermissionsRolesSeeder).seed();
+    await container.resolve(AdminsRolesSeeder).seed();
+    await container.resolve(RolesUsersSeeder).seed();
+    await container.resolve(RolesSellersSeeder).seed();
+    await container.resolve(ForgotPasswordsSeeder).seed();
+    await container.resolve(ActivationsSeeder).seed();
   }
 }
-
-export default new DatabaseSeeder();

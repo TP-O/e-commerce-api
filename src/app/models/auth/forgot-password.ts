@@ -1,6 +1,6 @@
-import { ModelMaker } from '@modules/database/core';
+import { model } from '@modules/helper';
 
-export const ForgotPassword = ModelMaker.make({
+export const ForgotPassword = model({
   table: 'forgot_passwords',
   // prettier-ignore
   columns: [

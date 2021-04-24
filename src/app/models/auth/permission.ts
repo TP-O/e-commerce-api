@@ -1,6 +1,6 @@
-import { ModelMaker } from '@modules/database/core';
+import { model } from '@modules/helper';
 
-export const Permission = ModelMaker.make({
+export const Permission = model({
   table: 'permissions',
   // prettier-ignore
   columns: [

@@ -1,9 +1,10 @@
 import { Model } from '@modules/database/core/orm/model';
-import { Relation } from '@modules/database/core/orm/relation';
-import { Database } from '@modules/database/core/database';
+import { Relationship } from '@modules/database/core/orm/relation/relationship';
 import { Pivot } from '@modules/database/core/orm/interfaces/relation';
+import { Database } from '@modules/database/core/database';
+import { container } from 'tsyringe';
 
-export class BelongsToMany extends Relation {
+export class BelongsToMany extends Relationship {
   /**
    *
    * @param table name of table having the relationship.
@@ -29,7 +30,9 @@ export class BelongsToMany extends Relation {
    */
   protected withCondition() {
     if (this.pivot.table) {
-      Database.join(this.pivot.table, 'left join')
+      container
+        .resolve(Database)
+        .join(this.pivot.table, 'left join')
         .on([
           [
             `${this.table}.${this.assetKey}`,
@@ -53,14 +56,16 @@ export class BelongsToMany extends Relation {
         relationship: undefined,
       };
 
-      Database.addSelection(
-        ...this.pivot.model.columns.map(
-          (c) =>
-            `${this.pivot.table}.${c}:${this.relation}-${
-              this.pivot.name || 'pivot_table'
-            }-${c}`,
-        ),
-      )
+      container
+        .resolve(Database)
+        .addSelection(
+          ...this.pivot.model.columns.map(
+            (c) =>
+              `${this.pivot.table}.${c}:${this.relation}-${
+                this.pivot.name || 'pivot_table'
+              }-${c}`,
+          ),
+        )
         .join(this.pivot.model.table, 'left join')
         .on([
           [

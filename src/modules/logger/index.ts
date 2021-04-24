@@ -3,8 +3,10 @@ import { Express } from 'express';
 import { createStream, RotatingFileStream } from 'rotating-file-stream';
 import { nodeConfig } from '@configs/node';
 import { loggerConfig } from '@configs/logger';
+import { singleton } from 'tsyringe';
 
-class Logger {
+@singleton()
+export class Logger {
   /**
    * Name of log file.
    */
@@ -47,5 +49,3 @@ class Logger {
     });
   }
 }
-
-export const logger = new Logger();

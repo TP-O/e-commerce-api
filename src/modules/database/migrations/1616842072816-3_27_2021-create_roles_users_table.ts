@@ -1,8 +1,10 @@
 import { basename } from 'path';
-import { Database } from '@modules/database/core/database';
 import { Migration } from '@modules/database/core/migration';
 import { DataType } from '@modules/database/core/builder/types/data-type';
+import { autoInjectable } from 'tsyringe';
+import { Database } from '@modules/database/core/database';
 
+@autoInjectable()
 export class CreateRolesUsersTable extends Migration {
   /**
    * Name of the table will be created.
@@ -14,11 +16,19 @@ export class CreateRolesUsersTable extends Migration {
    */
   protected migrationName = basename(__filename).split('.')[0];
 
+  /**
+   * Constructor.
+   *
+   * @param database database instance.
+   */
+  public constructor(protected database: Database) {
+    super(database);
+  }
+
   protected async up() {
-    await Database.create(
-      'roles_users',
-      // Columns
-      {
+    await this.database.create({
+      table: 'roles_users',
+      columns: {
         id: {
           type: DataType.bigInt(),
           unsigned: true,
@@ -45,39 +55,32 @@ export class CreateRolesUsersTable extends Migration {
           onUpdate: 'current_timestamp',
         },
       },
-      // Primary keys
-      {
+      primaryKey: {
         columns: ['id'],
       },
-      // Foreign keys
-      [
+      foreignKeys: [
         {
-          name: 'FK_RolesUsers_Roles',
           column: 'role_id',
           table: 'roles',
           referencedColumn: 'id',
           onDelete: 'cascade',
         },
         {
-          name: 'FK_RolesUsers_Users',
           column: 'user_id',
           table: 'users',
           referencedColumn: 'id',
           onDelete: 'cascade',
         },
       ],
-      [
+      uniqueColumns: [
         {
-          name: 'UQ_RolesUsers_RoleId_UserId',
           columns: ['role_id', 'user_id'],
         },
       ],
-    );
+    });
   }
 
   protected async down() {
-    await Database.dropIfExists('roles_users');
+    await this.database.dropIfExists('roles_users');
   }
 }
-
-export default new CreateRolesUsersTable();

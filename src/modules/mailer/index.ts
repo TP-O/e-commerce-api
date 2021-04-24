@@ -1,8 +1,10 @@
 import nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import { mailerConfig } from '@configs/mailer';
+import { singleton } from 'tsyringe';
 
-class Mailer {
+@singleton()
+export class Mailer {
   /**
    * Email transporter.
    */
@@ -27,5 +29,3 @@ class Mailer {
     this._transporter.sendMail(options);
   }
 }
-
-export default new Mailer();

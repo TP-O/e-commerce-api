@@ -9,96 +9,90 @@ import {
   HasManyRelationship,
   HasOneRelationship,
 } from '@modules/database/core/orm/interfaces/relation';
+import { autoInjectable } from 'tsyringe';
 
+@autoInjectable()
 export class Maker {
+  /**
+   * Constructor.
+   *
+   * @param model craeted model.
+   */
+  public constructor(private _model: Model) {}
+
   /**
    * Create model.
    *
    * @param infor information of created model.
    */
-  public static make(infor: ModelInfor) {
-    const model = new Model(
+  public make(infor: ModelInfor) {
+    this._model.init(
       infor.table,
       infor.columns,
       infor.primaryKey,
       infor.fillable,
     );
 
-    this.bindRelationships(model, infor.relationships);
+    this.bindRelationships(infor.relationships);
 
-    return model;
+    return this._model;
   }
 
   /**
    * Bind all relationships for created model
    *
-   * @param model created model.
    * @param relationships all of relationships.
    */
-  private static bindRelationships(model: Model, relationships: Relationship) {
+  private bindRelationships(relationships: Relationship) {
     if (relationships.hasOne) {
-      this.bindHasOneRelationship(model, relationships.hasOne);
+      this.bindHasOneRelationship(relationships.hasOne);
     }
     if (relationships.hasMany) {
-      this.bindHasManyRelationship(model, relationships.hasMany);
+      this.bindHasManyRelationship(relationships.hasMany);
     }
     if (relationships.belongsTo) {
-      this.bindBelongsToRelationship(model, relationships.belongsTo);
+      this.bindBelongsToRelationship(relationships.belongsTo);
     }
     if (relationships.belongsToMany) {
-      this.bindBelongsToManyRelationship(model, relationships.belongsToMany);
+      this.bindBelongsToManyRelationship(relationships.belongsToMany);
     }
   }
 
   /**
    * Create has-one relationships for the model.
    *
-   * @param model related model.
    * @param relationships list of has-one relationships.
    */
-  private static bindHasOneRelationship(
-    model: Model,
-    relationships: HasOneRelationship[],
-  ) {
-    relationships.forEach((r) => model.relationship.hasOne(r));
+  private bindHasOneRelationship(relationships: HasOneRelationship[]) {
+    relationships.forEach((r) => this._model.relationship.hasOne(r));
   }
 
   /**
    * Create has-many relationships for the model.
    *
-   * @param model related model.
    * @param relationships list of has-many relationships.
    */
-  private static bindHasManyRelationship(
-    model: Model,
-    relationships: HasManyRelationship[],
-  ) {
-    relationships.forEach((r) => model.relationship.hasMany(r));
+  private bindHasManyRelationship(relationships: HasManyRelationship[]) {
+    relationships.forEach((r) => this._model.relationship.hasMany(r));
   }
 
   /**
    * Create belongs-to relationships for the model.
    *
-   * @param model related model.
    * @param relationships list of belongs-to relationships.
    */
-  private static bindBelongsToRelationship(
-    model: Model,
-    relationships: BelongsToRelationship[],
-  ) {
-    relationships.forEach((r) => model.relationship.belongsTo(r));
+  private bindBelongsToRelationship(relationships: BelongsToRelationship[]) {
+    relationships.forEach((r) => this._model.relationship.belongsTo(r));
   }
 
   /**
    * Create belongs-to-many relationships for the model.
    *
-   * @param model related model.
    * @param relationships list of belongs-to-many relationships.
    */
-  private static bindBelongsToManyRelationship(
-    model: Model,
+  private bindBelongsToManyRelationship(
     relationships: BelongsToManyRelationship[],
   ) {
-    relationships.forEach((r) => model.relationship.belongsToMany(r));
+    relationships.forEach((r) => this._model.relationship.belongsToMany(r));
   }
 }

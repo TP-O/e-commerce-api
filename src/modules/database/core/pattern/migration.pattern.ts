@@ -1,9 +1,11 @@
 import { basename } from 'path';
-import { Database } from '@modules/database/core/database';
 import { Migration } from '@modules/database/core/migration';
 import { DataType } from '@modules/database/core/builder/types/data-type';
+import { autoInjectable } from 'tsyringe';
+import { Database } from '@modules/database/core/database';
 
-export class CreateXXXTable extends Migration {
+@autoInjectable()
+export class XXX extends Migration {
   /**
    * Name of the table will be created.
    */
@@ -14,11 +16,19 @@ export class CreateXXXTable extends Migration {
    */
   protected migrationName = basename(__filename).split('.')[0];
 
+  /**
+   * Constructor.
+   *
+   * @param database database instance.
+   */
+  public constructor(protected database: Database) {
+    super(database);
+  }
+
   protected async up() {
-    await Database.create(
-      'xxx',
-      // Columns
-      {
+    await this.database.create({
+      table: 'xxx',
+      columns: {
         id: {
           type: DataType.bigInt(),
           unsigned: true,
@@ -35,18 +45,15 @@ export class CreateXXXTable extends Migration {
           onUpdate: 'current_timestamp',
         },
       },
-      // Primary keys
-      {
+      primaryKey: {
         columns: ['id'],
       },
-      // Foreign keys
-      [],
-    );
+      foreignKeys: [],
+      uniqueColumns: [],
+    });
   }
 
   protected async down() {
-    await Database.dropIfExists('xxx');
+    await this.database.dropIfExists('xxx');
   }
 }
-
-export default new CreateXXXTable();

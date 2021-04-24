@@ -2,12 +2,24 @@ import { readFile, writeFile } from 'fs/promises';
 import { Command } from '@modules/database/core/console/command';
 
 export class MakeMigration extends Command {
+  /**
+   * Name of migration file.
+   */
   private _fileName: string;
 
+  /**
+   * Content of migration file.
+   */
   private _fileContent = '';
 
+  /**
+   * Path to migration directory.
+   */
   private _distDir = `${__dirname}/../../../migrations/`;
 
+  /**
+   * Path to pattern file.
+   */
   private _originFile = `${__dirname}/../../pattern/migration.pattern.ts`;
 
   /**
@@ -19,7 +31,7 @@ export class MakeMigration extends Command {
 
     this._fileName = `${new Date().getTime()}-${new Date()
       .toLocaleDateString()
-      .replace(/\//g, '_')}-create_${_name}_table`;
+      .replace(/\//g, '_')}-${_name}_table`;
   }
 
   /**

@@ -1,9 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpRequestError } from '@app/exceptions/http-request-error';
-import { Auth } from '@modules/auth';
-import { injectable } from 'tsyringe';
+import { verify } from '@modules/helper';
 
-@injectable()
 export class RequireAccessToken {
   public handle() {
     return async function (req: Request, res: Response, next: NextFunction) {
@@ -13,7 +11,7 @@ export class RequireAccessToken {
         throw new HttpRequestError(400, 'Access token is missing');
       }
 
-      const { success, error, user } = await Auth.verify(accessToken);
+      const { success, error, user } = await verify(accessToken);
 
       if (!success) {
         throw new HttpRequestError(400, error);

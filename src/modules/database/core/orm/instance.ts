@@ -1,5 +1,4 @@
 import { Model } from '@modules/database/core/orm/model';
-import { Database } from '@modules/database/core/database';
 
 export class Instance {
   /**
@@ -49,7 +48,7 @@ export class Instance {
    * @param relationship relationship's name.
    */
   public get(relationship: string) {
-    Database.usingModel = this.model;
+    Model.usingModel = this.model;
 
     return this.model
       .select('id')

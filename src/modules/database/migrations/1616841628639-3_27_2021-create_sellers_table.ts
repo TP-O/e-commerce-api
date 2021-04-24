@@ -1,8 +1,10 @@
 import { basename } from 'path';
-import { Database } from '@modules/database/core/database';
 import { Migration } from '@modules/database/core/migration';
 import { DataType } from '@modules/database/core/builder/types/data-type';
+import { autoInjectable } from 'tsyringe';
+import { Database } from '@modules/database/core/database';
 
+@autoInjectable()
 export class CreateSellersTable extends Migration {
   /**
    * Name of the table will be created.
@@ -14,11 +16,19 @@ export class CreateSellersTable extends Migration {
    */
   protected migrationName = basename(__filename).split('.')[0];
 
+  /**
+   * Constructor.
+   *
+   * @param database database instance.
+   */
+  public constructor(protected database: Database) {
+    super(database);
+  }
+
   protected async up() {
-    await Database.create(
-      'sellers',
-      // Columns
-      {
+    await this.database.create({
+      table: 'sellers',
+      columns: {
         id: {
           type: DataType.bigInt(),
           unsigned: true,
@@ -52,18 +62,13 @@ export class CreateSellersTable extends Migration {
           onUpdate: 'current_timestamp',
         },
       },
-      // Primary keys
-      {
+      primaryKey: {
         columns: ['id'],
       },
-      // Foreign keys
-      [],
-    );
+    });
   }
 
   protected async down() {
-    await Database.dropIfExists('sellers');
+    await this.database.dropIfExists('sellers');
   }
 }
-
-export default new CreateSellersTable();

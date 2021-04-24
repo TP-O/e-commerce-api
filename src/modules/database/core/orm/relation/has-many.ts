@@ -1,9 +1,10 @@
 import { Model } from '@modules/database/core/orm/model';
-import { Relation } from '@modules/database/core/orm/relation';
-import { Database } from '@modules/database/core/database';
+import { Relationship } from '@modules/database/core/orm/relation/relationship';
 import { Pivot } from '@modules/database/core/orm/interfaces/relation';
+import { container } from 'tsyringe';
+import { Database } from '@modules/database/core/database';
 
-export class HasMany extends Relation {
+export class HasMany extends Relationship {
   /**
    *
    * @param table name of table having the relationship.
@@ -28,7 +29,9 @@ export class HasMany extends Relation {
   protected withCondition() {
     if (this.pivot) {
       if (this.pivot.table) {
-        Database.join(this.pivot.table, 'left join')
+        container
+          .resolve(Database)
+          .join(this.pivot.table, 'left join')
           .on([
             [
               `${this.table}.${this.localKey}`,
@@ -52,14 +55,16 @@ export class HasMany extends Relation {
           relationship: undefined,
         };
 
-        Database.addSelection(
-          ...this.pivot.model.columns.map(
-            (c) =>
-              `${this.pivot?.model?.table}.${c}:${this.relation}-${
-                this.pivot?.name || 'pivot_table'
-              }-${c}`,
-          ),
-        )
+        container
+          .resolve(Database)
+          .addSelection(
+            ...this.pivot.model.columns.map(
+              (c) =>
+                `${this.pivot?.model?.table}.${c}:${this.relation}-${
+                  this.pivot?.name || 'pivot_table'
+                }-${c}`,
+            ),
+          )
           .join(this.pivot.model.table, 'left join')
           .on([
             [
@@ -78,13 +83,16 @@ export class HasMany extends Relation {
           ]);
       }
     } else {
-      Database.join(this.relatedModel.table, 'left join').on([
-        [
-          `${this.table}.${this.localKey}`,
-          '=',
-          `${this.relatedModel.table}.${this.foreignKey}`,
-        ],
-      ]);
+      container
+        .resolve(Database)
+        .join(this.relatedModel.table, 'left join')
+        .on([
+          [
+            `${this.table}.${this.localKey}`,
+            '=',
+            `${this.relatedModel.table}.${this.foreignKey}`,
+          ],
+        ]);
     }
   }
 }

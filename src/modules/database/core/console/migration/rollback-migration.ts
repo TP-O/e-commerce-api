@@ -2,12 +2,30 @@ import { readdir } from 'fs/promises';
 import { Command } from '@modules/database/core/console/command';
 import { Migration } from '@modules/database/core/migration';
 import { Connection } from '@modules/database/core/connect/connection';
-import { Database } from '@modules/database/core/database';
+import { database } from '@modules/helper';
+import { autoInjectable, container } from 'tsyringe';
+import { constructor } from 'tsyringe/dist/typings/types';
 
+@autoInjectable()
 export class RollbackMigration extends Command {
-  protected _migrations: Migration[] = [];
+  /**
+   * List of migration classes.
+   */
+  protected _migrations: constructor<Migration>[] = [];
 
+  /**
+   * Path to migraion directory.
+   */
   private _migrationDir = `${__dirname}/../../../migrations`;
+
+  /**
+   * Constructor.
+   *
+   * @param _connection database connection.
+   */
+  public constructor(private _connection: Connection) {
+    super();
+  }
 
   /**
    * Prepare data.
@@ -15,15 +33,18 @@ export class RollbackMigration extends Command {
   protected async prepare(): Promise<void> {
     if (this._migrations.length === 0) {
       const files = await readdir(this._migrationDir);
-      const { data } = await Database.table('migrations')
-        .select('batch')
-        .max('batch')
-        .execute(true);
 
-      const { data: migrated } = await Database.table('migrations')
-        .select('*')
-        .where([['batch', '=', `v:${data?.first().data}`]])
-        .execute(true);
+      const { data } = await database((q) => {
+        return q.table('migrations').select('batch').max('batch').execute(true);
+      });
+
+      const { data: migrated } = await database((q) => {
+        return q
+          .table('migrations')
+          .select('*')
+          .where([['batch', '=', `v:${data?.first().data}`]])
+          .execute(true);
+      });
 
       files.forEach((file) => {
         let matched = false;
@@ -35,9 +56,8 @@ export class RollbackMigration extends Command {
         });
 
         if (matched) {
-          this._migrations.push(
-            require(`@modules/database/migrations/${file}`).default,
-          );
+          const m = require(`@modules/database/migrations/${file}`);
+          this._migrations.push(m[Object.keys(m)[0]]);
         }
       });
 
@@ -52,9 +72,9 @@ export class RollbackMigration extends Command {
    */
   public async execute(): Promise<void> {
     try {
-      await Connection.establish();
+      await this._connection.establish();
 
-      if (await Connection.isConnected()) {
+      if (await this._connection.isConnected()) {
         await this.prepare();
 
         let job = Promise.resolve();
@@ -62,7 +82,9 @@ export class RollbackMigration extends Command {
         Object.values(this._migrations)
           .reverse()
           .forEach((migration) => {
-            job = job.then(async () => await migration.drop());
+            job = job.then(
+              async () => await container.resolve(migration).drop(),
+            );
           });
 
         return job;

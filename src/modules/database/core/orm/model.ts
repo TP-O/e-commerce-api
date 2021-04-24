@@ -1,41 +1,100 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { Database } from '@modules/database/core/database';
 import { QueryBuilder } from '@modules/database/core/builder/query-builder';
-import { RelationManager } from '@modules/database/core/orm/relation/manager/relation.manager';
+import { RelationshipManager } from '@modules/database/core/orm/relation/manager/relationship-manager';
+import { autoInjectable, delay, inject } from 'tsyringe';
 
+@autoInjectable()
 export class Model {
+  /**
+   * Table's name.
+   */
+  private _table = 'unknown';
+
+  /**
+   * Primary key of the table.
+   */
+  private _primaryKey = 'id';
+
+  /**
+   * All columns of the table.
+   */
+  private _columns: string[] = [];
+
+  /**
+   * The columns having data changing.
+   */
+  private _fillable: string[] = [];
+
   /**
    * Manage relationships.
    */
-  private readonly _relationManager: RelationManager;
+  private _relationshipsManager: RelationshipManager;
 
   /**
-   *
-   * @param table name of the table that this model uses.
-   * @param columns colums of the table.
-   * @param primaryKey primary key of the table.
-   * @param fillable fillable columns.
+   * Model being used.
    */
-  constructor(
-    public readonly table: string,
-    public readonly columns: string[],
-    public readonly primaryKey = 'id',
-    public readonly fillable: string[] = [],
+  public static usingModel: Model | any;
+
+  /**
+   * Constructor.
+   *
+   * @param _database database instance.
+   */
+  public constructor(
+    @inject(delay(() => Database)) private _database: Database,
   ) {
-    this._relationManager = new RelationManager(table);
+    this._relationshipsManager = new RelationshipManager(this._table);
+  }
+
+  get table() {
+    return this._table;
+  }
+
+  get primaryKey() {
+    return this._primaryKey;
+  }
+
+  get columns() {
+    return this._columns;
+  }
+
+  get fillable() {
+    return this._fillable;
   }
 
   get relationship() {
-    return this._relationManager;
+    return this._relationshipsManager;
+  }
+
+  /**
+   * Give table's information for the model.
+   *
+   * @param table table's name.
+   * @param columns all columns of the table.
+   * @param primaryKey primary key of the table.
+   * @param fillable the columns having data changing.
+   */
+  public init(
+    table: string,
+    columns: string[],
+    primaryKey = 'id',
+    fillable: string[],
+  ) {
+    this._table = table;
+    this._columns = columns;
+    this._primaryKey = primaryKey;
+    this._fillable = fillable;
+    this._relationshipsManager = new RelationshipManager(this._table);
   }
 
   /**
    * Get data.
    */
   public async get() {
-    Database.usingModel = this;
+    Model.usingModel = this;
 
-    const { data, error } = await Database.execute();
+    const { data, error } = await this._database.execute();
 
     return data && !error ? { data } : { error };
   }
@@ -44,9 +103,10 @@ export class Model {
    * Get all data.
    */
   public async all() {
-    Database.usingModel = this;
+    Model.usingModel = this;
 
-    const { data, error } = await Database.table(this.table)
+    const { data, error } = await this._database
+      .table(this._table)
       .select('*')
       .execute();
 
@@ -59,7 +119,7 @@ export class Model {
    * @param item new data.
    */
   public async create(items: any[]) {
-    const { status, error } = await Database.table(this.table).insert(
+    const { status, error } = await this._database.table(this._table).insert(
       Object.keys(this.filter(items[0])),
       items.map((item) => Object.values(this.filter(item))),
     );
@@ -75,9 +135,9 @@ export class Model {
    * @param value new values.
    */
   public async update(value: any) {
-    const { status, error } = await Database.table(this.table).update(
-      this.filter(value),
-    );
+    const { status, error } = await this._database
+      .table(this._table)
+      .update(this.filter(value));
 
     return status && status.affectedRows && status.affectedRows > 0
       ? { success: true }
@@ -88,7 +148,7 @@ export class Model {
    * Delete data.
    */
   public async delete() {
-    const { status, error } = await Database.table(this.table).delete();
+    const { status, error } = await this._database.table(this._table).delete();
 
     return status && status.affectedRows && status.affectedRows > 0
       ? { success: true }
@@ -103,12 +163,12 @@ export class Model {
   public select(...columns: string[]): this {
     // Add table name before each column.
     if (columns.includes('*')) {
-      columns = this.columns.map((c) => `${this.table}.${c}`);
+      columns = this._columns.map((c) => `${this._table}.${c}`);
     } else {
-      columns = columns.map((c) => `${this.table}.${c}`);
+      columns = columns.map((c) => `${this._table}.${c}`);
     }
 
-    Database.table(this.table).select(...columns);
+    this._database.table(this._table).select(...columns);
 
     return this;
   }
@@ -119,7 +179,7 @@ export class Model {
    * @param coditions list of conditions.
    */
   public where(conditions: string[][] | ((q: QueryBuilder) => void)): this {
-    Database.table(this.table).where(conditions);
+    this._database.table(this._table).where(conditions);
 
     return this;
   }
@@ -130,7 +190,7 @@ export class Model {
    * @param conditions list of conditions.
    */
   public orWhere(conditions: string[][]): this {
-    Database.orWhere(conditions);
+    this._database.orWhere(conditions);
 
     return this;
   }
@@ -141,7 +201,7 @@ export class Model {
    * @param conditions list of conditions.
    */
   public andWhere(conditions: string[][]): this {
-    Database.andWhere(conditions);
+    this._database.andWhere(conditions);
 
     return this;
   }
@@ -150,9 +210,10 @@ export class Model {
    * NOT conditions.
    *
    * @param conditions list of conditions.
+   * @param operator logical operator.
    */
-  public notWhere(conditions: string[][]): this {
-    Database.notWhere(conditions);
+  public whereNot(conditions: string[][], operator = 'AND'): this {
+    this._database.whereNot(conditions, operator);
 
     return this;
   }
@@ -163,7 +224,18 @@ export class Model {
    * @param column specified column.
    */
   public groupBy(column: string): this {
-    Database.groupBy(column);
+    this._database.groupBy(column);
+
+    return this;
+  }
+
+  /**
+   * Start conditions for having.
+   *
+   * @param conditions list of conditions.
+   */
+  public having(conditions: string[][] | ((q: QueryBuilder) => void)) {
+    this._database.having(conditions);
 
     return this;
   }
@@ -175,7 +247,7 @@ export class Model {
    * @param type type of order.
    */
   public orderBy(column: string, type?: string): this {
-    Database.orderBy(column, type);
+    this._database.orderBy(column, type);
 
     return this;
   }
@@ -186,7 +258,7 @@ export class Model {
    * @param number maximum number of results.
    */
   public limit(number: number): this {
-    Database.limit(number);
+    this._database.limit(number);
 
     return this;
   }
@@ -197,7 +269,7 @@ export class Model {
    * @param column specified column.
    */
   public min(column: string, alias?: string): this {
-    Database.min(column, alias);
+    this._database.min(column, alias);
 
     return this;
   }
@@ -208,7 +280,7 @@ export class Model {
    * @param column specified column.
    */
   public max(column: string, alias?: string): this {
-    Database.max(column, alias);
+    this._database.max(column, alias);
 
     return this;
   }
@@ -219,7 +291,7 @@ export class Model {
    * @param column specified column.
    */
   public sum(column: string, alias?: string): this {
-    Database.sum(column, alias);
+    this._database.sum(column, alias);
 
     return this;
   }
@@ -230,7 +302,7 @@ export class Model {
    * @param column specified column.
    */
   public avg(column: string, alias?: string): this {
-    Database.avg(column, alias);
+    this._database.avg(column, alias);
 
     return this;
   }
@@ -241,7 +313,7 @@ export class Model {
    * @param column specified column.
    */
   public count(column: string, alias?: string): this {
-    Database.count(column, alias);
+    this._database.count(column, alias);
 
     return this;
   }
@@ -278,7 +350,7 @@ export class Model {
   private filter(value: any): any {
     const filterdValue: any = {};
 
-    this.fillable.forEach((f) => {
+    this._fillable.forEach((f) => {
       if (f in value) {
         filterdValue[f] = value[f];
       }

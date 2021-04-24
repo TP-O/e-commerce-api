@@ -1,9 +1,9 @@
 import { Model } from '@modules/database/core/orm/model';
-import { Relation } from '@modules/database/core/orm/relation';
+import { Relationship } from '@modules/database/core/orm/relation/relationship';
 
 export interface RelationItem {
   model: any;
-  relationship: Relation | undefined;
+  relationship: Relationship | undefined;
 }
 
 export interface Pivot {
@@ -14,28 +14,28 @@ export interface Pivot {
   ownerKey: string;
 }
 
-export interface Relationship {
+export interface Relationships {
   name: string;
   relatedModel: Model;
 }
 
-export interface HasOneRelationship extends Relationship {
+export interface HasOneRelationship extends Relationships {
   foreignKey: string;
   localKey?: string;
 }
 
-export interface BelongsToRelationship extends Relationship {
+export interface BelongsToRelationship extends Relationships {
   foreignKey: string;
   ownerKey?: string;
 }
 
-export interface HasManyRelationship extends Relationship {
+export interface HasManyRelationship extends Relationships {
   foreignKey: string;
   ownerKey?: string;
   pivot?: Pivot;
 }
 
-export interface BelongsToManyRelationship extends Relationship {
+export interface BelongsToManyRelationship extends Relationships {
   assetKey?: string;
   ownerKey?: string;
   pivot: Pivot;

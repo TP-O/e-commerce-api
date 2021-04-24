@@ -1,10 +1,12 @@
+import 'reflect-metadata';
 import { argv, exit } from 'process';
-import { MakeSeeder } from '@modules/database/core/console/seeder/make.seeder';
-import { SeedSeeder } from '@modules/database/core/console/seeder/seed.seeder';
-import { MakeMigration } from '@modules/database/core/console/migration/make.migration';
-import { MigrateMigration } from '@modules/database/core/console/migration/migrate.migration';
-import { RefreshMigration } from '@modules/database/core/console/migration/refresh.migration';
-import { RollbackMigration } from '@modules/database/core/console/migration/rollback.migration';
+import { MakeSeeder } from '@modules/database/core/console/seeder/make-seeder';
+import { SeedSeeder } from '@modules/database/core/console/seeder/seed-seeder';
+import { MakeMigration } from '@modules/database/core/console/migration/make-migration';
+import { MigrateMigration } from '@modules/database/core/console/migration/migrate-migration';
+import { RefreshMigration } from '@modules/database/core/console/migration/refresh-migration';
+import { RollbackMigration } from '@modules/database/core/console/migration/rollback-migration';
+import { container } from 'tsyringe';
 
 class Handler {
   /**
@@ -65,7 +67,7 @@ class Handler {
    * Handle seed commad.
    */
   public async seed() {
-    return new SeedSeeder().execute();
+    return container.resolve(SeedSeeder).execute();
   }
 
   /**
@@ -76,13 +78,13 @@ class Handler {
   public async migrate(option = 'migrate') {
     switch (option) {
       case 'migrate':
-        return new MigrateMigration().execute();
+        return container.resolve(MigrateMigration).execute();
 
       case 'refresh':
-        return new RefreshMigration().execute();
+        return container.resolve(RefreshMigration).execute();
 
       case 'rollback':
-        return new RollbackMigration().execute();
+        return container.resolve(RollbackMigration).execute();
 
       default:
         console.log('Command does not exist');

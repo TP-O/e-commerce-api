@@ -3,18 +3,16 @@ import { RequireAccessToken } from '@app/middleware';
 import { createRequest, createResponse } from 'node-mocks-http';
 import { NextFunction } from 'express';
 
-jest.mock('@modules/auth', () => {
+jest.mock('@modules/helper', () => {
   return {
-    Auth: {
-      verify: jest
-        .fn()
-        .mockReturnValueOnce({
-          success: false,
-        })
-        .mockReturnValue({
-          success: true,
-        }),
-    },
+    verify: jest
+      .fn()
+      .mockReturnValueOnce({
+        success: false,
+      })
+      .mockReturnValue({
+        success: true,
+      }),
   };
 });
 

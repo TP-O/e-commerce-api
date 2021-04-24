@@ -1,9 +1,9 @@
 import bcrypt from 'bcryptjs';
 import randomstring from 'randomstring';
-import mailer from '@modules/mailer';
 import { Role } from '@app/models/auth/role';
 import { Model } from '@modules/database/core/orm/model';
 import { Activation } from '@app/models/auth/activation';
+import { sender } from '@modules/helper';
 
 export abstract class RegisterService {
   /**
@@ -86,7 +86,7 @@ export abstract class RegisterService {
    * @param content email's content.
    */
   public sendEmail(email: string, content: string) {
-    mailer.send({
+    sender({
       to: email,
       subject: 'Click this link to activate your account',
       text: content,

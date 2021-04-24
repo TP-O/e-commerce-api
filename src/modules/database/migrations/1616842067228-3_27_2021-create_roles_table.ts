@@ -1,8 +1,10 @@
 import { basename } from 'path';
-import { Database } from '@modules/database/core/database';
 import { Migration } from '@modules/database/core/migration';
 import { DataType } from '@modules/database/core/builder/types/data-type';
+import { autoInjectable } from 'tsyringe';
+import { Database } from '@modules/database/core/database';
 
+@autoInjectable()
 export class CreateRolesTable extends Migration {
   /**
    * Name of the table will be created.
@@ -14,11 +16,19 @@ export class CreateRolesTable extends Migration {
    */
   protected migrationName = basename(__filename).split('.')[0];
 
+  /**
+   * Constructor.
+   *
+   * @param database database instance.
+   */
+  public constructor(protected database: Database) {
+    super(database);
+  }
+
   protected async up() {
-    await Database.create(
-      'roles',
-      // Columns
-      {
+    await this.database.create({
+      table: 'roles',
+      columns: {
         id: {
           type: DataType.bigInt(),
           unsigned: true,
@@ -44,18 +54,13 @@ export class CreateRolesTable extends Migration {
           onUpdate: 'current_timestamp',
         },
       },
-      // Primary keys
-      {
+      primaryKey: {
         columns: ['id'],
       },
-      // Foreign keys
-      [],
-    );
+    });
   }
 
   protected async down() {
-    await Database.dropIfExists('roles');
+    await this.database.dropIfExists('roles');
   }
 }
-
-export default new CreateRolesTable();

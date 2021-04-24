@@ -1,7 +1,9 @@
 import bcrypt from 'bcryptjs';
-import { JWT } from '@modules/auth/jwt';
+import { JsonWebToken } from '@modules/auth/jwt';
 import { authConfig } from '@configs/auth';
+import { singleton } from 'tsyringe';
 
+@singleton()
 export class Guard {
   /**
    * Guard's name.
@@ -12,6 +14,13 @@ export class Guard {
    * Guard configuration.
    */
   private _config = authConfig.guard.default;
+
+  /**
+   * Constructor.
+   *
+   * @param jwt JsonWebToken.
+   */
+  public constructor(public jwt: JsonWebToken) {}
 
   /**
    *
@@ -33,7 +42,7 @@ export class Guard {
    * @param refreshToken refresh token.
    */
   public async refresh(refreshToken: string) {
-    return JWT.refresh(refreshToken);
+    return this.jwt.refresh(refreshToken);
   }
 
   /**
@@ -51,7 +60,7 @@ export class Guard {
       };
     }
 
-    const { accessToken, refreshToken } = JWT.create({
+    const { accessToken, refreshToken } = this.jwt.create({
       sub: user.id,
       guard: this._name,
     });

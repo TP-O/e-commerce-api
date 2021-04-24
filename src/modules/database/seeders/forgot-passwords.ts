@@ -3,11 +3,11 @@ import { autoInjectable } from 'tsyringe';
 import { Database } from '@modules/database/core/database';
 
 @autoInjectable()
-export class XXXSeeder extends Seeder {
+export class ForgotPasswordsSeeder extends Seeder {
   /**
    * Name of seeder.
    */
-  protected seederName = 'xxx';
+  protected seederName = 'forgot_passwords';
 
   /**
    * Constructor.
@@ -22,11 +22,15 @@ export class XXXSeeder extends Seeder {
    * Insert data to table.
    */
   protected async run() {
-    await this.database.table('xxx').insert(
+    await this.database.table('forgot_passwords').insert(
       // Column names
-      [],
+      ['account_id', 'code', 'type'],
       // Inserted data
-      [],
+      [
+        ['1', 'fjMHkkmmwHxMvFi6WPRgSeBpP', 'admin'],
+        ['1', 'wrErCnlr6gwS0jp31BXMeGnqE', 'user'],
+        ['1', 'DJiFLnXzIk5WNHvk3tXhF5D6n', 'seller'],
+      ],
     );
   }
 }

@@ -2,12 +2,30 @@ import { readdir } from 'fs/promises';
 import { Command } from '@modules/database/core/console/command';
 import { Migration } from '@modules/database/core/migration';
 import { Connection } from '@modules/database/core/connect/connection';
-import { Database } from '@modules/database/core/database';
+import { database } from '@modules/helper';
+import { autoInjectable, container } from 'tsyringe';
+import { constructor } from 'tsyringe/dist/typings/types';
 
+@autoInjectable()
 export class MigrateMigration extends Command {
-  protected _migrations: Migration[] = [];
+  /**
+   * List of migration classes.
+   */
+  protected _migrations: constructor<Migration>[] = [];
 
+  /**
+   * Path to migraion directory.
+   */
   private _migrationDir = `${__dirname}/../../../migrations`;
+
+  /**
+   * Constructor.
+   *
+   * @param _connection database connection.
+   */
+  public constructor(private _connection: Connection) {
+    super();
+  }
 
   /**
    * Prepare data.
@@ -16,9 +34,9 @@ export class MigrateMigration extends Command {
     let migrated: any;
 
     try {
-      const { data } = await Database.table('migrations')
-        .select('*')
-        .execute(true);
+      const { data } = await database((q) => {
+        return q.table('migrations').select('*').execute(true);
+      });
       migrated = data;
     } catch {
       migrated = [];
@@ -36,9 +54,8 @@ export class MigrateMigration extends Command {
       });
 
       if (!existed && file !== '.gitkeep') {
-        this._migrations.push(
-          require(`@modules/database/migrations/${file}`).default,
-        );
+        const m = require(`@modules/database/migrations/${file}`);
+        this._migrations.push(m[Object.keys(m)[0]]);
       }
     });
 
@@ -52,15 +69,17 @@ export class MigrateMigration extends Command {
    */
   public async execute(): Promise<void> {
     try {
-      await Connection.establish();
+      await this._connection.establish();
 
-      if (await Connection.isConnected()) {
+      if (await this._connection.isConnected()) {
         await this.prepare();
 
         let job = Promise.resolve();
 
         Object.values(this._migrations).forEach((migration) => {
-          job = job.then(async () => await migration.create());
+          job = job.then(
+            async () => await container.resolve(migration).create(),
+          );
         });
 
         return job;

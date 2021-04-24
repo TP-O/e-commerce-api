@@ -1,7 +1,8 @@
 import { Model } from '@modules/database/core/orm/model';
+import { container } from 'tsyringe';
 import { Database } from '@modules/database/core/database';
 
-export abstract class Relation {
+export abstract class Relationship {
   protected relation = '';
 
   /**
@@ -21,11 +22,13 @@ export abstract class Relation {
    * @param relation name of relationship.
    */
   protected selectColumns(): void {
-    Database.addSelection(
-      ...this.relatedModel.columns.map(
-        (c) => `${this.relatedModel.table}.${c}:${this.relation}-${c}`,
-      ),
-    );
+    container
+      .resolve(Database)
+      .addSelection(
+        ...this.relatedModel.columns.map(
+          (c) => `${this.relatedModel.table}.${c}:${this.relation}-${c}`,
+        ),
+      );
   }
 
   /**

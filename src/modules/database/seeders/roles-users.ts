@@ -3,11 +3,11 @@ import { autoInjectable } from 'tsyringe';
 import { Database } from '@modules/database/core/database';
 
 @autoInjectable()
-export class XXXSeeder extends Seeder {
+export class RolesUsersSeeder extends Seeder {
   /**
    * Name of seeder.
    */
-  protected seederName = 'xxx';
+  protected seederName = 'roles_users';
 
   /**
    * Constructor.
@@ -22,11 +22,15 @@ export class XXXSeeder extends Seeder {
    * Insert data to table.
    */
   protected async run() {
-    await this.database.table('xxx').insert(
+    await this.database.table('roles_users').insert(
       // Column names
-      [],
+      ['user_id', 'role_id'],
       // Inserted data
-      [],
+      [
+        ['1', '3'],
+        ['2', '3'],
+        ['3', '4'],
+      ],
     );
   }
 }

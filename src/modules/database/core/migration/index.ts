@@ -1,5 +1,5 @@
-import { Database } from '@modules/database/core/database';
 import { DataType } from '@modules/database/core/builder/types/data-type';
+import { Database } from '@modules/database/core/database';
 
 export abstract class Migration {
   /**
@@ -16,6 +16,13 @@ export abstract class Migration {
    * Number of migrating times.
    */
   private static currentBatch = 0;
+
+  /**
+   * Constructor.
+   *
+   * @param database database instance.
+   */
+  public constructor(protected database: Database) {}
 
   /**
    * Create the table.
@@ -54,9 +61,9 @@ export abstract class Migration {
    * Create table `migrations` to manage migrations.
    */
   private async createMigrationsTable(): Promise<void> {
-    await Database.createIfNotExists(
-      'migrations',
-      {
+    await this.database.createIfNotExists({
+      table: 'migrations',
+      columns: {
         id: {
           type: DataType.bigInt(),
           unsigned: true,
@@ -78,10 +85,10 @@ export abstract class Migration {
           default: 'current_timestamp',
         },
       },
-      {
+      primaryKey: {
         columns: ['id'],
       },
-    );
+    });
   }
 
   /**
@@ -89,17 +96,20 @@ export abstract class Migration {
    */
   private async insertMigration(): Promise<void> {
     await this.getCurrentBatch();
-    await Database.table('migrations').insert(
-      ['migration', 'batch'],
-      [[this.migrationName, `${Migration.currentBatch}`]],
-    );
+    await this.database
+      .table('migrations')
+      .insert(
+        ['migration', 'batch'],
+        [[this.migrationName, `${Migration.currentBatch}`]],
+      );
   }
 
   /**
    * Delete dropped migration to table migrations.
    */
   private async deleteMigration(): Promise<void> {
-    await Database.table('migrations')
+    await this.database
+      .table('migrations')
       .where([['migration', '=', `v:${this.migrationName}`]])
       .delete();
   }
@@ -109,7 +119,8 @@ export abstract class Migration {
    */
   private async getCurrentBatch() {
     if (Migration.currentBatch === 0) {
-      const { data } = await Database.table('migrations')
+      const { data } = await this.database
+        .table('migrations')
         .select('batch')
         .max('batch')
         .execute(true);

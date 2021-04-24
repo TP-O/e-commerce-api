@@ -1,10 +1,11 @@
 import { app } from '../index';
 import { nodeConfig } from '@configs/node';
-import { DBConnection } from '@modules/database/core';
+import { container } from 'tsyringe';
+import { Connection } from '@modules/database/core/connect/connection';
 
 // Activate server
 app.listen(nodeConfig.port, async () => {
-  await DBConnection.establish();
+  await container.resolve(Connection).establish();
 
   console.log(`
     \t------------------------------------
