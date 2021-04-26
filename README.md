@@ -7,6 +7,7 @@
 ```bash
 # yarn
 $ yarn install
+
 # npm
 $ npm install
 ```
@@ -20,11 +21,14 @@ $ cp .env.example .env
 
 ```bash
 # yarn
+$ yarn db migrate && yarn db seed
 $ yarn dev
 
 # npm
+$ npm run db migrate && npm run db seed
 $ npm run dev
 
 # docker
 $ yarn docker:dev up --build
+$ yarn docker:dev up exec app yarn db migrate && yarn db seed
 ```
