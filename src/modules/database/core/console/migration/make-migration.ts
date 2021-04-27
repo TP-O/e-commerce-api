@@ -31,7 +31,7 @@ export class MakeMigration extends Command {
 
     this._fileName = `${new Date().getTime()}-${new Date()
       .toLocaleDateString()
-      .replace(/\//g, '_')}-${_name}_table`;
+      .replace(/\//g, '_')}-${_name}`;
   }
 
   /**

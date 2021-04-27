@@ -7,7 +7,7 @@ import { container, injectable } from 'tsyringe';
 export class SeedSeeder extends Command {
   private _seeder: Seeder | undefined;
 
-  private _seederFile = 'database.seeder';
+  private _seederFile = 'database-seeder';
 
   /**
    * Constructor.
