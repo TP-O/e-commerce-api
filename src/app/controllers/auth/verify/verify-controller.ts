@@ -65,7 +65,7 @@ export abstract class VerifyController {
 
     const activation = await this.findActivation(req.params.code);
 
-    await this.activateAccount(activation.account_id);
+    await this.activateAccount(activation.accountId);
 
     await this.deleteActivation(req.params.code);
 

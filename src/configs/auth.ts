@@ -1,12 +1,12 @@
 import { Admin } from '@app/models/auth/admin';
 import { Seller } from '@app/models/auth/seller';
-import { User } from '@app/models/auth/user';
+import { Customer } from '@app/models/auth/customer';
 import { env } from 'process';
 
 export const authConfig = {
   guard: {
     default: {
-      model: User,
+      model: Customer,
     },
     admin: {
       model: Admin,

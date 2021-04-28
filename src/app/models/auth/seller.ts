@@ -1,36 +1,34 @@
 import { model } from '@modules/helper';
-import { Role } from '@app/models/auth/role';
+import { SellerRole } from '@app/models/auth/seller-role';
 
 export const Seller = model({
   table: 'sellers',
   // prettier-ignore
   columns: [
     'id',
-    'name',
+    'storeName',
     'email',
     'password',
     'active',
-    'created_at',
-    'updated_at',
+    'description',
+    'createdAt',
+    'updatedAt',
   ],
   // prettier-ignore
   fillable: [
-    'name',
+    'roleId',
+    'storeName',
     'email',
     'password',
     'active',
+    'description',
   ],
   relationships: {
-    hasMany: [
+    belongsTo: [
       {
-        name: 'roles',
-        foreignKey: 'id',
-        relatedModel: Role,
-        pivot: {
-          table: 'roles_sellers',
-          assetKey: 'role_id',
-          ownerKey: 'seller_id',
-        },
+        name: 'role',
+        foreignKey: 'roleId',
+        relatedModel: SellerRole,
       },
     ],
   },

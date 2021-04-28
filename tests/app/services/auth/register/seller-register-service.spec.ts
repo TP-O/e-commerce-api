@@ -26,27 +26,6 @@ jest.mock('@app/models/auth/activation', () => {
   };
 });
 
-jest.mock('@app/models/auth/role', () => {
-  return {
-    Role: {
-      select: jest.fn().mockReturnThis(),
-      where: jest.fn().mockReturnThis(),
-      get: jest
-        .fn()
-        .mockReturnValueOnce({
-          data: undefined,
-        })
-        .mockReturnValueOnce({
-          data: {
-            first: () => {
-              return { id: 1 };
-            },
-          },
-        }),
-    },
-  };
-});
-
 jest.mock('@app/models/auth/seller', () => {
   return {
     Seller: {
@@ -67,18 +46,28 @@ jest.mock('@app/models/auth/seller', () => {
       create: jest
         .fn()
         .mockReturnValueOnce({ success: false })
-        .mockReturnValue({ success: true }),
+        .mockReturnValue({ success: true, id: 1 }),
     },
   };
 });
 
-jest.mock('@app/models/auth/role-seller', () => {
+jest.mock('@app/models/auth/seller-role', () => {
   return {
-    RoleSeller: {
-      create: jest
+    SellerRole: {
+      select: jest.fn().mockReturnThis(),
+      where: jest.fn().mockReturnThis(),
+      get: jest
         .fn()
-        .mockReturnValueOnce({ success: false })
-        .mockReturnValue({ success: true }),
+        .mockReturnValueOnce({
+          data: undefined,
+        })
+        .mockReturnValueOnce({
+          data: {
+            first: () => {
+              return { id: 1 };
+            },
+          },
+        }),
     },
   };
 });
@@ -94,7 +83,7 @@ describe('Test SellerRegisterService', () => {
         password: '00001',
       });
 
-      expect(success).toBeFalsy();
+      expect(success).toEqual(0);
     });
 
     it('Should return true', async () => {
@@ -104,7 +93,7 @@ describe('Test SellerRegisterService', () => {
         password: '0000100',
       });
 
-      expect(success).toBeTruthy();
+      expect(success).toBeGreaterThan(0);
     });
   });
 
@@ -147,20 +136,6 @@ describe('Test SellerRegisterService', () => {
       const code = await service.createActivationCode(1);
 
       expect(code.length).toBeGreaterThan(0);
-    });
-  });
-
-  describe('Assign a role to the account', () => {
-    it('Should return false', async () => {
-      const success = await service.assign(1, 1);
-
-      expect(success).toBeFalsy();
-    });
-
-    it('Should return true', async () => {
-      const success = await service.assign(1, 1);
-
-      expect(success).toBeTruthy();
     });
   });
 });

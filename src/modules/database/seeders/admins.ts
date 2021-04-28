@@ -25,12 +25,24 @@ export class AdminsSeeder extends Seeder {
   protected async run() {
     await this.database.table('admins').insert(
       // Column names
-      ['name', 'email', 'password'],
+      ['roleId', 'firstName', 'lastName', 'email', 'password'],
       // Inserted data
       [
-        ['Admin 01', 'admin01@gmail.com', bcrypt.hashSync('00001', 10)],
-        ['Moderator 01', 'moderator01@gmail.com', bcrypt.hashSync('00001', 10)],
-        ['Moderator 02', 'moderator02@gmail.com', bcrypt.hashSync('00002', 10)],
+        ['1', 'Admin', '01', 'admin01@gmail.com', bcrypt.hashSync('00001', 10)],
+        [
+          '2',
+          'Moderator',
+          '01',
+          'moderator01@gmail.com',
+          bcrypt.hashSync('00001', 10),
+        ],
+        [
+          '3',
+          'Moderator',
+          '02',
+          'moderator02@gmail.com',
+          bcrypt.hashSync('00002', 10),
+        ],
       ],
     );
   }

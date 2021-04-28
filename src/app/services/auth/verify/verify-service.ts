@@ -5,10 +5,10 @@ export abstract class VerifyService {
   /**
    * Constructor.
    *
-   * @param model related model.
+   * @param account account model.
    * @param type activation type.
    */
-  public constructor(protected model: Model, protected type: string) {}
+  public constructor(protected account: Model, protected type: string) {}
 
   /**
    * Find an activation code.
@@ -19,7 +19,7 @@ export abstract class VerifyService {
     const { data } = await Activation.select('*')
       .where([
         ['code', '=', `v:${code}`],
-        ['type', '=', `v:${this.type}`],
+        ['accountType', '=', `v:${this.type}`],
       ])
       .get();
 
@@ -34,7 +34,7 @@ export abstract class VerifyService {
   public async deleteActivation(code: string) {
     const { success } = await Activation.where([
       ['code', '=', `v:${code}`],
-      ['type', '=', `v:${this.type}`],
+      ['accountType', '=', `v:${this.type}`],
     ]).delete();
 
     return success ?? false;
@@ -46,7 +46,7 @@ export abstract class VerifyService {
    * @param accountId account's ID.
    */
   public async activateAccount(accountId: number) {
-    const { data } = await this.model
+    const { data } = await this.account
       .select('*')
       .where([['id', '=', `v:${accountId}`]])
       .get();

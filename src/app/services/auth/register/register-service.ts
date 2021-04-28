@@ -1,6 +1,4 @@
-import bcrypt from 'bcryptjs';
 import randomstring from 'randomstring';
-import { Role } from '@app/models/auth/role';
 import { Model } from '@modules/database/core/orm/model';
 import { Activation } from '@app/models/auth/activation';
 import { sender } from '@modules/helper';
@@ -9,9 +7,15 @@ export abstract class RegisterService {
   /**
    * Constructor.
    *
-   * @param model related model.
+   * @param account account model.
+   * @param role role model.
+   * @param type account type.
    */
-  public constructor(protected model: Model, protected type: string) {}
+  public constructor(
+    protected account: Model,
+    protected role: Model,
+    protected type: string,
+  ) {}
 
   /**
    * Register an account.
@@ -19,15 +23,9 @@ export abstract class RegisterService {
    * @param value account's information.
    */
   public async registerAccount(value: any) {
-    const { success } = await this.model.create([
-      {
-        name: value.name,
-        email: value.email,
-        password: bcrypt.hashSync(value.password, 10),
-      },
-    ]);
+    const { success, id } = await this.account.create([value]);
 
-    return success ?? false;
+    return success ? id : 0;
   }
 
   /**
@@ -36,11 +34,9 @@ export abstract class RegisterService {
    * @param name role's name.
    */
   public async findRoleByName(name: string) {
-    const { data } = await Role.select('id')
-      .where([
-        ['name', '=', `v:${name}`],
-        ['type', '=', `v:${this.type}`],
-      ])
+    const { data } = await this.role
+      .select('id')
+      .where([['name', '=', `v:${name}`]])
       .get();
 
     return data?.first();
@@ -52,7 +48,7 @@ export abstract class RegisterService {
    * @param email account's email.
    */
   public async findAccountByEmail(email: string) {
-    const { data } = await this.model
+    const { data } = await this.account
       .select('id')
       .where([['email', '=', `v:${email}`]])
       .get();
@@ -68,11 +64,12 @@ export abstract class RegisterService {
    */
   public async createActivationCode(accountId: number) {
     const code = randomstring.generate({ length: 25 });
+
     const { success } = await Activation.create([
       {
-        account_id: accountId,
+        accountId: accountId,
         code: code,
-        type: this.type,
+        accountType: this.type,
       },
     ]);
 
@@ -92,12 +89,4 @@ export abstract class RegisterService {
       text: content,
     });
   }
-
-  /**
-   * Assign a role to the account.
-   *
-   * @param accountId ID's account.
-   * @param roleId ID's role.
-   */
-  public abstract assign(accountId: number, roleId: number): Promise<boolean>;
 }

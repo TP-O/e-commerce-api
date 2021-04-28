@@ -25,11 +25,11 @@ export class SellersSeeder extends Seeder {
   protected async run() {
     await this.database.table('sellers').insert(
       // Column names
-      ['name', 'email', 'password'],
+      ['roleId', 'storeName', 'email', 'password'],
       // Inserted data
       [
-        ['Seller 01', 'seller01@gmail.com', bcrypt.hashSync('00001', 10)],
-        ['Seller 02', 'seller02@gmail.com', bcrypt.hashSync('00002', 10)],
+        ['1', 'Store A', 'seller01@gmail.com', bcrypt.hashSync('00001', 10)],
+        ['2', 'Store B', 'seller02@gmail.com', bcrypt.hashSync('00002', 10)],
       ],
     );
   }

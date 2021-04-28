@@ -19,7 +19,14 @@ export class AdminRegisterValidator extends Validator {
    */
   protected makeRules() {
     this.rules = Joi.object().keys({
-      name: Joi.string().required().messages({
+      firstName: Joi.string().required().messages({
+        'string.base': 'Name must be a string',
+        'any.required': 'Name is required',
+      }),
+      middleName: Joi.string().messages({
+        'string.base': 'Name must be a string',
+      }),
+      lastName: Joi.string().required().messages({
         'string.base': 'Name must be a string',
         'any.required': 'Name is required',
       }),

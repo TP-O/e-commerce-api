@@ -5,10 +5,7 @@ import { createRequest, createResponse } from 'node-mocks-http';
 describe('Test AdminRegisterController', () => {
   const Service = jest.fn().mockImplementation(() => {
     return {
-      registerAccount: jest
-        .fn()
-        .mockReturnValueOnce(false)
-        .mockReturnValue(true),
+      registerAccount: jest.fn().mockReturnValueOnce(0).mockReturnValue(1),
       findRoleByName: jest
         .fn()
         .mockReturnValueOnce(undefined)
@@ -52,14 +49,14 @@ describe('Test AdminRegisterController', () => {
       expect(err).toHaveProperty('status');
     });
 
-    it('Should return true', async () => {
+    it('Should return account id', async () => {
       const success = await controller.create({
         name: 'name',
         email: 'email@gmail.com',
         password: 'password',
       });
 
-      expect(success).toBeTruthy();
+      expect(success).toBeGreaterThan(0);
     });
   });
 
@@ -120,26 +117,6 @@ describe('Test AdminRegisterController', () => {
       const code = await controller.createActivationCode(1);
 
       expect(code.length).toBeGreaterThan(0);
-    });
-  });
-
-  describe('Assign permissions for account.', () => {
-    it('Should throw the error', async () => {
-      let err;
-
-      try {
-        await controller.assign('email@gmail.com', 'role');
-      } catch (e) {
-        err = e;
-      }
-
-      expect(err).toHaveProperty('status');
-    });
-
-    it('Should return the activation code', async () => {
-      const accountID = await controller.assign('email@gmail.com', 'role');
-
-      expect(accountID).not.toBeNaN();
     });
   });
 
