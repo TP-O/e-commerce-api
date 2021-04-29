@@ -147,7 +147,7 @@ export abstract class ForgotPasswordController {
     const input = await this.resetPasswordValidator.validate(req.body);
 
     // Update account's password
-    await this.changeAccountPassword(forgotPassword.account_id, input.password);
+    await this.changeAccountPassword(forgotPassword.accountId, input.password);
 
     // Delete forgot password code
     await this.deleteForgotPassword(req.params.code);

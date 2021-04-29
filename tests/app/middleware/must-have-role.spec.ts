@@ -15,7 +15,7 @@ describe('Test MustHaveRole', () => {
             data: {
               first: () => {
                 return {
-                  roles: [{ name: 'another role' }],
+                  role: { name: 'another role' },
                 };
               },
             },
@@ -43,7 +43,7 @@ describe('Test MustHaveRole', () => {
             data: {
               first: () => {
                 return {
-                  roles: [{ name: 'required role' }],
+                  role: { name: 'required role' },
                 };
               },
             },

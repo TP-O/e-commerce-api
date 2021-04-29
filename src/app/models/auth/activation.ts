@@ -5,17 +5,17 @@ export const Activation = model({
   // prettier-ignore
   columns: [
     'id',
-    'account_id',
+    'accountId',
     'code',
-    'type',
-    'created_at',
-    'updated_at',
+    'accountType',
+    'createdAt',
+    'updatedAt',
   ],
   // prettier-ignore
   fillable: [
-    'account_id',
+    'accountId',
     'code',
-    'type',
+    'accountType',
   ],
   relationships: {},
 });

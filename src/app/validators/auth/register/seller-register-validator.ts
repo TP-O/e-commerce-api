@@ -19,7 +19,7 @@ export class SellerRegisterValidator extends Validator {
    */
   protected makeRules() {
     this.rules = Joi.object().keys({
-      name: Joi.string().required().messages({
+      storeName: Joi.string().required().messages({
         'string.base': 'Name must be a string',
         'any.required': 'Name is required',
       }),

@@ -26,11 +26,12 @@ export class SellerRegisterController extends RegisterController {
     // Validate seller's information
     const seller = await this.registerValidator.validate(req.body);
 
-    // Create seller account
-    await this.create(seller);
-
     // Assign role to seller account
-    const id = await this.assign(seller.email, seller.role);
+    const role = await this.registerService.findRoleByName(seller.role);
+    seller.roleId = role.id;
+
+    // Create seller account
+    const id = await this.create(seller);
 
     // Create activation code
     const code = await this.createActivationCode(id);

@@ -1,36 +1,36 @@
 import { model } from '@modules/helper';
-import { Role } from '@app/models/auth/role';
+import { AdminRole } from '@app/models/auth/admin-role';
 
 export const Admin = model({
   table: 'admins',
   // prettier-ignore
   columns: [
     'id',
-    'name',
+    'firstName',
+    'middleName',
+    'lastName',
     'email',
     'password',
     'active',
-    'created_at',
-    'updated_at',
+    'createdAt',
+    'updatedAt',
   ],
   // prettier-ignore
   fillable: [
-    'name',
+    'roleId',
+    'firstName',
+    'middleName',
+    'lastName',
     'email',
     'password',
     'active',
   ],
   relationships: {
-    hasMany: [
+    belongsTo: [
       {
-        name: 'roles',
-        foreignKey: 'id',
-        relatedModel: Role,
-        pivot: {
-          table: 'admins_roles',
-          assetKey: 'role_id',
-          ownerKey: 'admin_id',
-        },
+        name: 'role',
+        foreignKey: 'roleId',
+        relatedModel: AdminRole,
       },
     ],
   },

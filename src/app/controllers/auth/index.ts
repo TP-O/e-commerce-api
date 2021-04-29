@@ -1,12 +1,12 @@
 export { AdminLoginController } from '@app/controllers/auth/login/admin-login-controller';
 export { SellerLoginController } from '@app/controllers/auth/login/seller-login-controller';
-export { UserLoginController } from '@app/controllers/auth/login/user-login-controller';
+export { CustomerLoginController } from '@app/controllers/auth/login/customer-login-controller';
 export { AdminRegisterController } from '@app/controllers/auth/register/admin-register-controller';
 export { SellerRegisterController } from '@app/controllers/auth/register/seller-register-controller';
-export { UserRegisterController } from '@app/controllers/auth/register/user-register-controller';
+export { CustomerRegisterController } from '@app/controllers/auth/register/customer-register-controller';
 export { AdminVerifyController } from '@app/controllers/auth/verify/admin-verify-controller';
 export { SellerVerifyController } from '@app/controllers/auth/verify/seller-verify-controller';
-export { UserVerifyController } from '@app/controllers/auth/verify/user-verify-controller';
+export { CustomerVerifyController } from '@app/controllers/auth/verify/customer-verify-controller';
 export { AdminForgotPasswordController } from '@app/controllers/auth/password/admin-forgot-password-controller';
 export { SellerForgotPasswordController } from '@app/controllers/auth/password/seller-forgot-password-controller';
-export { UserForgotPasswordController } from '@app/controllers/auth/password/user-forgot-password-controller';
+export { CustomerForgotPasswordController } from '@app/controllers/auth/password/customer-forgot-password-controller';

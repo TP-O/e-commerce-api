@@ -125,7 +125,7 @@ export class Model {
     );
 
     return status && status.insertId !== 0 && status.affectedRows === 1
-      ? { success: true }
+      ? { success: true, id: status.insertId }
       : { error: error || 'Unknown error' };
   }
 
@@ -351,7 +351,7 @@ export class Model {
     const filterdValue: any = {};
 
     this._fillable.forEach((f) => {
-      if (f in value) {
+      if (f in value && value[f] !== undefined) {
         filterdValue[f] = value[f];
       }
     });

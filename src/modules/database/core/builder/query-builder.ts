@@ -67,6 +67,9 @@ export class QueryBuilder implements Builder {
       if (table.columns[name].required) {
         result.required();
       }
+      if (table.columns[name].unique) {
+        result.makeUnique();
+      }
       if (table.columns[name].onDelete) {
         result.onDelete(table.columns[name].onDelete);
       }

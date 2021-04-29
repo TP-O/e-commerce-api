@@ -35,11 +35,11 @@ export class XXX extends Migration {
           increment: true,
           required: true,
         },
-        created_at: {
+        createdAt: {
           type: DataType.timestamp(),
           default: 'current_timestamp',
         },
-        updated_at: {
+        updatedAt: {
           type: DataType.timestamp(),
           default: 'current_timestamp',
           onUpdate: 'current_timestamp',

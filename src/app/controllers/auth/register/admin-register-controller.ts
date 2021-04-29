@@ -26,11 +26,12 @@ export class AdminRegisterController extends RegisterController {
     // Validate admin's information
     const admin = await this.registerValidator.validate(req.body);
 
-    // Create admin account
-    await this.create(admin);
-
     // Assign role to admin account
-    const id = await this.assign(admin.email, admin.role);
+    const role = await this.registerService.findRoleByName(admin.role);
+    admin.roleId = role.id;
+
+    // Create admin account
+    const id = await this.create(admin);
 
     // Create activation code
     const code = await this.createActivationCode(id);

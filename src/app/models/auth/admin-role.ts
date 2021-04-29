@@ -1,19 +1,17 @@
 import { model } from '@modules/helper';
 
 export const AdminRole = model({
-  table: 'admins_roles',
+  table: 'admin_roles',
   // prettier-ignore
   columns: [
     'id',
-    'admin_id',
-    'role_id',
-    'created_at',
-    'updated_at',
+    'name',
+    'createdAt',
+    'updatedAt',
   ],
   // prettier-ignore
   fillable: [
-    'admin_id',
-    'role_id',
+    'name',
   ],
   relationships: {},
 });

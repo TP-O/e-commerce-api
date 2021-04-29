@@ -31,8 +31,8 @@ export function useAuthRoutes(router: LRouter) {
             action: container.resolve(Auth.SellerLoginController).login,
           });
           router.post({
-            path: '/user',
-            action: container.resolve(Auth.UserLoginController).login,
+            path: '/customer',
+            action: container.resolve(Auth.CustomerLoginController).login,
           });
         },
       );
@@ -55,8 +55,8 @@ export function useAuthRoutes(router: LRouter) {
             action: container.resolve(Auth.SellerLoginController).logout,
           });
           router.post({
-            path: '/user',
-            action: container.resolve(Auth.UserLoginController).logout,
+            path: '/customer',
+            action: container.resolve(Auth.CustomerLoginController).logout,
           });
         },
       );
@@ -82,8 +82,8 @@ export function useAuthRoutes(router: LRouter) {
             action: container.resolve(Auth.SellerLoginController).refresh,
           });
           router.post({
-            path: '/user',
-            action: container.resolve(Auth.UserLoginController).refresh,
+            path: '/customer',
+            action: container.resolve(Auth.CustomerLoginController).refresh,
           });
         },
       );
@@ -112,8 +112,8 @@ export function useAuthRoutes(router: LRouter) {
             action: container.resolve(Auth.SellerRegisterController).register,
           });
           router.post({
-            path: '/user',
-            action: container.resolve(Auth.UserRegisterController).register,
+            path: '/customer',
+            action: container.resolve(Auth.CustomerRegisterController).register,
           });
         },
       );
@@ -141,8 +141,9 @@ export function useAuthRoutes(router: LRouter) {
               .resendEmail,
           });
           router.post({
-            path: '/user',
-            action: container.resolve(Auth.UserRegisterController).resendEmail,
+            path: '/customer',
+            action: container.resolve(Auth.CustomerRegisterController)
+              .resendEmail,
           });
         },
       );
@@ -165,8 +166,8 @@ export function useAuthRoutes(router: LRouter) {
             action: container.resolve(Auth.SellerVerifyController).verify,
           });
           router.post({
-            path: '/user/:code',
-            action: container.resolve(Auth.UserVerifyController).verify,
+            path: '/customer/:code',
+            action: container.resolve(Auth.CustomerVerifyController).verify,
           });
         },
       );
@@ -190,8 +191,8 @@ export function useAuthRoutes(router: LRouter) {
               .forgotPassword,
           });
           router.post({
-            path: '/user',
-            action: container.resolve(Auth.UserForgotPasswordController)
+            path: '/customer',
+            action: container.resolve(Auth.CustomerForgotPasswordController)
               .forgotPassword,
           });
         });
@@ -211,8 +212,8 @@ export function useAuthRoutes(router: LRouter) {
               .forgotPassword,
           });
           router.post({
-            path: '/user/:code',
-            action: container.resolve(Auth.UserForgotPasswordController)
+            path: '/customer/:code',
+            action: container.resolve(Auth.CustomerForgotPasswordController)
               .forgotPassword,
           });
         });

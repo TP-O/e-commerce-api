@@ -8,10 +8,10 @@ export abstract class ForgotPasswordService {
   /**
    * Constructor.
    *
-   * @param model related model.
+   * @param account account model.
    * @param type account type.
    */
-  public constructor(protected model: Model, protected type: string) {}
+  public constructor(protected account: Model, protected type: string) {}
 
   /**
    * Find the account by something...
@@ -20,7 +20,7 @@ export abstract class ForgotPasswordService {
    * @param value field's value.
    */
   public async findAccountBy(field: string, value: any) {
-    const { data } = await this.model
+    const { data } = await this.account
       .select('*')
       .where([[field, '=', `v:${value}`]])
       .get();
@@ -37,7 +37,7 @@ export abstract class ForgotPasswordService {
     const { data } = await ForgotPassword.select('*')
       .where([
         ['code', '=', `v:${code}`],
-        ['type', '=', `v:${this.type}`],
+        ['accountType', '=', `v:${this.type}`],
       ])
       .get();
 
@@ -53,9 +53,9 @@ export abstract class ForgotPasswordService {
     const code = randomstring.generate({ length: 25 });
     const { success } = await ForgotPassword.create([
       {
-        account_id: accountId,
+        accountId: accountId,
         code: code,
-        type: this.type,
+        accountType: this.type,
       },
     ]);
 
@@ -70,7 +70,7 @@ export abstract class ForgotPasswordService {
   public async deleteForgotPassword(code: string) {
     const { success } = await ForgotPassword.where([
       ['code', '=', `v:${code}`],
-      ['type', '=', `v:${this.type}`],
+      ['accountType', '=', `v:${this.type}`],
     ]).delete();
 
     return success ?? false;
@@ -83,7 +83,7 @@ export abstract class ForgotPasswordService {
    * @param password new password.
    */
   public async changeAccountPassword(accountId: number, password: string) {
-    const { success } = await this.model
+    const { success } = await this.account
       .where([['id', '=', `v:${accountId}`]])
       .update({ password: bcrypt.hashSync(password, 10) });
 

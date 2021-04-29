@@ -21,33 +21,13 @@ export abstract class RegisterController {
    * @param account account's information.
    */
   public create = async (account: any) => {
-    const success = await this.registerService.registerAccount(account);
+    const id = await this.registerService.registerAccount(account);
 
-    if (!success) {
+    if (!id) {
       throw new HttpRequestError(500, 'Account creation failed');
     }
 
-    return success;
-  };
-
-  /**
-   * Assign permissions for account.
-   *
-   * @param email account's email.
-   * @param role role's name.
-   */
-  public assign = async (email: string, roleName: string) => {
-    const account = await this.findAccountByEmail(email);
-    const role = await this.findRoleByName(roleName);
-
-    // assign the role to the account.
-    const success = await this.registerService.assign(account.id, role.id);
-
-    if (!success) {
-      throw new HttpRequestError(500, 'Authorization failed');
-    }
-
-    return account.id;
+    return id;
   };
 
   /**
