@@ -17,11 +17,6 @@ services:
       - db
     networks:
       - db-network
-    healthcheck:
-      test: wget --quiet --spider --tries=1 127.0.0.1:${NODE_PORT}
-      interval: 30s
-      timeout: 10s
-      retries: 5
 
   db:
     image: mysql:5.7
@@ -35,11 +30,18 @@ services:
       - ./.docker/data/dev/db:/var/lib/mysql
     networks:
       - db-network
-    healthcheck:
-      test: 'mysqladmin ping'
-      interval: 30s
-      timeout: 10s
-      retries: 5
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    environment:
+      - PMA_ARBITRARY=1
+    depends_on:
+      - db
+    networks:
+      - db-network
 
 networks:
   db-network:
