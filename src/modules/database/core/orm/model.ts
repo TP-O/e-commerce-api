@@ -2,6 +2,12 @@
 import { Database } from '@modules/database/core/database';
 import { QueryBuilder } from '@modules/database/core/builder/query-builder';
 import { RelationshipManager } from '@modules/database/core/orm/relation/manager/relationship-manager';
+import {
+  BelongsToManyRelationship,
+  BelongsToRelationship,
+  HasManyRelationship,
+  HasOneRelationship,
+} from '@modules/database/core/orm/interfaces/relation';
 import { autoInjectable, delay, inject } from 'tsyringe';
 
 @autoInjectable()
@@ -357,5 +363,21 @@ export class Model {
     });
 
     return filterdValue;
+  }
+
+  public hasOne(relationship: HasOneRelationship) {
+    this.relationship.hasOne(relationship);
+  }
+
+  public hasMany(relationship: HasManyRelationship) {
+    this.relationship.hasMany(relationship);
+  }
+
+  public belongsTo(relationship: BelongsToRelationship) {
+    this.relationship.belongsTo(relationship);
+  }
+
+  public belongsToMany(relationship: BelongsToManyRelationship) {
+    this.relationship.belongsToMany(relationship);
   }
 }

@@ -30,6 +30,7 @@ export interface Constraint {
   default?: string | number;
   increment?: boolean;
   unsigned?: boolean;
+  nullable?: boolean;
   onUpdate?: string;
   onDelete?: string;
 }

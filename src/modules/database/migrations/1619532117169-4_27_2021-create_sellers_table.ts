@@ -43,10 +43,12 @@ export class CreateSellersTable extends Migration {
         storeName: {
           type: DataType.varChar(255),
           required: true,
+          unique: true,
         },
         email: {
           type: DataType.varChar(255),
           required: true,
+          unique: true,
         },
         password: {
           type: DataType.varChar(255),

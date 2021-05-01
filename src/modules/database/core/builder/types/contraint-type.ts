@@ -37,6 +37,13 @@ export class ConstraintType {
   }
 
   /**
+   * Set nullable column.
+   */
+  public static nullable() {
+    return 'NULL';
+  }
+
+  /**
    * Set action when the primary key is updated.
    *
    * @param mode restrict | no action | cascade | set null.

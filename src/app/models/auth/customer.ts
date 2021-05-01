@@ -1,7 +1,7 @@
 import { model } from '@modules/helper';
 import { CustomerRole } from '@app/models/auth/customer-role';
 
-export const Customer = model({
+const Customer = model({
   table: 'customers',
   // prettier-ignore
   columns: [
@@ -25,13 +25,12 @@ export const Customer = model({
     'password',
     'active',
   ],
-  relationships: {
-    belongsTo: [
-      {
-        name: 'role',
-        foreignKey: 'roleId',
-        relatedModel: CustomerRole,
-      },
-    ],
-  },
 });
+
+Customer.belongsTo({
+  name: 'role',
+  foreignKey: 'roleId',
+  relatedModel: CustomerRole,
+});
+
+export { Customer };

@@ -1,7 +1,7 @@
 import { model } from '@modules/helper';
 import { SellerRole } from '@app/models/auth/seller-role';
 
-export const Seller = model({
+const Seller = model({
   table: 'sellers',
   // prettier-ignore
   columns: [
@@ -23,13 +23,12 @@ export const Seller = model({
     'active',
     'description',
   ],
-  relationships: {
-    belongsTo: [
-      {
-        name: 'role',
-        foreignKey: 'roleId',
-        relatedModel: SellerRole,
-      },
-    ],
-  },
 });
+
+Seller.belongsTo({
+  name: 'role',
+  foreignKey: 'roleId',
+  relatedModel: SellerRole,
+});
+
+export { Seller };

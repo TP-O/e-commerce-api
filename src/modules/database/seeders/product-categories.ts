@@ -24,25 +24,22 @@ export class ProductCategoriesSeeder extends Seeder {
   protected async run() {
     await this.database.table('product_categories').insert(
       // Column names
+      ['name', 'slug', 'description'],
+      // Inserted data
+      [
+        ['Smart Phone', 'smart-phone', 'Smart phone produced by many Manufacturer',],
+        ['Electronic Devices', 'electronic-devices', 'Electronic Devices'],
+        ['House Tools', 'house-tools', 'house tools for family'],
+        ['Food Products', 'food-products', 'foods, beverages'],
+        ['Cosmetic', 'cosmetic', 'cosmetic products to take care of the beauty'],
+      ],
+    );
+
+    await this.database.table('product_categories').insert(
+      // Column names
       ['parentId', 'name', 'slug', 'description'],
       // Inserted data
       [
-        ['null', 'Smart Phone', 'smart-phone', 'Smart phone produced by many Manufacturer',],
-        [
-          'null',
-          'Electronic Devices',
-          'electronic-devices',
-          'Electronic Devices',
-        ],
-        ['null', 'House Tools', 'house-tools', 'house tools for family'],
-        ['null', 'Food Products', 'food-products', 'foods, beverages'],
-        [
-          'null',
-          'Cosmetic',
-          'cosmetic',
-          'cosmetic products to take care of the beauty',
-        ],
-
         ['1', 'Iphone', 'iphone', 'Apple manufacturer'], //6
         ['1', 'Samsung', 'samsung', 'Samsung manufacturer'],
         ['1', 'Xiaomi', 'xiaomi', 'Xiaomi manufacturer'],
@@ -64,7 +61,7 @@ export class ProductCategoriesSeeder extends Seeder {
         ['5', 'Skin Care', 'skin-care', 'skin care'],
 
         ['6', 'Iphone 12', 'iphone-12', 'Apple manufacturer'], //21
-        ['6', 'Iphone 12 pro', 'iphone-12-pro', 'Apple manufacturer'], 
+        ['6', 'Iphone 12 pro', 'iphone-12-pro', 'Apple manufacturer'],
         ['6', 'Iphone 13', 'iphone-13', 'Apple manufacturer'],
 
         ['7', 'Samsung Galaxy S20 Plus', 'samsung-galaxy-s20-plus', 'Samsung manufacturer'],

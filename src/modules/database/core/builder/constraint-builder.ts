@@ -63,6 +63,13 @@ export class ConstraintBuilder implements Builder {
   }
 
   /**
+   * Add null constraint.
+   */
+  public nullable() {
+    this._cons.push(ConstraintType.nullable());
+  }
+
+  /**
    * Set action when updated.
    *
    * @param value action.

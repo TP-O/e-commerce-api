@@ -118,7 +118,6 @@ const Price = container.resolve(Maker).make({
     'price',
     'book_id',
   ],
-  relationships: {},
 });
 
 const Book = container.resolve(Maker).make({
@@ -130,15 +129,15 @@ const Book = container.resolve(Maker).make({
   fillable: [
     'name',
   ],
-  relationships: {
-    hasOne: [{
-      name: 'price',
-      localKey: 'id', // column of books
-      foreignKey: 'book_id', // column of prices
-      relatedModel: Price,
-    }],
-  },
 });
+
+Book.hasOne({
+  name: 'price',
+  localKey: 'id', // column of books
+  foreignKey: 'book_id', // column of prices
+  relatedModel: Price,
+});
+
 ```
 
 ### hasMany
@@ -158,7 +157,6 @@ const Book = container.resolve(Maker).make({
     'name',
     'author_id',
   ],
-  relationships: {},
 });
 
 const Author = container.resolve(Maker).make({
@@ -170,14 +168,13 @@ const Author = container.resolve(Maker).make({
   fillable: [
     'name',
   ],
-  relationships: {
-    hasMany: [{
-      name: 'books',
-      ownerKey: 'id', // column of authors
-      foreignKey: 'author_id', // column of books
-      relatedModel: Book,
-    }],
-  },
+});
+
+Author.hasMany({
+  name: 'books',
+  ownerKey: 'id', // column of authors
+  foreignKey: 'author_id', // column of books
+  relatedModel: Book,
 });
 ```
 
@@ -196,7 +193,6 @@ const Author = container.resolve(Maker).make({
   fillable: [
     'name',
   ],
-  relationships: {},
 });
 
 const Book = container.resolve(Maker).make({
@@ -210,14 +206,13 @@ const Book = container.resolve(Maker).make({
     'name',
     'author_id',
   ],
-  relationships: {
-    belongsTo: [{
-      name: 'author',
-      ownerKey: 'id', // columns of authors
-      foreignKey: 'author_id', // column of books
-      relatedModel: Author,
-    }],
-  },
+});
+
+Book.belongsTo({
+  name: 'author',
+  ownerKey: 'id', // columns of authors
+  foreignKey: 'author_id', // column of books
+  relatedModel: Author,
 });
 ```
 
@@ -236,7 +231,6 @@ const Author = container.resolve(Maker).make({
   fillable: [
     'name',
   ],
-  relationships: {},
 });
 
 const Book = container.resolve(Maker).make({
@@ -248,17 +242,16 @@ const Book = container.resolve(Maker).make({
   fillable: [
     'name',
   ],
-  relationships: {
-    belongsToMany: [{
-      name: 'authors',
-      ownerKey: 'id', // column of authors
-      assetKey: 'id', // column of books
-      pivot: {
-        table: 'author_books', // name of pivot table
-        ownerKey: 'author_id', // column references the ownerKey
-        assetKey: 'book_id', // column references the assetKey
-      },
-    }],
+});
+
+Book.belongsToMany({
+  name: 'authors',
+  ownerKey: 'id', // column of authors
+  assetKey: 'id', // column of books
+  pivot: {
+    table: 'author_books', // name of pivot table
+    ownerKey: 'author_id', // column references the ownerKey
+    assetKey: 'book_id', // column references the assetKey
   },
 });
 ```

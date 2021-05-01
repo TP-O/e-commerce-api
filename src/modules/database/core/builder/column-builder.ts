@@ -91,6 +91,13 @@ export class ColumnBuilder implements Builder {
   }
 
   /**
+   * Add null constraint.
+   */
+  public nullable() {
+    this._constraintBuilder.nullable();
+  }
+
+  /**
    * Set action when updated.
    *
    * @param value action.

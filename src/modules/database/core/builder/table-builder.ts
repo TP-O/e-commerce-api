@@ -123,6 +123,13 @@ export class TableBuilder implements Builder {
   }
 
   /**
+   * Add null constraint.
+   */
+  public nullable() {
+    this._columnBuilder.nullable();
+  }
+
+  /**
    * Set action when updated.
    *
    * @param value action.

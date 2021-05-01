@@ -46,7 +46,6 @@ export class CreateAdminsTable extends Migration {
         },
         middleName: {
           type: DataType.varChar(50),
-          required: true,
         },
         lastName: {
           type: DataType.varChar(50),
@@ -55,6 +54,7 @@ export class CreateAdminsTable extends Migration {
         email: {
           type: DataType.varChar(255),
           required: true,
+          unique: true,
         },
         password: {
           type: DataType.varChar(255),

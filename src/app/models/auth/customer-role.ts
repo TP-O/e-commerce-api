@@ -13,5 +13,4 @@ export const CustomerRole = model({
   fillable: [
     'name',
   ],
-  relationships: {},
 });

@@ -17,5 +17,4 @@ export interface ModelInfor {
   columns: string[];
   primaryKey?: string;
   fillable: string[];
-  relationships: Relationship;
 }

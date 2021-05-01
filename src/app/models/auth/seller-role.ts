@@ -13,5 +13,4 @@ export const SellerRole = model({
   fillable: [
     'name',
   ],
-  relationships: {},
 });

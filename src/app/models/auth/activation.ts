@@ -17,5 +17,4 @@ export const Activation = model({
     'code',
     'accountType',
   ],
-  relationships: {},
 });

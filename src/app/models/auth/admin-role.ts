@@ -13,5 +13,4 @@ export const AdminRole = model({
   fillable: [
     'name',
   ],
-  relationships: {},
 });

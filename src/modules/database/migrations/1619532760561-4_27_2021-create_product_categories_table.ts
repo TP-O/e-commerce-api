@@ -38,6 +38,7 @@ export class CreateProductCategoriesTable extends Migration {
         parentId: {
           type: DataType.bigInt(),
           unsigned: true,
+          nullable: true,
         },
         name: {
           type: DataType.varChar(50),

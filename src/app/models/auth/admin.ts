@@ -1,7 +1,7 @@
 import { model } from '@modules/helper';
 import { AdminRole } from '@app/models/auth/admin-role';
 
-export const Admin = model({
+const Admin = model({
   table: 'admins',
   // prettier-ignore
   columns: [
@@ -25,13 +25,12 @@ export const Admin = model({
     'password',
     'active',
   ],
-  relationships: {
-    belongsTo: [
-      {
-        name: 'role',
-        foreignKey: 'roleId',
-        relatedModel: AdminRole,
-      },
-    ],
-  },
 });
+
+Admin.belongsTo({
+  name: 'role',
+  foreignKey: 'roleId',
+  relatedModel: AdminRole,
+});
+
+export { Admin };
