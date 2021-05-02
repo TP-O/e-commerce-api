@@ -40,10 +40,10 @@ export class BelongsToMany extends Relationship {
             `${this.pivot.table}.${this.pivot.assetKey}`,
           ],
         ])
-        .join(`${this.relatedModel.table}:${this.tableAlias}`, 'left join')
+        .join(this.relatedModel.table, 'left join')
         .on([
           [
-            `${this.tableAlias}.${this.ownerKey}`,
+            `${this.relatedModel.table}.${this.ownerKey}`,
             '=',
             `${this.pivot.table}.${this.pivot.ownerKey}`,
           ],
@@ -74,10 +74,10 @@ export class BelongsToMany extends Relationship {
             `${this.pivot.model.table}.${this.pivot.ownerKey}`,
           ],
         ])
-        .join(`${this.relatedModel.table}:${this.tableAlias}`, 'left join')
+        .join(this.relatedModel.table, 'left join')
         .on([
           [
-            `${this.tableAlias}.${this.assetKey}`,
+            `${this.relatedModel.table}.${this.assetKey}`,
             '=',
             `${this.pivot.model.table}.${this.pivot.assetKey}`,
           ],

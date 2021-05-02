@@ -39,10 +39,10 @@ export class HasMany extends Relationship {
               `${this.pivot.table}.${this.pivot.ownerKey}`,
             ],
           ])
-          .join(`${this.relatedModel.table}:${this.tableAlias}`, 'left join')
+          .join(this.relatedModel.table, 'left join')
           .on([
             [
-              `${this.tableAlias}.${this.foreignKey}`,
+              `${this.relatedModel.table}.${this.foreignKey}`,
               '=',
               `${this.pivot.table}.${this.pivot.assetKey}`,
             ],
@@ -73,10 +73,10 @@ export class HasMany extends Relationship {
               `${this.pivot.model.table}.${this.pivot.ownerKey}`,
             ],
           ])
-          .join(`${this.relatedModel.table}:${this.tableAlias}`, 'left join')
+          .join(this.relatedModel.table, 'left join')
           .on([
             [
-              `${this.tableAlias}.${this.foreignKey}`,
+              `${this.relatedModel.table}.${this.foreignKey}`,
               '=',
               `${this.pivot.model.table}.${this.pivot.assetKey}`,
             ],
@@ -85,12 +85,12 @@ export class HasMany extends Relationship {
     } else {
       container
         .resolve(Database)
-        .join(`${this.relatedModel.table}:${this.tableAlias}`, 'left join')
+        .join(this.relatedModel.table, 'left join')
         .on([
           [
             `${this.table}.${this.localKey}`,
             '=',
-            `${this.tableAlias}.${this.foreignKey}`,
+            `${this.relatedModel.table}.${this.foreignKey}`,
           ],
         ]);
     }

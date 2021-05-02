@@ -28,12 +28,12 @@ export class HasOne extends Relationship {
   protected withCondition() {
     container
       .resolve(Database)
-      .join(`${this.relatedModel.table}:${this.tableAlias}`, 'left join')
+      .join(this.relatedModel.table, 'left join')
       .on([
         [
           `${this.table}.${this.localKey}`,
           '=',
-          `${this.tableAlias}.${this.foreignKey}`,
+          `${this.relatedModel.table}.${this.foreignKey}`,
         ],
       ]);
   }

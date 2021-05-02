@@ -22,7 +22,7 @@ export abstract class Seeder {
 
       console.log(`Seeding: ${this.seederName}`);
     } catch (err) {
-      console.log(`Failed: ${this.seederName} (${err.meesage})`);
+      console.log(`Failed: ${this.seederName} (${err})`);
     }
   }
 

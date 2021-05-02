@@ -55,7 +55,7 @@ export class CreateProductsTable extends Migration {
           required: true,
         },
         slug: {
-          type: DataType.varChar(50),
+          type: DataType.varChar(250),
           required: true,
           unique: true,
         },

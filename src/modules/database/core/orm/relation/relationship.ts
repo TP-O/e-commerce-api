@@ -1,12 +1,9 @@
-import randomstring from 'randomstring';
 import { Model } from '@modules/database/core/orm/model';
 import { container } from 'tsyringe';
 import { Database } from '@modules/database/core/database';
 
 export abstract class Relationship {
   protected relation = '';
-
-  protected tableAlias = '';
 
   /**
    *
@@ -29,7 +26,7 @@ export abstract class Relationship {
       .resolve(Database)
       .addSelection(
         ...this.relatedModel.columns.map(
-          (c) => `${this.tableAlias}.${c}:${this.relation}-${c}`,
+          (c) => `${this.relatedModel.table}.${c}:${this.relation}-${c}`,
         ),
       );
   }
@@ -48,7 +45,6 @@ export abstract class Relationship {
    */
   public create(relation: string) {
     this.relation = relation;
-    this.tableAlias = randomstring.generate(5);
 
     this.selectColumns();
     this.withCondition();

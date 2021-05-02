@@ -28,12 +28,12 @@ export class BelongsTo extends Relationship {
   protected withCondition() {
     container
       .resolve(Database)
-      .join(`${this.relatedModel.table}:${this.tableAlias}`, 'left join')
+      .join(this.relatedModel.table, 'left join')
       .on([
         [
           `${this.table}.${this.foreignKey}`,
           '=',
-          `${this.tableAlias}.${this.ownerKey}`,
+          `${this.relatedModel.table}.${this.ownerKey}`,
         ],
       ]);
   }

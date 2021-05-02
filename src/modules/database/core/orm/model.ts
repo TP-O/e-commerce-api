@@ -166,7 +166,7 @@ export class Model {
    *
    * @param columns list of specific columns.
    */
-  public select(...columns: string[]): this {
+  public select(...columns: string[]) {
     // Add table name before each column.
     if (columns.includes('*')) {
       columns = this._columns.map((c) => `${this._table}.${c}`);
@@ -180,11 +180,45 @@ export class Model {
   }
 
   /**
+   * Add selection to current query sentences.
+   *
+   * @param columns specified columns.
+   */
+  public addSelection(...columns: string[]) {
+    this._database.addSelection(...columns);
+
+    return this;
+  }
+
+  /**
+   * Join table
+   *
+   * @param table joined table.
+   * @param type type of join.
+   */
+  public join(table: string, type?: string) {
+    this._database.join(table, type);
+
+    return this;
+  }
+
+  /**
+   * Start conditions for joins.
+   *
+   * @param conditions list of conditions.
+   */
+  public on(conditions: string[][] | ((q: QueryBuilder) => void)) {
+    this._database.on(conditions);
+
+    return this;
+  }
+
+  /**
    * Start conditions.
    *
    * @param coditions list of conditions.
    */
-  public where(conditions: string[][] | ((q: QueryBuilder) => void)): this {
+  public where(conditions: string[][] | ((q: QueryBuilder) => void)) {
     this._database.table(this._table).where(conditions);
 
     return this;
@@ -195,7 +229,7 @@ export class Model {
    *
    * @param conditions list of conditions.
    */
-  public orWhere(conditions: string[][]): this {
+  public orWhere(conditions: string[][]) {
     this._database.orWhere(conditions);
 
     return this;
@@ -206,7 +240,7 @@ export class Model {
    *
    * @param conditions list of conditions.
    */
-  public andWhere(conditions: string[][]): this {
+  public andWhere(conditions: string[][]) {
     this._database.andWhere(conditions);
 
     return this;
@@ -218,7 +252,7 @@ export class Model {
    * @param conditions list of conditions.
    * @param operator logical operator.
    */
-  public whereNot(conditions: string[][], operator = 'AND'): this {
+  public whereNot(conditions: string[][], operator = 'AND') {
     this._database.whereNot(conditions, operator);
 
     return this;
@@ -229,7 +263,7 @@ export class Model {
    *
    * @param column specified column.
    */
-  public groupBy(column: string): this {
+  public groupBy(column: string) {
     this._database.groupBy(column);
 
     return this;
@@ -252,7 +286,7 @@ export class Model {
    * @param column specified column.
    * @param type type of order.
    */
-  public orderBy(column: string, type?: string): this {
+  public orderBy(column: string, type?: string) {
     this._database.orderBy(column, type);
 
     return this;
@@ -263,7 +297,7 @@ export class Model {
    *
    * @param number maximum number of results.
    */
-  public limit(number: number): this {
+  public limit(number: number) {
     this._database.limit(number);
 
     return this;
@@ -274,7 +308,7 @@ export class Model {
    *
    * @param column specified column.
    */
-  public min(column: string, alias?: string): this {
+  public min(column: string, alias?: string) {
     this._database.min(column, alias);
 
     return this;
@@ -285,7 +319,7 @@ export class Model {
    *
    * @param column specified column.
    */
-  public max(column: string, alias?: string): this {
+  public max(column: string, alias?: string) {
     this._database.max(column, alias);
 
     return this;
@@ -296,7 +330,7 @@ export class Model {
    *
    * @param column specified column.
    */
-  public sum(column: string, alias?: string): this {
+  public sum(column: string, alias?: string) {
     this._database.sum(column, alias);
 
     return this;
@@ -307,7 +341,7 @@ export class Model {
    *
    * @param column specified column.
    */
-  public avg(column: string, alias?: string): this {
+  public avg(column: string, alias?: string) {
     this._database.avg(column, alias);
 
     return this;
@@ -318,7 +352,7 @@ export class Model {
    *
    * @param column specified column.
    */
-  public count(column: string, alias?: string): this {
+  public count(column: string, alias?: string) {
     this._database.count(column, alias);
 
     return this;
@@ -329,7 +363,7 @@ export class Model {
    *
    * @param relations list of relationship names.
    */
-  public with(...relations: string[]): this {
+  public with(...relations: string[]) {
     relations.forEach((relation) => {
       let curModel: Model = this;
       const nestedRelations = relation.split('.');
