@@ -354,7 +354,7 @@ export class QueryBuilder implements Builder {
    *
    * @param number maximum number of results.
    */
-  public limit(number: number) {
+  public limit(number: string) {
     this._query += ` LIMIT ${number}`;
 
     return this;

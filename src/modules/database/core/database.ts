@@ -263,7 +263,7 @@ export class Database {
    *
    * @param number maximum number of results.
    */
-  public limit(number: number) {
+  public limit(number: string) {
     this._builder.limit(number);
 
     return this;
@@ -337,6 +337,8 @@ export class Database {
    * Execute with current query.
    */
   public async execute(throwable = false) {
+    console.log(this.getQuery());
+
     const query = this._builder.build();
 
     try {
