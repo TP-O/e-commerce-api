@@ -1,3 +1,7 @@
+import { AdvertisementStrategiesSellersSeeder } from './advertisement-strategies-sellers';
+import { AdvertisementStrategiesProductsSeeder } from './advertisement-strategies-products';
+import { AdvertisementStrategiesSeeder } from './advertisement-strategies';
+import { AdvertisementTypesSeeder } from './advertisement-types';
 import { container } from 'tsyringe';
 import { AdminRolesSeeder } from './admin-roles';
 import { AdminsSeeder } from './admins';
@@ -22,5 +26,9 @@ export class DatabaseSeeder {
     await container.resolve(BrandsSeeder).seed();
     await container.resolve(ProductsSeeder).seed();
     await container.resolve(FeedbacksSeeder).seed();
+    await container.resolve(AdvertisementTypesSeeder).seed();
+    await container.resolve(AdvertisementStrategiesSeeder).seed();
+    await container.resolve(AdvertisementStrategiesProductsSeeder).seed();
+    await container.resolve(AdvertisementStrategiesSellersSeeder).seed();
   }
 }
