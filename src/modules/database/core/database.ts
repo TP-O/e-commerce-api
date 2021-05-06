@@ -338,7 +338,6 @@ export class Database {
    */
   public async execute(throwable = false) {
     console.log(this.getQuery());
-
     const query = this._builder.build();
 
     try {
