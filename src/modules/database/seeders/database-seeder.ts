@@ -12,6 +12,9 @@ import { ProductCategoriesSeeder } from './product-categories';
 import { ProductsSeeder } from './products';
 import { SellerRolesSeeder } from './seller-roles';
 import { SellersSeeder } from './sellers';
+import {AddressTypesSeeder} from './address-types';
+import {OrderStatusSeeder} from './order-status';
+import {ShippingAddressesSeeder} from './shipping-addresses';
 
 export class DatabaseSeeder {
   public async seed() {
@@ -28,5 +31,8 @@ export class DatabaseSeeder {
     await container.resolve(AdvertisementTypesSeeder).seed();
     await container.resolve(AdvertisementStrategiesSeeder).seed();
     await container.resolve(AdvertisementStrategiesProductsSeeder).seed();
+    await container.resolve(AddressTypesSeeder).seed();
+    await container.resolve(OrderStatusSeeder).seed();
+    await container.resolve(ShippingAddressesSeeder).seed();
   }
 }

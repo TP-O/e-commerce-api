@@ -144,6 +144,17 @@ export class ProductService {
   }
 
   /**
+   * Get product by ID.
+   */
+   public async getProductPrice(id: number) {
+    const { data } = await Product.select('*')
+      .where([['id', '=', `v:${id}`]])
+      .get();
+
+    return data?.first()?.price;
+  }
+
+  /**
    * Create product.
    *
    * @param data product's data.

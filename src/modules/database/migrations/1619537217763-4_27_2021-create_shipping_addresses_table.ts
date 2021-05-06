@@ -9,7 +9,7 @@ export class CreateShippingAddressesTable extends Migration {
   /**
    * Name of the table will be created.
    */
-  protected table = 'shipping_address';
+  protected table = 'shipping_addresses';
 
   /**
    * Name of migration.
@@ -27,7 +27,7 @@ export class CreateShippingAddressesTable extends Migration {
 
   protected async up() {
     await this.database.create({
-      table: 'shipping_address',
+      table: 'shipping_addresses',
       columns: {
         id: {
           type: DataType.bigInt(),
@@ -100,6 +100,6 @@ export class CreateShippingAddressesTable extends Migration {
   }
 
   protected async down() {
-    await this.database.dropIfExists('shipping_address');
+    await this.database.dropIfExists('shipping_addresses');
   }
 }

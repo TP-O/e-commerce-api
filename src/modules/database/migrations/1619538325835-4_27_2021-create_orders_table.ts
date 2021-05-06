@@ -43,7 +43,7 @@ export class CreateOrdersTable extends Migration {
         statusId: {
           type: DataType.bigInt(),
           unsigned: true,
-          required: true,
+          default: '1',
         },
         createdAt: {
           type: DataType.timestamp(),
