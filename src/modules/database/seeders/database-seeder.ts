@@ -1,4 +1,3 @@
-import { AdvertisementStrategiesSellersSeeder } from './advertisement-strategies-sellers';
 import { AdvertisementStrategiesProductsSeeder } from './advertisement-strategies-products';
 import { AdvertisementStrategiesSeeder } from './advertisement-strategies';
 import { AdvertisementTypesSeeder } from './advertisement-types';
@@ -29,6 +28,5 @@ export class DatabaseSeeder {
     await container.resolve(AdvertisementTypesSeeder).seed();
     await container.resolve(AdvertisementStrategiesSeeder).seed();
     await container.resolve(AdvertisementStrategiesProductsSeeder).seed();
-    await container.resolve(AdvertisementStrategiesSellersSeeder).seed();
   }
 }

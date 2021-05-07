@@ -1,10 +1,11 @@
-import { Seller } from '@app/models/auth/seller';
 import { Ads } from '@app/models/ads/ads';
 import { AdsProduct } from '@app/models/ads/ads-product';
 import { AdsSeller } from '@app/models/ads/ads-seller';
 import { ProductCategory } from '@app/models/product/category';
 import { Product } from '@app/models/product/product';
+import { singleton } from 'tsyringe';
 
+@singleton()
 export class AdsService {
     /**
      * Create advertisement strategy.
@@ -99,18 +100,6 @@ export class AdsService {
      * @param adsId: ads Id
 
      */
-    public async getSellersOfAds(adsId: number) {
-        const { data } = await Seller
-        .select('storeName', 'email', 'description')
-        .join('advertisement_strategies_sellers')
-        .on([['sellers.id','=','advertisement_strategies_sellers.sellerId']])
-        .join('advertisement_strategies', 'left join')
-        .on([['advertisement_strategies.id','=','advertisement_strategies_sellers.strategyId']])
-        .where([['advertisement_strategies.id', '=', `v:${adsId}`]])
-        .get();
-
-        return data?.all();
-    }
 
     /**
      * Get products of sellers which appropriate to ads
@@ -143,5 +132,4 @@ export class AdsService {
         return data?.all();
     }
 
-    
 }

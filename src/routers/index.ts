@@ -1,6 +1,7 @@
 import { nodeConfig } from '@configs/node';
 import { Express, Router } from 'express';
 import { lrouter } from 'laravel-expressjs-router';
+import { useAdsRoutes } from './ads';
 import { useAuthRoutes } from './auth';
 import { useCategoryRoutes } from './category';
 import { useFeedbackRoutes } from './feedback';
@@ -26,6 +27,8 @@ router.group({ prefix: '/api/v1' }, () => {
   useCategoryRoutes(router);
   useFeedbackRoutes(router);
 });
+
+
 
 export const registerRouter = (app: Express) => {
   app.use(router.init());

@@ -3,7 +3,7 @@ import { nodeConfig } from '@configs/node';
 import { container } from 'tsyringe';
 import { Connection } from '@modules/database/core/connect/connection';
 
-import { AdsService } from './../app/services/auth/ads/ads-service';
+//import { AdsService } from './../app/services/ads/ads-service';
 
 // Activate server
 app.listen(nodeConfig.port, async () => {
@@ -17,10 +17,11 @@ app.listen(nodeConfig.port, async () => {
     \t\x1b[0m------------------------------------
   `);
 
-  const s = new AdsService();
+  // const s = new AdsService();
 
-  const r = await s.insertProductToAds({strategyId: 1, productId: 7, percent: 20, amount: 30});
+  // const r = await s.insertProductToAds({strategyId: 1, productId: 7, percent: 20, amount: 30});
   
-  console.log(r);
+  // console.log(r);
+  
  
 });

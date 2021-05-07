@@ -1,4 +1,3 @@
-import { Seller } from '@app/models/auth/seller';
 import { Ads } from '@app/models/ads/ads';
 import { AdsProduct } from '@app/models/ads/ads-product';
 import { AdsSeller } from '@app/models/ads/ads-seller';
@@ -104,29 +103,6 @@ export class AdsService {
       .get();
 
     return data?.first();
-  }
-
-  /**
-   * Get sellers of ads.
-   *
-   * @param adsId ads id.
-   */
-  public async getSellersOfAds(adsId: number) {
-    const { data } = await Seller.select('storeName', 'email', 'description')
-      .join('advertisement_strategies_sellers')
-      .on([['sellers.id', '=', 'advertisement_strategies_sellers.sellerId']])
-      .join('advertisement_strategies', 'left join')
-      .on([
-        [
-          'advertisement_strategies.id',
-          '=',
-          'advertisement_strategies_sellers.strategyId',
-        ],
-      ])
-      .where([['advertisement_strategies.id', '=', `v:${adsId}`]])
-      .get();
-
-    return data?.all();
   }
 
   /**
