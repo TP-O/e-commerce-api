@@ -30,7 +30,7 @@ export class Instance {
    */
   public save() {
     return this.model
-      .where([[this.model.primaryKey, '=', `v:${this.data.id}`]])
+      .where([[this.model.primaryKey, '=', `'${this.data.id}'`]])
       .update(this.data);
   }
 
@@ -39,7 +39,7 @@ export class Instance {
    */
   public delete() {
     return this.model
-      .where([[this.model.primaryKey, '=', `v:${this.data.id}`]])
+      .where([[this.model.primaryKey, '=', `'${this.data.id}'`]])
       .delete();
   }
 
@@ -57,7 +57,7 @@ export class Instance {
         [
           `${this.model.table}.${this.model.primaryKey}`,
           '=',
-          `v:${this.data.id}`,
+          `'${this.data.id}'`,
         ],
       ])
       .get();

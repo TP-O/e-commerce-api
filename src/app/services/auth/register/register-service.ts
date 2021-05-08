@@ -36,7 +36,7 @@ export abstract class RegisterService {
   public async findRoleByName(name: string) {
     const { data } = await this.role
       .select('id')
-      .where([['name', '=', `v:${name}`]])
+      .where([['name', '=', `'${name}'`]])
       .get();
 
     return data?.first();
@@ -50,7 +50,7 @@ export abstract class RegisterService {
   public async findAccountByEmail(email: string) {
     const { data } = await this.account
       .select('id')
-      .where([['email', '=', `v:${email}`]])
+      .where([['email', '=', `'${email}'`]])
       .get();
 
     return data?.first();

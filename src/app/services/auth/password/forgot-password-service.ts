@@ -22,7 +22,7 @@ export abstract class ForgotPasswordService {
   public async findAccountBy(field: string, value: any) {
     const { data } = await this.account
       .select('*')
-      .where([[field, '=', `v:${value}`]])
+      .where([[field, '=', `'${value}'`]])
       .get();
 
     return data?.first();
@@ -36,8 +36,8 @@ export abstract class ForgotPasswordService {
   public async findForgotPassword(code: string) {
     const { data } = await ForgotPassword.select('*')
       .where([
-        ['code', '=', `v:${code}`],
-        ['accountType', '=', `v:${this.type}`],
+        ['code', '=', `'${code}'`],
+        ['accountType', '=', `'${this.type}'`],
       ])
       .get();
 
@@ -69,8 +69,8 @@ export abstract class ForgotPasswordService {
    */
   public async deleteForgotPassword(code: string) {
     const { success } = await ForgotPassword.where([
-      ['code', '=', `v:${code}`],
-      ['accountType', '=', `v:${this.type}`],
+      ['code', '=', `'${code}'`],
+      ['accountType', '=', `'${this.type}'`],
     ]).delete();
 
     return success ?? false;
@@ -84,7 +84,7 @@ export abstract class ForgotPasswordService {
    */
   public async changeAccountPassword(accountId: number, password: string) {
     const { success } = await this.account
-      .where([['id', '=', `v:${accountId}`]])
+      .where([['id', '=', `'${accountId}'`]])
       .update({ password: bcrypt.hashSync(password, 10) });
 
     return success ?? false;

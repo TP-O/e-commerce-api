@@ -18,8 +18,8 @@ export abstract class VerifyService {
   public async findActivation(code: string) {
     const { data } = await Activation.select('*')
       .where([
-        ['code', '=', `v:${code}`],
-        ['accountType', '=', `v:${this.type}`],
+        ['code', '=', `'${code}'`],
+        ['accountType', '=', `'${this.type}'`],
       ])
       .get();
 
@@ -33,8 +33,8 @@ export abstract class VerifyService {
    */
   public async deleteActivation(code: string) {
     const { success } = await Activation.where([
-      ['code', '=', `v:${code}`],
-      ['accountType', '=', `v:${this.type}`],
+      ['code', '=', `'${code}'`],
+      ['accountType', '=', `'${this.type}'`],
     ]).delete();
 
     return success ?? false;
@@ -48,7 +48,7 @@ export abstract class VerifyService {
   public async activateAccount(accountId: number) {
     const { data } = await this.account
       .select('*')
-      .where([['id', '=', `v:${accountId}`]])
+      .where([['id', '=', `'${accountId}'`]])
       .get();
 
     if (!data?.first()) {

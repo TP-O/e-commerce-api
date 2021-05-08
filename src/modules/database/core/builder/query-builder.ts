@@ -304,14 +304,6 @@ export class QueryBuilder implements Builder {
             .join('`.`')}\`)`;
         }
 
-        const c2 = c[2].split(':');
-
-        if (c2[0] === 'v') {
-          c[2] = `'${c2[1]}'`;
-        } else {
-          c[2] = `\`${c[2].split('.').join('`.`')}\``;
-        }
-
         return c.join(' ');
       })
       .join(' AND ')})`;

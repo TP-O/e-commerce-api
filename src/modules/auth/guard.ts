@@ -84,7 +84,7 @@ export class Guard {
   public async findUserByEmail(email: string) {
     const { data } = await this._config.model
       .select('*')
-      .where([['email', '=', `v:${email}`]])
+      .where([['email', '=', `'${email}'`]])
       .get();
 
     return data?.first();
@@ -98,7 +98,7 @@ export class Guard {
   public async findUserById(id: string) {
     const { data } = await this._config.model
       .select('*')
-      .where([['id', '=', `v:${id}`]])
+      .where([['id', '=', `'${id}'`]])
       .get();
 
     return data?.first();

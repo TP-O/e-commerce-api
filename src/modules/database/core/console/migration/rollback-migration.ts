@@ -42,7 +42,7 @@ export class RollbackMigration extends Command {
         return q
           .table('migrations')
           .select('*')
-          .where([['batch', '=', `v:${data?.first().data}`]])
+          .where([['batch', '=', `'${data?.first().data}'`]])
           .execute(true);
       });
 

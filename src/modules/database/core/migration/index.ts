@@ -110,7 +110,7 @@ export abstract class Migration {
   private async deleteMigration(): Promise<void> {
     await this.database
       .table('migrations')
-      .where([['migration', '=', `v:${this.migrationName}`]])
+      .where([['migration', '=', `'${this.migrationName}'`]])
       .delete();
   }
 
