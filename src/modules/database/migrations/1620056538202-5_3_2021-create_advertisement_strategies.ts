@@ -61,7 +61,7 @@ export class CreateOrderItemsTable extends Migration {
           type: DataType.int(),
           required: true,
         },
-        
+
         startOn: {
           type: DataType.timestamp(),
           default: 'current_timestamp',
@@ -96,7 +96,6 @@ export class CreateOrderItemsTable extends Migration {
           referencedColumn: 'id',
           onDelete: 'cascade',
         },
-
       ],
     });
   }

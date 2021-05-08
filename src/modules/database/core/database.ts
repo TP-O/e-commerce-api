@@ -108,7 +108,7 @@ export class Database {
   public async insert(columns: string[], values: string[][]) {
     this._builder.insert(this._tableName, columns, values);
 
-    return this.execute(true);
+    return this.execute();
   }
 
   /**

@@ -11,25 +11,26 @@ export function useAdsRoutes(router: LRouter) {
       path: '/create-ads-strategy',
       action: container.resolve(AdsController).createAdsStrategy,
     });
+
     router.post({
       path: '/insert-product',
       action: container.resolve(AdsController).insertProductToAds,
     });
+
+    router.delete({
+      path: '/delete-product',
+      action: container.resolve(AdsController).deleteProductToAds,
+    });
+
     router.get({
       path: '/get-products',
       action: container.resolve(AdsController).getProductsOfAds,
-     });
-    router.get({
-      path: '/get-categories',
-      action: container.resolve(AdsController).getCategoriesOfAds,
     });
+
     router.get({
       path: '/get-products-of-seller',
       action: container.resolve(AdsController).getProductsOfSelller,
     });
-
-    
-    
 
     // router.group({ prefix: '/login' }, () => {
     //   router.post({
@@ -63,7 +64,5 @@ export function useAdsRoutes(router: LRouter) {
     //     action: container.resolve(Auth.CustomerLoginController).logout,
     //   });
     // });
-
-    
   });
 }

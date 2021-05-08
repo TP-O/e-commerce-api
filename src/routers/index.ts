@@ -26,9 +26,8 @@ router.group({ prefix: '/api/v1' }, () => {
   useProductRoutes(router);
   useCategoryRoutes(router);
   useFeedbackRoutes(router);
+  useAdsRoutes(router);
 });
-
-
 
 export const registerRouter = (app: Express) => {
   app.use(router.init());

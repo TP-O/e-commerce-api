@@ -80,6 +80,11 @@ export class CreateAdvertisementStrategiesProducts extends Migration {
           onDelete: 'cascade',
         },
       ],
+      uniqueColumns: [
+        {
+          columns: ['strategyId', 'productId'],
+        },
+      ],
     });
   }
 
