@@ -65,10 +65,10 @@ export class ProductService {
    * Filter products rely on conditions.
    *
    * @param conditions filter conditions.
-   * @param limit number of products.
-   * @param from get from index.
+   * @param limit limit number of products.
+   * @param offset get from index.
    */
-  public async filter(conditions: any, limit: string, offset?: string) {
+  public async filter(conditions: any, limit: number, offset = 0) {
     Product.select('*');
 
     if (conditions.category) {
@@ -81,7 +81,7 @@ export class ProductService {
 
     this.filterColumnValue(conditions);
 
-    const { data } = await Product.limit(`${offset || 0}, ${limit}`).get();
+    const { data } = await Product.limit(`${offset}, ${limit}`).get();
 
     return data?.all();
   }
@@ -89,26 +89,26 @@ export class ProductService {
   /**
    * Get products.
    *
-   * @param limit number of products.
-   * @param from get from index.
+   * @param limit limit number of products.
+   * @param offset get from index.
    */
-  public async get(limit: string, offset?: string) {
+  public async get(limit: number, offset = 0) {
     const { data } = await Product.select('*')
-      .limit(`${offset || 0}, ${limit}`)
+      .limit(`${offset}, ${limit}`)
       .get();
 
     return data?.all();
   }
 
   /**
-   * Get product by ID.
+   * Get product by slug.
    *
-   * @param id product ID.
+   * @param slug product slug.
    */
-  public async getById(id: number) {
+  public async getBySlug(slug: string) {
     const { data } = await Product.select('*')
       .with('brand', 'seller')
-      .where([['products.id', '=', `${id}`]])
+      .where([['products.slug', '=', `${slug}`]])
       .get();
 
     return data?.first();

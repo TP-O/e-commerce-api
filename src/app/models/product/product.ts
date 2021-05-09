@@ -16,7 +16,7 @@ const Product = model({
     'slug',
     'price',
     'description',
-    'amount',
+    'quantity',
     'createdAt',
     'updatedAt',
   ],
@@ -29,7 +29,7 @@ const Product = model({
     'slug',
     'price',
     'description',
-    'amount',
+    'quantity',
   ],
 });
 
