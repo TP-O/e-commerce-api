@@ -24,8 +24,9 @@ export class AdsController {
    * Create ads.
    */
   public createAdsStrategy = async (req: Request, res: Response) => {
-    const input = this._createAdsValidator.validate(req.body);
+    const input = await this._createAdsValidator.validate(req.body);
     const success = await this._adsService.createAdsStrategy(input);
+    console.log('input: ' + input);
 
     if (!success) {
       throw new HttpRequestError(500, 'Unable to create Ads Strategy');
@@ -33,7 +34,7 @@ export class AdsController {
 
     return res.status(201).json({
       success: true,
-      message: 'create Ads Strategy successfully',
+      message: 'Create Ads Strategy successfully',
     });
   };
 
@@ -43,7 +44,8 @@ export class AdsController {
    */
   public insertProductToAds = async (req: Request, res: Response) => {
     const input = await this._insertProductToAdsValidator.validate(req.body);
-
+    await this.checkPercent(input.strategyId, input.percent);
+    await this.checkAmount(input.productId, input.amount);
     const success = await this._adsService.insertProductToAds(input);
 
     if (!success) {
@@ -52,10 +54,14 @@ export class AdsController {
 
     return res.status(201).json({
       success: true,
-      message: 'insert product successfully',
+      message: 'Insert product successfully',
     });
   };
 
+  /**
+   * 
+   * Delete product to ads.
+   */
   public deleteProductToAds = async (req: Request, res: Response) => {
     const success = await this._adsService.deleteProductToAds(
       req.body.adsId,
@@ -68,10 +74,33 @@ export class AdsController {
 
     return res.status(201).json({
       success: true,
-      message: 'delete product successfully',
+      message: 'Delete product successfully',
     });
   };
 
+  /**
+   * 
+   * Get Ads by id.
+   * 
+   */
+  public getAdsById = async (req: Request, res: Response) => {
+    const data = await this._adsService.getAdsById(req.body.adsId);
+    console.log(req.body);
+
+    if (!data) {
+      throw new HttpRequestError(404, 'Unable to get Ads');
+    }
+
+    return res.status(200).json({
+      data: format(data),
+      message: 'Get Ads successfully',
+    });
+  };
+  /**
+   * 
+   * Get product's amount.
+   * 
+   */
   public getProductAmount = async (req: Request, res: Response) => {
     const data = await this._adsService.getProductAmount(req.body.id);
 
@@ -81,7 +110,7 @@ export class AdsController {
 
     return res.status(200).json({
       data: format(data),
-      message: 'get product amount successfully',
+      message: 'Get product amount successfully',
     });
   };
 
@@ -91,6 +120,7 @@ export class AdsController {
    */
   public getProductsOfAds = async (req: Request, res: Response) => {
     const data = await this._adsService.getProductsOfAds(req.body.adsId);
+    console.log(req.body);
 
     if (!data) {
       throw new HttpRequestError(404, 'Unable to get products of Ads');
@@ -98,7 +128,7 @@ export class AdsController {
 
     return res.status(200).json({
       data: format(data),
-      message: 'get products successfully',
+      message: 'Get products successfully',
     });
   };
 
@@ -118,7 +148,26 @@ export class AdsController {
 
     return res.status(200).json({
       data: format(data),
-      message: 'get products of seller successfully',
+      message: 'Get products of seller successfully',
     });
   };
+
+  public checkPercent = async (adsId: number, percent: number) => {
+    const ads = await this._adsService.getAdsById(adsId);
+    const max = ads.max;
+    const min = ads.min;
+    if(percent < min || percent > max) {
+      throw new HttpRequestError(401, 'Percent must be greater than min and smaller than max'); 
+    }
+  }
+
+  public checkAmount = async (productId: number, productAmount: number) => {
+    const product = await this._adsService.getProductAmount(productId);
+    const amount = product.amount;
+    if(productAmount > amount) {
+      throw new HttpRequestError(401, 'The amount is greater than the amount of product');
+    }
+  }
+
+  
 }

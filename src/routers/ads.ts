@@ -23,6 +23,11 @@ export function useAdsRoutes(router: LRouter) {
     });
 
     router.get({
+      path: '/get-ads',
+      action: container.resolve(AdsController).getAdsById,
+    });
+
+    router.get({
       path: '/get-products',
       action: container.resolve(AdsController).getProductsOfAds,
     });
