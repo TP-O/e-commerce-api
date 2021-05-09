@@ -40,11 +40,6 @@ export class CreateOrdersTable extends Migration {
           unsigned: true,
           required: true,
         },
-        statusId: {
-          type: DataType.bigInt(),
-          unsigned: true,
-          default: '1',
-        },
         createdAt: {
           type: DataType.timestamp(),
           default: 'current_timestamp',
@@ -62,12 +57,6 @@ export class CreateOrdersTable extends Migration {
         {
           column: 'customerId',
           table: 'customers',
-          referencedColumn: 'id',
-          onDelete: 'cascade',
-        },
-        {
-          column: 'statusId',
-          table: 'order_status',
           referencedColumn: 'id',
           onDelete: 'cascade',
         },

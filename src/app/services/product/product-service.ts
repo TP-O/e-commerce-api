@@ -144,35 +144,96 @@ export class ProductService {
   }
 
   /**
-   * Get product price by ID.
+   * Get discounting products.
    *
-   * @param id product Id.
    */
-   public async getProductPrice(id: number) {
+  public async getDiscountingProduct() {
     const { data } = await Product.select('*')
-      .where([['id', '=', `v:${id}`]])
-      .first();
+      .addSelection(
+        'advertisement_strategies_products.percent:saleOff',
+        'advertisement_strategies_products.sold:sold',
+        'advertisement_strategies_products.quantity:quantity',
+      )
+      .join('advertisement_strategies_products', 'left join')
+      .on([['products.id', '=', 'advertisement_strategies_products.productId']])
+      .join('advertisement_strategies', 'left join')
+      .on([
+        [
+          'advertisement_strategies_products.strategyId',
+          '=',
+          'advertisement_strategies.id',
+        ],
+      ])
+      .where([
+        [
+          'advertisement_strategies.startOn',
+          '<=',
+          'CAST(CURRENT_TIMESTAMP AS DATE)',
+        ],
+        [
+          'advertisement_strategies.endOn',
+          '>',
+          'CAST(CURRENT_TIMESTAMP AS DATE)',
+        ],
+      ])
+      .orWhere([
+        [
+          'advertisement_strategies.startOn',
+          '>',
+          'CAST(CURRENT_TIMESTAMP AS DATE)',
+        ],
+      ])
+      .orderBy('advertisement_strategies.startOn', 'ASC')
+      .get();
 
-    return data?.price;
+    return data?.all();
   }
 
   /**
    * Get current price of product.
    */
   public async getCurrentPrice(id: number, quantity = 1) {
+    let price = 0;
+    let saleOff = 0;
+    let remaining = 0;
     const product = await this.getById(id);
+    const discountingProducts = await this.getDiscountingProduct();
 
-    return product.price * quantity;
+    if (!discountingProducts) {
+      return -1;
+    }
+
+    for (let i = 0; i < discountingProducts.length; i++) {
+      if (discountingProducts[i].id === product.id) {
+        saleOff = discountingProducts[i].saleOff;
+        remaining =
+          discountingProducts[i].quantity - discountingProducts[i].sold;
+
+        break;
+      }
+    }
+
+    price =
+      quantity - remaining <= 0
+        ? product.price * quantity * saleOff
+        : product.price * (remaining * saleOff + (quantity - remaining));
+
+    return price;
   }
 
   /**
    * Update product.
+   * Note: update quantity in ads (incompleted).
    *
    * @param id product ID.
    * @param data product data.
    */
   public async updateQuantity(id: number, diff: number, increase = true) {
     const product = await this.getById(id);
+
+    if (!product) {
+      return false;
+    }
 
     const quantity = increase
       ? product.quantity + diff

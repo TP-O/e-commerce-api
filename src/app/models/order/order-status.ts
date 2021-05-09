@@ -12,5 +12,6 @@ export const OrderStatus = model({
   // prettier-ignore
   fillable: [
     'name',
+    'updatedAt',
   ],
 });

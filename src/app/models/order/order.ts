@@ -1,18 +1,25 @@
 import { model } from '@modules/helper';
+import { OrderItem } from '@app/models/order/order-item';
 
-export const Order = model({
+const Order = model({
   table: 'orders',
   // prettier-ignore
   columns: [
     'id',
     'customerId',
-    'statusId',
     'createdAt',
     'updatedAt',
   ],
   // prettier-ignore
   fillable: [
     'customerId',
-    'statusId',
   ],
 });
+
+Order.hasMany({
+  name: 'items',
+  foreignKey: 'orderId',
+  relatedModel: OrderItem,
+});
+
+export { Order };

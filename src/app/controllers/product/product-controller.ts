@@ -83,6 +83,24 @@ export class ProductController {
     });
   };
 
+  /**
+   * Get discounting products.
+   */
+  public getDiscountingProduct = async (req: Request, res: Response) => {
+    const data = await this._productService.getDiscountingProduct();
+    if (!data) {
+      throw new HttpRequestError(404, 'Product not found');
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: format(data),
+    });
+  };
+
+  /**
+   * Get product feedbacks.
+   */
   public getFeedbacks = async (req: Request, res: Response) => {
     const data = await this._feedbackService.getByProductId(
       parseInt(req.params.id),

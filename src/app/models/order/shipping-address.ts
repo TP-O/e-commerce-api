@@ -1,5 +1,5 @@
 import { model } from '@modules/helper';
-import { AddressType } from './address-type';
+import { AddressType } from '@app/models/order/address-type';
 
 export const ShippingAddress = model({
   table: 'shipping_addresses',
@@ -36,8 +36,8 @@ ShippingAddress.belongsTo({
   relatedModel: AddressType,
 });
 
-ShippingAddress.hasOne({
-  name: 'address_type',
+ShippingAddress.belongsTo({
+  name: 'address_types',
   foreignKey: 'typeId',
   relatedModel: AddressType,
 });

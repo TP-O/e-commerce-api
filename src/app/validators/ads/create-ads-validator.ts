@@ -17,11 +17,11 @@ export class CreateAdsValidator extends Validator {
     this.rules = Joi.object().keys({
       categoryId: Joi.number().required().messages({
         'any.required': 'CategoryId is required',
-        'number.base': 'CategoryId must be a number'
+        'number.base': 'CategoryId must be a number',
       }),
       typeId: Joi.number().required().messages({
         'any.required': 'TypeId is required',
-        'number.base': 'TypeId must be a number'
+        'number.base': 'TypeId must be a number',
       }),
       name: Joi.string().required().messages({
         'any.required': 'Name is required',

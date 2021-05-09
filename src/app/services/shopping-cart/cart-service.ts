@@ -105,12 +105,38 @@ export class CartService {
       newQuantity,
     );
 
+    if (price === -1) {
+      return false;
+    }
+
     const { success } = await CartItem.where([
       ['id', '=', `v:${cartItemId}`],
     ]).update({
       quantity: newQuantity,
       price: price,
     });
+
+    return success;
+  }
+
+  /**
+   * Delete cart items
+   *
+   * @param ids list of cart item ids.
+   */
+  public async deleteCartItems(ids: number[]) {
+    if (ids.length < 1) {
+      return false;
+    }
+
+    Cart.where((q) => {
+      ids.forEach((id, i) => {
+        if (i == 0) q.where([['id', '=', `v:${id}`]]);
+        else q.andWhere([['id', '=', `v:${id}`]]);
+      });
+    });
+
+    const { success } = await Cart.delete();
 
     return success;
   }

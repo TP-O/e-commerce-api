@@ -141,7 +141,10 @@ export class Model {
       items.map((item) => Object.values(this.filter(item))),
     );
 
-    return status && status.insertId !== 0 && status.affectedRows === 1
+    return status &&
+      status.insertId !== 0 &&
+      status.affectedRows &&
+      status.affectedRows >= 1
       ? { success: true, id: status.insertId }
       : { error: error || 'Unknown error' };
   }
