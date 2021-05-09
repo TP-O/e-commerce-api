@@ -1,29 +1,35 @@
+import { CartController } from '@app/controllers/shopping-cart/cart-controller';
+import * as Middleware from '@app/middleware';
 import { LRouter } from 'laravel-expressjs-router';
 import { container } from 'tsyringe';
 
 export function useCartRoutes(router: LRouter) {
   /**
-   * Shopping-Cart
+   * Cart routes.
    */
-  router.group({ prefix: '/cart' }, () => {
-    /**
-     * Cart Modification
-     */
-    router.get({
-      path: '/add',
-      action: container.resolve,
-    });
-    router.get({
-      path: '/reduce',
-      action: container.resolve,
-    });
-    router.get({
-      path: '/remove',
-      action: container.resolve,
-    });
-    router.get({
-      path: '/checkout',
-      action: container.resolve,
-    });
-  });
+  router.group(
+    {
+      prefix: '/cart',
+      middleware: [
+        container.resolve(Middleware.RequireAccessToken).handle(),
+        container
+          .resolve(Middleware.MustHaveRole)
+          .handle(['normal customer', 'VIP customer']),
+      ],
+    },
+    () => {
+      router.get({
+        path: '/',
+        action: container.resolve(CartController).getCart,
+      });
+      router.post({
+        path: '/add',
+        action: container.resolve(CartController).addToCart,
+      });
+      router.delete({
+        path: '/remove',
+        action: container.resolve(CartController).removeFromCart,
+      });
+    },
+  );
 }

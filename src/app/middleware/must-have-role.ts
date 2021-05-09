@@ -5,6 +5,8 @@ export class MustHaveRole {
   public handle(roleNames = ['administrator']) {
     return async function (req: Request, res: Response, next: NextFunction) {
       try {
+        console.log('hello');
+
         const { data } = await req.user?.get('role');
         const role = data?.first()?.role;
 

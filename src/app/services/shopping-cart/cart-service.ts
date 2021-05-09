@@ -12,68 +12,64 @@ export class CartService {
 
   /**
    * Get cart of customer.
+   *
+   * @param customerId customer ID.
    */
   public async getCartOfCustomer(customerId: number) {
     const { data } = await Cart.select('*')
       .with('items')
       .where([['carts.customerId', '=', `v:${customerId}`]])
-      .get();
+      .first();
 
-    return data?.first();
+    return data;
   }
 
   /**
-   * Create cart.
+   * Create cart for one customer.
+   *
+   * @param customerId customer ID.
    */
   public async createCart(customerId: number) {
-    const { success } = await Cart.create([
+    const { id } = await Cart.create([
       {
         customerId: customerId,
       },
     ]);
 
-    return success;
-  }
-
-  /**
-   * Get cart item.
-   */
-  public async getCartItem(id: number) {
-    const { data } = await CartItem.select('*')
-      .where([['id', '=', `v:${id}`]])
-      .get();
-
-    return data?.first();
-  }
-
-  /**
-   * Get all cart items.
-   */
-  public async getCartItems(cartId: number) {
-    const { data } = await Cart.select('id')
-      .with('items')
-      .where([['carts.id', '=', `v:${cartId}`]])
-      .get();
-
-    return data?.first().items;
+    return id;
   }
 
   /**
    * Create item in cart.
+   *
+   * @param cartId cart ID.
+   * @param productId product ID.
+   * @param quantity product quantity.
    */
   public async createCartItem(
     cartId: number,
     productId: number,
     quantity: number,
   ) {
-    const price = await this._productService.getProductPrice(productId);
+    // Decrease product quantity
+    if (
+      !(await this._productService.updateQuantity(productId, quantity, false))
+    ) {
+      return false;
+    }
+
+    // Get current price of product
+    const price = await this._productService.getCurrentPrice(
+      productId,
+      quantity,
+    );
 
     const { success } = await CartItem.create([
       {
         cartId: cartId,
         productId: productId,
         quantity: quantity,
-        price: price * quantity,
+        price: price,
       },
     ]);
 
@@ -82,54 +78,105 @@ export class CartService {
 
   /**
    * Update item quantity and price in cart.
+   *
+   * @param cartItemId cart item ID.
+   * @param productId product ID.
+   * @param quantity product quantity.
    */
   public async updateCartItem(
     cartItemId: number,
     productId: number,
-    quantity: number,
+    oldQuantity: number,
+    newQuantity: number,
   ) {
-    const price = await this._productService.getProductPrice(productId);
+    // Update product quantity
+    if (
+      !(await this._productService.updateQuantity(
+        productId,
+        oldQuantity - newQuantity,
+      ))
+    ) {
+      return false;
+    }
+
+    // Get current price.
+    const price = await this._productService.getCurrentPrice(
+      productId,
+      newQuantity,
+    );
 
     const { success } = await CartItem.where([
       ['id', '=', `v:${cartItemId}`],
     ]).update({
-      quantity: quantity,
-      price: price * quantity,
+      quantity: newQuantity,
+      price: price,
     });
-
-    return success;
-  }
-
-  /**
-   * Delete cart items.
-   *
-   * @param ids list of cart item ids.
-   */
-  public async deleteCartItems(ids: number[]) {
-    Cart.where((q) => {
-      ids.forEach((id) => q.orWhere([['id', '=', `v:${id}`]]));
-    });
-
-    const { success } = await Cart.delete();
 
     return success;
   }
 
   /**
    * Add item to cart.
+   *
+   * @param customerId customer ID.
+   * @param productId product ID.
+   * @param quantity product quantity.
    */
-  public async addProductToCart(
-    cartId: number,
+  public async addToCart(
+    customerId: number,
     productId: number,
     quantity: number,
   ) {
-    const cartItems = await this.getCartItems(cartId);
+    let cart = await this.getCartOfCustomer(customerId);
 
-    for (let i = 0; i < cartItems.length; i++) {
-      if (cartItems[i].productId === productId)
-        return this.updateCartItem(cartItems[i].id, productId, quantity);
+    if (!cart) {
+      // Create new cart
+      await this.createCart(customerId);
+
+      // Try to get cart again
+      cart = await this.getCartOfCustomer(customerId);
+
+      if (!cart) {
+        return false;
+      }
     }
 
-    return this.createCartItem(cartId, productId, quantity);
+    for (let i = 0; i < cart.items.length; i++) {
+      // Update cart item
+      if (cart.items[i].productId === productId) {
+        return this.updateCartItem(
+          cart.items[i].id,
+          productId,
+          cart.items[i].quantity,
+          quantity,
+        );
+      }
+    }
+
+    // Add new cart item
+    return this.createCartItem(cart.id, productId, quantity);
+  }
+
+  public async removeFromCart(customerId: number, productId: number) {
+    const cart = await this.getCartOfCustomer(customerId);
+
+    if (!cart) {
+      return false;
+    }
+
+    for (let i = 0; i < cart.items.length; i++) {
+      if (cart.items[i].productId === productId) {
+        // Delete cart item and increase product quantity
+        return (
+          (await cart.items[i].delete()) &&
+          (await this._productService.updateQuantity(
+            productId,
+            cart.items[i].quantity,
+          ))
+        );
+      }
+    }
+
+    return false;
   }
 }

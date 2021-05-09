@@ -144,14 +144,49 @@ export class ProductService {
   }
 
   /**
-   * Get product by ID.
+   * Get product price by ID.
+   *
+   * @param id product Id.
    */
    public async getProductPrice(id: number) {
     const { data } = await Product.select('*')
       .where([['id', '=', `v:${id}`]])
-      .get();
+      .first();
 
-    return data?.first()?.price;
+    return data?.price;
+  }
+
+  /**
+   * Get current price of product.
+   */
+  public async getCurrentPrice(id: number, quantity = 1) {
+    const product = await this.getById(id);
+
+    return product.price * quantity;
+  }
+
+  /**
+   * Update product.
+   *
+   * @param id product ID.
+   * @param data product data.
+   */
+  public async updateQuantity(id: number, diff: number, increase = true) {
+    const product = await this.getById(id);
+
+    const quantity = increase
+      ? product.quantity + diff
+      : product.quantity - diff;
+
+    if (quantity < 0) {
+      return false;
+    }
+
+    product.quantity = quantity;
+
+    const { success } = await product.save();
+
+    return success;
   }
 
   /**

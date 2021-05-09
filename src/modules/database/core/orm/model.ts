@@ -106,6 +106,17 @@ export class Model {
   }
 
   /**
+   * Get data.
+   */
+  public async first() {
+    Model.usingModel = this;
+
+    const { data, error } = await this._database.execute();
+
+    return data && !error ? { data: data.first() } : { error };
+  }
+
+  /**
    * Get all data.
    */
   public async all() {
