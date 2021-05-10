@@ -1,6 +1,6 @@
 import { Ads } from '@app/models/ads/ads';
 import { AdsProduct } from '@app/models/ads/ads-product';
-import { ProductCategory } from '@app/models/product/category';
+import { Category } from '@app/models/product/category';
 import { Product } from '@app/models/product/product';
 import { singleton } from 'tsyringe';
 
@@ -36,24 +36,11 @@ export class AdsService {
    */
   public async deleteProductToAds(adsId: number, productId: number) {
     const { success } = await AdsProduct.where([
-      ['strategyId', '=', `v:${adsId}`],
-      ['productId', '=', `v:${productId}`],
+      ['strategyId', '=', `${adsId}`],
+      ['productId', '=', `${productId}`],
     ]).delete();
 
     return success;
-  }
-
-  /**
-   * Get number of specify products in ads.
-   *
-   * @param id product ID.
-   */
-  public async getProductAmount(id: number) {
-    const { data } = await Product.select('amount')
-      .where([['id', '=', `v:${id}`]])
-      .get();
-
-    return data?.first();
   }
 
   /**
@@ -63,7 +50,7 @@ export class AdsService {
    */
   public async getAdsById(adsId: number) {
     const { data } = await Ads.select('*')
-      .where([['id', '=', `v:${adsId}`]])
+      .where([['id', '=', `${adsId}`]])
       .get();
 
     return data?.first();
@@ -78,7 +65,7 @@ export class AdsService {
     const { data } = await Product.select('*')
       .addSelection(
         'advertisement_strategies_products.percent:percent',
-        'advertisement_strategies_products.amount:amount',
+        'advertisement_strategies_products.quantity:quantity',
       )
       .join('advertisement_strategies_products')
       .on([['products.id', '=', 'advertisement_strategies_products.productId']])
@@ -90,7 +77,7 @@ export class AdsService {
           'advertisement_strategies.id',
         ],
       ])
-      .where([['advertisement_strategies.id', '=', `v:${adsId}`]])
+      .where([['advertisement_strategies.id', '=', `${adsId}`]])
       .get();
 
     return data?.all();
@@ -103,12 +90,12 @@ export class AdsService {
    * @param sellerId seller ID.
    */
   public async getProductsOfSelller(adsId: number, sellerId: number) {
-    const { data: data1 } = await ProductCategory.select('*')
+    const { data: data1 } = await Category.select('*')
       .join('advertisement_strategies')
       .on([
         ['advertisement_strategies.categoryId', '=', 'product_categories.id'],
       ])
-      .where([['advertisement_strategies.id', '=', `v:${adsId}`]])
+      .where([['advertisement_strategies.id', '=', `${adsId}`]])
       .get();
 
     const { data } = await Product.select('*')
@@ -117,9 +104,9 @@ export class AdsService {
       .join('product_categories', 'left join')
       .on([['products.categoryId', '=', 'product_categories.id']])
       .where([
-        ['product_categories.left', '>=', `v:${data1?.first().left}`],
-        ['product_categories.left', '<=', `v:${data1?.first().right}`],
-        ['sellers.id', '=', `v:${sellerId}`],
+        ['product_categories.left', '>=', `${data1?.first().left}`],
+        ['product_categories.left', '<=', `${data1?.first().right}`],
+        ['sellers.id', '=', `${sellerId}`],
       ])
       .get();
 

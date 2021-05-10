@@ -45,13 +45,17 @@ export class CreateAdvertisementStrategiesProducts extends Migration {
           unsigned: true,
           required: true,
         },
-        amount: {
+        quantity: {
           type: DataType.int(),
           required: true,
         },
         percent: {
           type: DataType.int(),
           required: true,
+        },
+        sold: {
+          type: DataType.int(),
+          default: '0',
         },
         createdAt: {
           type: DataType.timestamp(),

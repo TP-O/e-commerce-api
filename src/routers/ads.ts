@@ -1,73 +1,64 @@
 import { LRouter } from 'laravel-expressjs-router';
 import { container } from 'tsyringe';
+import * as Middleware from '@app/middleware';
 import { AdsController } from '@app/controllers/ads/ads-controller';
 
 export function useAdsRoutes(router: LRouter) {
   /**
-   * Ads
+   * Ads routes.
    */
   router.group({ prefix: '/ads' }, () => {
-    router.post({
-      path: '/create-ads-strategy',
-      action: container.resolve(AdsController).createAdsStrategy,
-    });
-
-    router.post({
-      path: '/insert-product',
-      action: container.resolve(AdsController).insertProductToAds,
-    });
-
-    router.delete({
-      path: '/delete-product',
-      action: container.resolve(AdsController).deleteProductToAds,
-    });
-
     router.get({
-      path: '/get-ads',
+      path: '/:id',
       action: container.resolve(AdsController).getAdsById,
     });
 
     router.get({
-      path: '/get-products',
+      path: '/:id/products',
       action: container.resolve(AdsController).getProductsOfAds,
     });
 
-    router.get({
-      path: '/get-products-of-seller',
-      action: container.resolve(AdsController).getProductsOfSelller,
-    });
+    router.group(
+      {
+        middleware: [container.resolve(Middleware.RequireAccessToken).handle()],
+      },
+      () => {
+        router.post({
+          path: '/',
+          action: container.resolve(AdsController).createAdsStrategy,
+          middleware: [
+            container
+              .resolve(Middleware.MustHaveRole)
+              .handle(['administrator']),
+          ],
+        });
 
-    // router.group({ prefix: '/login' }, () => {
-    //   router.post({
-    //     path: '/admin',
-    //     action: container.resolve(Auth.AdminLoginController).login,
-    //   });
-    //   router.post({
-    //     path: '/seller',
-    //     action: container.resolve(Auth.SellerLoginController).login,
-    //   });
-    //   router.post({
-    //     path: '/customer',
-    //     action: container.resolve(Auth.CustomerLoginController).login,
-    //   });
-    // });
+        router.group(
+          {
+            middleware: [
+              container
+                .resolve(Middleware.MustHaveRole)
+                .handle(['individual', 'company']),
+            ],
+          },
+          () => {
+            router.get({
+              path: '/:id/recommended-products',
+              action: container.resolve(AdsController).getProductsOfSelller,
+            });
 
-    // /**
-    //  * Logout routes.
-    //  */
-    // router.group({ prefix: '/logout' }, () => {
-    //   router.post({
-    //     path: '/admin',
-    //     action: container.resolve(Auth.AdminLoginController).logout,
-    //   });
-    //   router.post({
-    //     path: '/seller',
-    //     action: container.resolve(Auth.SellerLoginController).logout,
-    //   });
-    //   router.post({
-    //     path: '/customer',
-    //     action: container.resolve(Auth.CustomerLoginController).logout,
-    //   });
-    // });
+            router.post({
+              path: '/:id/products',
+              action: container.resolve(AdsController).insertProductToAds,
+            });
+
+            router.delete({
+              path: '/:id/products/:productId',
+              action: container.resolve(AdsController).deleteProductToAds,
+            });
+          },
+        );
+      },
+    );
   });
 }

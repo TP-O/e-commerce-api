@@ -5,6 +5,7 @@ import { Request, Response } from 'express';
 import { format } from '@modules/helper';
 import { autoInjectable } from 'tsyringe';
 import { HttpRequestError } from '@app/exceptions/http-request-error';
+import { ProductService } from '@app/services/product/product-service';
 
 @autoInjectable()
 export class AdsController {
@@ -12,24 +13,80 @@ export class AdsController {
    * Constructor.
    *
    * @param _adsService ads service.
+   * @param _productService product service.
+   * @param _createAdsValidator ads creation validator.
+   * @param _insertProductToAdsValidator product insertion validator.
    */
   public constructor(
+    private _adsService: AdsService,
+    private _productService: ProductService,
     private _createAdsValidator: CreateAdsValidator,
     private _insertProductToAdsValidator: InsertProductToAdsValidator,
-    private _adsService: AdsService,
   ) {}
 
   /**
-   *
+   * Get Ads by ID.
+   */
+  public getAdsById = async (req: Request, res: Response) => {
+    const data = await this._adsService.getAdsById(parseInt(req.params.id, 10));
+
+    if (!data) {
+      throw new HttpRequestError(404, 'Ads not found');
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: format(data),
+    });
+  };
+
+  /**
+   * Get products of ads.
+   */
+  public getProductsOfAds = async (req: Request, res: Response) => {
+    const data = await this._adsService.getProductsOfAds(
+      parseInt(req.params.id, 10),
+    );
+
+    if (!data) {
+      throw new HttpRequestError(404, 'Ads not found');
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: format(data),
+    });
+  };
+
+  /**
+   * Get products of seller which appropriate to ads.
+   */
+  public getProductsOfSelller = async (req: Request, res: Response) => {
+    const data = await this._adsService.getProductsOfSelller(
+      parseInt(req.params.id, 10),
+      req.user.id,
+    );
+
+    if (!data) {
+      throw new HttpRequestError(404, 'Can not get products of seller');
+    }
+
+    return res.status(200).json({
+      data: format(data),
+      message: 'Get products of seller successfully',
+    });
+  };
+
+  /**
    * Create ads.
    */
   public createAdsStrategy = async (req: Request, res: Response) => {
     const input = await this._createAdsValidator.validate(req.body);
+
     const success = await this._adsService.createAdsStrategy(input);
-    console.log('input: ' + input);
 
     if (!success) {
-      throw new HttpRequestError(500, 'Unable to create Ads Strategy');
+      throw new HttpRequestError(500, 'Can not create Ads Strategy');
     }
 
     return res.status(201).json({
@@ -39,17 +96,21 @@ export class AdsController {
   };
 
   /**
-   *
    * Add products to ads.
    */
   public insertProductToAds = async (req: Request, res: Response) => {
+    // Validate input
     const input = await this._insertProductToAdsValidator.validate(req.body);
-    await this.checkPercent(input.strategyId, input.percent);
-    await this.checkAmount(input.productId, input.amount);
-    const success = await this._adsService.insertProductToAds(input);
+    await this.validatePercent(input.strategyId, input.percent);
+    await this.validateQuantity(input.productId, input.quantity);
+
+    const success = await this._adsService.insertProductToAds({
+      ...input,
+      adsId: req.params.id,
+    });
 
     if (!success) {
-      throw new HttpRequestError(500, 'Unable to insert product to Ads');
+      throw new HttpRequestError(500, 'Cant not insert product to Ads');
     }
 
     return res.status(201).json({
@@ -59,17 +120,16 @@ export class AdsController {
   };
 
   /**
-   * 
-   * Delete product to ads.
+   * Delete product from ads.
    */
   public deleteProductToAds = async (req: Request, res: Response) => {
     const success = await this._adsService.deleteProductToAds(
-      req.body.adsId,
-      req.body.productId,
+      parseInt(req.params.id, 10),
+      parseInt(req.params.productId, 10),
     );
 
     if (!success) {
-      throw new HttpRequestError(500, 'Unable to delete product to Ads');
+      throw new HttpRequestError(500, 'Can not delete product to Ads');
     }
 
     return res.status(201).json({
@@ -79,95 +139,40 @@ export class AdsController {
   };
 
   /**
-   * 
-   * Get Ads by id.
-   * 
-   */
-  public getAdsById = async (req: Request, res: Response) => {
-    const data = await this._adsService.getAdsById(req.body.adsId);
-    console.log(req.body);
-
-    if (!data) {
-      throw new HttpRequestError(404, 'Unable to get Ads');
-    }
-
-    return res.status(200).json({
-      data: format(data),
-      message: 'Get Ads successfully',
-    });
-  };
-  /**
-   * 
-   * Get product's amount.
-   * 
-   */
-  public getProductAmount = async (req: Request, res: Response) => {
-    const data = await this._adsService.getProductAmount(req.body.id);
-
-    if (!data) {
-      throw new HttpRequestError(404, 'Unable to get product amount');
-    }
-
-    return res.status(200).json({
-      data: format(data),
-      message: 'Get product amount successfully',
-    });
-  };
-
-  /**
+   * Validate sale-off percent.
    *
-   * Get products of ads.
+   * @param adsId ads ID.
+   * @param percent sale-off.
    */
-  public getProductsOfAds = async (req: Request, res: Response) => {
-    const data = await this._adsService.getProductsOfAds(req.body.adsId);
-    console.log(req.body);
-
-    if (!data) {
-      throw new HttpRequestError(404, 'Unable to get products of Ads');
-    }
-
-    return res.status(200).json({
-      data: format(data),
-      message: 'Get products successfully',
-    });
-  };
-
-  /**
-   *
-   * Get products of seller which appropriate to ads.
-   */
-  public getProductsOfSelller = async (req: Request, res: Response) => {
-    const data = await this._adsService.getProductsOfSelller(
-      req.body.adsId,
-      req.body.sellerId,
-    );
-
-    if (!data) {
-      throw new HttpRequestError(404, 'Unable to get products of seller');
-    }
-
-    return res.status(200).json({
-      data: format(data),
-      message: 'Get products of seller successfully',
-    });
-  };
-
-  public checkPercent = async (adsId: number, percent: number) => {
+  private validatePercent = async (adsId: number, percent: number) => {
     const ads = await this._adsService.getAdsById(adsId);
     const max = ads.max;
     const min = ads.min;
-    if(percent < min || percent > max) {
-      throw new HttpRequestError(401, 'Percent must be greater than min and smaller than max'); 
-    }
-  }
 
-  public checkAmount = async (productId: number, productAmount: number) => {
-    const product = await this._adsService.getProductAmount(productId);
-    const amount = product.amount;
-    if(productAmount > amount) {
-      throw new HttpRequestError(401, 'The amount is greater than the amount of product');
+    if (percent < min || percent > max) {
+      throw new HttpRequestError(401, {
+        percent: `Percent must be greater than ${min} and smaller than ${max}`,
+      });
     }
-  }
+  };
 
-  
+  /**
+   * Validate product quantity.
+   *
+   * @param productId product ID.
+   * @param joinedQuantity joined product quantity.
+   */
+  private validateQuantity = async (
+    productId: number,
+    joinedQuantity: number,
+  ) => {
+    const product = await this._productService.getById(productId);
+    const quantity = product.quantity;
+
+    if (joinedQuantity > quantity) {
+      throw new HttpRequestError(401, {
+        quantity: `The quantity is greater than ${quantity}`,
+      });
+    }
+  };
 }
