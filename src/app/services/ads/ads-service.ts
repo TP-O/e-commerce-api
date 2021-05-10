@@ -57,6 +57,36 @@ export class AdsService {
   }
 
   /**
+   * Get category of Ads.
+   * 
+   * @param adsId 
+   */
+  public async getCategoryOfAds(adsId: number) {
+    const { data } = await Ads.select('*')
+    .join('product_categories')
+    .on([['advertisement_strategies.categoryId', '=', 'product_categories.id']])
+    .where([['advertisement_strategies.id', '=', `${adsId}`]])
+    .get();
+
+    return data?.first();
+  }
+
+  /**
+   * Get category of Product.
+   * 
+   * @param productId 
+   */
+  public async getCategoryOfProduct(productId: number) {
+    const { data } = await Product.select('*')
+    .join('product_categories')
+    .on([['products.categoryId', '=', 'product_categories.id']])
+    .where([['products.id', '=', `${productId}`]])
+    .get();
+
+    return data?.first();
+  }
+
+  /**
    * Get all the products of ads.
    *
    * @param adsId id of ads.

@@ -8,7 +8,7 @@ const AdsProduct = model({
     'strategyId',
     'productId',
     'percent',
-    'amount',
+    'quantity',
     'createdAt',
     'updatedAt',
   ],
@@ -17,7 +17,7 @@ const AdsProduct = model({
     'strategyId',
     'productId',
     'percent',
-    'amount',
+    'quantity',
   ],
 });
 

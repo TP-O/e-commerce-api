@@ -83,7 +83,11 @@ export class AdsController {
   public createAdsStrategy = async (req: Request, res: Response) => {
     const input = await this._createAdsValidator.validate(req.body);
 
-    const success = await this._adsService.createAdsStrategy(input);
+    const success = await this._adsService.createAdsStrategy({
+      ...input,
+      startOn: input.startOn.toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+      endOn: input.endOn.toISOString().replace(/T/, ' ').replace(/\..+/, ''), 
+    });
 
     if (!success) {
       throw new HttpRequestError(500, 'Can not create Ads Strategy');
@@ -101,6 +105,7 @@ export class AdsController {
   public insertProductToAds = async (req: Request, res: Response) => {
     // Validate input
     const input = await this._insertProductToAdsValidator.validate(req.body);
+    await this.validateProductId(input.strategyId, input.productId);
     await this.validatePercent(input.strategyId, input.percent);
     await this.validateQuantity(input.productId, input.quantity);
 
@@ -110,7 +115,7 @@ export class AdsController {
     });
 
     if (!success) {
-      throw new HttpRequestError(500, 'Cant not insert product to Ads');
+      throw new HttpRequestError(500, 'Can not insert product to Ads');
     }
 
     return res.status(201).json({
@@ -175,4 +180,22 @@ export class AdsController {
       });
     }
   };
+
+  private validateProductId = async (adsId: number, product1Id: number) => {
+    const categoryA = await this._adsService.getCategoryOfAds(adsId);
+    const categoryALeft = categoryA?.left;
+    const categoryARight = categoryA.right;
+
+    const categoryB = await this._adsService.getCategoryOfProduct(product1Id);
+    const categoryBLeft = categoryB?.left;
+    
+
+    if (!(categoryBLeft > categoryALeft && categoryBLeft < categoryARight)) {
+      throw new HttpRequestError(401, {
+        productId: 'The product is not appropriate to the Ads'
+      });
+    }
+  };
+
+  
 }

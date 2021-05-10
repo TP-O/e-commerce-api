@@ -14,7 +14,7 @@ export class InsertProductToAdsValidator extends Validator {
       strategyId: Joi.number().integer().required(),
       productId: Joi.number().integer().required(),
       percent: Joi.number().integer().required(),
-      amount: Joi.number().integer().required(),
+      quantity: Joi.number().integer().required(),
     });
   }
 }
