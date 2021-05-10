@@ -128,10 +128,12 @@ export class AdsController {
    * Delete product from ads.
    */
   public deleteProductToAds = async (req: Request, res: Response) => {
+    await this.validateDelete(req.body.productId, req.user.id);
     const success = await this._adsService.deleteProductToAds(
       parseInt(req.params.id, 10),
       parseInt(req.params.productId, 10),
     );
+
 
     if (!success) {
       throw new HttpRequestError(500, 'Can not delete product to Ads');
@@ -197,5 +199,14 @@ export class AdsController {
     }
   };
 
-  
+  private validateDelete = async (productId: number, sellerId: number) => {
+    const A = await this._productService.getById(productId);
+    const B = A.sellerId;
+
+    if (B != sellerId) {
+      throw new HttpRequestError(401, {
+        sellerId: 'Can not delete product of another sellers'
+      });
+    }
+  }
 }
