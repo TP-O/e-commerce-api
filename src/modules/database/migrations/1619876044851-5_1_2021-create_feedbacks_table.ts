@@ -80,6 +80,11 @@ export class CreateFeedbacksTable extends Migration {
           onDelete: 'cascade',
         },
       ],
+      uniqueColumns: [
+        {
+          columns: ['customerId', 'productId'],
+        },
+      ],
     });
   }
 
