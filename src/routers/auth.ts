@@ -79,7 +79,7 @@ export function useAuthRoutes(router: LRouter) {
         action: container.resolve(Auth.AdminRegisterController).register,
         middleware: [
           container.resolve(Middleware.RequireAccessToken).handle(),
-          container.resolve(Middleware.MustHaveRole).handle('administrator'),
+          container.resolve(Middleware.MustHaveRole).handle(['administrator']),
         ],
       });
       router.post({

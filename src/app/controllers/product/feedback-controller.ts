@@ -19,7 +19,7 @@ export class FeedbackController {
     const success = await this._feedbackService.create(req.body);
 
     if (!success) {
-      throw new HttpRequestError(500, 'Unable to create feedback');
+      throw new HttpRequestError(500, 'Can not create feedback');
     }
 
     return res.status(200).json({

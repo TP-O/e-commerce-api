@@ -83,7 +83,7 @@ export class FeedbacksSeeder extends Seeder {
         ],
         [
           '1',
-          '22',
+          '3',
           '5',
           'Amazing picture quality and filled with smart features.',
         ],

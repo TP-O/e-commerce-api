@@ -30,12 +30,16 @@ export class ProductService {
   /**
    * Filter rely on brand name.
    *
-   * @param brand brand name.
+   * @param brands brand names.
    */
-  private filterBrand(brand: string) {
-    Product.join('brands')
-      .on([['products.brandId', '=', 'brands.id']])
-      .andWhere([['brands.name', '=', `'${brand}'`]]);
+  private filterBrand(brands: string) {
+    Product.join('brands').on([['products.brandId', '=', 'brands.id']]);
+
+    const conditions = brands
+      .split(',')
+      .map((brand) => ['brands.name', '=', `'${brand}'`, 'OR']);
+
+    Product.andWhere(conditions);
   }
 
   /**
@@ -81,7 +85,9 @@ export class ProductService {
 
     this.filterColumnValue(conditions);
 
-    const { data } = await Product.limit(`${offset}, ${limit}`).get();
+    const { data } = await Product.limit(
+      `${(offset - 1) * limit}, ${limit}`,
+    ).get();
 
     return data?.all();
   }
@@ -92,12 +98,25 @@ export class ProductService {
    * @param limit limit number of products.
    * @param offset get from index.
    */
-  public async get(limit: number, offset = 0) {
+  public async get(limit: number, offset = 1) {
     const { data } = await Product.select('*')
-      .limit(`${offset}, ${limit}`)
+      .limit(`${(offset - 1) * limit}, ${limit}`)
       .get();
 
     return data?.all();
+  }
+
+  /**
+   * Get product by ID.
+   *
+   * @param id product ID.
+   */
+  public async getById(id: number) {
+    const { data } = await Product.select('*')
+      .where([['id', '=', `${id}`]])
+      .get();
+
+    return data?.first();
   }
 
   /**
@@ -107,8 +126,8 @@ export class ProductService {
    */
   public async getBySlug(slug: string) {
     const { data } = await Product.select('*')
-      .with('brand', 'seller')
-      .where([['products.slug', '=', `${slug}`]])
+      .with('brand', 'seller', 'category')
+      .where([['products.slug', '=', `'${slug}'`]])
       .get();
 
     return data?.first();
