@@ -17,6 +17,13 @@ export class AdsService {
     return success;
   }
 
+  public async updateAdsStrategy(data: any) {
+    const { success } = await Ads.where([['id', '=', `${data.id}`]])
+    .update(data);
+    
+    return success;
+  }
+
   /**
    * Insert products to ads.
    *
@@ -71,7 +78,10 @@ export class AdsService {
   }
 
   public async getDiscountingProduct() {
-    const { data } = await Product.select('*')
+    const { data } = await Product.select('*').addSelection(
+      'advertisement_strategies_products.sold:sold',
+      'advertisement_strategies_products.quantity:quantity',
+    )
     .join('advertisement_strategies_products', 'left join')
       .on([['products.id', '=', 'advertisement_strategies_products.productId']])
       .join('advertisement_strategies', 'left join')
@@ -89,7 +99,7 @@ export class AdsService {
       .get();
 
       
-    return data?.first();
+    return data?.all();
       
   }
 

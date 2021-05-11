@@ -40,7 +40,15 @@ export function useAdsRoutes(router: LRouter) {
               .handle(['administrator']),
           ],
         });
-
+        router.put({
+          path: '/:id',
+          action: container.resolve(AdsController).updateAdsStrategy,
+          middleware: [
+            container
+              .resolve(Middleware.MustHaveRole)
+              .handle(['administrator']),
+          ],
+        });
         router.group(
           {
             middleware: [

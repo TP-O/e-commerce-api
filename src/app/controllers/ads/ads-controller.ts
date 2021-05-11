@@ -1,6 +1,7 @@
 import { AdsService } from '@app/services/ads/ads-service';
 import { InsertProductToAdsValidator } from '@app/validators/ads/insert-product-to-ads-validator';
 import { CreateAdsValidator } from '@app/validators/ads/create-ads-validator';
+import { UpdateAdsValidator } from '@app/validators/ads/update-ads-validator';
 import { Request, Response } from 'express';
 import { format } from '@modules/helper';
 import { autoInjectable } from 'tsyringe';
@@ -21,6 +22,7 @@ export class AdsController {
     private _adsService: AdsService,
     private _productService: ProductService,
     private _createAdsValidator: CreateAdsValidator,
+    private _updateAdsValidator: UpdateAdsValidator,
     private _insertProductToAdsValidator: InsertProductToAdsValidator,
   ) {}
 
@@ -129,6 +131,26 @@ export class AdsController {
     return res.status(201).json({
       success: true,
       message: 'Create Ads Strategy successfully',
+    });
+  };
+
+  public updateAdsStrategy = async (req: Request, res: Response) => {
+    const input = await this._updateAdsValidator.validate(req.body);
+
+    const success = await this._adsService.updateAdsStrategy({
+      ...input,
+      id: req.params.id,
+      startOn: input.startOn.toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+      endOn: input.endOn.toISOString().replace(/T/, ' ').replace(/\..+/, ''), 
+    });
+
+    if (!success) {
+      throw new HttpRequestError(500, 'Can not update Ads Strategy');
+    }
+
+    return res.status(201).json({
+      success: true,
+      message: 'Update Ads Strategy successfully',
     });
   };
 
