@@ -140,11 +140,11 @@ export abstract class ForgotPasswordController {
    * Reset account's password.
    */
   public resetPassword = async (req: Request, res: Response) => {
-    // Check forgot password code exists
-    const forgotPassword = await this.findForgotPassword(req.params.code);
-
     // Validate input
     const input = await this.resetPasswordValidator.validate(req.body);
+
+    // Check forgot password code exists
+    const forgotPassword = await this.findForgotPassword(req.params.code);
 
     // Update account's password
     await this.changeAccountPassword(forgotPassword.accountId, input.password);

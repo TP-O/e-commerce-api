@@ -7,6 +7,7 @@ const Category = model({
   columns: [
     'id',
     'name',
+    'slug',
     'left',
     'right',
     'level',
@@ -16,6 +17,7 @@ const Category = model({
   // prettier-ignore
   fillable: [
     'name',
+    'slug',
     'left',
     'right',
     'level',

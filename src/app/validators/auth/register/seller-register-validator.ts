@@ -44,7 +44,7 @@ export class SellerRegisterValidator extends Validator {
         'string.min': 'Password must be at least 5 characters',
         'any.required': 'Password is required',
       }),
-      confirm_password: Joi.any()
+      confirmPassword: Joi.any()
         .valid(Joi.ref('password'))
         .required()
         .messages({

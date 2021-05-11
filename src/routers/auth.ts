@@ -166,17 +166,17 @@ export function useAuthRoutes(router: LRouter) {
       router.post({
         path: '/admin/:code',
         action: container.resolve(Auth.AdminForgotPasswordController)
-          .forgotPassword,
+          .resetPassword,
       });
       router.post({
         path: '/seller/:code',
         action: container.resolve(Auth.SellerForgotPasswordController)
-          .forgotPassword,
+          .resetPassword,
       });
       router.post({
         path: '/customer/:code',
         action: container.resolve(Auth.CustomerForgotPasswordController)
-          .forgotPassword,
+          .resetPassword,
       });
     });
   });
