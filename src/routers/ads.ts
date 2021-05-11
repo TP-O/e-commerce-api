@@ -9,6 +9,14 @@ export function useAdsRoutes(router: LRouter) {
    */
   router.group({ prefix: '/ads' }, () => {
     router.get({
+      path: '/discounting-products',
+      action: container.resolve(AdsController).getDiscountingProduct,
+    });
+    router.get({
+      path: '/all-ads',
+      action: container.resolve(AdsController).getAdsByType,
+    });
+    router.get({
       path: '/:id',
       action: container.resolve(AdsController).getAdsById,
     });

@@ -57,6 +57,43 @@ export class AdsService {
   }
 
   /**
+   * Get all ads and sort startOn ACS
+   *  
+   */
+  public async getAdsByType(typeId: number) {
+    const { data } = await Ads.select('*')
+    .where([['advertisement_strategies.typeId', '=', `${typeId}`],
+            ['advertisement_strategies.startOn','>', 'CAST(CURRENT_TIMESTAMP AS DATE)']])
+    .orderBy('advertisement_strategies.startOn', 'ASC')
+    .get();
+
+    return data?.all();
+  }
+
+  public async getDiscountingProduct() {
+    const { data } = await Product.select('*')
+    .join('advertisement_strategies_products', 'left join')
+      .on([['products.id', '=', 'advertisement_strategies_products.productId']])
+      .join('advertisement_strategies', 'left join')
+      .on([
+        [
+          'advertisement_strategies_products.strategyId',
+          '=',
+          'advertisement_strategies.id',
+        ],
+      ])
+      .where([['advertisement_strategies.startOn', '<=', 'CAST(CURRENT_TIMESTAMP AS DATE)'],
+              ['advertisement_strategies.endOn', '>', 'CAST(CURRENT_TIMESTAMP AS DATE)']])
+      .orWhere([['advertisement_strategies.startOn', '>', 'CAST(CURRENT_TIMESTAMP AS DATE)']])
+      .orderBy('advertisement_strategies.startOn', 'ASC')
+      .get();
+
+      
+    return data?.first();
+      
+  }
+
+  /**
    * Get category of Ads.
    * 
    * @param adsId 

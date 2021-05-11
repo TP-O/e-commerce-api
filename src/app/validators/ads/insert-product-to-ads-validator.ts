@@ -11,10 +11,22 @@ export class InsertProductToAdsValidator extends Validator {
 
   protected makeRules() {
     this.rules = Joi.object().keys({
-      strategyId: Joi.number().integer().required(),
-      productId: Joi.number().integer().required(),
-      percent: Joi.number().integer().required(),
-      quantity: Joi.number().integer().required(),
+      strategyId: Joi.number().integer().required().messages({
+        'any.required': 'StrategyId is required',
+        'number.base': 'StrategyId must be a number',
+      }),
+      productId: Joi.number().integer().required().messages({
+        'any.required': 'ProductId is required',
+        'number.base': 'ProductId must be a number',
+      }),
+      percent: Joi.number().integer().required().messages({
+        'any.required': 'Percent is required',
+        'number.base': 'Percent must be a number',
+      }),
+      quantity: Joi.number().integer().required().messages({
+        'any.required': 'Quantity is required',
+        'number.base': 'Quantity must be a number',
+      }),
     });
   }
 }

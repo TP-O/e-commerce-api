@@ -41,6 +41,39 @@ export class AdsController {
   };
 
   /**
+   * 
+   * Get all Ads in Ads Type
+   */
+  public getAdsByType = async (req: Request, res: Response) => {
+    const data = await this._adsService.getAdsByType(req.body.typeId);
+
+    if (!data) {
+      throw new HttpRequestError(404, 'Ads not found');
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: format(data),
+    });
+  }
+
+  /**
+   * 
+   * Get discounting products.
+   */
+  public getDiscountingProduct = async (req: Request, res: Response) => {
+    const data = await this._adsService.getDiscountingProduct();
+    if (!data) {
+      throw new HttpRequestError(404, 'Product not found');
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: format(data),
+    });
+  }
+
+  /**
    * Get products of ads.
    */
   public getProductsOfAds = async (req: Request, res: Response) => {
