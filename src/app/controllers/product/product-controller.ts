@@ -1,6 +1,8 @@
 import { HttpRequestError } from '@app/exceptions/http-request-error';
 import { FeedbackService } from '@app/services/product/feedback-service';
 import { ProductService } from '@app/services/product/product-service';
+import { CreateProductValidator } from '@app/validators/product/create-product-validator';
+import { UpdateProductValidator } from '@app/validators/product/update-product-validator';
 import { format } from '@modules/helper';
 import { Request, Response } from 'express';
 import { autoInjectable } from 'tsyringe';
@@ -12,10 +14,14 @@ export class ProductController {
    *
    * @param _productService product service.
    * @param _feedbackService feedback service.
+   * @param _createProductValidator create product validator.
+   * @param _updateProductValidator update product validator.
    */
   public constructor(
     private _productService: ProductService,
     private _feedbackService: FeedbackService,
+    private _createProductValidator: CreateProductValidator,
+    private _updateProductValidator: UpdateProductValidator,
   ) {}
 
   /**
@@ -97,8 +103,10 @@ export class ProductController {
    * Create product.
    */
   public create = async (req: Request, res: Response) => {
+    const input = await this._createProductValidator.validate(req.body);
+
     const success = await this._productService.create({
-      ...req.body,
+      ...input,
       sellerId: req.user.id,
     });
 
@@ -118,9 +126,11 @@ export class ProductController {
   public update = async (req: Request, res: Response) => {
     await this.validateSellerId(req.user.id, parseInt(req.params.id, 10));
 
+    const input = await this._updateProductValidator.validate(req.body);
+
     const success = await this._productService.update(
       parseInt(req.params.id, 10),
-      req.body,
+      input,
     );
 
     if (!success) {
