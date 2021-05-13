@@ -24,7 +24,7 @@ export class FeedbacksSeeder extends Seeder {
   protected async run() {
     await this.database.table('feedbacks').insert(
       // Column names
-      ['customerId', 'productId', 'rating', 'content'],
+      ['customerId', 'productId', 'rating', "content"],
       // Inserted data
       [
         [
@@ -37,7 +37,7 @@ export class FeedbacksSeeder extends Seeder {
           '1',
           '2',
           '3',
-          'The phone is a definite upgrade from last year but I would’ve perferd 120hz refresh over 5G',
+          'The phone is a definite upgrade from last year but I would have perfered 120hz refresh over 5G',
         ],
         [
           '3',
@@ -53,7 +53,7 @@ export class FeedbacksSeeder extends Seeder {
         ],
         [
           '2',
-          '8',
+          '7',
           '1',
           'It does not worth this price.',
         ],
@@ -67,72 +67,139 @@ export class FeedbacksSeeder extends Seeder {
           '1',
           '10',
           '5',
-          'Not too hard to get set up, all I needed. Works great'
-        ],
-        [
-          '1',
-          '22',
-          '5',
-          'Amazing picture quality and filled with smart features.',
+          'Not too hard to get set up, all I needed. Works great.',
         ],
         [
           '3',
           '20',
           '1',
-          'DO NOT BUY THIS TV*** Or do buy it and prepared to be frustrated out of your mind. This is my first and last Sony TV...',
+          'DO NOT BUY THIS TV. Or do buy it and prepared to be frustrated out of your mind.',
         ],
         [
           '1',
-          '3',
+          '21',
           '5',
           'Amazing picture quality and filled with smart features.',
         ],
         [
           '3',
-          '15',
+          '22',
           '5',
-          'Great!',
-        ],
-        [
-          '1',
-          '14',
-          '4',
-          'Thank you.',
+          'Bucket list check. Next get rid of girl friend.',
         ],
         [
           '2',
-          '13',
-          '5',
-          'Thank you.',
-        ],
-        [
-          '1',
-          '12',
-          '4',
-          'Thank you.',
-        ],
-        [
-          '3',
-          '11',
-          '5',
-          'Thank you.',
+          '23',
+          '2',
+          'Did not come with any screws. like seriously.',
         ],
         [
           '2',
-          '10',
-          '4',
-          'Thank you.',
+          '24',
+          '5',
+          'Pretty amazing tv. I would buy it again. I have zero regrets.',
+        ],
+        [
+          '1',
+          '24',
+          '5',
+          'It is packed well, look up some YouTube for setting it up. The manual with it is well, non exixtent.',
         ],
         [
           '3',
-          '9',
-          '4',
-          'Thank you.',
-        ],[
+          '25',
           '1',
-          '7',
+          'do not buy this unit.',
+        ],
+        [
+          '2',
+          '25',
+          '2',
+          'I got the 6000 btu version and so far I have been greatly disappointed.',
+        ],
+        [
+          '1',
+          '26',
           '4',
-          'Thank you.',
+          'I have it cooling two rooms and it does the job. My only complaint would be the small size of the controls.',
+        ],
+        [
+          '2',
+          '27',
+          '2',
+          'Good looking unit but i expected more. Does not blow hard enough in my opinion.',
+        ],
+        [
+          '3',
+          '45',
+          '5',
+          'This lighter is amazing. Lights candles instantly. Highly recommend this product',
+        ],
+        [
+          '1',
+          '45',
+          '5',
+          'Easy to use. A nice change from a butane lighter that never works when you need it to. No butane fill up.',
+        ],
+        [
+          '2',
+          '47',
+          '5',
+          'Looks very good, adds a lot of warm atmosphere to the bedroom.',
+        ],
+        [
+          '3',
+          '48',
+          '1',
+          'A piece of junk, do not waste your money.',
+        ],
+        [
+          '1',
+          '73',
+          '5',
+          'Well worth the cash easy to assemble great quality very comfortable after long playing hours',
+        ],
+        [
+          '3',
+          '74',
+          '1',
+          'Cheapest material, worst design.',
+        ],
+        [
+          '2',
+          '74',
+          '1',
+          'Returned',
+        ],
+        [
+          '1',
+          '76',
+          '5',
+          'You just can not beat the basics. This hairdryer takes care of business and fast.',
+        ],
+        [
+          '3',
+          '76',
+          '5',
+          'I just love this hair dryer. It does a wonderful job dryer my thick hair.',
+        ],
+        [
+          '2',
+          '77',
+          '2',
+          'It did its job. Nothing amazing by any means. I was really disappointed that it stopped working after a year.',
+        ],
+        [
+          '3',
+          '81',
+          '1',
+          'This zinc oxide is too thick. It makes your face look like a ghost',
+        ],
+        [
+          '1',
+          '82',
+          '5',
+          'Love, love, love this product',
         ],
       ],
     );
