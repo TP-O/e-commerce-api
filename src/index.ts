@@ -19,7 +19,11 @@ app.use(cookieParser());
 container.resolve(Logger).applyFor(app);
 
 // Security
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+  }),
+);
 app.use(helmet());
 
 // Return only json

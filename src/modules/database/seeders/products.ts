@@ -24,7 +24,7 @@ export class ProductsSeeder extends Seeder {
   protected async run() {
     await this.database.table('products').insert(
       // Column names
-      ['sellerId', 'categoryId', 'brandId', 'name', 'slug', 'description', 'price', 'amount'],
+      ['sellerId', 'categoryId', 'brandId', 'name', 'slug', 'description', 'price', 'quantity'],
       // Inserted data
       [
         // Smart Phone

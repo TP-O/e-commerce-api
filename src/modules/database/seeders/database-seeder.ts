@@ -4,6 +4,7 @@ import { AdminsSeeder } from './admins';
 import { BrandsSeeder } from './brands';
 import { CustomerRolesSeeder } from './customer-roles';
 import { CustomersSeeder } from './customers';
+import { FeedbacksSeeder } from './feedbacks';
 import { ProductCategoriesSeeder } from './product-categories';
 import { ProductsSeeder } from './products';
 import { SellerRolesSeeder } from './seller-roles';
@@ -20,5 +21,6 @@ export class DatabaseSeeder {
     await container.resolve(ProductCategoriesSeeder).seed();
     await container.resolve(BrandsSeeder).seed();
     await container.resolve(ProductsSeeder).seed();
+    await container.resolve(FeedbacksSeeder).seed();
   }
 }

@@ -5,11 +5,11 @@ import { autoInjectable } from 'tsyringe';
 import { Database } from '@modules/database/core/database';
 
 @autoInjectable()
-export class CreateProductCategoriesTable extends Migration {
+export class CreateFeedbacksTable extends Migration {
   /**
    * Name of the table will be created.
    */
-  protected table = 'product_categories';
+  protected table = 'feedbacks';
 
   /**
    * Name of migration.
@@ -27,7 +27,7 @@ export class CreateProductCategoriesTable extends Migration {
 
   protected async up() {
     await this.database.create({
-      table: 'product_categories',
+      table: 'feedbacks',
       columns: {
         id: {
           type: DataType.bigInt(),
@@ -35,30 +35,23 @@ export class CreateProductCategoriesTable extends Migration {
           increment: true,
           required: true,
         },
-        level: {
+        customerId: {
+          type: DataType.bigInt(),
+          unsigned: true,
+          required: true,
+        },
+        productId: {
+          type: DataType.bigInt(),
+          unsigned: true,
+          required: true,
+        },
+        rating: {
           type: DataType.int(),
+          unsigned: true,
           required: true,
         },
-        left: {
-          type: DataType.int(),
-          required: true,
-        },
-        right: {
-          type: DataType.int(),
-          required: true,
-        },
-        name: {
-          type: DataType.varChar(50),
-          required: true,
-        },
-        slug: {
-          type: DataType.varChar(50),
-          required: true,
-          unique: true,
-        },
-        description: {
+        content: {
           type: DataType.text(),
-          required: true,
         },
         createdAt: {
           type: DataType.timestamp(),
@@ -73,10 +66,29 @@ export class CreateProductCategoriesTable extends Migration {
       primaryKey: {
         columns: ['id'],
       },
+      foreignKeys: [
+        {
+          column: 'customerId',
+          table: 'customers',
+          referencedColumn: 'id',
+          onDelete: 'cascade',
+        },
+        {
+          column: 'productId',
+          table: 'products',
+          referencedColumn: 'id',
+          onDelete: 'cascade',
+        },
+      ],
+      uniqueColumns: [
+        {
+          columns: ['customerId', 'productId'],
+        },
+      ],
     });
   }
 
   protected async down() {
-    await this.database.dropIfExists('product_categories');
+    await this.database.dropIfExists('feedbacks');
   }
 }

@@ -27,7 +27,7 @@ describe('Test MustHaveRole', () => {
     const next = (jest.fn() as unknown) as NextFunction;
 
     try {
-      await middleware.handle('required role')(req, res, next);
+      await middleware.handle(['required role'])(req, res, next);
     } catch (e) {
       err = e;
     }
@@ -54,7 +54,7 @@ describe('Test MustHaveRole', () => {
     const res = createResponse();
     const next = (jest.fn() as unknown) as NextFunction;
 
-    await middleware.handle('required role')(req, res, next);
+    await middleware.handle(['required role'])(req, res, next);
 
     expect(next).toBeCalled();
   });

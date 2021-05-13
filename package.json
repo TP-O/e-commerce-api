@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "E-commerce API",
   "scripts": {
-    "dev": "nodemon --exec ts-node -r tsconfig-paths/register --files ./src/bin/active.ts",
+    "dev": "nodemon --legacy-watch --exec ts-node -r tsconfig-paths/register --files ./src/bin/active.ts",
     "build": "webpack",
     "prod": "pm2-runtime start ecosystem.config.js --env production",
     "docker:prod": "docker-compose -f docker-compose.yml",

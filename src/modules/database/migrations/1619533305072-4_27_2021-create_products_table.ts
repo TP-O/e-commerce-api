@@ -67,7 +67,7 @@ export class CreateProductsTable extends Migration {
           type: DataType.int(),
           required: true,
         },
-        amount: {
+        quantity: {
           type: DataType.int(),
           required: true,
         },

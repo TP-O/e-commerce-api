@@ -37,6 +37,7 @@ export class CreateBrandsTable extends Migration {
         },
         name: {
           type: DataType.varChar(255),
+          unique: true,
           required: true,
         },
         slug: {

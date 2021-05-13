@@ -292,7 +292,7 @@ export class QueryBuilder implements Builder {
    */
   private whereClause(conditions: string[][], prefix: string) {
     this._query += ` ${prefix} (${conditions
-      .map((c) => {
+      .map((c, i) => {
         if (prefix !== 'HAVING') {
           c[0] = `\`${c[0].split('.').join('`.`')}\``;
         } else {
@@ -304,9 +304,11 @@ export class QueryBuilder implements Builder {
             .join('`.`')}\`)`;
         }
 
-        return c.join(' ');
+        const opr = i == conditions.length - 1 ? '' : c[3] || 'AND';
+
+        return `${c.splice(0, 3).join(' ')} ${opr}`;
       })
-      .join(' AND ')})`;
+      .join(' ')})`;
 
     return this;
   }
@@ -354,7 +356,7 @@ export class QueryBuilder implements Builder {
    *
    * @param number maximum number of results.
    */
-  public limit(number: number) {
+  public limit(number: string) {
     this._query += ` LIMIT ${number}`;
 
     return this;

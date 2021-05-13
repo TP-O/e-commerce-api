@@ -297,7 +297,7 @@ export class Model {
    *
    * @param number maximum number of results.
    */
-  public limit(number: number) {
+  public limit(number: string) {
     this._database.limit(number);
 
     return this;
