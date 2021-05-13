@@ -46,7 +46,7 @@ export class CreateFeedbacksTable extends Migration {
           required: true,
         },
         rating: {
-          type: DataType.bigInt(),
+          type: DataType.int(),
           unsigned: true,
           required: true,
         },

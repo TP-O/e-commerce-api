@@ -100,6 +100,11 @@ export class ProductService {
    */
   public async get(limit: number, offset = 1) {
     const { data } = await Product.select('*')
+      .addSelection('feedbacks.rating')
+      .join('feedbacks')
+      .on([['products.id', '=', '`feedbacks`.`productId`']])
+      .avg('feedbacks.rating', 'rating')
+      .groupBy('products`.`id')
       .limit(`${(offset - 1) * limit}, ${limit}`)
       .get();
 
@@ -127,7 +132,12 @@ export class ProductService {
   public async getBySlug(slug: string) {
     const { data } = await Product.select('*')
       .with('brand', 'seller', 'category')
+      .addSelection('feedbacks.rating')
+      .join('feedbacks')
+      .on([['products.id', '=', '`feedbacks`.`productId`']])
+      .avg('feedbacks.rating', 'rating')
       .where([['products.slug', '=', `'${slug}'`]])
+      .groupBy('products`.`id')
       .get();
 
     return data?.first();
