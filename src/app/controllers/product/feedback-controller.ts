@@ -14,8 +14,8 @@ export class FeedbackController {
    */
   public constructor(
     protected _feedbackService: FeedbackService,
-    private _createFeedbackValidator: CreateFeedbackValidator
-    ) {}
+    private _createFeedbackValidator: CreateFeedbackValidator,
+  ) {}
 
   /**
    * Create feedback.

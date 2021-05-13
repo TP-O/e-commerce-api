@@ -24,7 +24,7 @@ export class FeedbacksSeeder extends Seeder {
   protected async run() {
     await this.database.table('feedbacks').insert(
       // Column names
-      ['customerId', 'productId', 'rating', "content"],
+      ['customerId', 'productId', 'rating', 'content'],
       // Inserted data
       [
         [
