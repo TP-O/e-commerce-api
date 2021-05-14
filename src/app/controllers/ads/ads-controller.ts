@@ -133,7 +133,27 @@ export class AdsController {
       message: 'Create Ads Strategy successfully',
     });
   };
+  
+  /**
+   * Delete ads.
+   */
+   public deleteAdsStrategy = async (req: Request, res: Response) => {
+    const success = await this._adsService.deleteAdsStrategy(req.body.adsId);
 
+    if(!success) {
+      throw new HttpRequestError(500, 'Can not delete Ads Strategy');
+    }
+
+    return res.status(201).json({
+      success: true,
+      message: 'Delete Ads Strategy successfully',
+    });
+  }
+
+  /**
+   * 
+   * Update ads.
+   */
   public updateAdsStrategy = async (req: Request, res: Response) => {
     const input = await this._updateAdsValidator.validate(req.body);
 
@@ -238,6 +258,12 @@ export class AdsController {
     }
   };
 
+  /**
+   * Validate productId.
+   * 
+   * @param adsId adsId.
+   * @param product1Id productId.
+   */
   private validateProductId = async (adsId: number, product1Id: number) => {
     const categoryA = await this._adsService.getCategoryOfAds(adsId);
     const categoryALeft = categoryA?.left;
@@ -253,7 +279,11 @@ export class AdsController {
       });
     }
   };
-
+  /**
+   * Validate Delete.
+   * @param productId productId.
+   * @param sellerId sellerId.
+   */
   private validateDelete = async (productId: number, sellerId: number) => {
     const A = await this._productService.getById(productId);
     const B = A.sellerId;

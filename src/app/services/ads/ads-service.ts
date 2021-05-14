@@ -17,6 +17,23 @@ export class AdsService {
     return success;
   }
 
+  /**
+   * Delete advertisement strategy.
+   * 
+   * @param adsId ads ID.
+   */
+   public async deleteAdsStrategy(adsId: number) {
+    const { success } = await Ads.where([['id', '=', `${adsId}`]])
+    .delete();
+    
+    return success;
+  }
+
+    /**
+   * Update advertisement strategy.
+   *
+   * @param data ads data.
+   */
   public async updateAdsStrategy(data: any) {
     const { success } = await Ads.where([['id', '=', `${data.id}`]])
     .update(data);
@@ -64,7 +81,7 @@ export class AdsService {
   }
 
   /**
-   * Get all ads and sort startOn ACS
+   * Get all ads and sort startOn ACS.
    *  
    */
   public async getAdsByType(typeId: number) {
@@ -77,6 +94,10 @@ export class AdsService {
     return data?.all();
   }
 
+  /**
+   * Get discounting products.
+   * 
+   */
   public async getDiscountingProduct() {
     const { data } = await Product.select('*').addSelection(
       'advertisement_strategies_products.sold:sold',
