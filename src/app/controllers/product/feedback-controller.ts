@@ -13,7 +13,7 @@ export class FeedbackController {
    * @param _createFeedbackValidator create feedback validator.
    */
   public constructor(
-    protected _feedbackService: FeedbackService,
+    private _feedbackService: FeedbackService,
     private _createFeedbackValidator: CreateFeedbackValidator,
   ) {}
 

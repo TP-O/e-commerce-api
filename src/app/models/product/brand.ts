@@ -7,12 +7,14 @@ const Brand = model({
   columns: [
     'id',
     'name',
+    'slug',
     'createdAt',
     'updatedAt',
   ],
   // prettier-ignore
   fillable: [
     'name',
+    'slug',
   ],
 });
 
