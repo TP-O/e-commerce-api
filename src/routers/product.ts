@@ -19,6 +19,11 @@ export function useProductRoutes(router: LRouter) {
     });
 
     router.get({
+      path: '/sentiment/get',
+      action: container.resolve(ProductController).sortBySentiment,
+    });
+
+    router.get({
       path: '/discounting/get',
       action: container.resolve(ProductController).getDiscountingProduct,
     });

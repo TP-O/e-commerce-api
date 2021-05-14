@@ -1,4 +1,5 @@
 import { Feedback } from '@app/models/product/feedback';
+import { Keyword } from '@app/models/product/keyword';
 import { singleton } from 'tsyringe';
 
 @singleton()
@@ -25,8 +26,32 @@ export class FeedbackService {
    * @param data feedback data.
    */
   public async create(data: any) {
-    const id = await Feedback.create(data);
+    const score = await this.getScoreOfContent(data.content);
+
+    const id = await Feedback.create({
+      ...data,
+      score: score,
+    });
 
     return id;
+  }
+
+  /**
+   * Get sum of scores.
+   *
+   * @param content feedback content.
+   */
+  public async getScoreOfContent(content: string) {
+    const words = content.split(' ');
+
+    Keyword.select('score').where([['id', '>', '0']]);
+
+    words.forEach((word: string) => {
+      Keyword.orWhere([['word', '=', `'${word}'`]]);
+    });
+
+    const { data } = await Keyword.sum('score', 'diff').first();
+
+    return data?.diff ? data.diff : 0;
   }
 }

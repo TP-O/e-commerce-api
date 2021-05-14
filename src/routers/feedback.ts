@@ -9,7 +9,7 @@ export function useFeedbackRoutes(router: LRouter) {
    */
   router.group({ prefix: '/feedbacks' }, () => {
     router.post({
-      path: '/',
+      path: '/:productId',
       action: container.resolve(FeedbackController).create,
       middleware: [
         container.resolve(Middleware.RequireAccessToken).handle(),

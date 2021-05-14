@@ -23,7 +23,11 @@ export class FeedbackController {
   public create = async (req: Request, res: Response) => {
     const input = await this._createFeedbackValidator.validate(req.body);
 
-    const success = await this._feedbackService.create(input);
+    const success = await this._feedbackService.create({
+      ...input,
+      productId: req.params.productId,
+      customerId: req.user.id,
+    });
 
     if (!success) {
       throw new HttpRequestError(500, 'Can not create feedback');

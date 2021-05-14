@@ -93,6 +93,26 @@ export class ProductService {
   }
 
   /**
+   * Sort product by sentitment.
+   *
+   * @param limit limit number of products.
+   * @param offset get from index.
+   */
+  public async sortBySentiment(limit: number, offset = 0) {
+    const { data } = await Product.select('*')
+      .addSelection('feedbacks.score')
+      .join('feedbacks')
+      .on([['products.id', '=', '`feedbacks`.`productId`']])
+      .avg('feedbacks.score', 'score')
+      .groupBy('products`.`id')
+      .orderBy('score', 'DESC')
+      .limit(`${(offset - 1) * limit}, ${limit}`)
+      .get();
+
+    return data?.all();
+  }
+
+  /**
    * Get products.
    *
    * @param limit limit number of products.
@@ -152,7 +172,7 @@ export class ProductService {
       .addSelection(
         'advertisement_strategies_products.percent:saleOff',
         'advertisement_strategies_products.sold:sold',
-        'advertisement_strategies_products.quantity:quantity',
+        'advertisement_strategies_products.quantity:joinedQuantity',
       )
       .join('advertisement_strategies_products', 'left join')
       .on([['products.id', '=', 'advertisement_strategies_products.productId']])
@@ -207,7 +227,7 @@ export class ProductService {
       if (discountingProducts[i].id === product.id) {
         saleOff = discountingProducts[i].saleOff;
         remaining =
-          discountingProducts[i].quantity - discountingProducts[i].sold;
+          discountingProducts[i].joinedQuantity - discountingProducts[i].sold;
 
         break;
       }

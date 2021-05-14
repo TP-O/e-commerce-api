@@ -5,11 +5,11 @@ import { autoInjectable } from 'tsyringe';
 import { Database } from '@modules/database/core/database';
 
 @autoInjectable()
-export class CreateFeedbacksTable extends Migration {
+export class CreateKeywordsTable extends Migration {
   /**
    * Name of the table will be created.
    */
-  protected table = 'feedbacks';
+  protected table = 'keywords';
 
   /**
    * Name of migration.
@@ -27,7 +27,7 @@ export class CreateFeedbacksTable extends Migration {
 
   protected async up() {
     await this.database.create({
-      table: 'feedbacks',
+      table: 'keywords',
       columns: {
         id: {
           type: DataType.bigInt(),
@@ -35,27 +35,13 @@ export class CreateFeedbacksTable extends Migration {
           increment: true,
           required: true,
         },
-        customerId: {
-          type: DataType.bigInt(),
-          unsigned: true,
-          required: true,
-        },
-        productId: {
-          type: DataType.bigInt(),
-          unsigned: true,
-          required: true,
-        },
-        rating: {
-          type: DataType.int(),
-          unsigned: true,
+        word: {
+          type: DataType.varChar(25),
           required: true,
         },
         score: {
           type: DataType.int(),
-          default: '0',
-        },
-        content: {
-          type: DataType.text(),
+          required: true,
         },
         createdAt: {
           type: DataType.timestamp(),
@@ -70,29 +56,12 @@ export class CreateFeedbacksTable extends Migration {
       primaryKey: {
         columns: ['id'],
       },
-      foreignKeys: [
-        {
-          column: 'customerId',
-          table: 'customers',
-          referencedColumn: 'id',
-          onDelete: 'cascade',
-        },
-        {
-          column: 'productId',
-          table: 'products',
-          referencedColumn: 'id',
-          onDelete: 'cascade',
-        },
-      ],
-      uniqueColumns: [
-        {
-          columns: ['customerId', 'productId'],
-        },
-      ],
+      foreignKeys: [],
+      uniqueColumns: [],
     });
   }
 
   protected async down() {
-    await this.database.dropIfExists('feedbacks');
+    await this.database.dropIfExists('keywords');
   }
 }

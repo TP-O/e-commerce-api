@@ -8,6 +8,7 @@ const Feedback = model({
       'customerId',
       'productId',
       'rating',
+      'score',
       'content',
       'createdAt',
       'updatedAt',
@@ -17,6 +18,7 @@ const Feedback = model({
       'customerId',
       'productId',
       'rating',
+      'score',
       'content',
     ],
 });

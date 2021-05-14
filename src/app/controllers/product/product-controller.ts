@@ -84,6 +84,25 @@ export class ProductController {
   };
 
   /**
+   * Sort products by sentitment.
+   */
+  public sortBySentiment = async (req: Request, res: Response) => {
+    const data = await this._productService.sortBySentiment(
+      20,
+      parseInt(`${req.query.page || '1'}`, 10),
+    );
+
+    if (!data) {
+      throw new HttpRequestError(404, 'Product not found');
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: format(data),
+    });
+  };
+
+  /**
    * Get discounting products.
    */
   public getDiscountingProduct = async (req: Request, res: Response) => {
