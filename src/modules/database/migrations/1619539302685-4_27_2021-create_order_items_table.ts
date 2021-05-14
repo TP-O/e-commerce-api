@@ -50,6 +50,12 @@ export class CreateOrderItemsTable extends Migration {
           unsigned: true,
           required: true,
         },
+        statusId: {
+          type: DataType.bigInt(),
+          unsigned: true,
+          default: '1',
+          required: true,
+        },
         quantity: {
           type: DataType.int(),
           required: true,
@@ -80,13 +86,19 @@ export class CreateOrderItemsTable extends Migration {
         },
         {
           column: 'addressId',
-          table: 'shipping_address',
+          table: 'shipping_addresses',
           referencedColumn: 'id',
           onDelete: 'cascade',
         },
         {
           column: 'productId',
           table: 'products',
+          referencedColumn: 'id',
+          onDelete: 'cascade',
+        },
+        {
+          column: 'statusId',
+          table: 'order_status',
           referencedColumn: 'id',
           onDelete: 'cascade',
         },

@@ -19,25 +19,25 @@ export class AdsService {
 
   /**
    * Delete advertisement strategy.
-   * 
+   *
    * @param adsId ads ID.
    */
-   public async deleteAdsStrategy(adsId: number) {
-    const { success } = await Ads.where([['id', '=', `${adsId}`]])
-    .delete();
-    
+  public async deleteAdsStrategy(adsId: number) {
+    const { success } = await Ads.where([['id', '=', `${adsId}`]]).delete();
+
     return success;
   }
 
-    /**
+  /**
    * Update advertisement strategy.
    *
    * @param data ads data.
    */
   public async updateAdsStrategy(data: any) {
-    const { success } = await Ads.where([['id', '=', `${data.id}`]])
-    .update(data);
-    
+    const { success } = await Ads.where([['id', '=', `${data.id}`]]).update(
+      data,
+    );
+
     return success;
   }
 
@@ -82,74 +82,52 @@ export class AdsService {
 
   /**
    * Get all ads and sort startOn ACS.
-   *  
+   *
    */
   public async getAdsByType(typeId: number) {
     const { data } = await Ads.select('*')
-    .where([['advertisement_strategies.typeId', '=', `${typeId}`],
-            ['advertisement_strategies.startOn','>', 'CAST(CURRENT_TIMESTAMP AS DATE)']])
-    .orderBy('advertisement_strategies.startOn', 'ASC')
-    .get();
-
-    return data?.all();
-  }
-
-  /**
-   * Get discounting products.
-   * 
-   */
-  public async getDiscountingProduct() {
-    const { data } = await Product.select('*').addSelection(
-      'advertisement_strategies_products.sold:sold',
-      'advertisement_strategies_products.quantity:quantity',
-    )
-    .join('advertisement_strategies_products', 'left join')
-      .on([['products.id', '=', 'advertisement_strategies_products.productId']])
-      .join('advertisement_strategies', 'left join')
-      .on([
+      .where([
+        ['advertisement_strategies.typeId', '=', `${typeId}`],
         [
-          'advertisement_strategies_products.strategyId',
-          '=',
-          'advertisement_strategies.id',
+          'advertisement_strategies.startOn',
+          '>',
+          'CAST(CURRENT_TIMESTAMP AS DATE)',
         ],
       ])
-      .where([['advertisement_strategies.startOn', '<=', 'CAST(CURRENT_TIMESTAMP AS DATE)'],
-              ['advertisement_strategies.endOn', '>', 'CAST(CURRENT_TIMESTAMP AS DATE)']])
-      .orWhere([['advertisement_strategies.startOn', '>', 'CAST(CURRENT_TIMESTAMP AS DATE)']])
       .orderBy('advertisement_strategies.startOn', 'ASC')
       .get();
 
-      
     return data?.all();
-      
   }
 
   /**
    * Get category of Ads.
-   * 
-   * @param adsId 
+   *
+   * @param adsId
    */
   public async getCategoryOfAds(adsId: number) {
     const { data } = await Ads.select('*')
-    .join('product_categories')
-    .on([['advertisement_strategies.categoryId', '=', 'product_categories.id']])
-    .where([['advertisement_strategies.id', '=', `${adsId}`]])
-    .get();
+      .join('product_categories')
+      .on([
+        ['advertisement_strategies.categoryId', '=', 'product_categories.id'],
+      ])
+      .where([['advertisement_strategies.id', '=', `${adsId}`]])
+      .get();
 
     return data?.first();
   }
 
   /**
    * Get category of Product.
-   * 
-   * @param productId 
+   *
+   * @param productId
    */
   public async getCategoryOfProduct(productId: number) {
     const { data } = await Product.select('*')
-    .join('product_categories')
-    .on([['products.categoryId', '=', 'product_categories.id']])
-    .where([['products.id', '=', `${productId}`]])
-    .get();
+      .join('product_categories')
+      .on([['products.categoryId', '=', 'product_categories.id']])
+      .where([['products.id', '=', `${productId}`]])
+      .get();
 
     return data?.first();
   }

@@ -38,6 +38,7 @@ export class CreateCartsTable extends Migration {
         customerId: {
           type: DataType.bigInt(),
           unsigned: true,
+          unique: true,
           required: true,
         },
         createdAt: {

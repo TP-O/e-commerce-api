@@ -6,6 +6,8 @@ import { useAuthRoutes } from './auth';
 import { useCategoryRoutes } from './category';
 import { useFeedbackRoutes } from './feedback';
 import { useProductRoutes } from './product';
+import { useCartRoutes } from './cart';
+import { useOrderRoutes } from './order';
 
 const router = lrouter({
   router: Router(),
@@ -27,6 +29,8 @@ router.group({ prefix: '/api/v1' }, () => {
   useCategoryRoutes(router);
   useFeedbackRoutes(router);
   useAdsRoutes(router);
+  useCartRoutes(router);
+  useOrderRoutes(router);
 });
 
 export const registerRouter = (app: Express) => {

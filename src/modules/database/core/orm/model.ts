@@ -106,6 +106,17 @@ export class Model {
   }
 
   /**
+   * Get data.
+   */
+  public async first() {
+    Model.usingModel = this;
+
+    const { data, error } = await this._database.execute();
+
+    return data && !error ? { data: data.first() } : { error };
+  }
+
+  /**
    * Get all data.
    */
   public async all() {
@@ -130,7 +141,10 @@ export class Model {
       items.map((item) => Object.values(this.filter(item))),
     );
 
-    return status && status.insertId !== 0 && status.affectedRows === 1
+    return status &&
+      status.insertId !== 0 &&
+      status.affectedRows &&
+      status.affectedRows >= 1
       ? { success: true, id: status.insertId }
       : { error: error || 'Unknown error' };
   }

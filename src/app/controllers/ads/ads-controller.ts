@@ -43,7 +43,7 @@ export class AdsController {
   };
 
   /**
-   * 
+   *
    * Get all Ads in Ads Type
    */
   public getAdsByType = async (req: Request, res: Response) => {
@@ -57,23 +57,7 @@ export class AdsController {
       success: true,
       data: format(data),
     });
-  }
-
-  /**
-   * 
-   * Get discounting products.
-   */
-  public getDiscountingProduct = async (req: Request, res: Response) => {
-    const data = await this._adsService.getDiscountingProduct();
-    if (!data) {
-      throw new HttpRequestError(404, 'Product not found');
-    }
-
-    return res.status(200).json({
-      success: true,
-      data: format(data),
-    });
-  }
+  };
 
   /**
    * Get products of ads.
@@ -120,8 +104,11 @@ export class AdsController {
 
     const success = await this._adsService.createAdsStrategy({
       ...input,
-      startOn: input.startOn.toISOString().replace(/T/, ' ').replace(/\..+/, ''),
-      endOn: input.endOn.toISOString().replace(/T/, ' ').replace(/\..+/, ''), 
+      startOn: input.startOn
+        .toISOString()
+        .replace(/T/, ' ')
+        .replace(/\..+/, ''),
+      endOn: input.endOn.toISOString().replace(/T/, ' ').replace(/\..+/, ''),
     });
 
     if (!success) {
@@ -133,14 +120,14 @@ export class AdsController {
       message: 'Create Ads Strategy successfully',
     });
   };
-  
+
   /**
    * Delete ads.
    */
-   public deleteAdsStrategy = async (req: Request, res: Response) => {
+  public deleteAdsStrategy = async (req: Request, res: Response) => {
     const success = await this._adsService.deleteAdsStrategy(req.body.adsId);
 
-    if(!success) {
+    if (!success) {
       throw new HttpRequestError(500, 'Can not delete Ads Strategy');
     }
 
@@ -148,10 +135,10 @@ export class AdsController {
       success: true,
       message: 'Delete Ads Strategy successfully',
     });
-  }
+  };
 
   /**
-   * 
+   *
    * Update ads.
    */
   public updateAdsStrategy = async (req: Request, res: Response) => {
@@ -160,8 +147,11 @@ export class AdsController {
     const success = await this._adsService.updateAdsStrategy({
       ...input,
       id: req.params.id,
-      startOn: input.startOn.toISOString().replace(/T/, ' ').replace(/\..+/, ''),
-      endOn: input.endOn.toISOString().replace(/T/, ' ').replace(/\..+/, ''), 
+      startOn: input.startOn
+        .toISOString()
+        .replace(/T/, ' ')
+        .replace(/\..+/, ''),
+      endOn: input.endOn.toISOString().replace(/T/, ' ').replace(/\..+/, ''),
     });
 
     if (!success) {
@@ -208,7 +198,6 @@ export class AdsController {
       parseInt(req.params.id, 10),
       parseInt(req.params.productId, 10),
     );
-
 
     if (!success) {
       throw new HttpRequestError(500, 'Can not delete product to Ads');
@@ -260,7 +249,7 @@ export class AdsController {
 
   /**
    * Validate productId.
-   * 
+   *
    * @param adsId adsId.
    * @param product1Id productId.
    */
@@ -271,11 +260,10 @@ export class AdsController {
 
     const categoryB = await this._adsService.getCategoryOfProduct(product1Id);
     const categoryBLeft = categoryB?.left;
-    
 
     if (!(categoryBLeft > categoryALeft && categoryBLeft < categoryARight)) {
       throw new HttpRequestError(401, {
-        productId: 'The product is not appropriate to the Ads'
+        productId: 'The product is not appropriate to the Ads',
       });
     }
   };
@@ -290,8 +278,8 @@ export class AdsController {
 
     if (B != sellerId) {
       throw new HttpRequestError(401, {
-        sellerId: 'Can not delete product of another sellers'
+        sellerId: 'Can not delete product of another sellers',
       });
     }
-  }
+  };
 }

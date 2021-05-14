@@ -19,6 +19,11 @@ export function useProductRoutes(router: LRouter) {
     });
 
     router.get({
+      path: '/discounting/get',
+      action: container.resolve(ProductController).getDiscountingProduct,
+    });
+
+    router.get({
       path: '/filter/with',
       action: container.resolve(ProductController).filter,
     });
