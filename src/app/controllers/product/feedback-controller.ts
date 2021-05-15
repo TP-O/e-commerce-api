@@ -30,7 +30,7 @@ export class FeedbackController {
     });
 
     if (!success) {
-      throw new HttpRequestError(500, 'Can not create feedback');
+      throw new HttpRequestError(500, 'Just create one feedback');
     }
 
     return res.status(200).json({

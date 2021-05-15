@@ -28,10 +28,12 @@ export class FeedbackService {
   public async create(data: any) {
     const score = await this.getScoreOfContent(data.content);
 
-    const id = await Feedback.create({
-      ...data,
-      score: score,
-    });
+    const { id } = await Feedback.create([
+      {
+        ...data,
+        score: score,
+      },
+    ]);
 
     return id;
   }
@@ -41,16 +43,17 @@ export class FeedbackService {
    *
    * @param content feedback content.
    */
-  public async getScoreOfContent(content: string) {
+  public async getScoreOfContent(content = '') {
+    let conditions = [];
     const words = content.split(' ');
 
-    Keyword.select('score').where([['id', '>', '0']]);
+    conditions = words.map((word: string) => ['word', '=', `'${word}'`, 'OR']);
 
-    words.forEach((word: string) => {
-      Keyword.orWhere([['word', '=', `'${word}'`]]);
-    });
-
-    const { data } = await Keyword.sum('score', 'diff').first();
+    const { data } = await Keyword.select('score')
+      .where([['id', '>', '0']])
+      .andWhere(conditions)
+      .sum('keywords.score', 'diff')
+      .first();
 
     return data?.diff ? data.diff : 0;
   }

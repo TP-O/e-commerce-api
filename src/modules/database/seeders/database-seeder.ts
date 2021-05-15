@@ -15,6 +15,7 @@ import { SellersSeeder } from './sellers';
 import {AddressTypesSeeder} from './address-types';
 import {OrderStatusSeeder} from './order-status';
 import {ShippingAddressesSeeder} from './shipping-addresses';
+import { KeywordsSeeder } from './keywords';
 
 export class DatabaseSeeder {
   public async seed() {
@@ -34,5 +35,6 @@ export class DatabaseSeeder {
     await container.resolve(AddressTypesSeeder).seed();
     await container.resolve(OrderStatusSeeder).seed();
     await container.resolve(ShippingAddressesSeeder).seed();
+    await container.resolve(KeywordsSeeder).seed();
   }
 }
