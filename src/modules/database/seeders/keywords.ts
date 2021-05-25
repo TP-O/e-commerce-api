@@ -40,35 +40,31 @@ export class KeywordsSeeder extends Seeder {
                     '5',
                 ],
                 [
-                    'Great',
+                    'great',
                     '4',
                 ],
                 [
-                    'Cool',
+                    'cool',
                     '4',
                 ],
                 [
-                    'Outstanding',
+                    'outstanding',
                     '3',
                 ],
                 [
-                    'Awesome',
+                    'awesome',
                     '5',
                 ],
                 [
-                    'Wondeful',
+                    'wondeful',
                     '4',
                 ],
                 [
-                    'Excellent',
+                    'excellent',
                     '5',
                 ],
                 [
-                    'not good enough',
-                    '2',
-                ],
-                [
-                    'Pleasant',
+                    'pleasant',
                     '2',
                 ],
                 [
@@ -94,10 +90,6 @@ export class KeywordsSeeder extends Seeder {
                 [
                     'never',
                     '-4',
-                ],
-                [
-                    'Bad',
-                    '-5',
                 ],
                 [
                     'harmful',
