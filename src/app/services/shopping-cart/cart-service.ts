@@ -18,7 +18,7 @@ export class CartService {
   public async getCartOfCustomer(customerId: number) {
     const { data } = await Cart.select('*')
       .with('items')
-      .where([['carts.customerId', '=', `v:${customerId}`]])
+      .where([['carts.customerId', '=', `${customerId}`]])
       .first();
 
     return data;
@@ -110,7 +110,7 @@ export class CartService {
     }
 
     const { success } = await CartItem.where([
-      ['id', '=', `v:${cartItemId}`],
+      ['id', '=', `${cartItemId}`],
     ]).update({
       quantity: newQuantity,
       price: price,
@@ -129,14 +129,14 @@ export class CartService {
       return false;
     }
 
-    Cart.where((q) => {
+    CartItem.where((q) => {
       ids.forEach((id, i) => {
-        if (i == 0) q.where([['id', '=', `v:${id}`]]);
-        else q.andWhere([['id', '=', `v:${id}`]]);
+        if (i == 0) q.where([['id', '=', `${id}`]]);
+        else q.andWhere([['id', '=', `${id}`]]);
       });
     });
 
-    const { success } = await Cart.delete();
+    const { success } = await CartItem.delete();
 
     return success;
   }

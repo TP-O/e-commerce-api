@@ -57,7 +57,7 @@ export class OrderService {
       .on([['order_items.productId', '=', 'products.id']])
       .join('order_status')
       .on([['order_items.statusId', '=', 'order_status.id']])
-      .where([['orders.customerId', '=', `v:${customerId}`]])
+      .where([['orders.customerId', '=', `${customerId}`]])
       .get();
 
     return data?.all();
@@ -83,7 +83,10 @@ export class OrderService {
       quantity: item.quantity,
     }));
 
+    console.log(orderItems);
+
     const { success } = await OrderItem.create(orderItems);
+
     const deletedCartItems = await this._cartService.deleteCartItems(
       cartItems.map((item) => item.id),
     );
@@ -95,7 +98,7 @@ export class OrderService {
    * Update order item status.
    */
   public async updateStatus(id: number, statusId: number) {
-    const { success } = await OrderItem.where([['id', '=', `v:${id}`]]).update({
+    const { success } = await OrderItem.where([['id', '=', `${id}`]]).update({
       statusId,
     });
 
