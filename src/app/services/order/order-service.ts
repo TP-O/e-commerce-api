@@ -83,8 +83,6 @@ export class OrderService {
       quantity: item.quantity,
     }));
 
-    console.log(orderItems);
-
     const { success } = await OrderItem.create(orderItems);
 
     const deletedCartItems = await this._cartService.deleteCartItems(

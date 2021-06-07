@@ -1,5 +1,6 @@
 import { HttpRequestError } from '@app/exceptions/http-request-error';
 import { OrderService } from '@app/services/order/order-service';
+import { CreateOrderValidator } from '@app/validators/order/create-order-validator';
 import { format } from '@modules/helper';
 import { Request, Response } from 'express';
 import { autoInjectable } from 'tsyringe';
@@ -11,7 +12,7 @@ export class OrderController {
    *
    * @param _orderService order service.
    */
-  public constructor(private _orderService: OrderService) {}
+  public constructor(private _orderService: OrderService, private _createOrderValidator: CreateOrderValidator) {}
 
   /**
    * Get all orders.
@@ -33,9 +34,11 @@ export class OrderController {
    * Create order for customer.
    */
   public createOrder = async (req: Request, res: Response) => {
+    const input = await this._createOrderValidator.validate(req.body);
+
     const success = await this._orderService.createOrder(
       req.user.id,
-      req.body.addressId,
+      input.addressId,
     );
 
     if (!success) {
