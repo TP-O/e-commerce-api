@@ -1,44 +1,58 @@
 version: "3.8"
 
 services:
-  app:
-    image: e-commerce-server:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "${NODE_PORT}:${NODE_PORT}"
-    env_file:
-      - .env
-    restart: unless-stopped
-    depends_on:
-      - db
-    networks:
-      - db-network
-    healthcheck:
-      test: wget --quiet --spider --tries=1 127.0.0.1:${NODE_PORT}
-      interval: 30s
-      timeout: 10s
-      retries: 5
+    api:
+        build:
+            context: .
+        image: e-commerce-api:dev-latest
+        volumes:
+            - ./:/var/www/html
+        networks:
+            - webserver-network
+            - postgres-network
+        depends_on:
+            - postgres
+        restart: unless-stopped
 
-  db:
-    image: mysql:5.7
-    environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-    restart: unless-stopped
-    volumes:
-      - ./.docker/data/prod/db:/var/lib/mysql
-    networks:
-      - db-network
-    healthcheck:
-      test: 'mysqladmin ping'
-      interval: 30s
-      timeout: 10s
-      retries: 5
+    webserver:
+        image: nginx:1.21.3-alpine
+        working_dir: /var/www/html
+        volumes:
+            - ./public:/var/www/html/public
+            - ./.docker/nginx/ssl:/etc/nginx/ssl
+            - ./.docker/nginx/conf:/etc/nginx/conf.d
+            - ./.docker/nginx/entrypoint.sh:/docker-entrypoint.d/entrypoint.sh
+        ports:
+            - 8080:80
+            - 443:443
+        networks:
+            - webserver-network
+        depends_on:
+            - api
+        restart: unless-stopped
+
+    postgres:
+        image: postgres:14.1-alpine3.15
+        environment:
+            - POSTGRES_DB=${DB_DATABASE}
+            - POSTGRES_USER=${DB_USERNAME}
+            - POSTGRES_PASSWORD=${DB_PASSWORD}
+        volumes:
+            - ./.docker/postgres/data:/var/lib/postgresql/data
+        networks:
+            - postgres-network
+        restart: unless-stopped
+
+    adminer:
+        image: dockette/adminer:pgsql
+        ports:
+        - 8081:80
+        networks:
+            - postgres-network
+        depends_on:
+            - postgres
+        restart: unless-stopped
 
 networks:
-  db-network:
-    driver: bridge
+    webserver-network:
+    postgres-network:
