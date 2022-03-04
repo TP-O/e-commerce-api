@@ -2,3 +2,4 @@
 /.docker
 /.git
 /vendor
+/docs
