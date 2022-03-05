@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +13,48 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['prefix' => 'v2'], function () {
+    Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
+        Route::group(['namespace' => 'Auth'], function () {
+            // Authenticate user
+            Route::group(['prefix' => 'auth'], function () {
+                Route::post('/sign-up', 'AuthController@signUp');
+                Route::post('/sign-in', 'AuthController@signIn');
+                Route::post('/sign-out', 'AuthController@signOut');
+            });
+
+            // OAuth
+            Route::group(['prefix' => 'oauth', 'middleware' => 'web'], function () {
+                Route::get('/{driver}/redirect', 'OAuthController@redirect')->name('oauth.redirect');
+                Route::get('/{driver}/callback', 'OAuthController@callback')->name('oauth.callback');
+            });
+
+            // Verify email
+            Route::group(['prefix' => 'email'], function () {
+                Route::post('/verify', 'EmailVerificationController@sendEmail');
+                Route::get('/verify/{id}/{hash}', 'EmailVerificationController@verify')->name('verification.verify');
+            });
+
+            // Reset password
+            Route::group(['prefix' => 'password'], function () {
+                Route::post('/forgot', 'PasswordResetController@forgotPassword');
+                Route::post('/reset', 'PasswordResetController@resetPassword')->name('password.reset');
+            });
+        });
+
+        // // Manage profile
+        // Route::group(['prefix' => 'profile'], function () {
+        //     Route::get('/', 'ProfileController@me');
+        //     Route::put('/username', 'ProfileController@updateUsername');
+        //     Route::put('/email', 'ProfileController@updateEmail');
+        //     Route::put('/password', 'ProfileController@updatePassword');
+        // });
+    });
+
+    // Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
+    //     // Authenticate admin
+    //     Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
+    //         //
+    //     });
+    // });
 });
