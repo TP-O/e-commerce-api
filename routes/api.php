@@ -13,32 +13,32 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'v2'], function () {
-    Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
-        Route::group(['namespace' => 'Auth'], function () {
+Route::prefix('v2')->group(function () {
+    Route::prefix('user')->namespace('User')->group(function () {
+        Route::namespace('Auth')->group(function () {
             // Authenticate user
-            Route::group(['prefix' => 'auth'], function () {
-                Route::post('/sign-up', 'AuthController@signUp');
-                Route::post('/sign-in', 'AuthController@signIn');
-                Route::post('/sign-out', 'AuthController@signOut');
+            Route::prefix('auth')->controller('AuthController')->group(function () {
+                Route::post('/sign-up', 'signUp');
+                Route::post('/sign-in', 'signIn');
+                Route::post('/sign-out', 'signOut');
             });
 
             // OAuth
-            Route::group(['prefix' => 'oauth', 'middleware' => 'web'], function () {
-                Route::get('/{driver}/redirect', 'OAuthController@redirect')->name('oauth.redirect');
-                Route::get('/{driver}/callback', 'OAuthController@callback')->name('oauth.callback');
+            Route::prefix('oauth')->controller('OAuthController')->middleware('web')->group(function () {
+                Route::get('/{driver}/redirect', 'redirect');
+                Route::get('/{driver}/callback', 'callback');
             });
 
             // Verify email
-            Route::group(['prefix' => 'email'], function () {
-                Route::post('/verify', 'EmailVerificationController@sendEmail');
-                Route::get('/verify/{id}/{hash}', 'EmailVerificationController@verify')->name('verification.verify');
+            Route::prefix('email')->controller('EmailVerificationController')->group(function () {
+                Route::post('/verify', 'sendEmail');
+                Route::get('/verify/{id}/{hash}', 'verify')->name('verification.verify');
             });
 
             // Reset password
-            Route::group(['prefix' => 'password'], function () {
-                Route::post('/forgot', 'PasswordResetController@forgotPassword');
-                Route::post('/reset', 'PasswordResetController@resetPassword')->name('password.reset');
+            Route::prefix('password')->controller('PasswordResetController')->group(function () {
+                Route::post('/forgot', 'forgotPassword');
+                Route::post('/reset', 'resetPassword')->name('password.reset');
             });
         });
 
@@ -51,10 +51,19 @@ Route::group(['prefix' => 'v2'], function () {
         // });
     });
 
-    // Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
-    //     // Authenticate admin
-    //     Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
-    //         //
-    //     });
-    // });
+    Route::prefix('admin')->namespace('Admin')->group(function () {
+        Route::namespace('Auth')->group(function () {
+            // Authenticate admin
+            Route::prefix('auth')->controller('AuthController')->group(function () {
+                Route::post('/sign-in', 'signIn');
+                Route::post('/sign-out', 'signOut');
+            });
+
+            // Reset password
+            Route::prefix('password')->controller('PasswordResetController')->group(function () {
+                Route::post('/forgot', 'forgotPassword');
+                Route::post('/reset', 'resetPassword')->name('password.reset');
+            });
+        });
+    });
 });

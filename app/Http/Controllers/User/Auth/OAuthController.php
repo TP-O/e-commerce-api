@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\User\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Services\AuthService;
+use App\Services\Common\TokenService;
+use App\Services\User\AuthService;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -16,7 +17,9 @@ class OAuthController extends Controller
 
     private AuthService $authService;
 
-    public function __construct(AuthService $authService)
+    private TokenService $tokenService;
+
+    public function __construct(AuthService $authService, TokenService $tokenService)
     {
         $this->supportedDriver = [
             'github',
@@ -25,6 +28,7 @@ class OAuthController extends Controller
         ];
 
         $this->authService = $authService;
+        $this->tokenService = $tokenService;
     }
 
     /**
@@ -60,7 +64,7 @@ class OAuthController extends Controller
             $user = $this->authService->createOAuthUser($oauthUser->email);
         }
 
-        $token = $this->authService->createPAT($user);
+        $token = $this->tokenService->createPAT($user);
 
         return response()->json([
             'status' => true,

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\User\Auth;
+namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Common\Auth\ForgotPasswordRequest;
@@ -30,7 +30,7 @@ class PasswordResetController extends Controller
      */
     public function forgotPassword(ForgotPasswordRequest $request)
     {
-        $status = Password::sendResetLink(
+        $status = Password::broker('admins')->sendResetLink(
             $request->safe()->only('email'),
         );
 
@@ -57,11 +57,11 @@ class PasswordResetController extends Controller
      */
     public function resetPassword(ResetPasswordRequest $request)
     {
-        $status = Password::reset(
+        $status = Password::broker('admins')->reset(
             $request->safe()->only('email', 'token', 'password'),
-            function ($user, $password) {
-                $this->passwordService->updatePassword($user, $password);
-                $this->tokenService->revokeAllPATs($user);
+            function ($admin, $password) {
+                $this->passwordService->updatePassword($admin, $password);
+                $this->tokenService->revokeAllPATs($admin);
             },
         );
 

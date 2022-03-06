@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\Response;
 
 class CustomFormRequest extends FormRequest
 {
@@ -20,6 +21,6 @@ class CustomFormRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'error' => $validator->errors(),
-        ], 400));
+        ], Response::HTTP_BAD_REQUEST));
     }
 }

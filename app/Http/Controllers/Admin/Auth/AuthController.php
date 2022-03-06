@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\User\Auth;
+namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Common\Auth\SignInRequest;
-use App\Http\Requests\Common\Auth\SignUpRequest;
+use App\Services\Admin\AuthService;
 use App\Services\Common\Auth\TokenService;
-use App\Services\User\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -25,43 +24,20 @@ class AuthController extends Controller
     }
 
     /**
-     * Create an user account.
-     *
-     * @param  \App\Http\Requests\Common\Auth\SignUpRequest $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function signUp(SignUpRequest $request)
-    {
-        $signUpInput = $request->validated();
-
-        $user = $this->authService->createUser($signUpInput);
-        $token = $this->tokenService->createPAT($user);
-
-        return response()->json([
-            'status' => true,
-            'data' => $user,
-            'token' => $token,
-        ], Response::HTTP_CREATED);
-    }
-
-    /**
      * Sign in to system.
      *
      * @param  \App\Http\Requests\Common\Auth\SignInRequest  $request
      * @return \Illuminate\Http\JsonResponse
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    public function signIn(SignInRequest $request)
-    {
+    public function signIn(SignInRequest $request) {
         $signInInput = $request->validated();
 
-        $user = $this->authService->authenticate($signInInput);
-        $token = $this->tokenService->createPAT($user);
+        $admin = $this->authService->authenticate($signInInput, true);
+        $token = $this->tokenService->createPAT($admin);
 
         return response()->json([
             'status' => true,
-            'data' => $user,
+            'data' => $admin,
             'token' => $token,
         ], Response::HTTP_CREATED);
     }
@@ -72,8 +48,7 @@ class AuthController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function signOut(Request $request)
-    {
+    public function signOut(Request $request) {
         $this->tokenService->revokePAT($request->user());
 
         return response()->json([

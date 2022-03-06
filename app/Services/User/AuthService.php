@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\User;
 
 use App\Models\User;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class AuthService {
+class AuthService
+{
     /**
      * Create an user.
      *
@@ -23,7 +25,7 @@ class AuthService {
         $user = new User($input);
 
         if (!$user->save()) {
-            throw new HttpException(500, 'Unable to create account');
+            throw new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, 'Unable to create account');
         }
 
         return $user;
@@ -66,48 +68,6 @@ class AuthService {
     }
 
     /**
-     * Create a personal access token.
-     *
-     * @param \App\Models\User $user
-     * @return string
-     */
-    public function createPAT(User $user)
-    {
-        return $user->createToken('default')->plainTextToken;
-    }
-
-    /**
-     * Revoke user's current personal access token.
-     *
-     * @param \App\Models\User $user
-     * @return bool
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
-     */
-    public function revokePAT(User $user)
-    {
-        /**
-         * @var \App\Models $user
-         */
-        if (!$user->currentAccessToken()->delete()) {
-            throw new HttpException(500, 'Unable to revoke token');
-        }
-
-        return true;
-    }
-
-    /**
-     * Revoke all user's personal access tokens.
-     *
-     * @param \App\Models\User $user
-     * @return int
-     */
-    public function revokeAllPATs(User $user)
-    {
-        return $user->tokens()->delete();
-    }
-
-    /**
      * Authenticate an user.
      *
      * @param array<string, string> $credentials
@@ -115,7 +75,7 @@ class AuthService {
      *
      * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
      */
-    public function authenticate($credentials)
+    public function authenticate(array $credentials)
     {
         $user = User::where('username', $credentials['usernameOrEmail'])
             ->orWhere('email', $credentials['usernameOrEmail'])
