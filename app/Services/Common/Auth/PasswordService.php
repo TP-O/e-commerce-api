@@ -5,7 +5,8 @@ namespace App\Services\Common\Auth;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 
-class PasswordService {
+class PasswordService
+{
     /**
      * Update new password.
      *

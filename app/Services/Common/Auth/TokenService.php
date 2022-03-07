@@ -5,7 +5,8 @@ namespace App\Services\Common\Auth;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class TokenService {
+class TokenService
+{
     /**
      * Create a personal access token.
      *
@@ -27,12 +28,6 @@ class TokenService {
      */
     public function revokePAT(Authenticatable $user)
     {
-        /**
-         * The interface \Laravel\Sanctum\Contracts\HasAbilities does not declare `delete` method,
-         * so to avoid error from IDE, I treat `$user` as type-any variable.
-         *
-         * @var any $user
-         */
         if (!$user->currentAccessToken()->delete()) {
             throw new HttpException(500, 'Unable to revoke token');
         }

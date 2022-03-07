@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\User\Profile;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,4 +29,9 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     ];
 
     public $timestamps = false;
+
+    public function profile()
+    {
+        return $this->hasOne(Profile::class, 'user_id');
+    }
 }

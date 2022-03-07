@@ -7,6 +7,7 @@ use App\Http\Requests\Common\Auth\SignInRequest;
 use App\Http\Requests\Common\Auth\SignUpRequest;
 use App\Services\Common\Auth\TokenService;
 use App\Services\User\AuthService;
+use App\Services\User\ProfileService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -16,10 +17,16 @@ class AuthController extends Controller
 
     private TokenService $tokenService;
 
-    public function __construct(AuthService $authService, TokenService $tokenService)
+    private ProfileService $profileService;
+
+    public function __construct(
+        AuthService $authService,
+        TokenService $tokenService,
+        ProfileService $profileService)
     {
         $this->authService = $authService;
         $this->tokenService = $tokenService;
+        $this->profileService = $profileService;
 
         $this->middleware('auth:sanctum')->only(['signOut']);
     }
@@ -36,6 +43,10 @@ class AuthController extends Controller
 
         $user = $this->authService->createUser($signUpInput);
         $token = $this->tokenService->createPAT($user);
+
+        $this->profileService->createProfile($user->id, [
+            'username' => $user->username,
+        ]);
 
         return response()->json([
             'status' => true,

@@ -42,13 +42,14 @@ Route::prefix('v2')->group(function () {
             });
         });
 
-        // // Manage profile
-        // Route::group(['prefix' => 'profile'], function () {
-        //     Route::get('/', 'ProfileController@me');
-        //     Route::put('/username', 'ProfileController@updateUsername');
-        //     Route::put('/email', 'ProfileController@updateEmail');
-        //     Route::put('/password', 'ProfileController@updatePassword');
-        // });
+        Route::namespace('Account')->group(function () {
+            // Manage profile
+            Route::prefix('profile')->controller('ProfileController')->group(function () {
+                Route::get('/', 'me');
+                Route::put('/', 'updateProfile');
+                Route::put('/password', 'updatePassword');
+            });
+        });
     });
 
     Route::prefix('admin')->namespace('Admin')->group(function () {

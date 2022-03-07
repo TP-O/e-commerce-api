@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('display_name', 50)->nullable();
             $table->text('avatar_image');
             $table->string('phone', 12)->nullable();
-            $table->tinyInteger('gender', false, true)->default(1);
+            $table->tinyInteger('gender', false, true)->nullable();
             $table->date('date_of_birth')->nullable();
 
             $table->foreignId('admin_id')
