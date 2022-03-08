@@ -13,58 +13,55 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('v2')->group(function () {
-    Route::prefix('user')->namespace('User')->group(function () {
+Route::prefix('v2')->namespace('Api')->group(function () {
+    Route::prefix('/')->group(function () {
         Route::namespace('Auth')->group(function () {
-            // Authenticate user
-            Route::prefix('auth')->controller('AuthController')->group(function () {
-                Route::post('/sign-up', 'signUp');
-                Route::post('/sign-in', 'signIn');
-                Route::post('/sign-out', 'signOut');
+            Route::prefix('auth')->group(function () {
+                Route::post('/sign-up', 'SignUp\UserSignUpController@signUp');
+
+                Route::namespace('SignIn')->group(function () {
+                    Route::post('/sign-in', 'UserSignInController@signIn');
+                    Route::post('/sign-out', 'UserSignInController@signOut')->middleware('pat.name:user');
+                });
             });
 
-            // OAuth
-            Route::prefix('oauth')->controller('OAuthController')->middleware('web')->group(function () {
-                Route::get('/{driver}/redirect', 'redirect');
-                Route::get('/{driver}/callback', 'callback');
-            });
-
-            // Verify email
-            Route::prefix('email')->controller('EmailVerificationController')->group(function () {
-                Route::post('/verify', 'sendEmail');
-                Route::get('/verify/{id}/{hash}', 'verify')->name('verification.verify');
-            });
-
-            // Reset password
-            Route::prefix('password')->controller('PasswordResetController')->group(function () {
-                Route::post('/forgot', 'forgotPassword');
-                Route::post('/reset', 'resetPassword')->name('password.reset');
+            Route::prefix('oauth/{driver}')->namespace('SignUp')->group(function () {
+                Route::get('/redirect', 'UserSignUpController@OAuthRedirect');
+                Route::get('/callback', 'UserSignUpController@OAuthCallback');
             });
         });
 
-        Route::namespace('Account')->group(function () {
-            // Manage profile
-            Route::prefix('profile')->controller('ProfileController')->group(function () {
-                Route::get('/', 'me');
-                Route::put('/', 'updateProfile');
-                Route::put('/password', 'updatePassword');
+        Route::prefix('email')->namespace('Email')->group(function () {
+            Route::post('/verify', 'EmailVerificationController@sendEmail');
+            Route::get('/verify/{id}/{hash}', 'EmailVerificationController@verifyEmail')->name('verification.verify');
+        });
+
+        Route::prefix('password')->namespace('Password')->group(function () {
+            Route::put('/', 'UserPasswordController@updatePassword')->middleware('pat.name:user');
+            Route::post('/forgot', 'UserPasswordController@forgotPassword');
+            Route::put('/reset', 'UserPasswordController@resetPassword')->name('password.reset');
+        });
+
+        Route::prefix('account')->namespace('Account')->middleware('pat.name:user')->group(function () {
+            Route::prefix('profile')->namespace('Profile')->group(function () {
+                Route::get('/', 'UserProfileController@me');
+                Route::put('/', 'UserProfileController@updateProfile');
             });
         });
     });
 
-    Route::prefix('admin')->namespace('Admin')->group(function () {
-        Route::namespace('Auth')->group(function () {
-            // Authenticate admin
-            Route::prefix('auth')->controller('AuthController')->group(function () {
-                Route::post('/sign-in', 'signIn');
-                Route::post('/sign-out', 'signOut');
+    Route::prefix('/admin')->group(function () {
+        Route::prefix('auth')->namespace('Auth')->group(function () {
+            Route::name('SignIn')->group(function () {
+                Route::post('/sign-in', 'AdminSignInController@signIn');
+                Route::post('/sign-out', 'AdminSignInController@signOut')->middleware('pat.name:admin');
             });
+        });
 
-            // Reset password
-            Route::prefix('password')->controller('PasswordResetController')->group(function () {
-                Route::post('/forgot', 'forgotPassword');
-                Route::post('/reset', 'resetPassword')->name('password.reset');
-            });
+        Route::prefix('password')->namespace('Password')->group(function () {
+            Route::put('/', 'AdminPasswordController@updatePassword')->middleware('pat.name:admin');
+            Route::post('/forgot', 'AdminPasswordController@forgotPassword');
+            Route::put('/reset', 'AdminPasswordController@resetPassword')->name('admin.password.reset');
         });
     });
 });
