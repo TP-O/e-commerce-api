@@ -23,7 +23,7 @@ class UpdateUserProfileRequest extends CustomFormRequest
     {
         return [
             'display_name' => 'string|max:50',
-            'avatar' => 'image|max:1024',
+            'avatar' => 'image|mimes:jpg,jpeg,png|max:1024',
             'phone' => 'digits_ between:10,11',
             'gender' => 'numeric|min:0|max:2',
             'date_of_birth' => 'date_format:m/d/Y',

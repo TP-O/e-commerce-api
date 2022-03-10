@@ -20,3 +20,7 @@ Route::get('/', function () {
 Route::get('/test', function() {
     echo 'test...';
 });
+
+Route::prefix('public')->namespace('Asset')->group(function () {
+    Route::get('/images/{name}', 'ImageController@loadPublicImage')->where('name', '(.*)');
+});

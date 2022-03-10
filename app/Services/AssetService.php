@@ -5,34 +5,59 @@ namespace App\Services;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Image;
 use Intervention\Image\Facades\Image as ImageFacade;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AssetService
 {
     /**
-     * Resize then crop the image.
+     * The image will be loaded in order of extension's priority.
      *
-     * @param \Intervention\Image\Image $image
-     * @param int $width
-     * @param int $height
-     * @return \Intervention\Image\Image
+     * @var array<int, string>
      */
-    private function resizeAndCropImage(Image $image, int $width, int $height)
-    {
-        if ($image->width() < $width || $image->height() < $height) {
-            if ($image->width() < $width && $image->height() < $height) {
-                $image->resize($width, $height);
-            }
-            else if ($image->width() < $width) {
-                $image->resize($width);
-            }
-            else {
-                $image->resize(null, $height);
-            }
+    private $extensions = [
+        'jpg',
+        'jpeg',
+        'png',
+    ];
 
-            $image->resize($width);
+    /**
+     * Path to avatar directory.
+     *
+     * @var string
+     */
+    private $avatarDir = 'public/images/avatars/';
+
+    /**
+     * Load the public image from local.
+     *
+     * @param string $subPath
+     */
+    public function responsePublicImage(string $subPath)
+    {
+        foreach ($this->extensions as $extension) {
+            try {
+                return response()->file(storage_path("app/public/images/$subPath.$extension"));
+            }
+            catch (\Exception $_) {
+                continue;
+            }
         }
 
-        return $image->crop($width, $height);
+        throw new NotFoundHttpException('File does not exist!');
+    }
+
+    /**
+     * Crop the image as a square.
+     *
+     * @param \Intervention\Image\Image $image
+     * @param int $size
+     * @return \Intervention\Image\Image
+     */
+    private function convertToSquare(Image $image, int $size, $format)
+    {
+        $image->fit($image->width() > $image->height() ? $image->height() :$image->width());
+
+        return $image->width() <= $size ? $image : $image->crop($size, $size);
     }
 
     /**
@@ -43,11 +68,16 @@ class AssetService
      */
     public function storeAvatar($file)
     {
-        $image = $this->resizeAndCropImage(ImageFacade::make($file), 600, 600)->encode('jpg');
-        $imagePath = 'public/avatars/' . md5((string) time()) . '.jpg';
+        $name = md5((string) time());
+        $exntesion = is_string($file) ? 'jpg' : $file->extension();
+        $image = $this->convertToSquare(ImageFacade::make($file), 600, 600)->encode($exntesion);
 
-        Storage::put($imagePath, $image->__toString());
+        Storage::put($this->avatarDir . $name . '.jpg', $image->__toString());
+        Storage::put($this->avatarDir . $name . '_tn.jpg',
+            $image->resize(120, 120)
+                ->encode($exntesion)
+                ->__toString());
 
-        return $imagePath;
+        return $this->avatarDir . $name;
     }
 }
