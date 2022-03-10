@@ -1,20 +1,7 @@
-# Simple E-commerce API
+# Overview
 
-This project is based on a e-commerce website called [Shopee](https://shopee.vn/). Because of API's simplicity, only some of Shoppe basic features are covered in the project.
+The repository used as my Principle of Database Management project at International University (HCMIU). Read more about this repository [here](https://github.com/tpo-project/e-commerce-api/tree/2.x.x/docs).
 
-## Features
+# Setup
 
-- Authenticate user
-- Manage products
-- Shopping cart
-- Manage orders
 
-## Database Design
-
-I just referred to Shopee's workflows and assumed that the tables below are used in their system, so the design may not be the same as theirs.
-
-![E-commerce Database Design](/docs/img/database.jpg)
-
-## API Documentaion
-
-Updating...

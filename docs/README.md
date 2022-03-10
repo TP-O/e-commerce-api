@@ -4,10 +4,8 @@ This project is based on a e-commerce website called [Shopee](https://shopee.vn/
 
 ## Features
 
-- Authenticate user
-- Manage products
-- Shopping cart
-- Manage orders
+- Authenticate user/admin
+- Manage profile
 
 ## Database Design
 
@@ -17,4 +15,4 @@ I just referred to Shopee's workflows and assumed that the tables below are used
 
 ## API Documentaion
 
-Updating...
+Read [here](https://tpo-project.github.io/e-commerce-api/).

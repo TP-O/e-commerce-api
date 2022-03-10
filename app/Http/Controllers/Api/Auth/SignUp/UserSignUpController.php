@@ -39,7 +39,8 @@ class UserSignUpController extends Controller
         $this->profileService = $profileService;
         $this->assetService = $assetService;
 
-        $this->middleware(['web', 'guest:sanctum'])->except('signUp');
+        $this->middleware('guest:sanctum');
+        $this->middleware('web')->except('signUp');
     }
 
     /**
