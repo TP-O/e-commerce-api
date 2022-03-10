@@ -29,7 +29,8 @@ abstract class SignInController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function signOut(Request $request) {
+    public function signOut(Request $request)
+    {
         $this->tokenService->revokePAT($request->user());
 
         return response()->json([

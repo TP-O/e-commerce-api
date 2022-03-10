@@ -52,7 +52,7 @@ Route::prefix('v2')->namespace('Api')->group(function () {
 
     Route::prefix('/admin')->group(function () {
         Route::prefix('auth')->namespace('Auth')->group(function () {
-            Route::name('SignIn')->group(function () {
+            Route::namespace('SignIn')->group(function () {
                 Route::post('/sign-in', 'AdminSignInController@signIn');
                 Route::post('/sign-out', 'AdminSignInController@signOut')->middleware('pat.name:admin');
             });

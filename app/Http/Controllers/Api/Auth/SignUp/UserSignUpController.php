@@ -32,8 +32,8 @@ class UserSignUpController extends Controller
         AuthService $authService,
         TokenService $tokenService,
         ProfileService $profileService,
-        AssetService $assetService)
-    {
+        AssetService $assetService
+    ) {
         $this->authService = $authService;
         $this->tokenService = $tokenService;
         $this->profileService = $profileService;
@@ -78,7 +78,6 @@ class UserSignUpController extends Controller
         }
 
         return Socialite::driver($driver)->redirect();
-
     }
 
     /**

@@ -13,7 +13,8 @@ class UserSignInController extends SignInController
      * @param  \App\Http\Requests\SignInRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function signIn(SignInRequest $request) {
+    public function signIn(SignInRequest $request)
+    {
         $signInInput = $request->validated();
 
         $user = $this->authService->authenticateUser($signInInput);

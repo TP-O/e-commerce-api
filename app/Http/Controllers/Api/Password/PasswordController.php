@@ -91,8 +91,7 @@ abstract class PasswordController extends Controller
 
         if ($status === Password::INVALID_USER) {
             throw new BadRequestHttpException('Email does not exist!');
-        }
-        else if ($status !== Password::RESET_LINK_SENT) {
+        } else if ($status !== Password::RESET_LINK_SENT) {
             throw new BadRequestHttpException('Please retry after a while!');
         }
 

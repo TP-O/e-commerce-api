@@ -10,10 +10,11 @@ class AdminSignInController extends SignInController
     /**
      * Sign in to the system as an admin.
      *
-     * @param  \App\Http\Requests\SignInRequest $request
+     * @param \App\Http\Requests\SignInRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function signIn(SignInRequest $request) {
+    public function signIn(SignInRequest $request)
+    {
         $signInInput = $request->validated();
 
         $admin = $this->authService->authenticateAdmin($signInInput);
