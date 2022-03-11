@@ -5,8 +5,6 @@ services:
         build:
             context: .
         image: e-commerce-api
-        volumes:
-            - ./:/var/www/html
         networks:
             - webserver-network
             - postgres-network
