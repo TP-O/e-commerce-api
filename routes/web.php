@@ -16,3 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/test', function() {
+    echo 'test...';
+});
+
+Route::prefix('public')->namespace('Asset')->group(function () {
+    Route::get('/images/{name}', 'ImageController@loadPublicImage')->where('name', '(.*)');
+});

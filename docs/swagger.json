@@ -1,0 +1,687 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "E-Commerce API",
+        "description": "As the title, this is API documentation of my simple E-Commerce API. It has not been deployed on the internet, so clone this [repo](https://github.com/tpo-project/e-commerce-api/tree/2.x.x) and run it before accessing API endpoints",
+        "version": "2.x.x",
+        "license": {
+            "name": "MIT",
+            "url": "https://github.com/tpo-project/e-commerce-api/blob/2.x.x/LICENSE"
+        }
+    },
+    "servers": [
+        {
+            "url": "https://127.0.0.1/api/v2",
+            "description": "Localhost :D"
+        },
+        {
+            "url": "https://localhost/api/v2",
+            "description": "Localhost too :D"
+        }
+    ],
+    "tags": [
+        {
+            "name": "auth",
+            "description": "Authenticate user/admin"
+        },
+        {
+            "name": "oauth",
+            "description": "Sign in with third party"
+        },
+        {
+            "name": "email",
+            "description": "Verify user's email"
+        },
+        {
+            "name": "password",
+            "description": "Manage password"
+        },
+        {
+            "name": "account",
+            "description": "Manage account"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "token"
+            }
+        },
+        "schemas": {}
+    },
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ],
+    "paths": {
+        "/auth/sign-up": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Sign up an user account",
+                "operationId": "userSignUp",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "query",
+                        "description": "Username of user",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Email of user",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "Password of user",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password_confirmation",
+                        "in": "query",
+                        "description": "Confirm the password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invliad input"
+                    }
+                },
+                "security": []
+            }
+        },
+        "/auth/sign-in": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Sign in as an user",
+                "operationId": "userSignIn",
+                "parameters": [
+                    {
+                        "name": "usernameOrEmail",
+                        "in": "query",
+                        "description": "Username or email of user",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "Password of user",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid input or incorrect credentials"
+                    }
+                },
+                "security": []
+            }
+        },
+        "/auth/sign-out": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Sign out as an user",
+                "operationId": "userSignOut",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
+            }
+        },
+        "/auth/admin/sign-in": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Sign in as an admin",
+                "operationId": "adminSignIn",
+                "parameters": [
+                    {
+                        "name": "usernameOrEmail",
+                        "in": "query",
+                        "description": "Username or email of admin",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "Password of admin",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid input or incorrect credentials"
+                    }
+                },
+                "security": []
+            }
+        },
+        "/auth/admin/sign-out": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Sign out as an admin",
+                "operationId": "adminSignOut",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
+            }
+        },
+        "/oauth/{driver}/redirect": {
+            "get": {
+                "tags": [
+                    "oauth"
+                ],
+                "summary": "Sign in with third party (only user)",
+                "operationId": "oauthRedirect",
+                "parameters": [
+                    {
+                        "name": "driver",
+                        "in": "path",
+                        "description": "Supported third party",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "facebook",
+                                "google",
+                                "github"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "301": {
+                        "description": "Success"
+                    }
+                },
+                "security": []
+            }
+        },
+        "/email/verify": {
+            "post": {
+                "tags": [
+                    "email"
+                ],
+                "summary": "Request to send verification email",
+                "operationId": "sendVerificationEmail",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
+            }
+        },
+        "/email/verify/{id}/{hash}": {
+            "get": {
+                "tags": [
+                    "email"
+                ],
+                "summary": "Verify an user's email",
+                "operationId": "verifyUserEmail",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "hash",
+                        "in": "path",
+                        "description": "Unique hash string unique hash generated by user id and secret key",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "signature",
+                        "in": "query",
+                        "description": "Signature of system",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    },
+                    "403": {
+                        "description": "Not allow"
+                    }
+                }
+            }
+        },
+        "/password": {
+            "put": {
+                "tags": [
+                    "password"
+                ],
+                "summary": "Update user's password",
+                "operationId": "updateUserPassword",
+                "parameters": [
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "Current password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password_confirmation",
+                        "in": "query",
+                        "description": "Confirm current password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "new_password",
+                        "in": "query",
+                        "description": "New password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
+            }
+        },
+        "/password/forgot": {
+            "post": {
+                "tags": [
+                    "password"
+                ],
+                "summary": "Request to send reset-user-password email",
+                "operationId": "forgotUserPassowrd",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Email of account forgot password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                },
+                "security": []
+            }
+        },
+        "/password/reset": {
+            "post": {
+                "tags": [
+                    "password"
+                ],
+                "summary": "Reset user's password",
+                "operationId": "resetUserPassword",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "query",
+                        "description": "Unique token to reset password (deleted after resetting)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Email of account reset password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "New password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "passsword_confirmation",
+                        "in": "query",
+                        "description": "Confirm new password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                },
+                "security": []
+            }
+        },
+        "/password/admin": {
+            "put": {
+                "tags": [
+                    "password"
+                ],
+                "summary": "Update admin's password",
+                "operationId": "updateAdminPassword",
+                "parameters": [
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "Current password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password_confirmation",
+                        "in": "query",
+                        "description": "Confirm current password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "new_password",
+                        "in": "query",
+                        "description": "New password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
+            }
+        },
+        "/password/admin/forgot": {
+            "post": {
+                "tags": [
+                    "password"
+                ],
+                "summary": "Request to send reset-admin-password email",
+                "operationId": "forgotAdminPassword",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Email of account forgot password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                },
+                "security": []
+            }
+        },
+        "/password/admin/reset": {
+            "post": {
+                "tags": [
+                    "password"
+                ],
+                "summary": "Reset admin's password",
+                "operationId": "resetAdminPassword",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "query",
+                        "description": "Unique token to reset password (deleted after resetting)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Email of account reset password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "New password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "passsword_confirmation",
+                        "in": "query",
+                        "description": "Confirm new password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                },
+                "security": []
+            }
+        },
+        "/account/profile": {
+            "get": {
+                "tags": [
+                    "account"
+                ],
+                "summary": "Get user's profile",
+                "operationId": "getUserProfile",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "account"
+                ],
+                "summary": "Update user's profile",
+                "operationId": "updateUserProfile",
+                "parameters": [
+                    {
+                        "name": "display_name",
+                        "in": "query",
+                        "description": "Display name of user",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "phone",
+                        "in": "query",
+                        "description": "Phone number of user",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "gender",
+                        "in": "query",
+                        "description": "Gender of user",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                1,
+                                2,
+                                3
+                            ]
+                        }
+                    },
+                    {
+                        "name": "date_of_birth",
+                        "in": "query",
+                        "description": "Date of birth of user",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Avatar image of user",
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "avatar": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": false
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
+            }
+        }
+    }
+}

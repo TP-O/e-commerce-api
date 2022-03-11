@@ -4,7 +4,7 @@ services:
     api:
         build:
             context: .
-        image: e-commerce-api:dev-latest
+        image: e-commerce-api
         volumes:
             - ./:/var/www/html
         networks:

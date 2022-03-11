@@ -1,20 +1,28 @@
-# Simple E-commerce API
+# Overview
 
-This project is based on a e-commerce website called [Shopee](https://shopee.vn/). Because of API's simplicity, only some of Shoppe basic features are covered in the project.
+This repository is a E-Commerce API used as my Principle of Database Management project at International University (HCMIU). Read more about this repository [here](https://github.com/tpo-project/e-commerce-api/tree/2.x.x/docs).
 
-## Features
+# Setup
 
-- Authenticate user
-- Manage products
-- Shopping cart
-- Manage orders
+## Step 1: Create .env file
 
-## Database Design
+```bash
+$ cp .env.example .env
+```
 
-I just referenced Shopee's workflows and assumed that the tables below are used in their system, so the design may not be the same as theirs.
+Fill in:
+- `DB_DATABASE`, `DB_USERNAME` and `DB_PASSWORD` to connect database.
+- `MAIL_USERNAME`, `MAIL_PASSWORD` and `MAIL_FROM_ADDRESS` to make emailing functions work.
+- `FACEBOOK_CLIENT_ID` and `FACEBOOK_CLIENT_SECRET` if you want users to be able sign in with Facebook (the same with Google and Github).
 
-![E-commerce Database Design](/docs/img/database.jpg)
+## Step 2: Start containers
 
-## API Documentaion
+```bash
+$ docker-compose -f docker-compose.prod.yml up
+```
 
-Updating...
+## Step 3: Create secret key
+
+```bash
+$ docker-compose -f docker-compose.prod.yml exec api php artisan key:generate
+```
