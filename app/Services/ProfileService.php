@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\UserProfile;
+use App\Models\User\Profile;
 use Illuminate\Support\Arr;
 
 class ProfileService
@@ -12,11 +12,11 @@ class ProfileService
      *
      * @param int $userId
      * @param array<string, any> $infor
-     * @return \App\Models\UserProfile
+     * @return \App\Models\User\Profile
      */
     public function createUserProfile(int $userId, array $infor)
     {
-        $profile = new UserProfile([
+        $profile = new Profile([
             'user_id' => $userId,
             'display_name' => $infor['display_name'] ?? '',
             'avatar_image' => $infor['avatar_image'] ?? 'public/avatars/default-avatar.jpg',
@@ -36,7 +36,7 @@ class ProfileService
      */
     public function updateUserProfile(int $userId, array $newProfile)
     {
-        return UserProfile::where('user_id', $userId)
+        return Profile::where('user_id', $userId)
             ->update(Arr::except($newProfile, 'avatar'));
     }
 }

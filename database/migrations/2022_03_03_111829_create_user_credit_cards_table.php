@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('credit_cards', function (Blueprint $table) {
+        Schema::create('user_credit_cards', function (Blueprint $table) {
             $table->id();
             $table->string('owner', 255);
             $table->string('card_number', 16)->unique();
@@ -37,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('credit_cards');
+        Schema::dropIfExists('user_credit_cards');
     }
 };

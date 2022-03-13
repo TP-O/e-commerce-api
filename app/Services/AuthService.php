@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Admin;
-use App\Models\User;
+use App\Models\Admin\Admin;
+use App\Models\User\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -15,7 +15,7 @@ class AuthService
      * Create the user.
      *
      * @param array<string, string> $input
-     * @return \App\Models\User
+     * @return \App\Models\User\User
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
@@ -36,7 +36,7 @@ class AuthService
      * Create the OAuth user.
      *
      * @param string $email
-     * @return \App\Models\User
+     * @return \App\Models\User\User
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
@@ -61,7 +61,7 @@ class AuthService
      * Get the user if exist.
      *
      * @param string $email
-     * @return \App\Models\User|null
+     * @return \App\Models\User\User|null
      */
     public function existEmail(string $email)
     {
@@ -71,7 +71,7 @@ class AuthService
     /**
      * Validate the user's password.
      *
-     * @param \App\Models\User|\App\Models\Admin|null $user
+     * @param \App\Models\User\User|\App\Models\Admin\Admin|null $user
      * @param string $password
      * @return void
      *
@@ -92,7 +92,7 @@ class AuthService
      * Authenticate the user.
      *
      * @param array<string, string> $credentials
-     * @return \App\Models\User
+     * @return \App\Models\User\User
      */
     public function authenticateUser(array $credentials)
     {
@@ -109,7 +109,7 @@ class AuthService
      * Authenticate the admin.
      *
      * @param array<string, string> $credentials
-     * @return \App\Models\Admin
+     * @return \App\Models\Admin\Admin
      */
     public function authenticateAdmin(array $credentials)
     {
