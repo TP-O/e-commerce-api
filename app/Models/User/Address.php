@@ -20,7 +20,6 @@ class Address extends Model
         'province',
         'ward',
         'detail',
-        'reminder',
         'is_home',
     ];
 

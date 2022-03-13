@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-class UpdateUserProfileRequest extends CustomFormRequest
+class CreateUserBankAccountRequest extends CustomFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,11 @@ class UpdateUserProfileRequest extends CustomFormRequest
     public function rules()
     {
         return [
-            'display_name' => 'string|max:50',
-            'avatar' => 'image|mimes:jpg,jpeg,png|max:1024',
-            'phone' => 'digits_between:10,11',
-            'gender' => 'numeric|min:0|max:2',
-            'date_of_birth' => 'date_format:m/d/Y',
+            'owner_name' => 'required|string|max:64',
+            'identification_number' => 'required|digits_between:9,12',
+            'bank_name' => 'required|string',
+            'bank_branch' => 'required|string',
+            'account_number' => 'required|digits_between:9,17|unique:user_bank_accounts',
         ];
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-class UpdateUserProfileRequest extends CustomFormRequest
+class UpdateUserAddressRequest extends CustomFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,14 @@ class UpdateUserProfileRequest extends CustomFormRequest
     public function rules()
     {
         return [
-            'display_name' => 'string|max:50',
-            'avatar' => 'image|mimes:jpg,jpeg,png|max:1024',
+            'type_id' => 'numeric|min:1|max:3',
+            'full_name' => 'string|max:64',
             'phone' => 'digits_between:10,11',
-            'gender' => 'numeric|min:0|max:2',
-            'date_of_birth' => 'date_format:m/d/Y',
+            'city' => 'string|max:50',
+            'province' => 'string|max:50',
+            'ward' => 'string|max:50',
+            'detail' => 'string',
+            'is_home' => 'boolean',
         ];
     }
 }

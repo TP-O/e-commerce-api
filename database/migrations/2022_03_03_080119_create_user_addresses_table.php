@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('province', 50);
             $table->string('ward', 50);
             $table->text('detail');
-            $table->text('reminder');
             $table->boolean('is_home')->nullable();
 
             $table->foreignId('user_id')
