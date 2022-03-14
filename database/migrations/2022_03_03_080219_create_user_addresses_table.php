@@ -13,22 +13,24 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('user_addresses', function (Blueprint $table) {
             $table->id();
-            $table->float('transportation_fee', 8, 2, true);
-            $table->float('grand_total', 8, 2, true);
-            $table->text('reminder');
+            $table->boolean('is_home')->nullable();
 
-            $table->foreignId('payment_id')
-                ->nullable()
-                ->constrained('payment_methods')
-                ->onDelete('set null')
-                ->onUpdate('set null');;
             $table->foreignId('address_id')
-                ->nullable()
                 ->constrained('addresses')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->foreignId('type_id')
+                ->nullable()
+                ->constrained('user_address_types')
                 ->onDelete('set null')
                 ->onUpdate('set null');
+            $table->unique(['user_id', 'type_id']);
         });
     }
 
@@ -39,6 +41,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('user_addresses');
     }
 };
