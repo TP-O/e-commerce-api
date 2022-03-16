@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum UserAddress: int
+enum UserAddressType: int
 {
     case Default = 1;
     case Return = 2;

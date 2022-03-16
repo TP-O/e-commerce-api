@@ -120,13 +120,13 @@ class AddressService
     /**
      * Check if the address is owned by the user.
      *
+     * @param int $userId
      * @param int $addressId
-     * @param int $user
      * @return bool
      */
-    public function belongToUser($addressId, $userId)
+    public function belongToUser($userId, $addressId)
     {
-        return !empty(AddressLink::where([
+        return !is_null(AddressLink::where([
             ['user_id', $userId],
             ['address_id', $addressId],
         ])->first());

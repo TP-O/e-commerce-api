@@ -68,7 +68,7 @@ class UserAddressController extends Controller
 
         if (
             empty($updateUserAddressInput) ||
-            !$this->addressService->belongToUser($addressId, auth()->user()->id)
+            !$this->addressService->belongToUser(auth()->user()->id, $addressId)
         ) {
             throw new BadRequestHttpException('Nothing to update!');
         }
@@ -93,7 +93,7 @@ class UserAddressController extends Controller
      */
     public function delete($addressId)
     {
-        if (!$this->addressService->belongToUser($addressId, auth()->user()->id)) {
+        if (!$this->addressService->belongToUser(auth()->user()->id, $addressId)) {
             throw new BadRequestHttpException('Nothing to delete!');
         }
 

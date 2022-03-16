@@ -13,7 +13,7 @@ class BankAccount extends Model
 
     protected $fillable = [
         'user_id',
-        'owner_name',
+        'accountholder_name',
         'identification_number',
         'bank_name',
         'bank_branch',

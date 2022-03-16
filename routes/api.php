@@ -64,5 +64,12 @@ Route::prefix('v2')->namespace('Api')->group(function () {
             Route::put('/{addressId}', 'UserAddressController@update');
             Route::delete('/{addressId}', 'UserAddressController@delete');
         });
+
+        Route::prefix('bank-account')->namespace('BankAccount')->group(function () {
+            Route::get('/', 'UserBankAccountController@show');
+            Route::post('/', 'UserBankAccountController@create');
+            Route::put('/{bankAccountId}', 'UserBankAccountController@update');
+            Route::delete('/{bankAccountId}', 'UserBankAccountController@delete');
+        });
     });
 });

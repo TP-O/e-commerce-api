@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\UniqueUserBankAccountNumber;
+
 class CreateUserBankAccountRequest extends CustomFormRequest
 {
     /**
@@ -22,11 +24,15 @@ class CreateUserBankAccountRequest extends CustomFormRequest
     public function rules()
     {
         return [
-            'owner_name' => 'required|string|max:64',
+            'accountholder_name' => 'required|string|max:64',
             'identification_number' => 'required|digits_between:9,12',
             'bank_name' => 'required|string',
             'bank_branch' => 'required|string',
-            'account_number' => 'required|digits_between:9,17|unique:user_bank_accounts',
+            'account_number' => [
+                'required',
+                'digits_between:9,17',
+                new UniqueUserBankAccountNumber($this->user()->id),
+            ],
         ];
     }
 }
