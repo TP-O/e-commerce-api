@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\Account\Profile;
 use App\Http\Controllers\Controller;
 use App\Services\AssetService;
 use App\Services\ProfileService;
-use Illuminate\Support\Arr;
 
 abstract class ProfileController extends Controller
 {
@@ -30,11 +29,8 @@ abstract class ProfileController extends Controller
     {
         return response()->json([
             'data' => [
-                ...Arr::except(
-                    (\Illuminate\Database\Eloquent\Model::class)(auth()->user())->toArray(),
-                    'id'
-                ),
-                'profile' => Arr::except(auth()->user()->profile, 'user_id'),
+                ...(\Illuminate\Database\Eloquent\Model::class)(auth()->user())->toArray(),
+                'profile' => auth()->user()->profile,
             ],
         ]);
     }

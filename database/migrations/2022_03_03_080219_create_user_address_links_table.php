@@ -13,12 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_addresses', function (Blueprint $table) {
+        Schema::create('user_address_links', function (Blueprint $table) {
             $table->id();
-            $table->boolean('is_home')->nullable();
 
             $table->foreignId('address_id')
-                ->constrained('addresses')
+                ->constrained('user_addresses')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table->foreignId('user_id')
@@ -41,6 +40,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_addresses');
+        Schema::dropIfExists('user_address_links');
     }
 };

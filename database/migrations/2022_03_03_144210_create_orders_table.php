@@ -26,7 +26,7 @@ return new class extends Migration
                 ->onUpdate('set null');;
             $table->foreignId('address_id')
                 ->nullable()
-                ->constrained('addresses')
+                ->constrained('user_addresses')
                 ->onDelete('set null')
                 ->onUpdate('set null');
         });

@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\User\Profile;
-use Illuminate\Support\Arr;
 
 class ProfileService
 {
@@ -11,15 +10,15 @@ class ProfileService
      * Create the user's default profile.
      *
      * @param int $userId
-     * @param array<string, any> $infor
+     * @param array<string, any> $input
      * @return \App\Models\User\Profile
      */
-    public function createUserProfile(int $userId, array $infor)
+    public function createUserProfile(int $userId, array $input)
     {
         $profile = new Profile([
             'user_id' => $userId,
             'display_name' => $infor['display_name'] ?? '',
-            'avatar_image' => $infor['avatar_image'] ?? 'public/avatars/default-avatar.jpg',
+            'avatar_image' => $infor['avatar_image'] ?? '',
         ]);
 
         $profile->save();
@@ -31,12 +30,11 @@ class ProfileService
      * Update the user's profile.
      *
      * @param int $userId
-     * @param array<string, any> $newProfile
-     * @return
+     * @param array<string, any> $input
+     * @return bool
      */
-    public function updateUserProfile(int $userId, array $newProfile)
+    public function updateUserProfile(int $userId, array $input)
     {
-        return Profile::where('user_id', $userId)
-            ->update(Arr::except($newProfile, 'avatar'));
+        return Profile::where('user_id', $userId)->update($input);
     }
 }

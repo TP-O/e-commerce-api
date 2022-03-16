@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Enums\UserAddress;
+use App\Enums\UserAddressType;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -17,15 +17,15 @@ class UserAddressTypeSeeder extends Seeder
     {
         DB::table('user_address_types')->insert([
             [
-                'id' => UserAddress::Default,
+                'id' => UserAddressType::Default,
                 'name' => 'Default address',
             ],
             [
-                'id' => UserAddress::Return,
+                'id' => UserAddressType::Return,
                 'name' => 'Return address',
             ],
             [
-                'id' => UserAddress::Pickup,
+                'id' => UserAddressType::Pickup,
                 'name' => 'Pickup address',
             ],
         ]);

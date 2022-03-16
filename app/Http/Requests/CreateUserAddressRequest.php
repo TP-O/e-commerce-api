@@ -22,14 +22,16 @@ class CreateUserAddressRequest extends CustomFormRequest
     public function rules()
     {
         return [
-            'type_id' => 'numeric|min:1|max:3',
             'full_name' => 'required|string|max:64',
             'phone' => 'required|digits_between:10,11',
+            'state' => 'required|string|max:50',
             'city' => 'required|string|max:50',
-            'province' => 'required|string|max:50',
-            'ward' => 'required|string|max:50',
-            'detail' => 'required|string',
+            'town' => 'required|string|max:50',
+            'address' => 'required|string',
             'is_home' => 'boolean',
+            'is_pickup_address' => 'boolean',
+            'is_default_address' => 'boolean',
+            'is_return_address' => 'boolean',
         ];
     }
 }

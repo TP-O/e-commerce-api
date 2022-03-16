@@ -22,14 +22,16 @@ class UpdateUserAddressRequest extends CustomFormRequest
     public function rules()
     {
         return [
-            'type_id' => 'numeric|min:1|max:3',
             'full_name' => 'string|max:64',
             'phone' => 'digits_between:10,11',
+            'state' => 'string|max:50',
             'city' => 'string|max:50',
-            'province' => 'string|max:50',
-            'ward' => 'string|max:50',
-            'detail' => 'string',
+            'town' => 'string|max:50',
+            'address' => 'string',
             'is_home' => 'boolean',
+            'is_pickup_address' => 'boolean',
+            'is_default_address' => 'boolean',
+            'is_return_address' => 'boolean',
         ];
     }
 }

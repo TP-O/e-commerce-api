@@ -57,5 +57,12 @@ Route::prefix('v2')->namespace('Api')->group(function () {
             Route::get('/', 'UserProfileController@me');
             Route::put('/', 'UserProfileController@updateProfile');
         });
+
+        Route::prefix('addresses')->namespace('Address')->group(function () {
+            Route::get('/', 'UserAddressController@show');
+            Route::post('/', 'UserAddressController@create');
+            Route::put('/{addressId}', 'UserAddressController@update');
+            Route::delete('/{addressId}', 'UserAddressController@delete');
+        });
     });
 });

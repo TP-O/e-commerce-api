@@ -27,11 +27,14 @@ class UserProfileController extends ProfileController
                 ->storeAvatar($request->file('avatar'));
         }
 
-        $this->profileService->updateUserProfile(auth()->user()->id, $updateProfileInput);
+        $this->profileService->updateUserProfile(
+            auth()->user()->id,
+            $updateProfileInput,
+        );
 
         return response()->json([
             'status' => true,
-            'message' => 'Your profile has been updated!',
+            'message' => 'Profile has been updated!',
         ]);
     }
 }
