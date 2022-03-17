@@ -66,10 +66,7 @@ class UserAddressController extends Controller
     {
         $updateUserAddressInput = $request->validated();
 
-        if (
-            empty($updateUserAddressInput) ||
-            !$this->addressService->belongToUser(auth()->user()->id, $addressId)
-        ) {
+        if (!$this->addressService->belongToUser(auth()->user()->id, $addressId)) {
             throw new BadRequestHttpException('Nothing to update!');
         }
 

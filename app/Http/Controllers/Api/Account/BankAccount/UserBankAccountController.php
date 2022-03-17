@@ -68,10 +68,6 @@ class UserBankAccountController extends Controller
     {
         $updateBankAccountInput = $request->validated();
 
-        if (empty($updateBankAccountInput)) {
-            throw new BadRequestHttpException('Nothing to update!');
-        }
-
         $status = $this->bankAccountService->updateUserBankAccount(
             auth()->user()->id,
             $bankAccountId,

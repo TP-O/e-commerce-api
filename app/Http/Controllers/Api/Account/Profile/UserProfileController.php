@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\Account\Profile;
 
 use App\Http\Requests\UpdateUserProfileRequest;
 use Illuminate\Support\Arr;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class UserProfileController extends ProfileController
 {
@@ -17,10 +16,6 @@ class UserProfileController extends ProfileController
     public function updateProfile(UpdateUserProfileRequest $request)
     {
         $updateProfileInput = $request->validated();
-
-        if (empty($updateProfileInput)) {
-            throw new BadRequestHttpException('Nothing to update!');
-        }
 
         if (Arr::exists($updateProfileInput, 'avatar')) {
             $updateProfileInput['avatar_image'] = $this->assetService

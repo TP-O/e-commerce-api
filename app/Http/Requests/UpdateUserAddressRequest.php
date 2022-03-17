@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User\AddressLink;
+
 class UpdateUserAddressRequest extends CustomFormRequest
 {
     /**
@@ -11,7 +13,10 @@ class UpdateUserAddressRequest extends CustomFormRequest
      */
     public function authorize()
     {
-        return true;
+        return !is_null(AddressLink::where([
+            ['user_id', $this->user()->id],
+            ['address_id', $this->route('id')],
+        ])->first());
     }
 
     /**
@@ -21,7 +26,7 @@ class UpdateUserAddressRequest extends CustomFormRequest
      */
     public function rules()
     {
-        return [
+        return $this->requireLeastOne([
             'full_name' => 'string|max:64',
             'phone' => 'digits_between:10,11',
             'state' => 'string|max:50',
@@ -32,6 +37,6 @@ class UpdateUserAddressRequest extends CustomFormRequest
             'is_pickup_address' => 'boolean',
             'is_default_address' => 'boolean',
             'is_return_address' => 'boolean',
-        ];
+        ]);
     }
 }

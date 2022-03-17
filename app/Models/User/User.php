@@ -31,6 +31,6 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 
     public function profile()
     {
-        return $this->hasOne(UserProfile::class, 'user_id');
+        return $this->hasOne(Profile::class, 'user_id');
     }
 }

@@ -17,8 +17,8 @@ class ProfileService
     {
         $profile = new Profile([
             'user_id' => $userId,
-            'display_name' => $infor['display_name'] ?? '',
-            'avatar_image' => $infor['avatar_image'] ?? '',
+            'display_name' => $input['username'] ?? '',
+            'avatar_image' => $input['avatar_image'] ?? '',
         ]);
 
         $profile->save();

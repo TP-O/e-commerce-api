@@ -29,7 +29,7 @@ abstract class ProfileController extends Controller
     {
         return response()->json([
             'data' => [
-                ...(\Illuminate\Database\Eloquent\Model::class)(auth()->user())->toArray(),
+                ...auth()->user()->toArray(),
                 'profile' => auth()->user()->profile,
             ],
         ]);

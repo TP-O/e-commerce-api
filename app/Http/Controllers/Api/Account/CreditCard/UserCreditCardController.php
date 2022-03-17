@@ -68,10 +68,6 @@ class UserCreditCardController extends Controller
     {
         $updateUserCreditCard = $request->validated();
 
-        if (empty($updateUserCreditCard)) {
-            throw new BadRequestHttpException('Nothing to update!');
-        }
-
         $status = $this->creditCardService->updateUserCreditCard(
             auth()->user()->id,
             $creditCard,
