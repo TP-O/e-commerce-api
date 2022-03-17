@@ -5,28 +5,28 @@ namespace App\Http\Controllers\Api\Account\BankAccount;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateUserBankAccountRequest;
 use App\Http\Requests\UpdateUserBankAccountRequest;
-use App\Services\BankService;
+use App\Services\BankAccountService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class UserBankAccountController extends Controller
 {
-    private BankService $bankService;
+    private BankAccountService $bankAccountService;
 
-    public function __construct(BankService $bankService)
+    public function __construct(BankAccountService $bankAccountService)
     {
-        $this->bankService = $bankService;
+        $this->bankAccountService = $bankAccountService;
 
         $this->middleware('auth:sanctum');
     }
 
     /**
-     * Get all bank account of an user.
+     * Get all bank accounts of an user.
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function show()
     {
-        $bankAccounts = $this->bankService->getAllUserBankAccounts(
+        $bankAccounts = $this->bankAccountService->getAllUserBankAccounts(
             auth()->user()->id,
         );
 
@@ -46,7 +46,7 @@ class UserBankAccountController extends Controller
     {
         $createUserBankAccount = $request->validated();
 
-        $bankAccount = $this->bankService->createUserBankAccount(
+        $bankAccount = $this->bankAccountService->createUserBankAccount(
             auth()->user()->id,
             $createUserBankAccount,
         );
@@ -72,7 +72,7 @@ class UserBankAccountController extends Controller
             throw new BadRequestHttpException('Nothing to update!');
         }
 
-        $status = $this->bankService->updateUserBankAccount(
+        $status = $this->bankAccountService->updateUserBankAccount(
             auth()->user()->id,
             $bankAccountId,
             $updateBankAccountInput,
@@ -96,7 +96,7 @@ class UserBankAccountController extends Controller
      */
     public function delete($bankAccountId)
     {
-        $status = $this->bankService->deleteUserBankAccount(
+        $status = $this->bankAccountService->deleteUserBankAccount(
             auth()->user()->id,
             $bankAccountId,
         );

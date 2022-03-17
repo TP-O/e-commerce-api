@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\User\BankAccount;
 
-class BankService
+class BankAccountService
 {
     /**
      * Get all bank accounts of an user.

@@ -71,5 +71,11 @@ Route::prefix('v2')->namespace('Api')->group(function () {
             Route::put('/{bankAccountId}', 'UserBankAccountController@update');
             Route::delete('/{bankAccountId}', 'UserBankAccountController@delete');
         });
+        Route::prefix('credit-card')->namespace('CreditCard')->group(function () {
+            Route::get('/', 'UserCreditCardController@show');
+            Route::post('/', 'UserCreditCardController@create');
+            Route::put('/{creditCardId}', 'UserCreditCardController@update');
+            Route::delete('/{creditCardId}', 'UserCreditCardController@delete');
+        });
     });
 });
