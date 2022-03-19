@@ -10,26 +10,6 @@ use Illuminate\Support\Arr;
 class AddressService
 {
     /**
-     * Get all addresses of an user.
-     *
-     * @param int $userId
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getAllUserAddresses($userId)
-    {
-        return Address::select('user_addresses.*')
-            ->distinct('id')
-            ->join(
-                'user_address_links',
-                'user_addresses.id',
-                'user_address_links.address_id'
-            )
-            ->where('user_id', $userId)
-            ->with('types')
-            ->get();
-    }
-
-    /**
      * Create list of address type id.
      *
      * @param array<string, boolean> $address
@@ -118,21 +98,6 @@ class AddressService
     }
 
     /**
-     * Check if the address is owned by the user.
-     *
-     * @param int $userId
-     * @param int $addressId
-     * @return bool
-     */
-    public function belongToUser($userId, $addressId)
-    {
-        return !is_null(AddressLink::where([
-            ['user_id', $userId],
-            ['address_id', $addressId],
-        ])->first());
-    }
-
-    /**
      * Update the user's address.
      *
      * @param int $userId
@@ -153,16 +118,5 @@ class AddressService
                 'is_return_address',
                 'is_default_address',
             ]));
-    }
-
-    /**
-     * Delete the user's address.
-     *
-     * @param int $addressId
-     * @return bool
-     */
-    public function deleteUserAddress($addressId)
-    {
-        return Address::where('id', $addressId)->delete();
     }
 }

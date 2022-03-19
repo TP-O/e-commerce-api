@@ -5,17 +5,12 @@ namespace App\Http\Controllers\Api\Account\CreditCard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateUserCreditCardRequest;
 use App\Http\Requests\UpdateUserCreditCardRequest;
-use App\Services\CreditCardService;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use App\Models\User\CreditCard;
 
 class UserCreditCardController extends Controller
 {
-    private CreditCardService $creditCardService;
-
-    public function __construct(CreditCardService $creditCardService)
+    public function __construct()
     {
-        $this->creditCardService = $creditCardService;
-
         $this->middleware('auth:sanctum');
     }
 
@@ -26,9 +21,7 @@ class UserCreditCardController extends Controller
      */
     public function show()
     {
-        $creditCards = $this->creditCardService->getAllUserCreditCards(
-            auth()->user()->id,
-        );
+        $creditCards = CreditCard::where('user_id', auth()->user()->id)->get();
 
         return response()->json([
             'status' => true,
@@ -44,12 +37,10 @@ class UserCreditCardController extends Controller
      */
     public function create(CreateUserCreditCardRequest $request)
     {
-        $createUserCreditCard = $request->validated();
-
-        $creditCard = $this->creditCardService->createUserCreditCard(
-            auth()->user()->id,
-            $createUserCreditCard,
-        );
+        $creditCard = CreditCard::insert([
+            ...$request->validated(),
+            'user_id' => auth()->user()->id,
+        ]);
 
         return response()->json([
             'status' => true,
@@ -61,22 +52,12 @@ class UserCreditCardController extends Controller
      * Update the user's credit card.
      *
      * @param \App\Http\Requests\UpdateUserCreditCardRequest $request
-     * @param int $creditCard
+     * @param \App\Models\User\CreditCard $creditCard
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(UpdateUserCreditCardRequest $request, $creditCard)
+    public function update(UpdateUserCreditCardRequest $request, CreditCard $creditCard)
     {
-        $updateUserCreditCard = $request->validated();
-
-        $status = $this->creditCardService->updateUserCreditCard(
-            auth()->user()->id,
-            $creditCard,
-            $updateUserCreditCard,
-        );
-
-        if (!$status) {
-            throw new BadRequestHttpException('Nothing to update!');
-        }
+        $creditCard->update($request->validated());
 
         return response()->json([
             'status' => true,
@@ -87,19 +68,12 @@ class UserCreditCardController extends Controller
     /**
      * Delete the user's credit card.
      *
-     * @param int $creditCard
+     * @param \App\Models\User\CreditCard $creditCard
      * @return \Illuminate\Http\JsonResponse
      */
-    public function delete($creditCard)
+    public function delete(CreditCard $creditCard)
     {
-        $status = $this->creditCardService->deleteUserCreditCard(
-            auth()->user()->id,
-            $creditCard,
-        );
-
-        if (!$status) {
-            throw new BadRequestHttpException('Nothing to delete!');
-        }
+        $creditCard->delete();
 
         return response()->json([
             'status' => true,

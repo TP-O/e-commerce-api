@@ -25,16 +25,4 @@ class ProfileService
 
         return $profile;
     }
-
-    /**
-     * Update the user's profile.
-     *
-     * @param int $userId
-     * @param array<string, any> $input
-     * @return bool
-     */
-    public function updateUserProfile(int $userId, array $input)
-    {
-        return Profile::where('user_id', $userId)->update($input);
-    }
 }

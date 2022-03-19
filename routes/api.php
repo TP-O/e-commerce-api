@@ -61,21 +61,21 @@ Route::prefix('v2')->namespace('Api')->group(function () {
         Route::prefix('addresses')->namespace('Address')->group(function () {
             Route::get('/', 'UserAddressController@show');
             Route::post('/', 'UserAddressController@create');
-            Route::put('/{addressId}', 'UserAddressController@update');
-            Route::delete('/{addressId}', 'UserAddressController@delete');
+            Route::put('/{id}', 'UserAddressController@update');
+            Route::delete('/{address}', 'UserAddressController@delete');
         });
 
         Route::prefix('bank-account')->namespace('BankAccount')->group(function () {
             Route::get('/', 'UserBankAccountController@show');
             Route::post('/', 'UserBankAccountController@create');
-            Route::put('/{bankAccountId}', 'UserBankAccountController@update');
-            Route::delete('/{bankAccountId}', 'UserBankAccountController@delete');
+            Route::put('/{bank_account}', 'UserBankAccountController@update');
+            Route::delete('/{bank_account}', 'UserBankAccountController@delete');
         });
         Route::prefix('credit-card')->namespace('CreditCard')->group(function () {
             Route::get('/', 'UserCreditCardController@show');
             Route::post('/', 'UserCreditCardController@create');
-            Route::put('/{creditCardId}', 'UserCreditCardController@update');
-            Route::delete('/{creditCardId}', 'UserCreditCardController@delete');
+            Route::put('/{credit_card}', 'UserCreditCardController@update');
+            Route::delete('/{credit_card}', 'UserCreditCardController@delete');
         });
     });
 });

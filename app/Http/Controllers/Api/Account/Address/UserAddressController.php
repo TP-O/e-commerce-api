@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Api\Account\Address;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateUserAddressRequest;
+use App\Http\Requests\DeleteUserAddressRequest;
 use App\Http\Requests\UpdateUserAddressRequest;
+use App\Models\User\Address;
 use App\Services\AddressService;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class UserAddressController extends Controller
 {
@@ -26,7 +27,16 @@ class UserAddressController extends Controller
      */
     public function show()
     {
-        $addresses = $this->addressService->getAllUserAddresses(auth()->user()->id);
+        $addresses = Address::select('user_addresses.*')
+            ->distinct('id')
+            ->join(
+                'user_address_links',
+                'user_addresses.id',
+                'user_address_links.address_id'
+            )
+            ->where('user_id', auth()->user()->id)
+            ->with('types')
+            ->get();
 
         return response()->json([
             'status' => true,
@@ -59,20 +69,16 @@ class UserAddressController extends Controller
      * Update the user's address.
      *
      * @param \App\Http\Requests\UpdateUserAddressRequest $request
-     * @param int $addressId
+     * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(UpdateUserAddressRequest $request, $addressId)
+    public function update(UpdateUserAddressRequest $request, $id)
     {
         $updateUserAddressInput = $request->validated();
 
-        if (!$this->addressService->belongToUser(auth()->user()->id, $addressId)) {
-            throw new BadRequestHttpException('Nothing to update!');
-        }
-
         $this->addressService->updateUserAddress(
             auth()->user()->id,
-            $addressId,
+            $id,
             $updateUserAddressInput,
         );
 
@@ -85,16 +91,12 @@ class UserAddressController extends Controller
     /**
      * Delete the user's address.
      *
-     * @param int $addressId
+     * @param \App\Models\User\Address $address
      * @return \Illuminate\Http\JsonResponse
      */
-    public function delete($addressId)
+    public function delete(DeleteUserAddressRequest $request, Address $address)
     {
-        if (!$this->addressService->belongToUser(auth()->user()->id, $addressId)) {
-            throw new BadRequestHttpException('Nothing to delete!');
-        }
-
-        $this->addressService->deleteUserAddress($addressId);
+        $address->delete();
 
         return response()->json([
             'status' => true,
