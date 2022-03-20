@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
-class ResetPasswordRequest extends CustomFormRequest
+use App\Http\Requests\CustomFormRequest;
+
+class SignInRequest extends CustomFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +24,8 @@ class ResetPasswordRequest extends CustomFormRequest
     public function rules()
     {
         return [
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|min:5|confirmed',
+            'usernameOrEmail' => 'required|string|min:5|max:50',
+            'password' => 'required|string|min:5',
         ];
     }
 }

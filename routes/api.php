@@ -65,13 +65,13 @@ Route::prefix('v2')->namespace('Api')->group(function () {
             Route::delete('/{address}', 'UserAddressController@delete');
         });
 
-        Route::prefix('bank-account')->namespace('BankAccount')->group(function () {
+        Route::prefix('bank-accounts')->namespace('BankAccount')->group(function () {
             Route::get('/', 'UserBankAccountController@show');
             Route::post('/', 'UserBankAccountController@create');
             Route::put('/{bank_account}', 'UserBankAccountController@update');
             Route::delete('/{bank_account}', 'UserBankAccountController@delete');
         });
-        Route::prefix('credit-card')->namespace('CreditCard')->group(function () {
+        Route::prefix('credit-cards')->namespace('CreditCard')->group(function () {
             Route::get('/', 'UserCreditCardController@show');
             Route::post('/', 'UserCreditCardController@create');
             Route::put('/{credit_card}', 'UserCreditCardController@update');

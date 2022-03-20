@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Password;
+
+use App\Http\Requests\CustomFormRequest;
 
 class UpdatePasswordRequest extends CustomFormRequest
 {

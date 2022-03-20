@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Address;
 
+use App\Http\Requests\CustomFormRequest;
 use App\Models\User\AddressLink;
 
-class DeleteUserAddressRequest extends CustomFormRequest
+class AuthorizedUserAddressRequest extends CustomFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,17 +18,5 @@ class DeleteUserAddressRequest extends CustomFormRequest
             ['user_id', $this->user()->id],
             ['address_id', $this->route('address')->id],
         ])->first());
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
-    {
-        return [
-            //
-        ];
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Auth\SignUp;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SignUpUserRequest;
+use App\Http\Requests\Auth\SignUpUserRequest;
 use App\Services\AssetService;
 use App\Services\AuthService;
 use App\Services\ProfileService;
@@ -46,7 +46,7 @@ class UserSignUpController extends Controller
     /**
      * Create an user account.
      *
-     * @param  \App\Http\Requests\SignUpUserRequest $request
+     * @param  \App\Http\Requests\Auth\SignUpUserRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function signUp(SignUpUserRequest $request)

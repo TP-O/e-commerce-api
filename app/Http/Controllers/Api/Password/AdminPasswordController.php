@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api\Password;
 
-use App\Http\Requests\ForgotPasswordRequest;
-use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Requests\Password\ForgotPasswordRequest;
+use App\Http\Requests\Password\ResetPasswordRequest;
 use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 
 class AdminPasswordController extends PasswordController
@@ -26,7 +26,7 @@ class AdminPasswordController extends PasswordController
     /**
      * Send the reset password email to an admin.
      *
-     * @param \App\Http\Requests\ForgotPasswordRequest $request
+     * @param \App\Http\Requests\Password\ForgotPasswordRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function forgotPassword(ForgotPasswordRequest $request)
@@ -37,7 +37,7 @@ class AdminPasswordController extends PasswordController
     /**
      * Reset the admin's password.
      *
-     * @param \App\Http\Requests\ResetPasswordRequest $request
+     * @param \App\Http\Requests\Password\ResetPasswordRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function resetPassword(ResetPasswordRequest $request)

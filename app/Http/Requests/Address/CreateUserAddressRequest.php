@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Address;
+
+use App\Http\Requests\CustomFormRequest;
 
 class CreateUserAddressRequest extends CustomFormRequest
 {

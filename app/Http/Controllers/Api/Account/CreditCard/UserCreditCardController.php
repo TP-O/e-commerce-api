@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\Account\CreditCard;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateUserCreditCardRequest;
-use App\Http\Requests\UpdateUserCreditCardRequest;
+use App\Http\Requests\CreditCard\CreateUserCreditCardRequest;
+use App\Http\Requests\CreditCard\DeleteUserCreditCardRequest;
+use App\Http\Requests\CreditCard\UpdateUserCreditCardRequest;
 use App\Models\User\CreditCard;
+use Illuminate\Http\Response;
 
 class UserCreditCardController extends Controller
 {
@@ -32,7 +34,7 @@ class UserCreditCardController extends Controller
     /**
      * Store the user's credit card.
      *
-     * @param \App\Http\Requests\CreateUserCreditCardRequest $request
+     * @param \App\Http\Requests\CreditCard\CreateUserCreditCardRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function create(CreateUserCreditCardRequest $request)
@@ -45,13 +47,13 @@ class UserCreditCardController extends Controller
         return response()->json([
             'status' => true,
             'data' => $creditCard,
-        ]);
+        ], Response::HTTP_CREATED);
     }
 
     /**
      * Update the user's credit card.
      *
-     * @param \App\Http\Requests\UpdateUserCreditCardRequest $request
+     * @param \App\Http\Requests\CreditCard\UpdateUserCreditCardRequest $request
      * @param \App\Models\User\CreditCard $creditCard
      * @return \Illuminate\Http\JsonResponse
      */
@@ -68,10 +70,11 @@ class UserCreditCardController extends Controller
     /**
      * Delete the user's credit card.
      *
+     * @param \App\Http\Requests\CreditCard\DeleteUserCreditCardRequest $request
      * @param \App\Models\User\CreditCard $creditCard
      * @return \Illuminate\Http\JsonResponse
      */
-    public function delete(CreditCard $creditCard)
+    public function delete(DeleteUserCreditCardRequest $request, CreditCard $creditCard)
     {
         $creditCard->delete();
 

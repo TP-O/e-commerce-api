@@ -1,24 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Address;
 
 use App\Models\User\AddressLink;
 
-class UpdateUserAddressRequest extends CustomFormRequest
+class UpdateUserAddressRequest extends AuthorizedUserAddressRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return !is_null(AddressLink::where([
-            ['user_id', $this->user()->id],
-            ['address_id', $this->route('id')],
-        ])->first());
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *

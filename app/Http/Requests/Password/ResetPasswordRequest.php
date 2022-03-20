@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Password;
 
-use App\Models\User\BankAccount;
+use App\Http\Requests\CustomFormRequest;
 
-class DeleteUserBankAccountRequest extends CustomFormRequest
+class ResetPasswordRequest extends CustomFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,10 +13,7 @@ class DeleteUserBankAccountRequest extends CustomFormRequest
      */
     public function authorize()
     {
-        return !is_null(BankAccount::where([
-            ['id', $this->route('bank_account')->id],
-            ['user_id', $this->user()->id],
-        ])->first());
+        return true;
     }
 
     /**
@@ -27,7 +24,9 @@ class DeleteUserBankAccountRequest extends CustomFormRequest
     public function rules()
     {
         return [
-            //
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:5|confirmed',
         ];
     }
 }

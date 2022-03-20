@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\CreditCard;
 
-use App\Rules\UniqueUserCreditCardNumber;
+use App\Http\Requests\CustomFormRequest;
+use App\Rules\UniqueUserCreditCardNumberRule;
 
 class CreateUserCreditCardRequest extends CustomFormRequest
 {
@@ -36,7 +37,7 @@ class CreateUserCreditCardRequest extends CustomFormRequest
             'card_number' => [
                 'required',
                 'digits:16',
-                new UniqueUserCreditCardNumber($this->user()->id),
+                new UniqueUserCreditCardNumberRule($this->user()->id),
             ]
         ];
     }

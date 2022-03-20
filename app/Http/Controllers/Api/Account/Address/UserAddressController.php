@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Api\Account\Address;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateUserAddressRequest;
-use App\Http\Requests\DeleteUserAddressRequest;
-use App\Http\Requests\UpdateUserAddressRequest;
+use App\Http\Requests\Address\CreateUserAddressRequest;
+use App\Http\Requests\Address\DeleteUserAddressRequest;
+use App\Http\Requests\Address\UpdateUserAddressRequest;
 use App\Models\User\Address;
 use App\Services\AddressService;
+use Illuminate\Http\Response;
 
 class UserAddressController extends Controller
 {
@@ -47,7 +48,7 @@ class UserAddressController extends Controller
     /**
      * Store the user's address.
      *
-     * @param \App\Http\Requests\CreateUserAddressRequest $request
+     * @param \App\Http\Requests\Address\CreateUserAddressRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function create(CreateUserAddressRequest $request)
@@ -62,13 +63,13 @@ class UserAddressController extends Controller
         return response()->json([
             'status' => true,
             'data' => $address,
-        ]);
+        ], Response::HTTP_CREATED);
     }
 
     /**
      * Update the user's address.
      *
-     * @param \App\Http\Requests\UpdateUserAddressRequest $request
+     * @param \App\Http\Requests\Address\UpdateUserAddressRequest $request
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
@@ -91,6 +92,7 @@ class UserAddressController extends Controller
     /**
      * Delete the user's address.
      *
+     * @param \App\Http\Requests\Address\DeleteUserAddressRequest $request
      * @param \App\Models\User\Address $address
      * @return \Illuminate\Http\JsonResponse
      */
