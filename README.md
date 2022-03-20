@@ -18,11 +18,17 @@ Fill in:
 ## Step 2: Start containers
 
 ```bash
-$ docker-compose -f docker-compose.prod.yml up
+$ docker-compose -f docker-compose.prod.yml up --build
 ```
 
 ## Step 3: Create secret key
 
 ```bash
 $ docker-compose -f docker-compose.prod.yml exec api php artisan key:generate
+```
+
+## Step 4: Create database tables
+
+```bash
+$ docker-compose -f docker-compose.prod.yml exec api php artisan migrate --seed
 ```
