@@ -57,5 +57,25 @@ Route::prefix('v2')->namespace('Api')->group(function () {
             Route::get('/', 'UserProfileController@me');
             Route::put('/', 'UserProfileController@updateProfile');
         });
+
+        Route::prefix('addresses')->namespace('Address')->group(function () {
+            Route::get('/', 'UserAddressController@show');
+            Route::post('/', 'UserAddressController@create');
+            Route::put('/{id}', 'UserAddressController@update');
+            Route::delete('/{address}', 'UserAddressController@delete');
+        });
+
+        Route::prefix('bank-accounts')->namespace('BankAccount')->group(function () {
+            Route::get('/', 'UserBankAccountController@show');
+            Route::post('/', 'UserBankAccountController@create');
+            Route::put('/{bank_account}', 'UserBankAccountController@update');
+            Route::delete('/{bank_account}', 'UserBankAccountController@delete');
+        });
+        Route::prefix('credit-cards')->namespace('CreditCard')->group(function () {
+            Route::get('/', 'UserCreditCardController@show');
+            Route::post('/', 'UserCreditCardController@create');
+            Route::put('/{credit_card}', 'UserCreditCardController@update');
+            Route::delete('/{credit_card}', 'UserCreditCardController@delete');
+        });
     });
 });

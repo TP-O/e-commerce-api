@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Auth\SignIn;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SignInRequest;
+use App\Http\Requests\Auth\SignInRequest;
 use App\Services\AuthService;
 use App\Services\TokenService;
 use Illuminate\Http\Request;
@@ -42,7 +42,7 @@ abstract class SignInController extends Controller
     /**
      * Sign in to the system.
      *
-     * @param  \App\Http\Requests\SignInRequest $request
+     * @param  \App\Http\Requests\Auth\SignInRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     abstract public function signIn(SignInRequest $request);

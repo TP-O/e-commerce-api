@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->float('transportation_fee', 8, 2, true);
             $table->float('grand_total', 8, 2, true);
+            $table->text('reminder');
 
             $table->foreignId('payment_id')
                 ->nullable()

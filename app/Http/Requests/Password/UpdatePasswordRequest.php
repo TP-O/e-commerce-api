@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Password;
 
-class SignUpUserRequest extends CustomFormRequest
+use App\Http\Requests\CustomFormRequest;
+
+class UpdatePasswordRequest extends CustomFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +24,8 @@ class SignUpUserRequest extends CustomFormRequest
     public function rules()
     {
         return [
-            'username' => 'required|string|min:5|max:50|unique:users',
-            'email' => 'required|email|max:50|unique:users',
-            'password' => 'required|string|min:5|confirmed',
+            'password' => 'required|min:5',
+            'new_password' => 'required|min:5|confirmed|different:password',
         ];
     }
 }

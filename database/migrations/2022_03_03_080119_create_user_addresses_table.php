@@ -17,22 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string('full_name', 50);
             $table->string('phone', 12);
+            $table->string('state', 50);
             $table->string('city', 50);
-            $table->string('province', 50);
-            $table->string('ward', 50);
-            $table->text('detail');
-            $table->text('reminder');
+            $table->string('town', 50);
+            $table->text('address');
             $table->boolean('is_home')->nullable();
-
-            $table->foreignId('user_id')
-                ->constrained('users')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-            $table->foreignId('type_id')
-                ->nullable()
-                ->constrained('user_address_types')
-                ->onDelete('set null')
-                ->onUpdate('set null');
         });
     }
 

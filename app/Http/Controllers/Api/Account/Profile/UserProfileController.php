@@ -2,36 +2,58 @@
 
 namespace App\Http\Controllers\Api\Account\Profile;
 
-use App\Http\Requests\UpdateUserProfileRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Profile\UpdateUserProfileRequest;
+use App\Models\User\Profile;
+use App\Services\AssetService;
 use Illuminate\Support\Arr;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class UserProfileController extends ProfileController
+class UserProfileController extends Controller
 {
+    private AssetService $assetService;
+
+    public function __construct(AssetService $assetService) {
+        $this->assetService = $assetService;
+
+        $this->middleware('auth:sanctum');
+    }
+
+    /**
+     * Show the user's profile.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function me()
+    {
+        return response()->json([
+            'data' => [
+                ...auth()->user()->toArray(),
+                'profile' => auth()->user()->profile,
+            ],
+        ]);
+    }
+
     /**
      * Update the user's profile.
      *
-     * @param \App\Http\Requests\UpdateUserProfileRequest $request
+     * @param \App\Http\Requests\Profile\UpdateUserProfileRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function updateProfile(UpdateUserProfileRequest $request)
     {
         $updateProfileInput = $request->validated();
 
-        if (empty($updateProfileInput)) {
-            throw new BadRequestHttpException('Nothing to update!');
-        }
-
         if (Arr::exists($updateProfileInput, 'avatar')) {
             $updateProfileInput['avatar_image'] = $this->assetService
                 ->storeAvatar($request->file('avatar'));
         }
 
-        $this->profileService->updateUserProfile(auth()->user()->id, $updateProfileInput);
+        Profile::where('user_id', auth()->user()->id)
+            ->update($updateProfileInput);
 
         return response()->json([
             'status' => true,
-            'message' => 'Your profile has been updated!',
+            'message' => 'Profile has been updated!',
         ]);
     }
 }

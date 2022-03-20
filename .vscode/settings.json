@@ -2,4 +2,7 @@
     "i18n-ally.localesPaths": [
         "resources/lang"
     ],
+    "files.associations": {
+        "*.module": "php",
+    },
 }

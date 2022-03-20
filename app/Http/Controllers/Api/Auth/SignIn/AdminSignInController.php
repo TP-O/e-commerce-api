@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\Auth\SignIn;
 
-use App\Http\Requests\SignInRequest;
+use App\Http\Requests\Auth\SignInRequest;
 use Illuminate\Http\Response;
 
 class AdminSignInController extends SignInController
@@ -10,7 +10,7 @@ class AdminSignInController extends SignInController
     /**
      * Sign in to the system as an admin.
      *
-     * @param \App\Http\Requests\SignInRequest $request
+     * @param \App\Http\Requests\Auth\SignInRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function signIn(SignInRequest $request)

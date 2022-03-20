@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Api\Password;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ForgotPasswordRequest;
-use App\Http\Requests\ResetPasswordRequest;
-use App\Http\Requests\UpdatePasswordRequest;
+use App\Http\Requests\Password\ForgotPasswordRequest;
+use App\Http\Requests\Password\ResetPasswordRequest;
+use App\Http\Requests\Password\UpdatePasswordRequest;
+use App\Models\User\User;
 use App\Services\PasswordService;
 use App\Services\TokenService;
 use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
@@ -30,7 +31,7 @@ abstract class PasswordController extends Controller
     /**
      * Update the user's password.
      *
-     * @param \App\Http\Requests\UpdatePasswordRequest $request
+     * @param \App\Http\Requests\Password\UpdatePasswordRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function updatePassword(UpdatePasswordRequest $request)
@@ -75,7 +76,7 @@ abstract class PasswordController extends Controller
     /**
      * Send the reset password email.
      *
-     * @param \App\Http\Requests\ForgotPasswordRequest $request
+     * @param \App\Http\Requests\Password\ForgotPasswordRequest $request
      * @param string $broker
      * @return \Illuminate\Http\JsonResponse
      *
@@ -104,7 +105,7 @@ abstract class PasswordController extends Controller
     /**
      * Reset the password.
      *
-     * @param \App\Http\Requests\ResetPasswordRequest $request
+     * @param \App\Http\Requests\Password\ResetPasswordRequest $request
      * @param string $broker
      * @return \Illuminate\Http\JsonResponse
      *
@@ -133,7 +134,7 @@ abstract class PasswordController extends Controller
     /**
      * Send the reset password email with the specific broker.
      *
-     * @param \App\Http\Requests\ForgotPasswordRequest $request
+     * @param \App\Http\Requests\Password\ForgotPasswordRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     abstract public function forgotPassword(ForgotPasswordRequest $request);
@@ -141,7 +142,7 @@ abstract class PasswordController extends Controller
     /**
      * Reset the password with the specific broker.
      *
-     * @param \App\Http\Requests\ResetPasswordRequest $request
+     * @param \App\Http\Requests\Password\ResetPasswordRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     abstract public function resetPassword(ResetPasswordRequest $request);

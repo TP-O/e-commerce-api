@@ -13,19 +13,23 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_bank_accounts', function (Blueprint $table) {
+        Schema::create('user_address_links', function (Blueprint $table) {
             $table->id();
-            $table->string('accountholder_name', 64);
-            $table->string('identification_number', 12);
-            $table->string('bank_name', 255);
-            $table->string('bank_branch', 255);
-            $table->string('account_number', 17);
 
+            $table->foreignId('address_id')
+                ->constrained('user_addresses')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->foreignId('user_id')
                 ->constrained('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->unique(['user_id', 'account_number']);
+            $table->foreignId('type_id')
+                ->nullable()
+                ->constrained('user_address_types')
+                ->onDelete('set null')
+                ->onUpdate('set null');
+            $table->unique(['user_id', 'type_id']);
         });
     }
 
@@ -36,6 +40,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_bank_accounts');
+        Schema::dropIfExists('user_address_links');
     }
 };

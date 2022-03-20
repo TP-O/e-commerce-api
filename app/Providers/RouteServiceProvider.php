@@ -47,6 +47,13 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
         });
+
+        Route::patterns([
+            'id' => '[0-9]+',
+            'address' => '[0-9]+',
+            'bank_account' => '[0-9]+',
+            'credit_card' => '[0-9]+',
+        ]);
     }
 
     /**

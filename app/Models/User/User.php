@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\User;
 
 use Illuminate\Contracts\Auth\CanResetPassword;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Admin extends Authenticatable implements CanResetPassword
+class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 {
     use HasApiTokens, HasFactory, Notifiable;
-
-    protected $table = 'administrators';
 
     protected $fillable = [
         'username',
@@ -29,4 +28,9 @@ class Admin extends Authenticatable implements CanResetPassword
     ];
 
     public $timestamps = false;
+
+    public function profile()
+    {
+        return $this->hasOne(Profile::class, 'user_id');
+    }
 }

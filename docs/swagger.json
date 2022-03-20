@@ -682,6 +682,675 @@
                     }
                 }
             }
+        },
+        "/account/addresses": {
+            "get": {
+                "tags": [
+                    "account"
+                ],
+                "summary": "Get user's address",
+                "operationId": "getAllUserAddresses",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "account"
+                ],
+                "summary": "Create user's address",
+                "operationId": "createUserAddress",
+                "parameters": [
+                    {
+                        "name": "full_name",
+                        "in": "query",
+                        "description": "Full name of user",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "phone",
+                        "in": "query",
+                        "description": "Phone number of user",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "state",
+                        "in": "query",
+                        "description": "State of user",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "description": "City of user",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "town",
+                        "in": "query",
+                        "description": "Town of user",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "address",
+                        "in": "query",
+                        "description": "Detailed address of user",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "is_home",
+                        "in": "query",
+                        "description": "Mark as home address",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "is_pickup_address",
+                        "in": "query",
+                        "description": "Mark as pickup address",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "is_default_address",
+                        "in": "query",
+                        "description": "Mark as default address",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "is_return_address",
+                        "in": "query",
+                        "description": "Mark as return address",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
+            }
+        },
+        "/account/addresses/{id}": {
+            "put": {
+                "tags": [
+                    "account"
+                ],
+                "summary": "Update user's address",
+                "operationId": "updateUserAddress",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Address's id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "full_name",
+                        "in": "query",
+                        "description": "Full name of user",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "phone",
+                        "in": "query",
+                        "description": "Phone number of user",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "state",
+                        "in": "query",
+                        "description": "State of user",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "description": "City of user",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "town",
+                        "in": "query",
+                        "description": "Town of user",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "address",
+                        "in": "query",
+                        "description": "Detailed address of user",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "is_home",
+                        "in": "query",
+                        "description": "Mark as home address",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "is_pickup_address",
+                        "in": "query",
+                        "description": "Mark as pickup address",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "is_default_address",
+                        "in": "query",
+                        "description": "Mark as default address",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "is_return_address",
+                        "in": "query",
+                        "description": "Mark as return address",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "account"
+                ],
+                "summary": "Delete user's address",
+                "operationId": "deleteUserAddress",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Address's id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/account/bank-accounts": {
+            "get": {
+                "tags": [
+                    "account"
+                ],
+                "summary": "Get user's bank account",
+                "operationId": "getAllUserBankAccount",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "account"
+                ],
+                "summary": "Create user's bank account",
+                "operationId": "createUserBankAccount",
+                "parameters": [
+                    {
+                        "name": "accountholder_name",
+                        "in": "query",
+                        "description": "Holder name of bank account",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "identification_number",
+                        "in": "query",
+                        "description": "Identification number of holder",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bank_name",
+                        "in": "query",
+                        "description": "Name of bank",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bank_branch",
+                        "in": "query",
+                        "description": "Name of bank's branch",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "account_number",
+                        "in": "query",
+                        "description": "Account number of bank account",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
+            }
+        },
+        "/account/bank-accounts/{id}": {
+            "put": {
+                "tags": [
+                    "account"
+                ],
+                "summary": "Update user's bank account",
+                "operationId": "updateUserBankAccount",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Bank account's id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "accountholder_name",
+                        "in": "query",
+                        "description": "Holder name of bank account",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "identification_number",
+                        "in": "query",
+                        "description": "Identification number of holder",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bank_name",
+                        "in": "query",
+                        "description": "Name of bank",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bank_branch",
+                        "in": "query",
+                        "description": "Name of bank's branch",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "account_number",
+                        "in": "query",
+                        "description": "Account number of bank account",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "account"
+                ],
+                "summary": "Delete user's bank account",
+                "operationId": "deleteUserBankAccount",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Bank account's id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/account/credit-cards": {
+            "get": {
+                "tags": [
+                    "account"
+                ],
+                "summary": "Get user's credit card",
+                "operationId": "getAllUseCreditCard",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "account"
+                ],
+                "summary": "Create user's credit card",
+                "operationId": "createUserCreditCard",
+                "parameters": [
+                    {
+                        "name": "cardholder_name",
+                        "in": "query",
+                        "description": "Holder name of card",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "expiry_date",
+                        "in": "query",
+                        "description": "Expiration date of card (MM/YY)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "cvv",
+                        "in": "query",
+                        "description": "CVV of card",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "registration_address",
+                        "in": "query",
+                        "description": "Card registration address",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "postal_code",
+                        "in": "query",
+                        "description": "Postal code of Card registration address (5 digits)",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "card_number",
+                        "in": "query",
+                        "description": "Card number",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
+            }
+        },
+        "/account/credit-cards/{id}": {
+            "put": {
+                "tags": [
+                    "account"
+                ],
+                "summary": "Update user's credit card",
+                "operationId": "updateUserCreditCard",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Credit card's id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "cardholder_name",
+                        "in": "query",
+                        "description": "Holder name of card",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "expiry_date",
+                        "in": "query",
+                        "description": "Expiration date of card (MM/YY)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "cvv",
+                        "in": "query",
+                        "description": "CVV of card",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "registration_address",
+                        "in": "query",
+                        "description": "Card registration address",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "postal_code",
+                        "in": "query",
+                        "description": "Postal code of Card registration address (5 digits)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "card_number",
+                        "in": "query",
+                        "description": "Card number",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "account"
+                ],
+                "summary": "Delete user's credit card",
+                "operationId": "deleteUserCreditCard",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Credit card's id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
         }
     }
 }
