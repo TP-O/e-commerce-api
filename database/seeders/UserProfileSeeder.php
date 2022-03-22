@@ -19,7 +19,7 @@ class UserProfileSeeder extends Seeder
             [
                 'user_id' => 1,
                 'display_name' => 'User 01',
-                'avatar_image' => '',
+                'avatar_image' => '/public/image/demo/avatar/avatar-01',
                 'phone' => '0338620888',
                 'gender' => 1,
                 'date_of_birth' => Carbon::create(2001, 12, 20, 0, 0, 0, 'GMT'),
@@ -27,7 +27,7 @@ class UserProfileSeeder extends Seeder
             [
                 'user_id' => 2,
                 'display_name' => 'User 02',
-                'avatar_image' => '',
+                'avatar_image' => '/public/image/demo/avatar/avatar-02',
                 'phone' => null,
                 'gender' => 1,
                 'date_of_birth' => Carbon::create(2001, 1, 1, 0, 0, 0, 'GMT'),
