@@ -23,7 +23,7 @@ class UpdateUserProfileRequest extends CustomFormRequest
      */
     public function rules()
     {
-        return $this->requireLeastOne([
+        return $this->requireAtLeastOne([
             'display_name' => 'string|max:50',
             'avatar' => 'image|mimes:jpg,jpeg,png|max:1024',
             'phone' => 'digits_between:10,11',

@@ -13,7 +13,7 @@ class UpdateUserCreditCardRequest extends AuthorizedUserBankAccountRequest
      */
     public function rules()
     {
-        return $this->requireLeastOne([
+        return $this->requireAtLeastOne([
             'cardholder_name'  => 'string|max:64',
             'expiry_date' => 'string|regex:/^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/',
             'cvv' => 'digits:3',
