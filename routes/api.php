@@ -83,8 +83,9 @@ Route::prefix('v2')->namespace('Api')->group(function () {
         });
     });
 
+    Route::get('shops/{id}', 'ShopController@get');
+
     Route::prefix('shop')->namespace('Shop')->middleware('pat.name:user')->group(function() {
-        Route::get('/{id}', 'ShopController@get')->withoutMiddleware('pat.name:user');
         Route::get('/', 'ShopController@getMyShop');
         Route::post('/', 'ShopController@create');
         Route::put('/', 'ShopController@update');
