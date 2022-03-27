@@ -20,8 +20,8 @@ class ShopSeeder extends Seeder
                 'slug' => 'shop-01',
                 'name' => 'Shop of User 01',
                 'description' => 'This is a shope of user 01.',
-                'avatar_image' => '/public/image/demo/avatar/avatar-01',
-                'cover_image' => '/public/image/demo/cover/shop/cover-01',
+                'avatar_image' => 'demo/avatar-01',
+                'cover_image' => 'demo/shop-cover-01',
             ],
         ]);
     }

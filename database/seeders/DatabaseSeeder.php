@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
             UserAddressLinkSeeder::class,
 
             ShopSeeder::class,
-            ShopMediaSeeder::class,
+            ShopBannerSeeder::class,
         ]);
     }
 }

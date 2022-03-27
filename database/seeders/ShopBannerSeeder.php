@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class ShopMediaSeeder extends Seeder
+class ShopBannerSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,7 +14,7 @@ class ShopMediaSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('shop_media')->insert([
+        DB::table('shop_banners')->insert([
             [
                 'shop_id' => 1,
                 'source' => 'https://youtu.be/GxUxTtdkW2E',
@@ -25,7 +25,7 @@ class ShopMediaSeeder extends Seeder
             ],
             [
                 'shop_id' => 1,
-                'source' => '/public/image/demo/preview/shop/preview-01_01',
+                'source' => 'demo/shop-banner-01_01',
             ],
         ]);
     }
