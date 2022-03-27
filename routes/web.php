@@ -22,5 +22,6 @@ Route::get('/test', function() {
 });
 
 Route::prefix('resource')->group(function () {
-    Route::get('/image/{imageId}', 'Api\ResourceController@loadImage')->where('imageId', '(.*)');
+    Route::get('/image/{imageId}', 'Api\ResourceController@loadImage')
+        ->where('imageId', '^(demo\/[a-z0-9-]{1,}|[a-z0-9]{32})(_tn)?$');
 });
