@@ -17,7 +17,7 @@ class UserBankAccountController extends Controller
     }
 
     /**
-     * Get all bank accounts of an user.
+     * Get all bank accounts of the user.
      *
      * @return \Illuminate\Http\JsonResponse
      */

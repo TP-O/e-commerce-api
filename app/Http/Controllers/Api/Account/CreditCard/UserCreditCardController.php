@@ -17,7 +17,7 @@ class UserCreditCardController extends Controller
     }
 
     /**
-     * Get all credit cards of an user.
+     * Get all credit cards of the user.
      *
      * @return \Illuminate\Http\JsonResponse
      */

@@ -5,16 +5,12 @@ namespace App\Http\Controllers\Api\Account\Profile;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Profile\UpdateUserProfileRequest;
 use App\Models\User\Profile;
-use App\Services\AssetService;
-use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
 
 class UserProfileController extends Controller
 {
-    private AssetService $assetService;
-
-    public function __construct(AssetService $assetService) {
-        $this->assetService = $assetService;
-
+    public function __construct()
+    {
         $this->middleware('auth:sanctum');
     }
 
@@ -23,11 +19,11 @@ class UserProfileController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function me()
+    public function me(Request $request)
     {
         return response()->json([
             'data' => [
-                ...auth()->user()->toArray(),
+                ...$request->user()->toArray(),
                 'profile' => auth()->user()->profile,
             ],
         ]);
@@ -41,15 +37,8 @@ class UserProfileController extends Controller
      */
     public function updateProfile(UpdateUserProfileRequest $request)
     {
-        $updateProfileInput = $request->validated();
-
-        if (Arr::exists($updateProfileInput, 'avatar')) {
-            $updateProfileInput['avatar_image'] = $this->assetService
-                ->storeAvatar($request->file('avatar'));
-        }
-
         Profile::where('user_id', auth()->user()->id)
-            ->update($updateProfileInput);
+            ->update($request->validated());
 
         return response()->json([
             'status' => true,

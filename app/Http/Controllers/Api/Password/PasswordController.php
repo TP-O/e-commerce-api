@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Password\ForgotPasswordRequest;
 use App\Http\Requests\Password\ResetPasswordRequest;
 use App\Http\Requests\Password\UpdatePasswordRequest;
-use App\Models\User\User;
 use App\Services\PasswordService;
 use App\Services\TokenService;
 use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
@@ -42,7 +41,7 @@ abstract class PasswordController extends Controller
             throw new BadRequestHttpException('Invalid password!');
         }
 
-        $this->passwordService->updatePassword(
+        $this->passwordService->update(
             $request->user(),
             $updatePasswordInput['new_password'],
         );
@@ -116,7 +115,7 @@ abstract class PasswordController extends Controller
         $status = Password::broker($broker)->reset(
             $request->safe()->only('email', 'token', 'password'),
             function ($user, $password) {
-                $this->passwordService->updatePassword($user, $password);
+                $this->passwordService->update($user, $password);
                 $this->tokenService->revokeAllPATs($user);
             },
         );

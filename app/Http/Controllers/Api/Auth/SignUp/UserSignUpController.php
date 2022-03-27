@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api\Auth\SignUp;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\SignUpUserRequest;
-use App\Services\AssetService;
 use App\Services\AuthService;
 use App\Services\ProfileService;
+use App\Services\ResourceService;
 use App\Services\TokenService;
 use Illuminate\Http\Response;
 use Laravel\Socialite\Facades\Socialite;
@@ -20,7 +20,7 @@ class UserSignUpController extends Controller
 
     private ProfileService $profileService;
 
-    private AssetService $assetService;
+    private ResourceService $resourceService;
 
     private array $supportedDriver = [
         'github',
@@ -32,12 +32,12 @@ class UserSignUpController extends Controller
         AuthService $authService,
         TokenService $tokenService,
         ProfileService $profileService,
-        AssetService $assetService
+        ResourceService $resourceService,
     ) {
         $this->authService = $authService;
         $this->tokenService = $tokenService;
         $this->profileService = $profileService;
-        $this->assetService = $assetService;
+        $this->resourceService = $resourceService;
 
         $this->middleware('guest:sanctum');
         $this->middleware('web')->except('signUp');
@@ -97,11 +97,11 @@ class UserSignUpController extends Controller
 
         if (is_null($user)) {
             $user = $this->authService->createOAuthUser($oauthUser->getEmail());
-            $avatarImage = $this->assetService->storeAvatar($oauthUser->getAvatar());
+            $imageId = $this->resourceService->storeImage($oauthUser->getAvatar(), 1);
 
             $this->profileService->createUserProfile($user->id, [
                 'username' => $user->name,
-                'avatar_image' => $avatarImage,
+                'avatar_image' => $imageId,
             ]);
         }
 

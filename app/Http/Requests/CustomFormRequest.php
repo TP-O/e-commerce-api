@@ -27,8 +27,8 @@ class CustomFormRequest extends FormRequest
     /**
      * Require at least one field.
      *
-     * @param array<string, any> $rules
-     * @return array<string, any>
+     * @param array $rules
+     * @return array
      */
     protected function requireAtLeastOne($rules)
     {

@@ -10,10 +10,32 @@ use Illuminate\Support\Arr;
 class AddressService
 {
     /**
+     * Get all addresses of the user.
+     *
+     * @param int $userId
+     * @return Illuminate\Support\Collection
+     */
+    public function getUserAddresses($userId)
+    {
+        $addresses = Address::select('user_addresses.*')
+            ->distinct('id')
+            ->join(
+                'user_address_links',
+                'user_addresses.id',
+                'user_address_links.address_id'
+            )
+            ->where('user_id', $userId)
+            ->with('types')
+            ->get();
+
+        return $addresses;
+    }
+
+    /**
      * Create list of address type id.
      *
-     * @param array<string, boolean> $address
-     * @return array<int>
+     * @param array $address
+     * @return array
      */
     private function createAddressTypeIds($address)
     {
@@ -33,7 +55,7 @@ class AddressService
      * Bind the address with specified types.
      *
      * @param int $userId
-     * @param array<string, any> $address
+     * @param array $address
      * @return bool
      */
     private function linkUserAddresses($userId, $address)
@@ -73,7 +95,7 @@ class AddressService
      * Create an user's address.
      *
      * @param int $userId
-     * @param array<string, any> $input
+     * @param array $input
      * @return \App\Models\User\Address
      */
     public function createUserAddress($userId, $input)
@@ -86,7 +108,7 @@ class AddressService
         $address->save();
 
         $this->linkUserAddresses(
-            auth()->user()->id,
+            $userId,
             [
                 ...$input,
                 'id' => $address->id,
@@ -102,7 +124,7 @@ class AddressService
      *
      * @param int $userId
      * @param int $addressId
-     * @param array<string, any> $input
+     * @param array $input
      * @return bool
      */
     public function updateUserAddress($userId, $addressId, $input)

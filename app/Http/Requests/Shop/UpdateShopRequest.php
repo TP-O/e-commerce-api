@@ -27,10 +27,10 @@ class UpdateShopRequest extends CustomFormRequest
             'name' => 'string|max:30',
             'slug' => 'string|max:40',
             'description' => 'string|max:500',
-            'avatar' => 'string|between:32,32',
-            'cover' => 'string|between:32,32',
+            'avatar_image' => 'string|bmin:32|max:32',
+            'cover_image' => 'string|min:32|max:32',
             'banners' => 'array|min:1|max:5',
-            'banners.*.image' => 'required_without:banners.*.video|string|between:32,32',
+            'banners.*.image' => 'required_without:banners.*.video|string|min:32|max:32',
             'banners.*.video' => [
                 'required_without:banners.*.image',
                 'string',
