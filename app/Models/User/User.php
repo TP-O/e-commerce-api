@@ -2,6 +2,7 @@
 
 namespace App\Models\User;
 
+use App\Models\Shop\Shop;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -32,5 +33,10 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     public function profile()
     {
         return $this->hasOne(Profile::class, 'user_id');
+    }
+
+    public function shop()
+    {
+        return $this->hasOne(Shop::class, 'id');
     }
 }
