@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\SignInRequest;
 use App\Services\AuthService;
 use App\Services\TokenService;
-use Illuminate\Http\Request;
 
 abstract class SignInController extends Controller
 {
@@ -26,12 +25,11 @@ abstract class SignInController extends Controller
     /**
      * Sign out of the system.
      *
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function signOut(Request $request)
+    public function signOut()
     {
-        $this->tokenService->revokePAT($request->user());
+        $this->tokenService->revokePAT(auth()->user());
 
         return response()->json([
             'status' => true,

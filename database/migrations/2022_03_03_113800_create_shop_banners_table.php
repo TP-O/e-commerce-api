@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('shop_videos', function (Blueprint $table) {
+        Schema::create('shop_banners', function (Blueprint $table) {
             $table->id();
-            $table->text('url');
+            $table->text('source');
 
             $table->foreignId('shop_id')
                 ->constrained('shops')
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shop_videos');
+        Schema::dropIfExists('shop_banners');
     }
 };

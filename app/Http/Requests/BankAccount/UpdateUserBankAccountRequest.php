@@ -13,7 +13,7 @@ class UpdateUserBankAccountRequest extends AuthorizedUserBankAccountRequest
      */
     public function rules()
     {
-        return $this->requireLeastOne([
+        return $this->requireAtLeastOne([
             'accountholder_name' => 'string|max:64',
             'identification_number' => 'digits_between:9,12',
             'bank_name' => 'string',

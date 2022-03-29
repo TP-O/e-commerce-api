@@ -2,10 +2,21 @@
 
 namespace App\Http\Requests\Address;
 
-use App\Models\User\AddressLink;
-
 class UpdateUserAddressRequest extends AuthorizedUserAddressRequest
 {
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        if (is_null(auth()->user()->shop)) {
+            $this->getInputSource()->remove('is_pickup_address');
+            $this->getInputSource()->remove('is_return_address');
+        }
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -13,7 +24,7 @@ class UpdateUserAddressRequest extends AuthorizedUserAddressRequest
      */
     public function rules()
     {
-        return $this->requireLeastOne([
+        return $this->requireAtLeastOne([
             'full_name' => 'string|max:64',
             'phone' => 'digits_between:10,11',
             'state' => 'string|max:50',

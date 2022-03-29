@@ -4,43 +4,35 @@ namespace App\Services;
 
 use App\Models\Admin\Admin;
 use App\Models\User\User;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AuthService
 {
     /**
-     * Create the user.
+     * Create an user.
      *
-     * @param array<string, string> $input
+     * @param array $input
      * @return \App\Models\User\User
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    public function createUser(array $input)
+    public function createUser($input)
     {
         $input['password'] = Hash::make($input['password'], ['rounds' => 10]);
 
         $user = new User($input);
 
-        if (!$user->save()) {
-            throw new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, 'Unable to create account');
-        }
+        $user->save();
 
         return $user;
     }
 
     /**
-     * Create the OAuth user.
+     * Create an OAuth user.
      *
      * @param string $email
      * @return \App\Models\User\User
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    public function createOAuthUser(string $email)
+    public function createOAuthUser($email)
     {
         $username = substr(md5($email), 0, 10);
 
@@ -50,9 +42,7 @@ class AuthService
         ]);
 
         // Save user with verified email
-        if (!$user->markEmailAsVerified()) {
-            throw new HttpException(500, 'Unable to create account');
-        }
+        $user->markEmailAsVerified();
 
         return  $user;
     }
@@ -63,7 +53,7 @@ class AuthService
      * @param string $email
      * @return \App\Models\User\User|null
      */
-    public function existEmail(string $email)
+    public function existEmail($email)
     {
         return User::where('email', $email)->first();
     }
@@ -77,7 +67,7 @@ class AuthService
      *
      * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
      */
-    private function validatePassword($user, string $password)
+    private function validatePassword($user, $password)
     {
         $isCorrectPassword = is_null($user)
             ? false
@@ -91,10 +81,10 @@ class AuthService
     /**
      * Authenticate the user.
      *
-     * @param array<string, string> $credentials
+     * @param array $credentials
      * @return \App\Models\User\User
      */
-    public function authenticateUser(array $credentials)
+    public function authenticateUser($credentials)
     {
         $user = User::where('username', $credentials['usernameOrEmail'])
             ->orWhere('email', $credentials['usernameOrEmail'])
@@ -108,10 +98,10 @@ class AuthService
     /**
      * Authenticate the admin.
      *
-     * @param array<string, string> $credentials
+     * @param array $credentials
      * @return \App\Models\Admin\Admin
      */
-    public function authenticateAdmin(array $credentials)
+    public function authenticateAdmin($credentials)
     {
         $admin =  Admin::where('username', $credentials['usernameOrEmail'])
             ->orWhere('email', $credentials['usernameOrEmail'])

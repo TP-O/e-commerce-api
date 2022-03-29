@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v2')->namespace('Api')->group(function () {
+    Route::prefix('resource')->group(function () {
+        Route::post('/image', 'ResourceController@uploadImage');
+    });
+
     Route::namespace('Auth')->group(function () {
         Route::prefix('auth')->group(function () {
             Route::post('/sign-up', 'SignUp\UserSignUpController@signUp');
@@ -77,5 +81,13 @@ Route::prefix('v2')->namespace('Api')->group(function () {
             Route::put('/{credit_card}', 'UserCreditCardController@update');
             Route::delete('/{credit_card}', 'UserCreditCardController@delete');
         });
+    });
+
+    Route::get('shops/{id}', 'ShopController@get');
+
+    Route::prefix('shop')->namespace('Shop')->middleware('pat.name:user')->group(function() {
+        Route::get('/', 'ShopController@getMyShop');
+        Route::post('/', 'ShopController@create');
+        Route::put('/', 'ShopController@update');
     });
 });

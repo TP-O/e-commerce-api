@@ -22,6 +22,9 @@ class DatabaseSeeder extends Seeder
             UserAddressTypeSeeder::class,
             UserAddressSeeder::class,
             UserAddressLinkSeeder::class,
+
+            ShopSeeder::class,
+            ShopBannerSeeder::class,
         ]);
     }
 }

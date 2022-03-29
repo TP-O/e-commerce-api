@@ -22,22 +22,15 @@ class UserAddressController extends Controller
     }
 
     /**
-     * Get all addresses of an user.
+     * Get all addresses of the user.
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function show()
     {
-        $addresses = Address::select('user_addresses.*')
-            ->distinct('id')
-            ->join(
-                'user_address_links',
-                'user_addresses.id',
-                'user_address_links.address_id'
-            )
-            ->where('user_id', auth()->user()->id)
-            ->with('types')
-            ->get();
+        $addresses = $this->addressService->getUserAddresses(
+            auth()->user()->id,
+        );
 
         return response()->json([
             'status' => true,
@@ -46,18 +39,16 @@ class UserAddressController extends Controller
     }
 
     /**
-     * Store the user's address.
+     * Store an user's address.
      *
      * @param \App\Http\Requests\Address\CreateUserAddressRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function create(CreateUserAddressRequest $request)
     {
-        $createUserAddressInput = $request->validated();
-
         $address = $this->addressService->createUserAddress(
             auth()->user()->id,
-            $createUserAddressInput,
+            $request->validated(),
         );
 
         return response()->json([

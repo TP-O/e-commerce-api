@@ -27,10 +27,10 @@ class CustomFormRequest extends FormRequest
     /**
      * Require at least one field.
      *
-     * @param array<string, any> $rules
-     * @return array<string, any>
+     * @param array $rules
+     * @return array
      */
-    protected function requireLeastOne($rules)
+    protected function requireAtLeastOne($rules)
     {
         $atLeastOneRule = 'required_without_all:' . implode(',', array_keys($rules));
 

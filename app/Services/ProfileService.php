@@ -10,10 +10,10 @@ class ProfileService
      * Create the user's default profile.
      *
      * @param int $userId
-     * @param array<string, any> $input
+     * @param array $input
      * @return \App\Models\User\Profile
      */
-    public function createUserProfile(int $userId, array $input)
+    public function createUserProfile($userId, $input)
     {
         $profile = new Profile([
             'user_id' => $userId,

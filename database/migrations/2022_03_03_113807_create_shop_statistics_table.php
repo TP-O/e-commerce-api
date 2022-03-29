@@ -13,11 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('shop_images', function (Blueprint $table) {
-            $table->id();
-            $table->text('url');
+        Schema::create('shop_statistics', function (Blueprint $table) {
+            $table->integer('product_count', false, true)->default(0);
+            $table->float('average_raiting', 8, 2, true)->default(0);
+            $table->float('nonfulfilment_rate', 8, 2, true)->default(0);
 
             $table->foreignId('shop_id')
+                ->primary()
                 ->constrained('shops')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
@@ -31,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shop_images');
+        Schema::dropIfExists('shop_statistics');
     }
 };
