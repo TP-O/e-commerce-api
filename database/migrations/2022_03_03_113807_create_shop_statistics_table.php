@@ -21,8 +21,8 @@ return new class extends Migration
             $table->foreignId('shop_id')
                 ->primary()
                 ->constrained('shops')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
         });
     }
 

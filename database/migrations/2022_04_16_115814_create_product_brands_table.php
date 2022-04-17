@@ -13,10 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('shipping_channels', function (Blueprint $table) {
+        Schema::create('product_brands', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 20)->unique();
-            $table->text('description');
+            $table->string('name', 64)->unique();
         });
     }
 
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shipping_channels');
+        Schema::dropIfExists('product_brands');
     }
 };

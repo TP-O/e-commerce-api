@@ -13,16 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('product_brands', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 64)->unique();
-            $table->timestamp('created_at')->useCurrent();
-
+        Schema::create('product_brand_product_category', function (Blueprint $table) {
+            $table->foreignId('brand_id')
+                ->constrained('product_brands')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->foreignId('category_id')
-                ->nullable()
                 ->constrained('product_categories')
-                ->onDelete('set null')
-                ->onUpdate('set null');
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->primary(['brand_id', 'category_id']);
         });
     }
 
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_brands');
+        Schema::dropIfExists('product_brand_product_category');
     }
 };

@@ -13,23 +13,23 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_address_links', function (Blueprint $table) {
+        Schema::create('product_attributes', function (Blueprint $table) {
             $table->id();
+            $table->string('raw_value', 255)->nullable();
 
-            $table->foreignId('address_id')
-                ->constrained('user_addresses')
+            $table->foreignId('product_id')
+                ->constrained('products')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('user_id')
-                ->constrained('users')
+            $table->foreignId('attribute_id')
+                ->constrained('product_category_attributes')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('type_id')
+            $table->foreignId('value_id')
                 ->nullable()
-                ->constrained('user_address_types')
+                ->constrained('product_category_attribute_values')
                 ->cascadeOnUpdate()
-                ->nullOnDelete();
-            $table->unique(['user_id', 'type_id']);
+                ->cascadeOnDelete();
         });
     }
 
@@ -40,6 +40,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_address_links');
+        Schema::dropIfExists('product_attributes');
     }
 };

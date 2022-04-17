@@ -13,16 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('shipping_methods', function (Blueprint $table) {
+        Schema::create('product_category_attribute_values', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 50)->unique();
-            $table->text('description');
+            $table->string('value', 255);
 
-            $table->foreignId('channel_id')
-                ->nullable()
-                ->constrained('shipping_channels')
-                ->onDelete('set null')
-                ->onUpdate('set null');
+            $table->foreignId('attribute_id')
+                ->constrained('product_category_attributes')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
         });
     }
 
@@ -33,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shipping_methods');
+        Schema::dropIfExists('product_category_attribute_values');
     }
 };

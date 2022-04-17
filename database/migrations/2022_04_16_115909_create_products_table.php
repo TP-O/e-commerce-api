@@ -18,21 +18,27 @@ return new class extends Migration
             $table->string('slug', 120)->unique();
             $table->string('name', 120);
             $table->text('description');
-            $table->float('price', 8, 2, true)->nullable();
-            $table->integer('quantity')->nullable();
-            $table->text('cover_image');
+            $table->float('weight', 8, 2, true);
+            $table->text('images')->default('[""]');
+            $table->text('videos')->default('[""]');
+            $table->text('variations')->default('[""]');
             $table->timestamp('created_at')->useCurrent();
 
             $table->foreignId('shop_id')
                 ->nullable()
                 ->constrained('shops')
-                ->onDelete('set null')
-                ->onUpdate('set null');
-            $table->foreignId('category_id')
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
+            $table->foreignId('brand_id')
                 ->nullable()
-                ->constrained('product_categories')
-                ->onDelete('set null')
-                ->onUpdate('set null');
+                ->constrained('product_brands')
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
+            $table->foreignId('status_id')
+                ->nullable()
+                ->constrained('product_status')
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
         });
     }
 

@@ -13,17 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('applied_shipping_channels', function (Blueprint $table) {
-            $table->float('fee', 8, 2, true);
+        Schema::create('product_wholesale_prices', function (Blueprint $table) {
+            $table->id();
+            $table->integer('min', false, true);
+            $table->integer('max', false, true);
+            $table->float('price', 8, 2, true);
 
             $table->foreignId('product_id')
                 ->constrained('products')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-            $table->foreignId('shipping_channel_id')
-                ->constrained('shipping_channels')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
         });
     }
 
@@ -34,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('applied_shipping_channels');
+        Schema::dropIfExists('product_wholesale_prices');
     }
 };

@@ -13,14 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('product_videos', function (Blueprint $table) {
-            $table->id();
-            $table->text('url');
-
+        Schema::create('product_category_paths', function (Blueprint $table) {
             $table->foreignId('product_id')
                 ->constrained('products')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreignId('category_id')
+                ->constrained('product_categories')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->primary(['product_id', 'category_id']);
         });
     }
 
@@ -31,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_videos');
+        Schema::dropIfExists('product_category_paths');
     }
 };

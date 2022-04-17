@@ -13,14 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('shop_payment_settings', function (Blueprint $table) {
-            $table->boolean('accept_pay_by_credit_card')->default(true);
-
-            $table->foreignId('shop_id')
-                ->primary()
-                ->constrained('shops')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+        Schema::create('product_category_attributes', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 50)->unique();
+            $table->text('units')->default('[""]');
         });
     }
 
@@ -31,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shop_payment_settings');
+        Schema::dropIfExists('product_category_attributes');
     }
 };
