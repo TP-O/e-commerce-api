@@ -15,7 +15,11 @@ class ProductCategorySeeder extends Seeder
     public function run()
     {
         DB::table('product_categories')->insert([
+<<<<<<< HEAD
             [
+=======
+                        [
+>>>>>>> 9205d4ce9682df8f36ab7c8411ed687ba7894b81
                 'parent_id' => null,
                 'name' => 'Clothes',
             ],
