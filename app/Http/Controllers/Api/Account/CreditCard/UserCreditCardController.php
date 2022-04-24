@@ -39,7 +39,7 @@ class UserCreditCardController extends Controller
      */
     public function create(CreateUserCreditCardRequest $request)
     {
-        $creditCard = CreditCard::insert([
+        $creditCard = CreditCard::create([
             ...$request->validated(),
             'user_id' => auth()->user()->id,
         ]);

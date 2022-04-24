@@ -44,9 +44,11 @@ class ShopController extends Controller
      */
     public function getMyShop()
     {
+        $shop = auth()->user()->shop?->with(['statistic', 'media'])->get();
+
         return response()->json([
             'status' => true,
-            'data' => auth()->user()->shop?->with(['statistic', 'media'])->get(),
+            'data' => $shop,
         ]);
     }
 

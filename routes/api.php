@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+DB::enableQueryLog();
 
 Route::prefix('v2')->namespace('Api')->group(function () {
     Route::prefix('resource')->group(function () {
@@ -83,11 +86,28 @@ Route::prefix('v2')->namespace('Api')->group(function () {
         });
     });
 
-    Route::get('shops/{id}', 'ShopController@get');
+    Route::namespace('Shop')->get('shops/{id}', 'ShopController@get');
 
-    Route::prefix('shop')->namespace('Shop')->middleware('pat.name:user')->group(function() {
+    Route::prefix('shop')->namespace('Shop')->middleware('pat.name:user')->group(function () {
         Route::get('/', 'ShopController@getMyShop');
         Route::post('/', 'ShopController@create');
         Route::put('/', 'ShopController@update');
+    });
+
+    Route::prefix('products')->namespace('Product')->middleware('pat.name:admin')->group(function () {
+        Route::prefix('categories')->group(function () {
+            Route::get('/{id}/children', 'CategoryController@showChildren')
+                ->where('id', '[0-9]+')
+                ->withoutMiddleware('pat.name:admin');
+            Route::get('/{id}/attributes', 'CategoryController@showAttributes')
+                ->where('id', '[1-9]+')
+                ->withoutMiddleware('pat.name:admin');
+            Route::post('/{id}/attributes', 'CategoryController@bindAttribute')
+                ->where('id', '[1-9]+');
+            Route::post('/', 'CategoryController@manageCategory');
+            Route::post('/attributes', 'CategoryController@manageAttribute');
+            Route::get('/attributes/{search}', 'CategoryController@searchAttributes')
+                ->withoutMiddleware('pat.name:admin');
+        });
     });
 });

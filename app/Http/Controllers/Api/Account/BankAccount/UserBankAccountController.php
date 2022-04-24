@@ -39,7 +39,7 @@ class UserBankAccountController extends Controller
      */
     public function create(CreateUserBankAccountRequest $request)
     {
-        $bankAccount = BankAccount::insert([
+        $bankAccount = BankAccount::create([
             ...$request->validated(),
             'user_id' => auth()->user()->id,
         ]);

@@ -36,7 +36,7 @@ class CustomFormRequest extends FormRequest
 
         $rules = array_map(function($val) use($atLeastOneRule) {
             if (is_string($val)) {
-                return $atLeastOneRule . '|' . $val;
+                return $val . '|' . $atLeastOneRule;
             }
 
             array_push($val, $atLeastOneRule);

@@ -15,8 +15,4 @@ class Banner extends Model
         'shop_id',
         'source',
     ];
-
-    protected $hidden = [
-        'shop_id',
-    ];
 }
