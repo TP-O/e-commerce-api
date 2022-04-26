@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api\Account\BankAccount;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\BankAccount\CreateUserBankAccountRequest;
-use App\Http\Requests\BankAccount\DeleteUserBankAccountRequest;
-use App\Http\Requests\BankAccount\UpdateUserBankAccountRequest;
+use App\Http\Requests\Account\BankAccount\CreateUserBankAccountRequest;
+use App\Http\Requests\Account\BankAccount\DeleteUserBankAccountRequest;
+use App\Http\Requests\Account\BankAccount\UpdateUserBankAccountRequest;
 use App\Models\User\BankAccount;
 use Illuminate\Http\Response;
 
@@ -34,7 +34,7 @@ class UserBankAccountController extends Controller
     /**
      * Store the user's bank account.
      *
-     * @param \App\Http\Requests\BankAccount\CreateUserBankAccountRequest $request
+     * @param \App\Http\Requests\Account\BankAccount\CreateUserBankAccountRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function create(CreateUserBankAccountRequest $request)
@@ -53,7 +53,7 @@ class UserBankAccountController extends Controller
     /**
      * Update the user's bank account.
      *
-     * @param \App\Http\Requests\BankAccount\UpdateUserBankAccountRequest $request
+     * @param \App\Http\Requests\Account\BankAccount\UpdateUserBankAccountRequest $request
      * @param \App\Models\User\BankAccount $bankAccount
      * @return \Illuminate\Http\JsonResponse
      */
@@ -70,7 +70,7 @@ class UserBankAccountController extends Controller
     /**
      * Delete the user's bank account.
      *
-     * @param \App\Http\Requests\BankAccount\DeleteUserBankAccountRequest $request
+     * @param \App\Http\Requests\Account\BankAccount\DeleteUserBankAccountRequest $request
      * @param \App\Models\User\BankAccount $bankAccount
      * @return \Illuminate\Http\JsonResponse
      */

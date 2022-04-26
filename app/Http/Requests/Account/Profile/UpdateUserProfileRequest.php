@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Profile;
+namespace App\Http\Requests\Account\Profile;
 
 use App\Http\Requests\CustomFormRequest;
 

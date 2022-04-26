@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\CreditCard;
+namespace App\Http\Requests\Account\CreditCard;
 
 use App\Rules\UniqueUserCreditCardNumberRule;
 

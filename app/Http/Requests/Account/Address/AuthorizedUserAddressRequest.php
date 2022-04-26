@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Address;
+namespace App\Http\Requests\Account\Address;
 
 use App\Http\Requests\CustomFormRequest;
 use App\Models\User\AddressLink;

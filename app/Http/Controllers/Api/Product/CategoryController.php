@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api\Product;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductCategory\BindCategoryAttributeRequest;
-use App\Http\Requests\ProductCategory\ManageProductCategoryAttributeRequest;
-use App\Http\Requests\ProductCategory\ManageProductCategoryRequest;
+use App\Http\Requests\Product\Category\BindCategoryAttributeRequest;
+use App\Http\Requests\Product\Category\ManageProductCategoryAttributeRequest;
+use App\Http\Requests\Product\Category\ManageProductCategoryRequest;
 use App\Models\Product\Category;
 use App\Models\Product\CategoryAttribute;
 use App\Services\QueryService;

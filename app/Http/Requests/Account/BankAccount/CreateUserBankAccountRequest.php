@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\BankAccount;
+namespace App\Http\Requests\Account\BankAccount;
 
 use App\Http\Requests\CustomFormRequest;
 use App\Rules\UniqueUserBankAccountNumberRule;

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Account\Profile;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Profile\UpdateUserProfileRequest;
+use App\Http\Requests\Account\Profile\UpdateUserProfileRequest;
 use App\Models\User\Profile;
 use Illuminate\Http\Request;
 
@@ -32,7 +32,7 @@ class UserProfileController extends Controller
     /**
      * Update the user's profile.
      *
-     * @param \App\Http\Requests\Profile\UpdateUserProfileRequest $request
+     * @param \App\Http\Requests\Account\Profile\UpdateUserProfileRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function updateProfile(UpdateUserProfileRequest $request)

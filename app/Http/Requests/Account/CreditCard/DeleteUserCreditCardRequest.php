@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Requests\Address;
+namespace App\Http\Requests\Account\CreditCard;
 
-class DeleteUserAddressRequest extends AuthorizedUserAddressRequest
+class DeleteUserCreditCardRequest extends AuthorizedUserBankAccountRequest
 {
     /**
      * Get the validation rules that apply to the request.

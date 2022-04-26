@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\ProductCategory;
+namespace App\Http\Requests\Product\Category;
 
 use App\Http\Requests\CustomFormRequest;
 use App\Models\Product\CategoryAttribute;

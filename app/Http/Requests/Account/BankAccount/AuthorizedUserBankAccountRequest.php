@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\CreditCard;
+namespace App\Http\Requests\Account\BankAccount;
 
 use App\Http\Requests\CustomFormRequest;
 
@@ -13,6 +13,6 @@ class AuthorizedUserBankAccountRequest extends CustomFormRequest
      */
     public function authorize()
     {
-        return $this->route('credit_card')->user_id === auth()->user()->id;
+        return $this->route('bank_account')->user_id === auth()->user()->id;
     }
 }
