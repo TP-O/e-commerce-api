@@ -17,8 +17,8 @@ use Illuminate\Support\Facades\Route;
 DB::enableQueryLog();
 
 Route::prefix('v2')->namespace('Api')->group(function () {
-    Route::prefix('resource')->group(function () {
-        Route::post('/image', 'ResourceController@uploadImage');
+    Route::prefix('resources')->group(function () {
+        Route::post('/images', 'ResourceController@uploadImage');
     });
 
     Route::namespace('Auth')->group(function () {
@@ -86,28 +86,32 @@ Route::prefix('v2')->namespace('Api')->group(function () {
         });
     });
 
-    Route::namespace('Shop')->get('shops/{id}', 'ShopController@get');
+    Route::namespace('Shop')->group(function () {
+        Route::get('shops/{id}', 'ShopController@get');
 
-    Route::prefix('shop')->namespace('Shop')->middleware('pat.name:user')->group(function () {
-        Route::get('/', 'ShopController@getMyShop');
-        Route::post('/', 'ShopController@create');
-        Route::put('/', 'ShopController@update');
+        Route::prefix('shop')->middleware('pat.name:user')->group(function () {
+            Route::get('/', 'ShopController@getMyShop');
+            Route::post('/', 'ShopController@create');
+            Route::put('/', 'ShopController@update');
+        });
     });
 
-    Route::prefix('products')->namespace('Product')->middleware('pat.name:admin')->group(function () {
+    Route::prefix('products')->namespace('Product')->group(function () {
         Route::prefix('categories')->group(function () {
-            Route::get('/{id}/children', 'CategoryController@showChildren')
-                ->where('id', '[0-9]+')
-                ->withoutMiddleware('pat.name:admin');
-            Route::get('/{id}/attributes', 'CategoryController@showAttributes')
-                ->where('id', '[1-9]+')
-                ->withoutMiddleware('pat.name:admin');
-            Route::post('/{id}/attributes', 'CategoryController@bindAttribute')
-                ->where('id', '[1-9]+');
-            Route::post('/', 'CategoryController@manageCategory');
-            Route::post('/attributes', 'CategoryController@manageAttribute');
-            Route::get('/attributes/{search}', 'CategoryController@searchAttributes')
-                ->withoutMiddleware('pat.name:admin');
+            Route::middleware('pat.name:admin')->group(function () {
+                Route::post('/', 'CategoryController@manage');
+                Route::post('/{id}/attributes', 'CategoryController@bind')->where('id', '[1-9]+');
+            });
+
+            Route::prefix('{id}')->group(function () {
+                Route::get('/children', 'CategoryController@children')->where('id', '[0-9]+');
+                Route::get('/attributes', 'CategoryController@attributes')->where('id', '[1-9]+');
+            });
+
+            Route::prefix('attributes')->group(function () {
+                Route::get('/{input}', 'AttributeController@attributes');
+                Route::post('/', 'AttributeController@manage');
+            });
         });
     });
 });
