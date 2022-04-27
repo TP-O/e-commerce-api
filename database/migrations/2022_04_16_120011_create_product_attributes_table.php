@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('product_attributes', function (Blueprint $table) {
             $table->id();
-            $table->string('raw_value', 255)->nullable();
+            $table->string('value', 255);
 
             $table->foreignId('product_id')
                 ->constrained('products')
@@ -23,11 +23,6 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->foreignId('attribute_id')
                 ->constrained('product_category_attributes')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->foreignId('value_id')
-                ->nullable()
-                ->constrained('product_category_attribute_values')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });

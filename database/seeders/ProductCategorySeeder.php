@@ -29,7 +29,7 @@ class ProductCategorySeeder extends Seeder
             ],
             [
                 'parent_id' => 3,
-                'name' => 'Hoodies', 
+                'name' => 'Hoodies',
             ],
             //5
             [
