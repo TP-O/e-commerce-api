@@ -109,7 +109,7 @@ Route::prefix('v2')->namespace('Api')->group(function () {
             });
 
             Route::prefix('attributes')->group(function () {
-                Route::get('/{input}', 'AttributeController@attributes');
+                Route::get('/{input}', 'AttributeController@search');
                 Route::post('/', 'AttributeController@manage');
             });
         });
