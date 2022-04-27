@@ -6,16 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\Category\BindCategoryAttributeRequest;
 use App\Http\Requests\Product\Category\ManageProductCategoryRequest;
 use App\Models\Product\Category;
-use App\Services\QueryService;
+use App\Services\ProductCategoryService;
 use Illuminate\Http\Response;
 
 class CategoryController extends Controller
 {
-    private QueryService $queryService;
+    private ProductCategoryService $productCategoryService;
 
-    public function __construct(QueryService $queryService)
+    public function __construct(ProductCategoryService $productCategoryService)
     {
-        $this->queryService = $queryService;
+        $this->productCategoryService = $productCategoryService;
 
         $this->middleware('auth:sanctum')->except([
             'children',
@@ -25,25 +25,21 @@ class CategoryController extends Controller
 
     public function children(int $id)
     {
-        $category = $id == 0
-            ? $id = null
-            : Category::findOrFail($id);
-        $children = Category::where('parent_id', $id)->get();
+        $children = $this->productCategoryService->getChildren($id);
 
         return response()->json([
             'status' => true,
-            'data' => [
-                'parent' => $category,
-                'children' => $children,
-            ],
+            'data' => $children,
         ]);
     }
 
     public function attributes(int $id)
     {
+        $attributes = Category::find($id)->attributes;
+
         return response()->json([
             'status' => true,
-            'data' => Category::find($id)->attributes,
+            'data' => $attributes,
         ]);
     }
 
@@ -59,22 +55,7 @@ class CategoryController extends Controller
 
     public function manage(ManageProductCategoryRequest $request)
     {
-        if (!is_null($request->input('create'))) {
-            Category::insert($request->input('create'));
-        }
-
-        if (!is_null($request->input('update'))) {
-            $this->queryService->updateMultipleRecords(
-                'product_categories',
-                $request->input('update'),
-            );
-        }
-
-        if (!is_null($request->input('delete'))) {
-            Category::destroy(array_map(function($val) {
-                return $val['id'];
-            }, $request->input('delete')));
-        }
+        $this->productCategoryService->manage($request->all());
 
         return response()->json([
             'status' => true,

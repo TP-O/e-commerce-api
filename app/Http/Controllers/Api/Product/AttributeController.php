@@ -5,44 +5,33 @@ namespace App\Http\Controllers\Api\Product;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\Category\ManageProductCategoryAttributeRequest;
 use App\Models\Product\CategoryAttribute;
-use App\Services\QueryService;
+use App\Services\CategoryAttributeService;
 use Illuminate\Http\Response;
 
 class AttributeController extends Controller
 {
-    private QueryService $queryService;
+    private CategoryAttributeService $categoryAttributeService;
 
-    public function __construct(QueryService $queryService)
+    public function __construct(CategoryAttributeService $categoryAttributeService)
     {
-        $this->queryService = $queryService;
+        $this->categoryAttributeService = $categoryAttributeService;
 
         $this->middleware('auth:sanctum')->except('search');
     }
 
     public function search(string $input)
     {
+        $attributes = $this->categoryAttributeService->search($input);
+
         return response()->json([
             'status' => true,
-            'data' => CategoryAttribute::where('name', 'like', "%$input%")->get(),
+            'data' => $attributes,
         ]);
     }
 
     public function manage(ManageProductCategoryAttributeRequest $request)
     {
-        if (!is_null($request->input('create'))) {
-            CategoryAttribute::insert($request->input('create'));
-        }
-
-        if (!is_null($request->input('update'))) {
-            $this->queryService->updateMultipleRecords(
-                'product_category_attributes',
-                $request->input('update'),
-            );
-        }
-
-        if (!is_null($request->input('delete'))) {
-            CategoryAttribute::destroy($request->input('delete'));
-        }
+        $this->categoryAttributeService->manage($request->all());
 
         return response()->json([
             'status' => true,
