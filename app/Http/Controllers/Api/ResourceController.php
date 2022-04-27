@@ -36,11 +36,10 @@ class ResourceController extends Controller
      */
     public function uploadImage(UploadImageRequest $request)
     {
-        $uploadImageInput = $request->validated();
-
         $imageId = $this->resourceService->storeImage(
-            $uploadImageInput['file'],
-            $uploadImageInput['ratio'],
+            $request->input('file'),
+            $request->input('ratio'),
+            $request->input('is_demo'),
         );
 
         return response()->json([

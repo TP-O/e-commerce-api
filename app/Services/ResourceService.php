@@ -48,6 +48,13 @@ class ResourceService
     ];
 
     /**
+     * Resource storage paths for demo.
+     */
+    private $demoResourcePaths = [
+        'image' => 'public/image/demo',
+    ];
+
+    /**
      * Load the public image from local.
      *
      * @param string $imageId
@@ -111,20 +118,22 @@ class ResourceService
      *
      * @param Illuminate\Http\UploadedFile|string $file
      * @param int $ratioId
+     * @param bool $isDemo
      * @return string
      */
-    public function storeImage($file, $ratioId)
+    public function storeImage($file, $ratioId, $isDemo = false)
     {
         $imageId = md5((string) time());
         $extension = is_string($file) ? 'jpg' : $file->extension();
         $image = $this->processImage(ImageFacade::make($file), $ratioId)->encode($extension);
+        $resourcePaths = $isDemo ? $this->demoResourcePaths : $this->resourcePaths;
 
         Storage::put(
-            $this->resourcePaths['image'] . $imageId . '.' . $extension,
+            $resourcePaths['image'] . $imageId . '.' . $extension,
             $image->__toString(),
         );
         Storage::put(
-            $this->resourcePaths['image'] . $imageId . '_tn.' . $extension,
+            $resourcePaths['image'] . $imageId . '_tn.' . $extension,
             $image->resize($image->resize(...$this->calculateImageSize('tn', $ratioId)))
                 ->encode($extension)
                 ->__toString(),
