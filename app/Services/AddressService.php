@@ -13,7 +13,7 @@ class AddressService
      * Get all addresses of the user.
      *
      * @param int $userId
-     * @return Illuminate\Support\Collection
+     * @return Illuminate\Support\Collection<Address>
      */
     public function getUserAddresses($userId)
     {

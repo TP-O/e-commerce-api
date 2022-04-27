@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Product\Category;
 use App\Models\Product\CategoryAttribute;
 
 class CategoryAttributeService
@@ -14,11 +13,23 @@ class CategoryAttributeService
         $this->queryService = $queryService;
     }
 
+    /**
+     * Search attributes by name
+     *
+     * @param string $input
+     * @return Illuminate\Support\Collection<CategoryAttribute>
+     */
     public function search(string $input)
     {
         return CategoryAttribute::where('name', 'like', "%$input%")->get();
     }
 
+    /**
+     * Create, update, or delete attributes.
+     *
+     * @param array $changes
+     * @return void
+     */
     public function manage(array $changes)
     {
         if (!is_null($changes['create'])) {

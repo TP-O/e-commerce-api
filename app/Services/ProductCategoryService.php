@@ -13,6 +13,12 @@ class ProductCategoryService
         $this->queryService = $queryService;
     }
 
+    /**
+     * Get children of the category.
+     *
+     * @param int $id
+     * @return array
+     */
     public function getChildren(int $id)
     {
         $category = $id == 0
@@ -26,6 +32,12 @@ class ProductCategoryService
         ];
     }
 
+    /**
+     * Create, update, or delete categories.
+     *
+     * @param array $changes
+     * @return void
+     */
     public function manage(array $changes)
     {
         if (!is_null($changes['create'])) {

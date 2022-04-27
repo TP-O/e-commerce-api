@@ -23,6 +23,11 @@ class CategoryController extends Controller
         ]);
     }
 
+    /**
+     * Get children of the category.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function children(int $id)
     {
         $children = $this->productCategoryService->getChildren($id);
@@ -33,6 +38,12 @@ class CategoryController extends Controller
         ]);
     }
 
+    /**
+     * Get all attributes of the category.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function attributes(int $id)
     {
         $attributes = Category::find($id)->attributes;
@@ -43,6 +54,13 @@ class CategoryController extends Controller
         ]);
     }
 
+    /**
+     * Bind the attributes with the specific category.
+     *
+     * @param \App\Http\Requests\Product\Category\BindCategoryAttributeRequest $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function bind(BindCategoryAttributeRequest $request, int $id)
     {
         Category::findOrFail($id)->attributes()->sync($request->input('binds'));
@@ -53,6 +71,12 @@ class CategoryController extends Controller
         ], Response::HTTP_CREATED);
     }
 
+    /**
+     * Manage the categories.
+     *
+     * @param \App\Http\Requests\Product\Category\ManageProductCategoryRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function manage(ManageProductCategoryRequest $request)
     {
         $this->productCategoryService->manage($request->all());
