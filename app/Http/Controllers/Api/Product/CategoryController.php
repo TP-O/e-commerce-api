@@ -79,7 +79,7 @@ class CategoryController extends Controller
      */
     public function manage(ManageProductCategoryRequest $request)
     {
-        $this->productCategoryService->manage($request->all());
+        $this->productCategoryService->manage($request->validated());
 
         return response()->json([
             'status' => true,

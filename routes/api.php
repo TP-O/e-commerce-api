@@ -97,6 +97,10 @@ Route::prefix('v2')->namespace('Api')->group(function () {
     });
 
     Route::prefix('products')->namespace('Product')->group(function () {
+        Route::middleware('pat.name:user')->group(function () {
+            Route::post('/', 'ProductController@create');
+        });
+
         Route::prefix('categories')->group(function () {
             Route::middleware('pat.name:admin')->group(function () {
                 Route::post('/', 'CategoryController@manage');

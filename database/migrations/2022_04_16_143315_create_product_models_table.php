@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('product_models', function (Blueprint $table) {
             $table->id();
             $table->string('name', 35);
-            $table->text('skt')->default('');
+            $table->text('sku')->default('');
             $table->float('price', 8, 2, true);
             $table->integer('stock', false, true)->default(0);
-            $table->text('variation')->default('[]');
+            $table->text('variation_index')->default('[]');
             $table->boolean('is_default')->default(false);
 
             $table->foreignId('product_id')

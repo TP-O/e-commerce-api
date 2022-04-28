@@ -27,7 +27,7 @@ class UpdateUserProfileRequest extends CustomFormRequest
             'display_name' => 'string|max:50',
             'avatar_image' => 'string|min:32|max:32',
             'phone' => 'digits_between:10,11',
-            'gender' => 'numeric|min:0|max:2',
+            'gender' => 'integer|min:0|max:2',
             'date_of_birth' => 'date_format:m/d/Y',
         ]);
     }

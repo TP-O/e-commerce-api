@@ -11,7 +11,7 @@ class BatchExistsRule extends BatchSomethingRule
      */
     public function message()
     {
-        return 'The :attribute.*.' . $this->property . ' fileds are invalid.';
+        return 'The :attribute.*.' . $this->property . ' fields are invalid.';
     }
 
     protected function validate(array $values)

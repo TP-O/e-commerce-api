@@ -11,7 +11,7 @@ class BatchUniqueRule extends BatchSomethingRule
      */
     public function message()
     {
-        return 'The :attribute.*.' . $this->property . ' fileds have already been taken.';
+        return 'The :attribute.*.' . $this->property . ' fields have already been taken.';
     }
 
     protected function validate(array $values)
