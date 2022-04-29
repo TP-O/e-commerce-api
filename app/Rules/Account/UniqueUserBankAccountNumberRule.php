@@ -1,23 +1,21 @@
 <?php
 
-namespace App\Rules;
+namespace App\Rules\Account;
 
-use App\Models\User\CreditCard;
+use App\Models\User\BankAccount;
 use Illuminate\Contracts\Validation\Rule;
 
-class UniqueUserCreditCardNumberRule implements Rule
+class UniqueUserBankAccountNumberRule implements Rule
 {
-    private int $userId;
-
     /**
      * Create a new rule instance.
      *
      * @param int $userId
      * @return void
      */
-    public function __construct($userId)
+    public function __construct()
     {
-        $this->userId = $userId;
+        //
     }
 
     /**
@@ -29,9 +27,9 @@ class UniqueUserCreditCardNumberRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        return is_null(CreditCard::where([
-            ['user_id', $this->userId],
-            ['card_number', $value],
+        return is_null(BankAccount::where([
+            ['user_id', request()->user()->id],
+            ['account_number', $value],
         ])->first());
     }
 
@@ -42,6 +40,6 @@ class UniqueUserCreditCardNumberRule implements Rule
      */
     public function message()
     {
-        return 'The card number already exists.';
+        return 'The account number already exists.';
     }
 }

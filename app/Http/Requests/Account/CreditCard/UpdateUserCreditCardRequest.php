@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Account\CreditCard;
 
-use App\Rules\UniqueUserCreditCardNumberRule;
+use App\Rules\Account\UniqueUserCreditCardNumberRule;
 
 class UpdateUserCreditCardRequest extends AuthorizedUserBankAccountRequest
 {
@@ -21,7 +21,7 @@ class UpdateUserCreditCardRequest extends AuthorizedUserBankAccountRequest
             'postal_code' => 'digits:5',
             'card_number' => [
                 'digits:16',
-                new UniqueUserCreditCardNumberRule($this->user()->id),
+                new UniqueUserCreditCardNumberRule(),
             ]
         ]);
     }

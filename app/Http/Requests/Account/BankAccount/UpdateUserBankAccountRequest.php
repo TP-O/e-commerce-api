@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Account\BankAccount;
 
-use App\Rules\UniqueUserBankAccountNumberRule;
+use App\Rules\Account\UniqueUserBankAccountNumberRule;
 
 class UpdateUserBankAccountRequest extends AuthorizedUserBankAccountRequest
 {
@@ -20,7 +20,7 @@ class UpdateUserBankAccountRequest extends AuthorizedUserBankAccountRequest
             'bank_branch' => 'string',
             'account_number' => [
                 'digits_between:9,17',
-                new UniqueUserBankAccountNumberRule($this->user()->id),
+                new UniqueUserBankAccountNumberRule(),
             ],
         ]);
     }

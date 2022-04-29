@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Rules;
+namespace App\Rules\Product;
 
 use App\Models\Product\Category;
 use Illuminate\Contracts\Validation\DataAwareRule;
@@ -15,7 +15,17 @@ class ValidProductAttributesRule implements Rule, DataAwareRule
      */
     protected $data = [];
 
+    /**
+     * Name of key containing list of category ids.
+     */
     private $categoryPathKey = '';
+
+    /**
+     * Error message.
+     *
+     * @var string
+     */
+    private $message = 'The :attribute are invalid.';
 
     /**
      * Create a new rule instance.
@@ -61,7 +71,10 @@ class ValidProductAttributesRule implements Rule, DataAwareRule
             $categoryAttributes = $categoryAttributes->concat($category['attributes']);
         });
 
+        // Check if the redundant attributes are provided
         if ($categoryAttributes->whereIn('id', $inputAttributeIds)->count() !== count($inputAttributeIds)) {
+            $this->message = 'The :attribute fields containing invalid attributes.';
+
             return false;
         }
 
@@ -69,15 +82,22 @@ class ValidProductAttributesRule implements Rule, DataAwareRule
             $exists = array_search($categoryAttributes[$i]['id'], $inputAttributeIds);
             $isRequired = $categoryAttributes[$i]['is_required'];
 
+            // Check if the required attribute is missed
             if ($exists === false && $isRequired) {
+                $this->message = 'The :attribute fields are missing required attributes.';
+
                 return false;
-            } else if (
+            }
+            // Check if the unit is correct
+            else if (
                 $exists !== false &&
                 array_search(
                     $value[$exists]['unit'] ?? '',
                     $categoryAttributes[$i]['units'],
                 ) === false
             ) {
+                $this->message = 'The :attribute fields have incorrect units.';
+
                 return false;
             }
         }
@@ -92,6 +112,6 @@ class ValidProductAttributesRule implements Rule, DataAwareRule
      */
     public function message()
     {
-        return 'The :attribute are invalid.';
+        return $this->message;
     }
 }

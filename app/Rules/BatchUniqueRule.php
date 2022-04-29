@@ -14,9 +14,8 @@ class BatchUniqueRule extends BatchSomethingRule
         return 'The :attribute.*.' . $this->property . ' fields have already been taken.';
     }
 
-    protected function validate(array $values)
+    protected function validate(array $validatedValues)
     {
-        return $this->model->whereIn($this->column, $values)->count() === 0;
+        return $this->model->whereIn($this->column, $validatedValues)->count() === 0;
     }
 }
-

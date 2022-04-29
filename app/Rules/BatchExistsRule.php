@@ -11,12 +11,11 @@ class BatchExistsRule extends BatchSomethingRule
      */
     public function message()
     {
-        return 'The :attribute.*.' . $this->property . ' fields are invalid.';
+        return 'The :attribute.*.' . $this->property . ' fields are unavailable.';
     }
 
-    protected function validate(array $values)
+    protected function validate(array $validatedValues)
     {
-        return count($values) === 0 ||
-            $this->model->whereIn($this->column, $values)->count() > 0;
+        return $this->model->whereIn($this->column, $validatedValues)->count() > 0;
     }
 }

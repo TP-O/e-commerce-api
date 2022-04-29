@@ -34,30 +34,30 @@ class ManageProductCategoryRequest extends CustomFormRequest
             ]),
 
             // Create
-            'create.*.parent_id' => 'nullable|integer|min:1',
-            'create.*.name' => 'required|string|min:5|max:50|distinct:strict',
-            'create.*.cover_image' => 'required|string|min:32|max:32',
             'create' => [
                 new BatchExistsRule(Category::class, 'parent_id', 'id'),
                 new BatchUniqueRule(Category::class, 'name'),
             ],
+            'create.*.parent_id' => 'nullable|integer|min:1',
+            'create.*.name' => 'required|string|min:5|max:50|distinct:strict',
+            'create.*.cover_image' => 'required|string|min:32|max:32',
 
             // Update
-            'update.*.id' => 'required|integer|min:1|distinct:strict',
-            'update.*.parent_id' => 'nullable|integer|min:1',
-            'update.*.name' => 'required|string|min:5|max:50|distinct:strict',
-            'update.*.cover_image' => 'required|string|min:32|max:32',
             'update' => [
                 new BatchExistsRule(Category::class, 'id'),
                 new BatchExistsRule(Category::class, 'parent_id', 'id'),
                 new BatchUniqueRule(Category::class, 'name'),
             ],
+            'update.*.id' => 'required|integer|min:1|distinct:strict',
+            'update.*.parent_id' => 'nullable|integer|min:1',
+            'update.*.name' => 'required|string|min:5|max:50|distinct:strict',
+            'update.*.cover_image' => 'required|string|min:32|max:32',
 
             // Delete
-            'delete.*.id' => 'required|integer|min:1|distinct:strict',
             'delete' => [
                 new BatchExistsRule(Category::class, 'id'),
             ],
+            'delete.*.id' => 'required|integer|min:1|distinct:strict',
         ];
     }
 }

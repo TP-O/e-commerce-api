@@ -2,29 +2,43 @@
 
 namespace App\Rules;
 
-use Error;
 use Exception;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Database\Eloquent\Model;
 
 abstract class BatchSomethingRule implements Rule
 {
+    /**
+     * Required model for validation.
+     *
+     * @var \Illuminate\Database\Eloquent\Model
+     */
     protected Model $model;
 
-    protected string $property;
+    /**
+     * Name of key need to be validated.
+     *
+     * @var string
+     */
+    protected string $validatedKey = '';
 
-    protected string $column;
+    /**
+     * Name of column corresponds to validated key.
+     *
+     * @var string
+     */
+    protected string $column = '';
 
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct(string $model, string $property, string $column = null)
+    public function __construct(string $model, string $validatedKey, string $column = null)
     {
         $this->model = resolve($model);
-        $this->property = $property;
-        $this->column = is_null($column) ? $property : $column;
+        $this->validatedKey = $validatedKey;
+        $this->column = is_null($column) ? $validatedKey : $column;
     }
 
     /**
@@ -40,20 +54,24 @@ abstract class BatchSomethingRule implements Rule
             return false;
         }
 
-        $uniqueValues = array_filter(array_map(function ($value) {
-            if (isset($value[$this->property])) {
-                return $value[$this->property];
+        // Get all values of the validated key without null value
+        $validatedValues = array_filter(
+            array_map(function ($value) {
+                if (isset($value[$this->validatedKey])) {
+                    return $value[$this->validatedKey];
+                }
+            }, $values),
+            function ($value) {
+                return !is_null($value);
             }
-        }, $values), function ($value) {
-            return !is_null($value);
-        });
+        );
 
         try {
-            return $this->validate($uniqueValues);
+            return $this->validate($validatedValues);
         } catch (Exception $_) {
             return false;
         }
     }
 
-    abstract protected function validate(array $values);
+    abstract protected function validate(array $validatedValues);
 }

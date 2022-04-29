@@ -34,28 +34,28 @@ class ManageProductCategoryAttributeRequest extends CustomFormRequest
             ]),
 
             // Create
-            'create.*.name' => 'required|string|min:5|max:50|distinct:strict',
-            'create.*.units' => 'required|array',
-            'create.*.units.*' => 'string|nullable|distinct:strict',
             'create' => [
                 new BatchUniqueRule(CategoryAttribute::class, 'name'),
             ],
+            'create.*.name' => 'required|string|min:5|max:50|distinct:strict',
+            'create.*.units' => 'required|array',
+            'create.*.units.*' => 'string|nullable|distinct:strict',
 
             // Update
-            'update.*.id' => 'required|integer|min:1|distinct:strict',
-            'update.*.name' => 'required|string|min:5|max:50|distinct:strict',
-            'update.*.units' => 'required|array',
-            'update.*.units.*' => 'string|nullable|distinct:strict',
             'update' => [
                 new BatchExistsRule(CategoryAttribute::class, 'id'),
                 new BatchUniqueRule(CategoryAttribute::class, 'name'),
             ],
+            'update.*.id' => 'required|integer|min:1|distinct:strict',
+            'update.*.name' => 'required|string|min:5|max:50|distinct:strict',
+            'update.*.units' => 'required|array',
+            'update.*.units.*' => 'string|nullable|distinct:strict',
 
             // Delete
-            'delete.*.id' => 'required|integer|min:1|distinct:strict',
             'delete' => [
                 new BatchExistsRule(CategoryAttribute::class, 'id'),
             ],
+            'delete.*.id' => 'required|integer|min:1|distinct:strict',
         ];
     }
 

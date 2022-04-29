@@ -4,9 +4,8 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Support\Arr;
 
-class DistinctArrayRule implements Rule, DataAwareRule
+class DistinctArrayKeyRule implements Rule, DataAwareRule
 {
     /**
      * All of the data under validation.
@@ -15,6 +14,11 @@ class DistinctArrayRule implements Rule, DataAwareRule
      */
     protected $data = [];
 
+    /**
+     * Name of distinct key in the array.
+     *
+     * @var string
+     */
     private $distinctKey = '';
 
     /**

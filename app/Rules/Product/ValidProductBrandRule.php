@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Rules;
+namespace App\Rules\Product;
 
+use App\Enums\ProductBrand;
+use App\Models\Product\ProductBrandProductCategory;
 use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\Rule;
 
-class ValidNumberOfProducModelsRule implements Rule, DataAwareRule
+class ValidProductBrandRule implements Rule, DataAwareRule
 {
     /**
      * All of the data under validation.
@@ -14,16 +16,19 @@ class ValidNumberOfProducModelsRule implements Rule, DataAwareRule
      */
     protected $data = [];
 
-    private $variationKey = '';
+    /**
+     * Name of key containing list of category ids.
+     */
+    private $categoryPathKey = '';
 
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct(string $variationKey)
+    public function __construct(string $categoryPathKey)
     {
-        $this->variationKey = $variationKey;
+        $this->categoryPathKey = $categoryPathKey;
     }
 
     /**
@@ -48,14 +53,16 @@ class ValidNumberOfProducModelsRule implements Rule, DataAwareRule
      */
     public function passes($attribute, $value)
     {
-        $variations = $this->data[$this->variationKey] ?? [];
-        $modelSize = 1;
-
-        foreach ($variations as $variation) {
-            $modelSize *= count($variation['options']);
+        if (ProductBrand::from($value) === ProductBrand::NoBrand) {
+            return true;
         }
 
-        return count($value) === $modelSize;
+        $categoryIds = $this->data[$this->categoryPathKey];
+
+        // Brand must be belong to at least one category
+        return ProductBrandProductCategory::where('brand_id', $value)
+            ->whereIn('category_id', $categoryIds)
+            ->count() > 0;
     }
 
     /**
@@ -65,6 +72,6 @@ class ValidNumberOfProducModelsRule implements Rule, DataAwareRule
      */
     public function message()
     {
-        return 'The :attribute field has incorrect size.';
+        return 'The :attribute field is not compatible with the categories.';
     }
 }

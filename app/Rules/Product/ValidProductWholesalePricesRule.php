@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Rules;
+namespace App\Rules\Product;
 
 use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\Rule;
 
-class ValidWholesalePricesRule implements Rule, DataAwareRule
+class ValidProductWholesalePricesRule implements Rule, DataAwareRule
 {
     /**
      * All of the data under validation.
@@ -14,6 +14,9 @@ class ValidWholesalePricesRule implements Rule, DataAwareRule
      */
     protected $data = [];
 
+    /**
+     * Name of key containing list of models.
+     */
     private $modelKey = '';
 
     /**
@@ -51,6 +54,7 @@ class ValidWholesalePricesRule implements Rule, DataAwareRule
         $models = $this->data[$this->modelKey] ?? [];
         $modelSize = count($models);
 
+        // Wholesale prices are only applicable if all models have the same price.
         for ($i = 0; $i < $modelSize - 1; $i++) {
             for ($j = $i + 1; $j < $modelSize; $j++) {
                 if ($models[$i]['price'] !== $models[$j]['price']) {
@@ -69,6 +73,6 @@ class ValidWholesalePricesRule implements Rule, DataAwareRule
      */
     public function message()
     {
-        return 'The :attribute field is invalid.';
+        return 'The :attribute field is not applicable.';
     }
 }

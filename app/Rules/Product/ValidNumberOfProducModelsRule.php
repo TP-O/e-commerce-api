@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Rules;
+namespace App\Rules\Product;
 
-use App\Enums\ProductBrand;
-use App\Models\Product\ProductBrandProductCategory;
 use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\Rule;
 
-class ValidProductBrandRule implements Rule, DataAwareRule
+class ValidNumberOfProducModelsRule implements Rule, DataAwareRule
 {
     /**
      * All of the data under validation.
@@ -16,16 +14,19 @@ class ValidProductBrandRule implements Rule, DataAwareRule
      */
     protected $data = [];
 
-    private $categoryPathKey = '';
+    /**
+     * Name of key containing list of variations.
+     */
+    private $variationKey = '';
 
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct(string $categoryPathKey)
+    public function __construct(string $variationKey)
     {
-        $this->categoryPathKey = $categoryPathKey;
+        $this->variationKey = $variationKey;
     }
 
     /**
@@ -50,16 +51,15 @@ class ValidProductBrandRule implements Rule, DataAwareRule
      */
     public function passes($attribute, $value)
     {
-        if (ProductBrand::from($value) === ProductBrand::NoBrand) {
-            return true;
+        $variations = $this->data[$this->variationKey] ?? [];
+        $modelSize = 1;
+
+        foreach ($variations as $variation) {
+            $modelSize *= count($variation['options']);
         }
 
-        $categoryIds = $this->data[$this->categoryPathKey];
-
-        // Brand must be belong to at least one category
-        return ProductBrandProductCategory::where('brand_id', $value)
-            ->whereIn('category_id', $categoryIds)
-            ->count() > 0;
+        // Number of models must be equal to combination of options
+        return count($value) === $modelSize;
     }
 
     /**
@@ -69,6 +69,6 @@ class ValidProductBrandRule implements Rule, DataAwareRule
      */
     public function message()
     {
-        return 'The :attribute field is invalid.';
+        return 'The :attribute field has incorrect size.';
     }
 }

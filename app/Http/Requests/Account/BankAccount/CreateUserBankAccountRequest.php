@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Account\BankAccount;
 
 use App\Http\Requests\CustomFormRequest;
-use App\Rules\UniqueUserBankAccountNumberRule;
+use App\Rules\Account\UniqueUserBankAccountNumberRule;
 
 class CreateUserBankAccountRequest extends CustomFormRequest
 {
@@ -32,7 +32,7 @@ class CreateUserBankAccountRequest extends CustomFormRequest
             'account_number' => [
                 'required',
                 'digits_between:9,17',
-                new UniqueUserBankAccountNumberRule($this->user()->id),
+                new UniqueUserBankAccountNumberRule(),
             ],
         ];
     }

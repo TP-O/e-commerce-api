@@ -29,8 +29,7 @@ class BindCategoryAttributeRequest extends CustomFormRequest
             'binds' => [
                 'required',
                 'array',
-                'min:1',
-                new BatchExistsRule(CategoryAttribute::class, 'id'),
+                new BatchExistsRule(CategoryAttribute::class, 'attribute_id', 'id'),
             ],
             'binds.*.attribute_id' => 'required|integer|distinct:strict',
             'binds.*.is_required' => 'required|boolean',

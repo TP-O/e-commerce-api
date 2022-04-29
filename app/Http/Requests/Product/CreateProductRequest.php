@@ -3,13 +3,13 @@
 namespace App\Http\Requests\Product;
 
 use App\Http\Requests\CustomFormRequest;
-use App\Rules\DistinctArrayRule;
-use App\Rules\ValidNumberOfProducModelsRule;
-use App\Rules\ValidProducModelVariationIndexesRule;
-use App\Rules\ValidProductAttributesRule;
-use App\Rules\ValidProductBrandRule;
-use App\Rules\ValidProductCategoryPathRule;
-use App\Rules\ValidWholesalePricesRule;
+use App\Rules\DistinctArrayKeyRule;
+use App\Rules\Product\ValidNumberOfProducModelsRule;
+use App\Rules\Product\ValidProducModelVariationIndexesRule;
+use App\Rules\Product\ValidProductAttributesRule;
+use App\Rules\Product\ValidProductBrandRule;
+use App\Rules\Product\ValidProductCategoryPathRule;
+use App\Rules\Product\ValidProductWholesalePricesRule;
 
 class CreateProductRequest extends CustomFormRequest
 {
@@ -71,7 +71,7 @@ class CreateProductRequest extends CustomFormRequest
             'wholesale_prices' => [
                 'array',
                 'min:1',
-                new ValidWholesalePricesRule('models'),
+                new ValidProductWholesalePricesRule('models'),
             ],
             'wholesale_prices.*.min' => 'required|integer|min:0|distinct:strict',
             'wholesale_prices.*.max' => 'required|integer|gt:wholesale_prices.*.min',
@@ -79,7 +79,7 @@ class CreateProductRequest extends CustomFormRequest
             'models' => [
                 'required',
                 'array',
-                new DistinctArrayRule('variation_index'),
+                new DistinctArrayKeyRule('variation_index'),
                 new ValidNumberOfProducModelsRule('variations'),
                 new ValidProducModelVariationIndexesRule('variations', 'variation_index'),
             ],

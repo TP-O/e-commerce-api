@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Rules;
+namespace App\Rules\Product;
 
 use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\Rule;
@@ -58,10 +58,13 @@ class ValidProducModelVariationIndexesRule implements Rule, DataAwareRule
         }
 
         foreach ($value as $val) {
+            // Number of indexes must be equal to number of variations
             if (count($val[$this->variationIndexKey]) !== count($variations)) {
                 return false;
             }
 
+            // Value of varition index must be compitable with
+            // number of corresponding options in variation
             foreach ($variations as $key => $variation) {
                 if ($val[$this->variationIndexKey][$key] >= count($variation['options'])) {
                     return false;
