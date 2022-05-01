@@ -13,7 +13,7 @@ class CreateShopRequest extends CustomFormRequest
      */
     public function authorize()
     {
-        return true;
+        return is_null(auth()->user()->shop);
     }
 
     /**

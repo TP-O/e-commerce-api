@@ -60,10 +60,6 @@ class ShopController extends Controller
      */
     public function create(CreateShopRequest $request)
     {
-        if (!is_null(auth()->user()->shop)) {
-            throw new BadRequestHttpException('Shop already created!');
-        }
-
         $shop = $this->shopService->create(
             auth()->user()->id,
             $request->validated(),
@@ -84,10 +80,6 @@ class ShopController extends Controller
      */
     public function update(UpdateShopRequest $request)
     {
-        if (is_null(auth()->user()->shop)) {
-            throw new BadRequestHttpException('Create your shop first!');
-        }
-
         $this->shopService->update(
             auth()->user()->id,
             $request->validated(),
