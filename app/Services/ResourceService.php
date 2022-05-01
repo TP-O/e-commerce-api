@@ -141,4 +141,24 @@ class ResourceService
 
         return $imageId;
     }
+
+    /**
+     *
+     */
+    public function storeImages(array $inputs)
+    {
+        $imageIds = [];
+
+        foreach ($inputs as $input) {
+            $imageId = $this->storeImages(
+                $input['file'],
+                $input['ratio'],
+                $input['is_demo'],
+            );
+
+            array_push($imageIds, $imageId);
+        }
+
+        return $imageIds;
+    }
 }
