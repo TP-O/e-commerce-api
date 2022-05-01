@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Product;
 
+use App\Models\Product\Product;
 use App\Rules\DistinctArrayKeyRule;
 use App\Rules\Product\ValidNumberOfProducModelsRule;
 use App\Rules\Product\ValidProducModelVariationIndexesRule;
@@ -10,8 +11,28 @@ use App\Rules\Product\ValidProductBrandRule;
 use App\Rules\Product\ValidProductCategoryPathRule;
 use App\Rules\Product\ValidProductWholesalePricesRule;
 
-class CreateProductRequest extends CreateOrUpdateProductRequest
+class UpdateProductRequest extends CreateOrUpdateProductRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        $shopId = $this->user()->id;
+        $productIds = array_map(
+            function ($product) {
+                return $product['id'];
+            },
+            $this->input('products')
+        );
+
+        return parent::authorize() && Product::where('shop_id', $shopId)
+            ->whereIn('id', $productIds)
+            ->count() === count($productIds);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -21,6 +42,7 @@ class CreateProductRequest extends CreateOrUpdateProductRequest
     {
         return [
             'products' => 'required|array',
+            'products.*.id' => 'required|integer|min:1',
             'products.*.brand_id' => [
                 'required',
                 'integer',

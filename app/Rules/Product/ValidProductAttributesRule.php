@@ -62,10 +62,9 @@ class ValidProductAttributesRule implements Rule, DataAwareRule
         $categoryAttributes = collect([]);
         $inputAttributeIds = array_map(function ($val) {
             return $val['attribute_id'];
-        }, $value);
+        }, $value ?? []);
         $categoryIds = $this->data[$this->categoryPathKey];
         $categories = Category::whereIn('id', $categoryIds)->with('attributes')->get();
-
 
         $categories->each(function ($category) use (&$categoryAttributes) {
             $categoryAttributes = $categoryAttributes->concat($category['attributes']);

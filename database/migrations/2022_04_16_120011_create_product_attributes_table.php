@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('product_attributes', function (Blueprint $table) {
             $table->id();
             $table->string('value', 255);
+            $table->string('unit', 255)->nullable();
 
             $table->foreignId('product_id')
                 ->constrained('products')

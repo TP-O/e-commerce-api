@@ -42,7 +42,7 @@ class AttributeController extends Controller
      */
     public function manage(ManageProductCategoryAttributeRequest $request)
     {
-        $this->categoryAttributeService->manage($request->validated());
+        $this->categoryAttributeService->manage($request->all());
 
         return response()->json([
             'status' => true,

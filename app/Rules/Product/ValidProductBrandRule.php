@@ -57,7 +57,11 @@ class ValidProductBrandRule implements Rule, DataAwareRule
             return true;
         }
 
-        $categoryIds = $this->data[$this->categoryPathKey];
+        $categoryIds = $this->data[$this->categoryPathKey] ?? [];
+
+        if (count($categoryIds) === 0) {
+            return false;
+        }
 
         // Brand must be belong to at least one category
         return ProductBrandProductCategory::where('brand_id', $value)

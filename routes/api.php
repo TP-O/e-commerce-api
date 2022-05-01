@@ -97,8 +97,12 @@ Route::prefix('v2')->namespace('Api')->group(function () {
     });
 
     Route::prefix('products')->namespace('Product')->group(function () {
+        Route::get('/{id}', 'ProductController@get');
+
         Route::middleware('pat.name:user')->group(function () {
             Route::post('/', 'ProductController@create');
+            Route::put('/', 'ProductController@update');
+            Route::delete('/', 'ProductController@delete');
         });
 
         Route::prefix('categories')->group(function () {

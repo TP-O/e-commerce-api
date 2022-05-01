@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('product_models', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 35);
             $table->text('sku')->default('');
             $table->float('price', 8, 2, true);
             $table->integer('stock', false, true)->default(0);

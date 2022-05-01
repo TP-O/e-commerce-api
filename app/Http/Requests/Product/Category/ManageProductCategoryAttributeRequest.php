@@ -58,36 +58,4 @@ class ManageProductCategoryAttributeRequest extends CustomFormRequest
             'delete.*.id' => 'required|integer|min:1|distinct:strict',
         ];
     }
-
-    private function convertKeyOfArrayToJSON(array $arr, string $key)
-    {
-        return array_map(
-            function ($val) use ($key) {
-                $val[$key] = json_encode(array_map(
-                    function ($val) {
-                        return is_null($val) ? "" : $val;
-                    },
-                    $val[$key],
-                ));
-
-                return $val;
-            },
-            $arr,
-        );
-    }
-
-    public function passedValidation()
-    {
-        if (!is_null($this->get('create'))) {
-            $this->merge([
-                'create' => $this->convertKeyOfArrayToJSON($this->get('create'), 'units'),
-            ]);
-        }
-
-        if (!is_null($this->get('update'))) {
-            $this->merge([
-                'update' => $this->convertKeyOfArrayToJSON($this->get('update'), 'units'),
-            ]);
-        }
-    }
 }

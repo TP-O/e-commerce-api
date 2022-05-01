@@ -28,4 +28,39 @@ class Product extends Model
     ];
 
     public $timestamps = false;
+
+    public function categories()
+    {
+        return $this->belongsToMany(
+            Category::class,
+            'product_category_paths',
+            'product_id',
+            'category_id',
+        );
+    }
+
+    public function models()
+    {
+        return $this->hasMany(ProductModel::class);
+    }
+
+    public function wholesalePrices()
+    {
+        return $this->hasMany(WholesalePrice::class);
+    }
+
+    public function attributes()
+    {
+        return $this->belongsToMany(
+            CategoryAttribute::class,
+            'product_attributes',
+            'product_id',
+            'attribute_id',
+        )
+        ->select(
+            'product_category_attributes.name',
+            'product_attributes.value as value',
+            'product_attributes.unit as unit',
+        );
+    }
 }
