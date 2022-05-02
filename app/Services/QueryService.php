@@ -7,7 +7,14 @@ use Illuminate\Support\Facades\DB;
 
 class QueryService
 {
-    public function updateMultipleRecords(string $table, array $values)
+    /**
+     * Update multiple records of the table.
+     *
+     * @param string $table
+     * @param array $values
+     * @param string $primaryKey
+     */
+    public function updateMultipleRecords($table, $values, $primaryKey = 'id')
     {
         if (count($values) === 0) {
             throw new Error('The $values must have at least one element.');
@@ -33,7 +40,7 @@ class QueryService
             UPDATE $table
             SET $changes
             FROM (values $newValues) as $tempTable ($columns)
-            WHERE $table.id = $tempTable.id;",
+            WHERE $table.$primaryKey = $tempTable.$primaryKey;",
         );
     }
 }

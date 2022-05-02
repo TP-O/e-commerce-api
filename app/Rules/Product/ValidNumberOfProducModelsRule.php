@@ -16,6 +16,8 @@ class ValidNumberOfProducModelsRule implements Rule, DataAwareRule
 
     /**
      * Name of key containing list of variations.
+     *
+     * @var string
      */
     private $variationKey = '';
 

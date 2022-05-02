@@ -11,7 +11,11 @@ class BatchUniqueRule extends BatchSomethingRule
      */
     public function message()
     {
-        return 'The :attribute.*.' . $this->property . ' fields have already been taken.';
+        $validatedKey = is_null($this->validatedKey)
+            ? ''
+            : '.' . $this->validatedKey;
+
+        return 'The :attribute.*.' . $validatedKey . ' fields have taken value.';
     }
 
     protected function validate(array $validatedValues)

@@ -15,10 +15,8 @@ class AdminSignInController extends SignInController
      */
     public function signIn(SignInRequest $request)
     {
-        $signInInput = $request->validated();
-
-        $admin = $this->authService->authenticateAdmin($signInInput);
-        $token = $this->tokenService->createPAT($admin, true);
+        $admin = $this->authService->authenticateAdmin($request->validated());
+        $token = $admin->createToken('')->plainTextToken;;
 
         return response()->json([
             'status' => true,

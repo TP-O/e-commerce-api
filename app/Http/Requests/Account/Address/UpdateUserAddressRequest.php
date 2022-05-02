@@ -2,19 +2,21 @@
 
 namespace App\Http\Requests\Account\Address;
 
-class UpdateUserAddressRequest extends AuthorizedUserAddressRequest
+use App\Models\Addressable;
+
+class UpdateUserAddressRequest extends CreateOrUpdateUserAddressRequest
 {
     /**
-     * Prepare the data for validation.
+     * Determine if the user is authorized to make this request.
      *
-     * @return void
+     * @return bool
      */
-    protected function prepareForValidation()
+    public function authorize()
     {
-        if (is_null(auth()->user()->shop)) {
-            $this->getInputSource()->remove('is_pickup_address');
-            $this->getInputSource()->remove('is_return_address');
-        }
+        return Addressable::where([
+            ['addressable_id', $this->user()->id],
+            ['address_id', $this->route('id')],
+        ])->count() > 0;
     }
 
     /**

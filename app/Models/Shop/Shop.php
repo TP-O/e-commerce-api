@@ -2,6 +2,8 @@
 
 namespace App\Models\Shop;
 
+use App\Enums\ProductStatus;
+use App\Models\Product\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,10 +17,12 @@ class Shop extends Model
         'name',
         'description',
         'avatar_image',
-        'cover_image'
+        'cover_image',
+        'banners',
     ];
 
     protected $casts = [
+        'banners' => 'array',
         'created_at' => 'datetime',
     ];
 
@@ -29,8 +33,20 @@ class Shop extends Model
         return $this->hasOne(Statistic::class);
     }
 
-    public function banners()
+    public function products()
     {
-        return $this->hasMany(Banner::class);
+        return $this->hasMany(Product::class)
+            ->where('status_id', '<>', ProductStatus::Deleted)
+            ->with('models');
+    }
+
+    public function publishedProducts()
+    {
+        return $this->hasMany(Product::class)
+            ->where([
+                ['status_id', '<>', ProductStatus::Delisted],
+                ['status_id', '<>', ProductStatus::Deleted],
+            ])
+            ->with('models');
     }
 }

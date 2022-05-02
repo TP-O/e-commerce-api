@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Password\ForgotPasswordRequest;
 use App\Http\Requests\Password\ResetPasswordRequest;
 use App\Http\Requests\Password\UpdatePasswordRequest;
-use App\Services\PasswordService;
-use App\Services\TokenService;
 use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -15,15 +13,8 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 abstract class PasswordController extends Controller
 {
-    private TokenService $tokenService;
-
-    private PasswordService $passwordService;
-
-    public function __construct(TokenService $tokenService, PasswordService $passwordService)
+    public function __construct()
     {
-        $this->tokenService = $tokenService;
-        $this->passwordService = $passwordService;
-
         $this->middleware('auth:sanctum')->only('updatePassword');
     }
 
@@ -33,7 +24,7 @@ abstract class PasswordController extends Controller
      * @param \App\Http\Requests\Password\UpdatePasswordRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updatePassword(UpdatePasswordRequest $request)
+    public function update(UpdatePasswordRequest $request)
     {
         $updatePasswordInput = $request->validated();
 
@@ -41,14 +32,13 @@ abstract class PasswordController extends Controller
             throw new BadRequestHttpException('Invalid password!');
         }
 
-        $this->passwordService->update(
-            $request->user(),
-            $updatePasswordInput['new_password'],
-        );
+        $request->user()->update([
+            'password' => Hash::make($updatePasswordInput['new_password'], ['rounds' => 10]),
+        ]);
 
-        $this->tokenService->revokeAllPATs($request->user());
+        $request->user()->tokens()->delete();
 
-        $token = $this->tokenService->createPAT($request->user());
+        $token = $request->user()->createToken('')->plainTextToken;
 
         return response()->json([
             'status' => true,
@@ -81,7 +71,7 @@ abstract class PasswordController extends Controller
      *
      * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
      */
-    protected function forgot(ForgotPasswordRequest $request, string $broker)
+    protected function forgotPassword(ForgotPasswordRequest $request, string $broker)
     {
         $this->setResetUrl();
 
@@ -110,13 +100,16 @@ abstract class PasswordController extends Controller
      *
      * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
      */
-    protected function reset(ResetPasswordRequest $request, string $broker)
+    protected function resetPassword(ResetPasswordRequest $request, string $broker)
     {
         $status = Password::broker($broker)->reset(
             $request->safe()->only('email', 'token', 'password'),
             function ($user, $password) {
-                $this->passwordService->update($user, $password);
-                $this->tokenService->revokeAllPATs($user);
+                $user()->update([
+                    'password' => Hash::make($password, ['rounds' => 10]),
+                ]);
+
+                $user->tokens()->delete();
             },
         );
 
@@ -136,7 +129,7 @@ abstract class PasswordController extends Controller
      * @param \App\Http\Requests\Password\ForgotPasswordRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    abstract public function forgotPassword(ForgotPasswordRequest $request);
+    abstract public function forgot(ForgotPasswordRequest $request);
 
     /**
      * Reset the password with the specific broker.
@@ -144,5 +137,5 @@ abstract class PasswordController extends Controller
      * @param \App\Http\Requests\Password\ResetPasswordRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    abstract public function resetPassword(ResetPasswordRequest $request);
+    abstract public function reset(ResetPasswordRequest $request);
 }

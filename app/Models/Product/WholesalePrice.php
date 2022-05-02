@@ -20,6 +20,7 @@ class WholesalePrice extends Model
 
     protected $hidden = [
         'id',
+        'product_id',
     ];
 
     public $timestamps = false;

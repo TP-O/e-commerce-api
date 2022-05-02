@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\Shop\Banner;
+use App\Enums\ResourceType;
 use App\Models\Shop\Shop;
-use App\Models\User\Profile;
-use Illuminate\Support\Arr;
+use App\Models\Account\User\Profile;
+use App\Models\Account\User\User;
 
 class ShopService
 {
@@ -20,35 +20,47 @@ class ShopService
      * Create a shop for the user.
      *
      * @param int $ownerId
-     * @param array $input
+     * @param array $shopData
      * @return \App\Models\Shop\Shop
      */
-    public function create($ownerId, $input)
+    public function create($ownerId, $shopData)
     {
-        $shop = new Shop([
+        $shop = Shop::create([
             'id' => $ownerId,
-            'name' => $input['name'],
-            'slug' => $input['slug'],
+            'name' => $shopData['name'],
+            'slug' => $shopData['slug'],
         ]);
-
-        $shop->save();
 
         // Add phone number if doesn't exist
         Profile::where([
             ['user_id', $ownerId],
             ['phone', null],
         ])->update([
-            'phone' => $input['phone'],
+            'phone' => $shopData['phone'],
         ]);
 
+        // Update this address to pickup address
+        if (isset($shopData['address']['id'])) {
+            $this->addressService->update(
+                $ownerId,
+                User::class,
+                $shopData['address']['id'],
+                [
+                    'is_pickup_address' => true,
+                ],
+            );
+        }
         // Add new pickup address for shop
-        $this->addressService->createUserAddress(
-            $ownerId,
-            [
-                ...$input['address'],
-                'is_pickup_address' => true,
-            ],
-        );
+        else {
+            $this->addressService->create(
+                $ownerId,
+                User::class,
+                [
+                    ...$shopData['address'],
+                    'is_pickup_address' => true,
+                ],
+            );
+        }
 
         return $shop;
     }
@@ -57,29 +69,27 @@ class ShopService
      * Update the shop.
      *
      * @param int $id
-     * @param array $input
+     * @param array $shopData
      * @return true
      */
-    public function update($id, $input)
+    public function update($id, $shopData)
     {
-        $shopInput = Arr::except($input, 'banners');
-        $shopBannerInput = $input['banners'];
-
-        empty($shopInput) ?: Shop::where('id', $id)->update($shopInput);
-
-        Banner::where('shop_id', $id)->delete();
-
-        if (!empty($shopBannerInput)) {
-            Banner::insert(array_map(
-                function ($val) use ($id) {
-                    return [
-                        'shop_id' => $id,
-                        'source' => $val['image'] ?? $val['video'],
+        $shopData['banners'] = array_map(
+            function ($banner) {
+                return isset($banner['image'])
+                    ? [
+                        'type' => ResourceType::Image,
+                        ...$banner['image'],
+                    ]
+                    : [
+                        'type' => ResourceType::Video,
+                        'source' => $banner['video']
                     ];
-                },
-                $shopBannerInput,
-            ));
-        }
+            },
+            $shopData['banners']
+        );
+
+        Shop::where('id', $id)->update($shopData);
 
         return true;
     }

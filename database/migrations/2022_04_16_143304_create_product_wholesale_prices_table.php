@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -23,7 +24,14 @@ return new class extends Migration
                 ->constrained('products')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+
+            $table->unique(['product_id', 'min']);
         });
+
+        DB::statement('
+            ALTER TABLE product_wholesale_prices
+            ADD CONSTRAINT chk_max CHECK (max > min);
+        ');
     }
 
     /**

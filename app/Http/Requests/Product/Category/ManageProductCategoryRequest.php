@@ -6,6 +6,7 @@ use App\Http\Requests\CustomFormRequest;
 use App\Models\Product\Category;
 use App\Rules\BatchExistsRule;
 use App\Rules\BatchUniqueRule;
+use App\Rules\Resource\ExistImageRule;
 
 class ManageProductCategoryRequest extends CustomFormRequest
 {
@@ -40,7 +41,11 @@ class ManageProductCategoryRequest extends CustomFormRequest
             ],
             'create.*.parent_id' => 'nullable|integer|min:1',
             'create.*.name' => 'required|string|min:5|max:50|distinct:strict',
-            'create.*.cover_image' => 'required|string|min:32|max:32',
+            'create.*.cover_image' => [
+                'required',
+                'string',
+                new ExistImageRule(),
+            ],
 
             // Update
             'update' => [
@@ -51,7 +56,11 @@ class ManageProductCategoryRequest extends CustomFormRequest
             'update.*.id' => 'required|integer|min:1|distinct:strict',
             'update.*.parent_id' => 'nullable|integer|min:1',
             'update.*.name' => 'required|string|min:5|max:50|distinct:strict',
-            'update.*.cover_image' => 'required|string|min:32|max:32',
+            'update.*.cover_image' => [
+                'required',
+                'string',
+                new ExistImageRule(),
+            ],
 
             // Delete
             'delete' => [

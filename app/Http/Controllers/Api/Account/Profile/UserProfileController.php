@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Account\Profile;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Account\Profile\UpdateUserProfileRequest;
-use App\Models\User\Profile;
+use App\Models\Account\User\Profile;
 use Illuminate\Http\Request;
 
 class UserProfileController extends Controller
@@ -15,7 +15,7 @@ class UserProfileController extends Controller
     }
 
     /**
-     * Show the user's profile.
+     * Show the current user's profile.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -35,7 +35,7 @@ class UserProfileController extends Controller
      * @param \App\Http\Requests\Account\Profile\UpdateUserProfileRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateProfile(UpdateUserProfileRequest $request)
+    public function update(UpdateUserProfileRequest $request)
     {
         Profile::where('user_id', auth()->user()->id)
             ->update($request->validated());

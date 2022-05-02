@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Shop;
 
 use App\Http\Requests\CustomFormRequest;
+use App\Models\Addressable;
+use App\Rules\ExistPolymorphicManyToManyOwnedByCurrentUserRule;
 
 class CreateShopRequest extends CustomFormRequest
 {
@@ -25,14 +27,24 @@ class CreateShopRequest extends CustomFormRequest
     {
         return [
             'name' => 'required|string|max:30',
-            'slug' => 'required|string|max:40',
+            'slug' => 'required|string|max:40|unique:shops',
             'phone' => 'required|digits_between:10,11',
-            'address.full_name' => 'required|string|max:64',
-            'address.phone' => 'required|digits_between:10,11',
-            'address.state' => 'required|string|max:50',
-            'address.city' => 'required|string|max:50',
-            'address.town' => 'required|string|max:50',
-            'address.address' => 'required|string',
+            'address.id' => [
+                'integer',
+                'min:1',
+                'exists:addresses,id',
+                new ExistPolymorphicManyToManyOwnedByCurrentUserRule(
+                    Addressable::class,
+                    'addressable',
+                    'address_id',
+                ),
+            ],
+            'address.full_name' => 'required_without:address.id|string|max:64',
+            'address.phone' => 'required_without:address.id|digits_between:10,11',
+            'address.state' => 'required_without:address.id|string|max:50',
+            'address.city' => 'required_without:address.id|string|max:50',
+            'address.town' => 'required_without:address.id|string|max:50',
+            'address.address' => 'required_without:address.id|string',
         ];
     }
 }

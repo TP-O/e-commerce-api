@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Shop;
 
 use App\Http\Requests\CustomFormRequest;
+use App\Rules\Resource\ExistImageRule;
 
 class UpdateShopRequest extends CustomFormRequest
 {
@@ -25,12 +26,27 @@ class UpdateShopRequest extends CustomFormRequest
     {
         return $this->requireAtLeastOne([
             'name' => 'string|max:30',
-            'slug' => 'string|max:40',
+            'slug' => 'string|max:40|unique:shops',
             'description' => 'string|max:500',
-            'avatar_image' => 'string|min:32|max:32',
-            'cover_image' => 'string|min:32|max:32',
-            'banners' => 'array|min:1|max:5',
-            'banners.*.image' => 'required_without:banners.*.video|string|min:32|max:32',
+            'avatar_image' => [
+                'string',
+                new ExistImageRule(),
+            ],
+            'cover_image' => [
+                'string',
+                new ExistImageRule(),
+            ],
+            'banners' => 'array|max:5',
+            'banners.*.image' => 'required_without:banners.*.video',
+            'banners.*.image.id' => [
+                'required_with:banners.*.image',
+                'string',
+                new ExistImageRule(),
+            ],
+            'banners.*.image.hyper_link' => [
+                'string',
+                'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
+            ],
             'banners.*.video' => [
                 'required_without:banners.*.image',
                 'string',

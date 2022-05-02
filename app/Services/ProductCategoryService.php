@@ -19,7 +19,7 @@ class ProductCategoryService
      * @param int $id
      * @return array
      */
-    public function getChildren(int $id)
+    public function getChildren($id)
     {
         $category = $id == 0
             ? $id = null
@@ -33,28 +33,49 @@ class ProductCategoryService
     }
 
     /**
-     * Create, update, or delete categories.
+     * Get all attributes of the categories.
      *
-     * @param array $changes
-     * @return void
+     * @param array $ids
+     * @return array
      */
-    public function manage(array $changes)
+    public function getAttributes($ids)
     {
-        if (!is_null($changes['create'])) {
-            Category::insert($changes['create']);
+        $attributes = [];
+        $categoriesWithAttributes = Category::whereIn('id', $ids)
+            ->with('attributes')
+            ->get()
+            ;
+
+        foreach ($categoriesWithAttributes as $categoryWithAttributes) {
+            array_push($attributes, ...$categoryWithAttributes->attributes);
         }
 
-        if (!is_null($changes['update'])) {
+        return $attributes;
+    }
+
+    /**
+     * Create, update, or delete categories.
+     *
+     * @param array $categoryChanges
+     * @return void
+     */
+    public function manage($categoryChanges)
+    {
+        if (isset($categoryChanges['create'])) {
+            Category::insert($categoryChanges['create']);
+        }
+
+        if (isset($categoryChanges['update'])) {
             $this->queryService->updateMultipleRecords(
                 'product_categories',
-                $changes['update'],
+                $categoryChanges['update'],
             );
         }
 
-        if (!is_null($changes['delete'])) {
+        if (isset($categoryChanges['delete'])) {
             Category::destroy(array_map(function($val) {
                 return $val['id'];
-            }, $changes['delete']));
+            }, $categoryChanges['delete']));
         }
 
         return;

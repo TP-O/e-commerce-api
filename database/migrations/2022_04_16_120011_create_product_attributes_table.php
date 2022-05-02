@@ -14,7 +14,6 @@ return new class extends Migration
     public function up()
     {
         Schema::create('product_attributes', function (Blueprint $table) {
-            $table->id();
             $table->string('value', 255);
             $table->string('unit', 255)->nullable();
 
@@ -26,6 +25,8 @@ return new class extends Migration
                 ->constrained('product_category_attributes')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+
+            $table->primary(['product_id', 'attribute_id']);
         });
     }
 

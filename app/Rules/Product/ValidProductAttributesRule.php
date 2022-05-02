@@ -71,8 +71,12 @@ class ValidProductAttributesRule implements Rule, DataAwareRule
         });
 
         // Check if the redundant attributes are provided
-        if ($categoryAttributes->whereIn('id', $inputAttributeIds)->count() !== count($inputAttributeIds)) {
-            $this->message = 'The :attribute fields containing invalid attributes.';
+        if (
+            $categoryAttributes
+            ->whereIn('id', $inputAttributeIds)
+            ->count() !== count($inputAttributeIds)
+        ) {
+            $this->message = 'The :attribute fields have invalid value.';
 
             return false;
         }

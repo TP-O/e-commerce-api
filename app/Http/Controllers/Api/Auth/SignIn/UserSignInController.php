@@ -15,10 +15,8 @@ class UserSignInController extends SignInController
      */
     public function signIn(SignInRequest $request)
     {
-        $signInInput = $request->validated();
-
-        $user = $this->authService->authenticateUser($signInInput);
-        $token = $this->tokenService->createPAT($user);
+        $user = $this->authService->authenticateUser($request->validated());
+        $token = $user->createToken('')->plainTextToken;
 
         return response()->json([
             'status' => true,

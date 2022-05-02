@@ -14,8 +14,18 @@ class ValidProducModelVariationIndexesRule implements Rule, DataAwareRule
      */
     protected $data = [];
 
+    /**
+     * Name of key containing list of variations.
+     *
+     * @var string
+     */
     private $variationKey = '';
 
+    /**
+     * Name of key containing variation index.
+     *
+     * @var string
+     */
     private $variationIndexKey = '';
 
     /**

@@ -6,12 +6,10 @@ abstract class CreateOrUpdateProductRequest extends ShopRequiredRequest
 {
     public function passedValidation()
     {
-        $this->replace([
-            'products' => array_map(function ($product) {
-                $product['variations'] = $product['variations'] ?? [];
-
-                return $product;
-            }, $this->input('products')),
+        $this->merge([
+            'attributes' => $this->input('attributes') ?? [],
+            'variations' => $this->input('variations') ?? [],
+            'wholesale_prices' => $this->input('wholesale_prices') ?? [],
         ]);
     }
 }

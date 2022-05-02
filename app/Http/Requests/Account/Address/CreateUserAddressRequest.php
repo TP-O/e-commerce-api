@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\Account\Address;
 
-use App\Http\Requests\CustomFormRequest;
-
-class CreateUserAddressRequest extends CustomFormRequest
+class CreateUserAddressRequest extends CreateOrUpdateUserAddressRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,19 +12,6 @@ class CreateUserAddressRequest extends CustomFormRequest
     public function authorize()
     {
         return true;
-    }
-
-    /**
-     * Prepare the data for validation.
-     *
-     * @return void
-     */
-    protected function prepareForValidation()
-    {
-        if (is_null(auth()->user()->shop)) {
-            $this->getInputSource()->remove('is_pickup_address');
-            $this->getInputSource()->remove('is_return_address');
-        }
     }
 
     /**

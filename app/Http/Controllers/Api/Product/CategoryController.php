@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Product;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\Category\BindCategoryAttributeRequest;
+use App\Http\Requests\Product\Category\GetProductCategoryAttributeRequest;
 use App\Http\Requests\Product\Category\ManageProductCategoryRequest;
 use App\Models\Product\Category;
 use App\Services\ProductCategoryService;
@@ -18,8 +19,25 @@ class CategoryController extends Controller
         $this->productCategoryService = $productCategoryService;
 
         $this->middleware('auth:sanctum')->except([
+            'get',
             'children',
             'attributes',
+        ]);
+    }
+
+    /**
+     * Get the category by id.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get(int $id)
+    {
+        $category = Category::findOrFail($id);
+
+        return response()->json([
+            'status' => true,
+            'data' => $category,
         ]);
     }
 
@@ -39,14 +57,16 @@ class CategoryController extends Controller
     }
 
     /**
-     * Get all attributes of the category.
+     * Get all attributes of the categories.
      *
-     * @param int $id
+     * @param \App\Http\Requests\Product\Category\GetProductCategoryAttributeRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function attributes(int $id)
+    public function attributes(GetProductCategoryAttributeRequest $request)
     {
-        $attributes = Category::find($id)->attributes;
+        $attributes = $this->productCategoryService->getAttributes(
+            $request->input('category_ids'),
+        );
 
         return response()->json([
             'status' => true,
@@ -58,12 +78,14 @@ class CategoryController extends Controller
      * Bind the attributes with the specific category.
      *
      * @param \App\Http\Requests\Product\Category\BindCategoryAttributeRequest $request
-     * @param int $id
+     * @param \App\Models\Product\Category $category
      * @return \Illuminate\Http\JsonResponse
      */
-    public function bind(BindCategoryAttributeRequest $request, int $id)
+    public function bind(BindCategoryAttributeRequest $request, Category $category)
     {
-        Category::findOrFail($id)->attributes()->sync($request->input('binds'));
+        $category->attributes()->sync(
+            collect($request->input('binds'))->keyBy('attribute_id'),
+        );
 
         return response()->json([
             'status' => true,
@@ -79,7 +101,7 @@ class CategoryController extends Controller
      */
     public function manage(ManageProductCategoryRequest $request)
     {
-        $this->productCategoryService->manage($request->all());
+        $this->productCategoryService->manage($request->validated());
 
         return response()->json([
             'status' => true,

@@ -14,39 +14,28 @@ class CategoryAttributeService
     }
 
     /**
-     * Search attributes by name
-     *
-     * @param string $input
-     * @return Illuminate\Support\Collection<CategoryAttribute>
-     */
-    public function search(string $input)
-    {
-        return CategoryAttribute::where('name', 'like', "%$input%")->get();
-    }
-
-    /**
      * Create, update, or delete attributes.
      *
-     * @param array $changes
+     * @param array $attributeChanges
      * @return void
      */
-    public function manage(array $changes)
+    public function manage($attributeChanges)
     {
-        if (!is_null($changes['create'])) {
-            CategoryAttribute::insert($changes['create']);
+        if (isset($attributeChanges['create'])) {
+            CategoryAttribute::insert($attributeChanges['create']);
         }
 
-        if (!is_null($changes['update'])) {
+        if (isset($attributeChanges['update'])) {
             $this->queryService->updateMultipleRecords(
                 'product_category_attributes',
-                $changes['update'],
+                $attributeChanges['update'],
             );
         }
 
-        if (!is_null($changes['delete'])) {
+        if (isset($attributeChanges['delete'])) {
             CategoryAttribute::destroy(array_map(function($val) {
                 return $val['id'];
-            }, $changes['delete']));
+            }, $attributeChanges['delete']));
         }
 
         return;

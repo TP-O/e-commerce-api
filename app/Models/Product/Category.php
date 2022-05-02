@@ -30,6 +30,7 @@ class Category extends Model
             ->select(
                 'product_category_attributes.*',
                 'product_category_product_category_attribute.is_required as is_required',
-            );
+            )
+            ->distinct('product_category_attributes.id');
     }
 }

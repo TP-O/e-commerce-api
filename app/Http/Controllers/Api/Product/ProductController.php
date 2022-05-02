@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Product;
 
+use App\Enums\ProductStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\CreateProductRequest;
 use App\Http\Requests\Product\DeleteProductRequest;
@@ -9,6 +10,7 @@ use App\Http\Requests\Product\UpdateProductRequest;
 use App\Models\Product\Product;
 use App\Services\ProductService;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ProductController extends Controller
 {
@@ -24,15 +26,25 @@ class ProductController extends Controller
         ]);
     }
 
+    /**
+     * Get the product by id.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function get(int $id)
     {
-        $product = Product::with(
-            [
+        $product = Product::where([
+                ['id', $id],
+                ['status_id', '<>', ProductStatus::Delisted->value],
+                ['status_id', '<>', ProductStatus::Deleted->value],
+            ])
+            ->with([
                 'attributes',
                 'models',
                 'wholesalePrices',
-            ],
-        )->findOrFail($id);
+            ])
+            ->firstOrFail();
 
         return response()->json([
             'status' => true,
@@ -40,42 +52,85 @@ class ProductController extends Controller
         ]);
     }
 
+    /**
+     * Create the product.
+     *
+     * @param \App\Http\Requests\Product\CreateProductRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function create(CreateProductRequest $request)
     {
-        $productIds = $this->productService->createMany(
-            $request->input('products'),
+        $productId = $this->productService->create(
+            $request->all(),
         );
 
         return response()->json([
             'status' => true,
-            'message' => 'Products have been created!',
+            'message' => 'Product has been created!',
             'data' => [
-                'ids' => $productIds,
+                'id' => $productId,
             ],
         ], Response::HTTP_CREATED);
     }
 
-    public function update(UpdateProductRequest $request)
+    /**
+     * Update the product.
+     *
+     * @param \App\Http\Requests\Product\UpdateProductRequest $request
+     * @param \App\Models\Product\Product $product
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        $this->productService->updateMany(
-            $request->input('products'),
+        $this->productService->update(
+            $product->id,
+            $request->all(),
         );
 
         return response()->json([
             'status' => true,
-            'message' => 'Products have been updated!',
+            'message' => 'Product has been updated!',
         ]);
     }
 
-    public function delete(DeleteProductRequest $request)
+    /**
+     * Delete the product.
+     *
+     * @param \App\Http\Requests\Product\DeleteProductRequest $request
+     * @param \App\Models\Product\Product $product
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete(DeleteProductRequest $request, Product $product)
     {
-        Product::where('shop_id', $request->user()->id)
-            ->whereIn('id', $request->input('ids'))
-            ->delete();
+        $product->update([
+            'status_id' => ProductStatus::Deleted,
+        ]);
 
         return response()->json([
             'status' => true,
-            'message' => 'Products have been deleted!',
+            'message' => 'Product has been deleted!',
+        ]);
+    }
+
+    /**
+     * Recovery the product.
+     *
+     * @param \App\Models\Product\Product $product
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function recovery(Product $product)
+    {
+        if ($product->status_id !== ProductStatus::Deleted->value) {
+            throw new BadRequestHttpException('Product has not been deleted yet!');
+        }
+
+        $product->update([
+            'status_id' => ProductStatus::Delisted,
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Product has been recoveried!',
         ]);
     }
 }

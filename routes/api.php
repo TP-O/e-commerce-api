@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
+use App\Models\Account\Admin\Admin;
+use App\Models\Account\User\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,8 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-DB::enableQueryLog();
-
 Route::prefix('v2')->namespace('Api')->group(function () {
     Route::prefix('resources')->group(function () {
         Route::post('/images', 'ResourceController@uploadImage');
@@ -27,12 +26,12 @@ Route::prefix('v2')->namespace('Api')->group(function () {
 
             Route::namespace('SignIn')->group(function () {
                 Route::post('/sign-in', 'UserSignInController@signIn');
-                Route::post('/sign-out', 'UserSignInController@signOut')->middleware('pat.name:user');
+                Route::post('/sign-out', 'UserSignInController@signOut')->middleware('allow:' . User::class);
             });
 
             Route::prefix('admin')->namespace('SignIn')->group(function () {
                 Route::post('/sign-in', 'AdminSignInController@signIn');
-                Route::post('/sign-out', 'AdminSignInController@signOut')->middleware('pat.name:admin');
+                Route::post('/sign-out', 'AdminSignInController@signOut')->middleware('allow:' . Admin::class);
             });
         });
 
@@ -48,77 +47,85 @@ Route::prefix('v2')->namespace('Api')->group(function () {
     });
 
     Route::prefix('password')->namespace('Password')->group(function () {
-        Route::put('/', 'UserPasswordController@updatePassword')->middleware('pat.name:user');
-        Route::post('/forgot', 'UserPasswordController@forgotPassword');
-        Route::post('/reset', 'UserPasswordController@resetPassword')->name('password.reset');
+        Route::put('/', 'UserPasswordController@update')->middleware('allow:' . User::class);
+        Route::post('/forgot', 'UserPasswordController@forgot');
+        Route::post('/reset', 'UserPasswordController@reset')->name('password.reset');
 
         Route::prefix('admin')->group(function () {
-            Route::put('/', 'AdminPasswordController@updatePassword')->middleware('pat.name:admin');
-            Route::post('/forgot', 'AdminPasswordController@forgotPassword');
-            Route::post('/reset', 'AdminPasswordController@resetPassword')->name('admin.password.reset');
+            Route::put('/', 'AdminPasswordController@update')->middleware('allow:' . Admin::class);
+            Route::post('/forgot', 'AdminPasswordController@forgot');
+            Route::post('/reset', 'AdminPasswordController@reset')->name('admin.password.reset');
         });
     });
 
-    Route::prefix('account')->namespace('Account')->middleware('pat.name:user')->group(function () {
+    Route::prefix('account')->namespace('Account')->middleware('allow:' . User::class)->group(function () {
         Route::prefix('profile')->namespace('Profile')->group(function () {
             Route::get('/', 'UserProfileController@me');
-            Route::put('/', 'UserProfileController@updateProfile');
+            Route::put('/', 'UserProfileController@update');
         });
 
         Route::prefix('addresses')->namespace('Address')->group(function () {
-            Route::get('/', 'UserAddressController@show');
+            Route::get('/', 'UserAddressController@all');
             Route::post('/', 'UserAddressController@create');
             Route::put('/{id}', 'UserAddressController@update');
             Route::delete('/{address}', 'UserAddressController@delete');
         });
 
-        Route::prefix('bank-accounts')->namespace('BankAccount')->group(function () {
-            Route::get('/', 'UserBankAccountController@show');
-            Route::post('/', 'UserBankAccountController@create');
-            Route::put('/{bank_account}', 'UserBankAccountController@update');
-            Route::delete('/{bank_account}', 'UserBankAccountController@delete');
+        Route::prefix('bank-accounts')->group(function () {
+            Route::get('/', 'BankAccountController@all');
+            Route::post('/', 'BankAccountController@create');
+            Route::put('/{bank_account}', 'BankAccountController@update');
+            Route::delete('/{bank_account}', 'BankAccountController@delete');
         });
-        Route::prefix('credit-cards')->namespace('CreditCard')->group(function () {
-            Route::get('/', 'UserCreditCardController@show');
-            Route::post('/', 'UserCreditCardController@create');
-            Route::put('/{credit_card}', 'UserCreditCardController@update');
-            Route::delete('/{credit_card}', 'UserCreditCardController@delete');
+        Route::prefix('credit-cards')->group(function () {
+            Route::get('/', 'CreditCardController@show');
+            Route::post('/', 'CreditCardController@create');
+            Route::put('/{credit_card}', 'CreditCardController@update');
+            Route::delete('/{credit_card}', 'CreditCardController@delete');
         });
     });
 
-    Route::namespace('Shop')->group(function () {
-        Route::get('shops/{id}', 'ShopController@get');
-
-        Route::prefix('shop')->middleware('pat.name:user')->group(function () {
-            Route::get('/', 'ShopController@getMyShop');
+    Route::prefix('shops')->namespace('Shop')->group(function () {
+        Route::middleware('allow:' . User::class)->group(function () {
+            Route::get('/', 'ShopController@mine');
+            Route::get('/products', 'ShopController@products');
             Route::post('/', 'ShopController@create');
             Route::put('/', 'ShopController@update');
         });
+
+        Route::get('/{id_or_slug}', 'ShopController@get');
+        Route::get('/{id_or_slug}/products', 'ShopController@publishedProducts');
     });
 
     Route::prefix('products')->namespace('Product')->group(function () {
         Route::get('/{id}', 'ProductController@get');
 
-        Route::middleware('pat.name:user')->group(function () {
+        Route::middleware('allow:' . User::class)->group(function () {
             Route::post('/', 'ProductController@create');
-            Route::put('/', 'ProductController@update');
-            Route::delete('/', 'ProductController@delete');
+            Route::put('/{product}', 'ProductController@update');
+            Route::delete('/{product}', 'ProductController@delete');
+        });
+
+        Route::middleware('allow:' . Admin::class)->group(function () {
+            Route::post('/{product}/recovery', 'ProductController@recovery');
         });
 
         Route::prefix('categories')->group(function () {
-            Route::middleware('pat.name:admin')->group(function () {
+            Route::middleware('allow:' . Admin::class)->group(function () {
                 Route::post('/', 'CategoryController@manage');
-                Route::post('/{id}/attributes', 'CategoryController@bind')->where('id', '[1-9]+');
+                Route::post('/{category}/attributes', 'CategoryController@bind')
+                    ->where('category', '[1-9]+');
             });
 
-            Route::prefix('{id}')->group(function () {
-                Route::get('/children', 'CategoryController@children')->where('id', '[0-9]+');
-                Route::get('/attributes', 'CategoryController@attributes')->where('id', '[1-9]+');
+            Route::prefix('{id}')->where(['id', '[0-9]+'])->group(function () {
+                Route::get('/', 'CategoryController@get');
+                Route::get('/children', 'CategoryController@children');
             });
 
             Route::prefix('attributes')->group(function () {
+                Route::get('/', 'CategoryController@attributes');
                 Route::get('/{input}', 'AttributeController@search');
-                Route::post('/', 'AttributeController@manage');
+                Route::post('/', 'AttributeController@manage')->middleware('allow:' . Admin::class);
             });
         });
     });

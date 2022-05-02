@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Product;
 
-use App\Models\Product\Product;
+use App\Enums\ProductStatus;
 
 class DeleteProductRequest extends ShopRequiredRequest
 {
@@ -14,11 +14,11 @@ class DeleteProductRequest extends ShopRequiredRequest
     public function authorize()
     {
         $shopId = $this->user()->id;
-        $productIds = $this->input('ids');
+        $product = $this->route('product');
 
-        return parent::authorize() && Product::where('shop_id', $shopId)
-            ->whereIn('id', $productIds)
-            ->count() === count($productIds);
+        return parent::authorize() &&
+            $product->shop_id === $shopId &&
+            $product->status_id !== ProductStatus::Deleted->value;
     }
 
     /**
@@ -29,8 +29,7 @@ class DeleteProductRequest extends ShopRequiredRequest
     public function rules()
     {
         return [
-            'ids' => 'required|array',
-            'ids.*' => 'integer|min:1',
+            //
         ];
     }
 }

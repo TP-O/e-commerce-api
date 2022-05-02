@@ -25,8 +25,8 @@ class ProductStatusSeeder extends Seeder
                 'name' => 'Delisted',
             ],
             [
-                'id' => ProductStatus::Deleleted,
-                'name' => 'Deleleted',
+                'id' => ProductStatus::Deleted,
+                'name' => 'Deleted',
             ],
         ]);
     }

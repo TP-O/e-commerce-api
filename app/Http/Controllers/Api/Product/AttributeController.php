@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Api\Product;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Product\Category\ManageProductCategoryAttributeRequest;
+use App\Http\Requests\Product\Category\Attribute\ManageProductCategoryAttributeRequest;
+use App\Models\Product\CategoryAttribute;
 use App\Services\CategoryAttributeService;
 use Illuminate\Http\Response;
 
@@ -26,7 +27,7 @@ class AttributeController extends Controller
      */
     public function search(string $input)
     {
-        $attributes = $this->categoryAttributeService->search($input);
+        $attributes = CategoryAttribute::where('name', 'like', "%$input%")->get();
 
         return response()->json([
             'status' => true,
@@ -37,12 +38,12 @@ class AttributeController extends Controller
     /**
      * Manage the attributes.
      *
-     * @param \App\Http\Requests\Product\Category\ManageProductCategoryAttributeRequest $request
+     * @param \App\Http\Requests\Product\Category\Attribute\ManageProductCategoryAttributeRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function manage(ManageProductCategoryAttributeRequest $request)
     {
-        $this->categoryAttributeService->manage($request->all());
+        $this->categoryAttributeService->manage($request->validated());
 
         return response()->json([
             'status' => true,

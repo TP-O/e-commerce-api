@@ -13,14 +13,14 @@ abstract class BatchSomethingRule implements Rule
      *
      * @var \Illuminate\Database\Eloquent\Model
      */
-    protected Model $model;
+    protected $model;
 
     /**
      * Name of key need to be validated.
      *
-     * @var string
+     * @var string|null
      */
-    protected string $validatedKey = '';
+    protected $validatedKey = '';
 
     /**
      * Name of column corresponds to validated key.
@@ -34,7 +34,7 @@ abstract class BatchSomethingRule implements Rule
      *
      * @return void
      */
-    public function __construct(string $model, string $validatedKey, string $column = null)
+    public function __construct(string $model, string $validatedKey = null, string $column = null)
     {
         $this->model = resolve($model);
         $this->validatedKey = $validatedKey;
@@ -45,7 +45,7 @@ abstract class BatchSomethingRule implements Rule
      * Determine if the validation rule passes.
      *
      * @param  string  $attribute
-     * @param  mixed  $value
+     * @param  mixed  $values
      * @return bool
      */
     public function passes($attribute, $values)
@@ -57,7 +57,10 @@ abstract class BatchSomethingRule implements Rule
         // Get all values of the validated key without null value
         $validatedValues = array_filter(
             array_map(function ($value) {
-                if (isset($value[$this->validatedKey])) {
+                if (is_null($this->validatedKey) && isset($value)) {
+                    return $value;
+                }
+                else if (isset($value[$this->validatedKey])) {
                     return $value[$this->validatedKey];
                 }
             }, $values),

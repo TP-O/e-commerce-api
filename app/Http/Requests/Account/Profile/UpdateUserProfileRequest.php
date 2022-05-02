@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Account\Profile;
 
 use App\Http\Requests\CustomFormRequest;
+use App\Rules\Resource\ExistImageRule;
 
 class UpdateUserProfileRequest extends CustomFormRequest
 {
@@ -25,7 +26,10 @@ class UpdateUserProfileRequest extends CustomFormRequest
     {
         return $this->requireAtLeastOne([
             'display_name' => 'string|max:50',
-            'avatar_image' => 'string|min:32|max:32',
+            'avatar_image' => [
+                'string',
+                new ExistImageRule(),
+            ],
             'phone' => 'digits_between:10,11',
             'gender' => 'integer|min:0|max:2',
             'date_of_birth' => 'date_format:m/d/Y',

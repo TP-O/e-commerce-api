@@ -19,12 +19,12 @@ class DatabaseSeeder extends Seeder
 
             UserSeeder::class,
             UserProfileSeeder::class,
-            UserAddressTypeSeeder::class,
-            UserAddressSeeder::class,
-            UserAddressLinkSeeder::class,
+
+            AddressTypeSeeder::class,
+            AddressSeeder::class,
+            AddressableSeeder::class,
 
             ShopSeeder::class,
-            ShopBannerSeeder::class,
 
             ProductStatusSeeder::class,
             ProductBrandSeeder::class,

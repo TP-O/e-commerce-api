@@ -9,6 +9,7 @@ use App\Rules\Product\ValidProductAttributesRule;
 use App\Rules\Product\ValidProductBrandRule;
 use App\Rules\Product\ValidProductCategoryPathRule;
 use App\Rules\Product\ValidProductWholesalePricesRule;
+use App\Rules\Resource\ExistImageRule;
 
 class CreateProductRequest extends CreateOrUpdateProductRequest
 {
@@ -20,62 +21,65 @@ class CreateProductRequest extends CreateOrUpdateProductRequest
     public function rules()
     {
         return [
-            'products' => 'required|array',
-            'products.*.brand_id' => [
+            'brand_id' => [
                 'required',
                 'integer',
                 'min:1',
                 new ValidProductBrandRule('category_path'),
             ],
-            'products.*.is_published' => 'required|boolean',
-            'products.*.name' => 'required|string|min:10|max:120',
-            'products.*.description' => 'string|min:50',
-            'products.*.weight' => 'required|numeric|min:0.1|max:999999',
-            'products.*.images' => 'required|array|min:1|max:9',
-            'products.*.images.*' => 'string|min:32|max:32|distinct:strict',
-            'products.*.videos' => 'array|max:1',
-            'products.*.videos.*' => [
+            'is_published' => 'required|boolean',
+            'name' => 'required|string|min:10|max:120',
+            'description' => 'string|min:50',
+            'weight' => 'required|numeric|min:0.1|max:999999',
+            'images' => 'required|array|min:1|max:9',
+            'images.*' => [
+                'string',
+                'distinct:strict',
+                new ExistImageRule(),
+            ],
+            'videos' => 'array|max:1',
+            'videos.*' => [
                 'string',
                 'regex:/^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$/',
                 'distinct:strict',
             ],
-            'products.*.attributes' => [
+            'attributes' => [
                 'array',
                 new ValidProductAttributesRule('category_path'),
             ],
-            'products.*.attributes.*.attribute_id' => 'integer|min:1',
-            'products.*.attributes.*.value' => 'required|string',
-            'products.*.attributes.*.unit' => 'string|nullable',
-            'products.*.variations' => 'array|max:2',
-            'products.*.variations.*.name' => 'required|string|max:14|distinct:strict',
-            'products.*.variations.*.options' => 'required|array|min:1',
-            'products.*.variations.0.options.*' => 'required|string|min:1|max:20|distinct:strict',
-            'products.*.variations.1.options.*' => 'required|string|min:1|max:20|distinct:strict',
-            'products.*.category_path' => [
+            'attributes.*.attribute_id' => 'integer|min:1',
+            'attributes.*.value' => 'required|string',
+            'attributes.*.unit' => 'string|nullable',
+            'variations' => 'array|max:2',
+            'variations.*.name' => 'required|string|max:14|distinct:strict',
+            'variations.*.options' => 'required|array|min:1',
+            'variations.0.options.*' => 'required|string|min:1|max:20|distinct:strict',
+            'variations.1.options.*' => 'required|string|min:1|max:20|distinct:strict',
+            'category_path' => [
                 'required',
                 'array',
                 new ValidProductCategoryPathRule(),
             ],
-            'products.*.category_path.*' => 'integer|min:1|distinct:strict',
-            'products.*.wholesale_prices' => [
+            'category_path.*' => 'integer|min:1|distinct:strict',
+            'wholesale_prices' => [
                 'array',
                 new ValidProductWholesalePricesRule('models'),
             ],
-            'products.*.wholesale_prices.*.min' => 'required|integer|min:0|distinct:strict',
-            'products.*.wholesale_prices.*.max' => 'required|integer|gt:wholesale_prices.*.min',
-            'products.*.wholesale_prices.*.price' => 'required|numeric|min:0.5',
-            'products.*.models' => [
+            'wholesale_prices.*.min' => 'required|integer|min:0|distinct:strict',
+            'wholesale_prices.*.max' => 'required|integer|gt:wholesale_prices.*.min',
+            'wholesale_prices.*.price' => 'required|numeric|min:0.5',
+            'models' => [
                 'required',
                 'array',
                 new DistinctArrayKeyRule('variation_index'),
                 new ValidNumberOfProducModelsRule('variations'),
                 new ValidProducModelVariationIndexesRule('variations', 'variation_index'),
             ],
-            'products.*.models.*.sku' => 'nullable|string',
-            'products.*.models.*.price' => 'numeric|min:0.5',
-            'products.*.models.*.stock' => 'required|integer|min:0',
-            'products.*.models.*.variation_index' => 'array|max:2',
-            'products.*.models.*.variation_index.*' => 'integer|min:0',
+            'models.*.sku' => 'nullable|string',
+            'models.*.price' => 'numeric|min:0.5',
+            'models.*.stock' => 'required|integer|min:0',
+            'models.*.variation_index' => 'array|max:2',
+            'models.*.variation_index.*' => 'integer|min:0',
         ];
     }
 }

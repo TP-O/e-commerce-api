@@ -29,7 +29,7 @@ class AdminPasswordController extends PasswordController
      * @param \App\Http\Requests\Password\ForgotPasswordRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function forgotPassword(ForgotPasswordRequest $request)
+    public function forgot(ForgotPasswordRequest $request)
     {
         return $this->forgot($request, 'admins');
     }
@@ -40,7 +40,7 @@ class AdminPasswordController extends PasswordController
      * @param \App\Http\Requests\Password\ResetPasswordRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function resetPassword(ResetPasswordRequest $request)
+    public function reset(ResetPasswordRequest $request)
     {
         return $this->reset($request, 'admins');
     }

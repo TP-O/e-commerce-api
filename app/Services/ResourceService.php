@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
+use Exception;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Image;
 use Intervention\Image\Facades\Image as ImageFacade;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -11,8 +11,10 @@ class ResourceService
 {
     /**
      * The image will be loaded in order of extension's priority.
+     *
+     * @var array
      */
-    private $imageExtensions = [
+    private static $imageExtensions = [
         'jpg',
         'jpeg',
         'png',
@@ -20,6 +22,8 @@ class ResourceService
 
     /**
      * Supported image ratios.
+     *
+     * @var array
      */
     private $imageRatios = [
         [1, 1],
@@ -28,6 +32,8 @@ class ResourceService
 
     /**
      * Maximum image widths.
+     *
+     * @var array
      */
     private $maxImageWidths = [
         'md' => [
@@ -42,17 +48,32 @@ class ResourceService
 
     /**
      * Resource storage paths.
+     *
+     * @var array
      */
-    private $resourcePaths = [
+    private static $resourcePaths = [
         'image' => 'public/image/',
     ];
 
     /**
-     * Resource storage paths for demo.
+     * Get supported image extensions.
+     *
+     * @return array
      */
-    private $demoResourcePaths = [
-        'image' => 'public/image/demo',
-    ];
+    public static function getImageExtensions()
+    {
+        return self::$imageExtensions;
+    }
+
+    /**
+     * Get resource paths.
+     *
+     * @return array
+     */
+    public static function getResourcePaths()
+    {
+        return self::$resourcePaths;
+    }
 
     /**
      * Load the public image from local.
@@ -61,17 +82,19 @@ class ResourceService
      */
     public function loadImage($imageId)
     {
-        foreach ($this->imageExtensions as $extension) {
+        foreach (self::$imageExtensions as $extension) {
             try {
                 return response()->file(
-                    storage_path('app/' . $this->resourcePaths['image'] . $imageId . '.' . $extension)
+                    storage_path(
+                        'app/' . $this->resourcePaths['image'] . $imageId . '.' . $extension,
+                    ),
                 );
-            } catch (\Exception $_) {
+            } catch (Exception $_) {
                 continue;
             }
         }
 
-        throw new NotFoundHttpException('File does not exist!');
+        throw new NotFoundHttpException('Image does not exist!');
     }
 
     /**
@@ -79,34 +102,37 @@ class ResourceService
      *
      * @param string $key
      * @param int $ratio
-     * @return array<int, int>
+     * @return array
      */
     private function calculateImageSize($key, $ratioId)
     {
         return [
             $this->maxImageWidths[$key][$ratioId],
             $this->maxImageWidths[$key][$ratioId] *
-                $this->imageRatios[$ratioId][1] / $this->imageRatios[$ratioId][0]
+                $this->imageRatios[$ratioId][1] / $this->imageRatios[$ratioId][0],
         ];
     }
 
     /**
-     * Crop the image as a square.
+     * Make the image have correct ratio and size.
      *
      * @param \Intervention\Image\Image $image
-     * @param array<int, int> $ratioId
+     * @param array $ratioId
      * @return \Intervention\Image\Image
      */
-    private function processImage(Image $image, $ratioId)
+    private function processImage($image, $ratioId)
     {
         $width = $image->getWidth();
         $height = $image->getHeight();
 
         if ($width / $height === $this->imageRatios[$ratioId][0] / $this->imageRatios[$ratioId][1]) {
+            // Resize if the image to too large
             if ($width > $this->maxImageWidths['md'][$ratioId]) {
                 return $image->resize(...$this->calculateImageSize('md', $ratioId));
             }
-        } else {
+        }
+        // Handle specially if the image have incorrect ratio
+        else {
             $image->fit(...$this->calculateImageSize('md', $ratioId));
         }
 
@@ -114,7 +140,7 @@ class ResourceService
     }
 
     /**
-     * Store an image.
+     * Store the image.
      *
      * @param Illuminate\Http\UploadedFile|string $file
      * @param int $ratioId
@@ -123,17 +149,18 @@ class ResourceService
      */
     public function storeImage($file, $ratioId, $isDemo = false)
     {
-        $imageId = md5((string) time());
+        $imageId = $isDemo
+            ? 'demo-' . md5((string) time())
+            : md5((string) time());
         $extension = is_string($file) ? 'jpg' : $file->extension();
         $image = $this->processImage(ImageFacade::make($file), $ratioId)->encode($extension);
-        $resourcePaths = $isDemo ? $this->demoResourcePaths : $this->resourcePaths;
 
         Storage::put(
-            $resourcePaths['image'] . $imageId . '.' . $extension,
+            self::$resourcePaths['image'] . $imageId . '.' . $extension,
             $image->__toString(),
         );
         Storage::put(
-            $resourcePaths['image'] . $imageId . '_tn.' . $extension,
+            self::$resourcePaths['image'] . $imageId . '_tn.' . $extension,
             $image->resize($image->resize(...$this->calculateImageSize('tn', $ratioId)))
                 ->encode($extension)
                 ->__toString(),
@@ -143,17 +170,20 @@ class ResourceService
     }
 
     /**
+     * Store the images.
      *
+     * @param array $images
+     * @return array
      */
-    public function storeImages(array $inputs)
+    public function storeImages($images)
     {
         $imageIds = [];
 
-        foreach ($inputs as $input) {
-            $imageId = $this->storeImages(
-                $input['file'],
-                $input['ratio'],
-                $input['is_demo'],
+        foreach ($images as $image) {
+            $imageId = $this->storeImage(
+                $image['file'],
+                $image['ratio'],
+                $image['is_demo'] ?? false,
             );
 
             array_push($imageIds, $imageId);

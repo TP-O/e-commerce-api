@@ -23,6 +23,7 @@ return new class extends Migration
                     UPDATE product_categories
                     SET number_of_children = number_of_children + 1
                     WHERE id = NEW.parent_id;
+
                 ELSIF TG_OP = 'UPDATE' AND OLD.parent_id <> NEW.parent_id THEN
                     IF OLD.parent_id IS NOT NULL THEN
                         UPDATE product_categories
@@ -35,6 +36,7 @@ return new class extends Migration
                         SET number_of_children = number_of_children + 1
                         WHERE id = NEW.parent_id;
                     END IF;
+
                 ELSIF TG_OP = 'DELETE' AND OLD.parent_id IS NOT NULL THEN
                     UPDATE product_categories
                     SET number_of_children = number_of_children - 1

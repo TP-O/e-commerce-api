@@ -25,6 +25,7 @@ return new class extends Migration
                 ->constrained('product_categories')
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
+
             $table->unique(['parent_id', 'name']);
         });
     }

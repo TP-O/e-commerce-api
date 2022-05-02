@@ -5,18 +5,15 @@ namespace App\Http\Controllers\Api\Auth\SignIn;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\SignInRequest;
 use App\Services\AuthService;
-use App\Services\TokenService;
+use Illuminate\Http\Request;
 
 abstract class SignInController extends Controller
 {
     protected AuthService $authService;
 
-    protected TokenService $tokenService;
-
-    public function __construct(AuthService $authService, TokenService $tokenService)
+    public function __construct(AuthService $authService)
     {
         $this->authService = $authService;
-        $this->tokenService = $tokenService;
 
         $this->middleware('guest:sanctum')->only('signIn');
         $this->middleware('auth:sanctum')->only('signOut');
@@ -27,9 +24,9 @@ abstract class SignInController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function signOut()
+    public function signOut(Request $request)
     {
-        $this->tokenService->revokePAT(auth()->user());
+        $request->user()->currentAccessToken()->delete();
 
         return response()->json([
             'status' => true,
