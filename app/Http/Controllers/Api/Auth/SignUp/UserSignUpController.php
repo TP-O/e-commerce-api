@@ -4,21 +4,18 @@ namespace App\Http\Controllers\Api\Auth\SignUp;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\SignUpUserRequest;
+use App\Models\Account\User\Profile;
+use App\Models\Account\User\User;
 use App\Services\AuthService;
-use App\Services\ProfileService;
 use App\Services\ResourceService;
-use App\Services\TokenService;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Laravel\Socialite\Facades\Socialite;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class UserSignUpController extends Controller
 {
     private AuthService $authService;
-
-    private TokenService $tokenService;
-
-    private ProfileService $profileService;
 
     private ResourceService $resourceService;
 
@@ -30,13 +27,9 @@ class UserSignUpController extends Controller
 
     public function __construct(
         AuthService $authService,
-        TokenService $tokenService,
-        ProfileService $profileService,
         ResourceService $resourceService,
     ) {
         $this->authService = $authService;
-        $this->tokenService = $tokenService;
-        $this->profileService = $profileService;
         $this->resourceService = $resourceService;
 
         $this->middleware('guest:sanctum');
@@ -44,19 +37,18 @@ class UserSignUpController extends Controller
     }
 
     /**
-     * Create an user account.
+     * Create the user account.
      *
      * @param  \App\Http\Requests\Auth\SignUpUserRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function signUp(SignUpUserRequest $request)
     {
-        $signUpInput = $request->validated();
+        $user = $this->authService->createUser($request->validated());
+        $token = $user->createToken('')->plainTextToken;
 
-        $user = $this->authService->createUser($signUpInput);
-        $token = $this->tokenService->createPAT($user);
-
-        $this->profileService->createUserProfile($user->id, [
+        Profile::create([
+            'user_id' => $user->id,
             'username' => $user->username,
         ]);
 
@@ -75,7 +67,7 @@ class UserSignUpController extends Controller
     public function OAuthRedirect(string $driver)
     {
         if (!in_array($driver, $this->supportedDriver)) {
-            throw new NotFoundHttpException('This OAuth is not supported yet!');
+            throw new BadRequestHttpException('This OAuth is not supported yet!');
         }
 
         return Socialite::driver($driver)->redirect();
@@ -84,28 +76,31 @@ class UserSignUpController extends Controller
     /**
      * Handle the OAuth callback.
      *
+     * @param \Illuminate\Http\Request $request
+     * @param string $driver
      * @return \Illuminate\Http\JsonResponse
      */
-    public function OAuthCallback(string $driver)
+    public function OAuthCallback(Request $request, string $driver)
     {
         if (!in_array($driver, $this->supportedDriver)) {
-            throw new NotFoundHttpException('This OAuth is not supported yet');
+            throw new BadRequestHttpException('This OAuth is not supported yet');
         }
 
         $oauthUser = Socialite::driver($driver)->user();
-        $user = $this->authService->existEmail($oauthUser->getEmail());
+        $user = User::where('email', $oauthUser->getEmail())->first();
 
         if (is_null($user)) {
             $user = $this->authService->createOAuthUser($oauthUser->getEmail());
-            $imageId = $this->resourceService->storeImage($oauthUser->getAvatar(), 1);
+            $imageId = $this->resourceService->storeImage($oauthUser->getAvatar(), 0);
 
-            $this->profileService->createUserProfile($user->id, [
+            Profile::create([
+                'user_id' => $user->id,
                 'username' => $user->name,
                 'avatar_image' => $imageId,
             ]);
         }
 
-        $token = $this->tokenService->createPAT($user);
+        $token = $user->createToken('')->plainTextToken;
 
         return response()->json([
             'status' => true,

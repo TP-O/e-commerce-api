@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Admin\Admin;
-use App\Models\User\User;
+use App\Models\Account\Admin\Admin;
+use App\Models\Account\User\User;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -13,15 +13,13 @@ class AuthService
      * Create an user.
      *
      * @param array $input
-     * @return \App\Models\User\User
+     * @return \App\Models\Account\User\User
      */
     public function createUser($input)
     {
         $input['password'] = Hash::make($input['password'], ['rounds' => 10]);
 
-        $user = new User($input);
-
-        $user->save();
+        $user = User::create($input);
 
         return $user;
     }
@@ -30,7 +28,7 @@ class AuthService
      * Create an OAuth user.
      *
      * @param string $email
-     * @return \App\Models\User\User
+     * @return \App\Models\Account\User\User
      */
     public function createOAuthUser($email)
     {
@@ -48,20 +46,9 @@ class AuthService
     }
 
     /**
-     * Get the user if exist.
-     *
-     * @param string $email
-     * @return \App\Models\User\User|null
-     */
-    public function existEmail($email)
-    {
-        return User::where('email', $email)->first();
-    }
-
-    /**
      * Validate the user's password.
      *
-     * @param \App\Models\User\User|\App\Models\Admin\Admin|null $user
+     * @param \App\Models\Account\User\User|\App\Models\Account\Admin\Admin|null $user
      * @param string $password
      * @return void
      *
@@ -82,7 +69,7 @@ class AuthService
      * Authenticate the user.
      *
      * @param array $credentials
-     * @return \App\Models\User\User
+     * @return \App\Models\Account\User\User
      */
     public function authenticateUser($credentials)
     {
@@ -99,7 +86,7 @@ class AuthService
      * Authenticate the admin.
      *
      * @param array $credentials
-     * @return \App\Models\Admin\Admin
+     * @return \App\Models\Account\Admin\Admin
      */
     public function authenticateAdmin($credentials)
     {

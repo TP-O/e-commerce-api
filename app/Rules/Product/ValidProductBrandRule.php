@@ -1,0 +1,81 @@
+<?php
+
+namespace App\Rules\Product;
+
+use App\Enums\ProductBrand;
+use App\Models\Product\ProductBrandProductCategory;
+use Illuminate\Contracts\Validation\DataAwareRule;
+use Illuminate\Contracts\Validation\Rule;
+
+class ValidProductBrandRule implements Rule, DataAwareRule
+{
+    /**
+     * All of the data under validation.
+     *
+     * @var array
+     */
+    protected $data = [];
+
+    /**
+     * Name of key containing list of category ids.
+     */
+    private $categoryPathKey = '';
+
+    /**
+     * Create a new rule instance.
+     *
+     * @return void
+     */
+    public function __construct(string $categoryPathKey)
+    {
+        $this->categoryPathKey = $categoryPathKey;
+    }
+
+    /**
+     * Set the data under validation.
+     *
+     * @param  array  $data
+     * @return $this
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
+    /**
+     * Determine if the validation rule passes.
+     *
+     * @param  string  $attribute
+     * @param  mixed  $value
+     * @return bool
+     */
+    public function passes($attribute, $value)
+    {
+        if (ProductBrand::from($value) === ProductBrand::NoBrand) {
+            return true;
+        }
+
+        $categoryIds = $this->data[$this->categoryPathKey] ?? [];
+
+        if (count($categoryIds) === 0) {
+            return false;
+        }
+
+        // Brand must be belong to at least one category
+        return ProductBrandProductCategory::where('brand_id', $value)
+            ->whereIn('category_id', $categoryIds)
+            ->count() > 0;
+    }
+
+    /**
+     * Get the validation error message.
+     *
+     * @return string
+     */
+    public function message()
+    {
+        return 'The :attribute field is not compatible with the categories.';
+    }
+}

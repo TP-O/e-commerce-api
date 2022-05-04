@@ -2,52 +2,23 @@
 
 namespace App\Http\Controllers\Api\Account\Address;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Address\CreateUserAddressRequest;
-use App\Http\Requests\Address\DeleteUserAddressRequest;
-use App\Http\Requests\Address\UpdateUserAddressRequest;
-use App\Models\User\Address;
-use App\Services\AddressService;
+use App\Http\Requests\Account\Address\CreateUserAddressRequest;
+use App\Http\Requests\Account\Address\UpdateUserAddressRequest;
 use Illuminate\Http\Response;
 
-class UserAddressController extends Controller
+class UserAddressController extends AddressController
 {
-    private AddressService $addressService;
-
-    public function __construct(AddressService $addressService)
-    {
-        $this->addressService = $addressService;
-
-        $this->middleware('auth:sanctum');
-    }
-
     /**
-     * Get all addresses of the user.
+     * Create the user's address.
      *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function show()
-    {
-        $addresses = $this->addressService->getUserAddresses(
-            auth()->user()->id,
-        );
-
-        return response()->json([
-            'status' => true,
-            'data' => $addresses,
-        ]);
-    }
-
-    /**
-     * Store an user's address.
-     *
-     * @param \App\Http\Requests\Address\CreateUserAddressRequest $request
+     * @param \App\Http\Requests\Account\Address\CreateUserAddressRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function create(CreateUserAddressRequest $request)
     {
-        $address = $this->addressService->createUserAddress(
-            auth()->user()->id,
+        $address = $this->addressService->create(
+            $request->user()->id,
+            get_class($request->user()),
             $request->validated(),
         );
 
@@ -60,40 +31,22 @@ class UserAddressController extends Controller
     /**
      * Update the user's address.
      *
-     * @param \App\Http\Requests\Address\UpdateUserAddressRequest $request
+     * @param \App\Http\Requests\Account\Address\UpdateUserAddressRequest $request
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(UpdateUserAddressRequest $request, $id)
+    public function update(UpdateUserAddressRequest $request, int $id)
     {
-        $updateUserAddressInput = $request->validated();
-
-        $this->addressService->updateUserAddress(
-            auth()->user()->id,
+        $this->addressService->update(
+            $request->user()->id,
+            get_class($request->user()),
             $id,
-            $updateUserAddressInput,
+            $request->validated(),
         );
 
         return response()->json([
             'status' => true,
             'data' =>  'Address has been updated!',
-        ]);
-    }
-
-    /**
-     * Delete the user's address.
-     *
-     * @param \App\Http\Requests\Address\DeleteUserAddressRequest $request
-     * @param \App\Models\User\Address $address
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function delete(DeleteUserAddressRequest $request, Address $address)
-    {
-        $address->delete();
-
-        return response()->json([
-            'status' => true,
-            'data' =>  'Address has been deleted!',
         ]);
     }
 }

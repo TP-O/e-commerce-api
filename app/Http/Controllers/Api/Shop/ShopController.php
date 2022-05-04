@@ -8,7 +8,6 @@ use App\Http\Requests\Shop\UpdateShopRequest;
 use App\Models\Shop\Shop;
 use App\Services\ShopService;
 use Illuminate\Http\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ShopController extends Controller
 {
@@ -18,18 +17,26 @@ class ShopController extends Controller
     {
         $this->shopService = $shopService;
 
-        $this->middleware('auth:sanctum')->except('get');
+        $this->middleware('auth:sanctum')->except([
+            'get',
+            'publishedProducts',
+        ]);
     }
 
     /**
-     * Get the shop by id.
+     * Get the shop by id or slug.
      *
-     * @param int $id
+     * @param int|string $idOrSlug
      * @return \Illuminate\Http\JsonResponse
      */
-    public function get($id)
+    public function get($idOrSlug)
     {
-        $shop = Shop::find($id)->with(['statistic', 'media'])->get();
+        $shop = Shop::where('id', (int) $idOrSlug)
+            ->orWhere('slug', $idOrSlug)
+            ->with('statistic')
+            ->firstOrFail();
+
+        unset($shop->statistic->all_product_count);
 
         return response()->json([
             'status' => true,
@@ -38,30 +45,69 @@ class ShopController extends Controller
     }
 
     /**
-     * Get the owned shop.
+     * Get published products of the shop.
      *
+     * @param int}string $idOrSlug
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getMyShop()
+    public function publishedProducts($idOrSlug)
     {
+        $shop = Shop::where('id', (int) $idOrSlug)
+            ->orWhere('slug', $idOrSlug)
+            ->firstOrFail();
+
+        $publishedProducts = $shop
+            ->publishedProducts()
+            ->paginate(10);
+
         return response()->json([
             'status' => true,
-            'data' => auth()->user()->shop?->with(['statistic', 'media'])->get(),
+            'data' => $publishedProducts,
         ]);
     }
 
     /**
-     * Create a shop.
+     * Get products of the current shop.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function products()
+    {
+        $products = request()
+            ->user()
+            ->shop
+            ->products()
+            ->paginate(10);
+
+        return response()->json([
+            'status' => true,
+            'data' => $products ?? [],
+        ]);
+    }
+
+    /**
+     * Get the owned shop.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function mine()
+    {
+        $shop = request()->user()->shop?->with('statistic')->get();
+
+        return response()->json([
+            'status' => true,
+            'data' => $shop,
+        ]);
+    }
+
+    /**
+     * Create the shop.
      *
      * @param \App\Http\Requests\Shop\CreateShopRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function create(CreateShopRequest $request)
     {
-        if (!is_null(auth()->user()->shop)) {
-            throw new BadRequestHttpException('Shop already created!');
-        }
-
         $shop = $this->shopService->create(
             auth()->user()->id,
             $request->validated(),
@@ -82,12 +128,8 @@ class ShopController extends Controller
      */
     public function update(UpdateShopRequest $request)
     {
-        if (is_null(auth()->user()->shop)) {
-            throw new BadRequestHttpException('Create your shop first!');
-        }
-
         $this->shopService->update(
-            auth()->user()->id,
+            $request->user()->id,
             $request->validated(),
         );
 

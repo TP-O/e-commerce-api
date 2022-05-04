@@ -20,12 +20,12 @@ class ResourceController extends Controller
     /**
      * Load the public image from local.
      *
-     * @param string $imageId
+     * @param string $id
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function loadImage($imageId)
+    public function loadImage(string $id)
     {
-        return $this->resourceService->loadImage($imageId);
+        return $this->resourceService->loadImage($id);
     }
 
     /**
@@ -36,17 +36,21 @@ class ResourceController extends Controller
      */
     public function uploadImage(UploadImageRequest $request)
     {
-        $uploadImageInput = $request->validated();
+        $imageData = [];
 
-        $imageId = $this->resourceService->storeImage(
-            $uploadImageInput['file'],
-            $uploadImageInput['ratio'],
-        );
+        foreach ($request->input('images') as $key => $image) {
+            array_push($imageData, [
+                ...$image,
+                'file' => $request->file('images')[$key]['file'],
+            ]);
+        }
+
+        $imageIds = $this->resourceService->storeImages($imageData);
 
         return response()->json([
             'status' => true,
             'data' => [
-                'image_id' => $imageId,
+                'image_ids' => $imageIds,
             ],
         ]);
     }

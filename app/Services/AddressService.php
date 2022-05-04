@@ -2,115 +2,96 @@
 
 namespace App\Services;
 
-use App\Enums\UserAddressType;
-use App\Models\User\Address;
-use App\Models\User\AddressLink;
+use App\Enums\AddressType;
+use App\Models\Address;
+use App\Models\Addressable;
 use Illuminate\Support\Arr;
 
 class AddressService
 {
     /**
-     * Get all addresses of the user.
+     * Create list of address type's ids.
      *
-     * @param int $userId
-     * @return Illuminate\Support\Collection
-     */
-    public function getUserAddresses($userId)
-    {
-        $addresses = Address::select('user_addresses.*')
-            ->distinct('id')
-            ->join(
-                'user_address_links',
-                'user_addresses.id',
-                'user_address_links.address_id'
-            )
-            ->where('user_id', $userId)
-            ->with('types')
-            ->get();
-
-        return $addresses;
-    }
-
-    /**
-     * Create list of address type id.
-     *
-     * @param array $address
+     * @param array $addressTypes
      * @return array
      */
-    private function createAddressTypeIds($address)
+    private function createAddressTypeIds($addressTypes)
     {
         $typeIds = [];
 
-        empty($address['is_default_address'])
-            ?: array_push($typeIds, UserAddressType::Default);
-        empty($address['is_return_address'])
-            ?: array_push($typeIds, UserAddressType::Return);
-        empty($address['is_pickup_address'])
-            ?: array_push($typeIds, UserAddressType::Pickup);
+        empty($addressTypes['is_default_address'])
+            ?: array_push($typeIds, AddressType::Default);
+        empty($addressTypes['is_return_address'])
+            ?: array_push($typeIds, AddressType::Return);
+        empty($addressTypes['is_pickup_address'])
+            ?: array_push($typeIds, AddressType::Pickup);
 
         return $typeIds;
     }
 
     /**
-     * Bind the address with specified types.
+     * Bind the address with specific types.
      *
-     * @param int $userId
-     * @param array $address
+     * @param int $ownerId
+     * @param string $ownerModel
+     * @param array $addressData
      * @return bool
      */
-    private function linkUserAddresses($userId, $address)
+    private function bindAddressTypes($ownerId, $ownerModel, $addressData)
     {
-        $newLinks = empty($address['is_new'])
+        $newBinds = empty($addressData['is_new'])
             ? []
             : [[
-                'user_id' => $userId,
-                'address_id' => $address['id'],
+                'addressable_type' => $ownerModel,
+                'addressable_id' => $ownerId,
+                'address_id' => $addressData['id'],
                 'type_id' => null,
             ]];
 
-        $typeIds = $this->createAddressTypeIds($address);
+        $typeIds = $this->createAddressTypeIds($addressData);
 
         if (!empty($typeIds)) {
-            // Delete the old links between addresses and types
-            AddressLink::where('user_id', $userId)
+            // Delete the old binds between addresses and their types
+            Addressable::where([
+                ['addressable_type', $ownerModel],
+                ['addressable_id', $ownerId],
+            ])
                 ->whereIn('type_id', $typeIds)
                 ->delete();
 
             array_push(
-                $newLinks,
-                ...array_map(function ($typeId) use ($userId, $address) {
+                $newBinds,
+                ...array_map(function ($typeId) use ($ownerId, $ownerModel, $addressData) {
                     return [
-                        'user_id' => $userId,
-                        'address_id' => $address['id'],
+                        'addressable_type' => $ownerModel,
+                        'addressable_id' => $ownerId,
+                        'address_id' => $addressData['id'],
                         'type_id' => $typeId,
                     ];
                 }, $typeIds)
             );
         }
 
-        return AddressLink::insert($newLinks);
+        return Addressable::insert($newBinds);
     }
 
     /**
-     * Create an user's address.
+     * Create the address.
      *
-     * @param int $userId
-     * @param array $input
-     * @return \App\Models\User\Address
+     * @param int $ownerId
+     * @param string $ownerModel
+     * @param array $addressData
+     * @return \App\Models\Address
      */
-    public function createUserAddress($userId, $input)
+    public function create($ownerId, $ownerModel, $addressData)
     {
-        $address = new Address([
-            ...$input,
-            'user_id' => $userId,
-        ]);
+        $address = Address::create($addressData);
 
-        $address->save();
-
-        $this->linkUserAddresses(
-            $userId,
+        $this->bindAddressTypes(
+            $ownerId,
+            $ownerModel,
             [
-                ...$input,
+                ...$addressData,
                 'id' => $address->id,
                 'is_new' => true,
             ]
@@ -120,25 +101,33 @@ class AddressService
     }
 
     /**
-     * Update the user's address.
+     * Update the address.
      *
-     * @param int $userId
+     * @param int $ownerId
+     * @param string $ownerModel
      * @param int $addressId
-     * @param array $input
+     * @param array $addressData
      * @return bool
      */
-    public function updateUserAddress($userId, $addressId, $input)
+    public function update($ownerId, $ownerModel, $addressId, $addressData)
     {
-        $this->linkUserAddresses($userId, [
-            ...$input,
-            'id' => $addressId,
-        ]);
+        $address = Address::findOrFail($addressId);
 
-        return Address::where('id', $addressId)
-            ->update(Arr::except($input, [
-                'is_pickup_address',
-                'is_return_address',
-                'is_default_address',
-            ]));
+        $address->update(Arr::except($addressData, [
+            'is_pickup_address',
+            'is_return_address',
+            'is_default_address',
+        ]));
+
+        $this->bindAddressTypes(
+            $ownerId,
+            $ownerModel,
+            [
+                ...$addressData,
+                'id' => $addressId,
+            ]
+        );
+
+        return;
     }
 }

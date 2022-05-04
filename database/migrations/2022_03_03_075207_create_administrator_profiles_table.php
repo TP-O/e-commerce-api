@@ -23,8 +23,8 @@ return new class extends Migration
             $table->foreignId('admin_id')
                 ->primary()
                 ->constrained('administrators')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
         });
     }
 
