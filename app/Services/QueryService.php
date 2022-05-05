@@ -13,11 +13,12 @@ class QueryService
      * @param string $table
      * @param array $values
      * @param string $primaryKey
+     * @return int
      */
-    public function updateMultipleRecords($table, $values, $primaryKey = 'id')
+    public function updateMultipleRecords($table, $values, $primaryKey = 'id', callable $callback = null)
     {
         if (count($values) === 0) {
-            throw new Error('The $values must have at least one element.');
+            return 0;
         }
 
         $tempTable = 'temp_tb';
@@ -25,7 +26,11 @@ class QueryService
         $changes = join(',', array_map(function ($column) use ($tempTable) {
             return "$column = $tempTable.$column";
         }, array_keys($values[0])));
-        $newValues = join(',', array_map(function ($value) {
+        $newValues = join(',', array_map(function ($value) use ($callback) {
+            if (!is_null($callback)) {
+                $value = $callback($value);
+            }
+
             $newValue = array_map(function ($val) {
                 return is_string($val)
                     ? '\'' . str_replace('\'', '\'\'', $val) . '\''

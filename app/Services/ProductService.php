@@ -10,6 +10,13 @@ use Illuminate\Support\Arr;
 
 class ProductService
 {
+    private QueryService $queryService;
+
+    public function __construct(QueryService $queryService)
+    {
+        $this->queryService = $queryService;
+    }
+
     /**
      * Create the product.
      *
@@ -37,13 +44,7 @@ class ProductService
             ),
         ]);
 
-        $product->models()->saveMany(
-            array_map(function ($model) use ($product) {
-                $model['product_id'] = $product->id;
-
-                return new ProductModel($model);
-            }, $productData['models'])
-        );
+        $this->syncModels($product, $productData['models'], true);
 
         $product->wholesalePrices()->saveMany(
             array_map(function ($price) use ($product) {
@@ -57,6 +58,68 @@ class ProductService
         $product->categories()->attach($productData['category_path']);
 
         return $product->id;
+    }
+
+    /**
+     * Add new product models.
+     *
+     * @param \App\Models\Product\Product $product
+     * @param array $producyModelsData
+     * @return void
+     */
+    private function attachModels($product, $productModelsData)
+    {
+        $product->models()->saveMany(
+            array_map(function ($model) {
+                return new ProductModel($model);
+            }, $productModelsData),
+        );
+
+        return;
+    }
+
+    /**
+     * Synchronize product models.
+     *
+     * @param \App\Models\Product\Product $product
+     * @param array $producyModelsData
+     * @return void
+     */
+    private function syncModels($product, $productModelsData)
+    {
+        $retainingModelIds = [];
+        $createdModels = [];
+        $updatedModels = [];
+
+        foreach ($productModelsData as $model) {
+            $model['product_id'] = $product->id;
+
+            if (isset($model['id'])) {
+                array_push($retainingModelIds, $model['id']);
+                array_push($updatedModels, $model);
+            } else {
+                array_push($createdModels, $model);
+            }
+        }
+
+        ProductModel::where('product_id', $product->id)
+            ->whereNotIn('id', $retainingModelIds)
+            ->delete();
+
+        $this->attachModels($product, $createdModels);
+
+        $this->queryService->updateMultipleRecords(
+            'product_models',
+            $updatedModels,
+            'id',
+            function ($model) {
+                $model['variation_index'] = json_encode($model['variation_index']);
+
+                return $model;
+            },
+        );
+
+        return;
     }
 
     /**
@@ -88,14 +151,7 @@ class ProductService
             ),
         ]);
 
-        $product->models()->delete();
-        $product->models()->saveMany(
-            array_map(function ($model) use ($product) {
-                $model['product_id'] = $product['id'];
-
-                return new ProductModel($model);
-            }, $productData['models'] ?? [])
-        );
+        $this->syncModels($product, $productData['models']);
 
         $product->wholesalePrices()->delete();
         $product->wholesalePrices()->saveMany(

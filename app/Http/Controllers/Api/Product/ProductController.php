@@ -61,7 +61,7 @@ class ProductController extends Controller
     public function create(CreateProductRequest $request)
     {
         $productId = $this->productService->create(
-            $request->all(),
+            $request->validated(),
         );
 
         return response()->json([
@@ -84,7 +84,7 @@ class ProductController extends Controller
     {
         $this->productService->update(
             $product->id,
-            $request->all(),
+            $request->validated(),
         );
 
         return response()->json([

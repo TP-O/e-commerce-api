@@ -49,7 +49,7 @@ class CreateProductRequest extends CreateOrUpdateProductRequest
             ],
             'attributes.*.attribute_id' => 'integer|min:1',
             'attributes.*.value' => 'required|string',
-            'attributes.*.unit' => 'string|nullable',
+            'attributes.*.unit' => 'nullable|string',
             'variations' => 'array|max:2',
             'variations.*.name' => 'required|string|max:14|distinct:strict',
             'variations.*.options' => 'required|array|min:1',

@@ -18,10 +18,6 @@ class ProductModel extends Model
         'is_default',
     ];
 
-    protected $hidden = [
-        'id',
-    ];
-
     protected $casts = [
         'variation_index' => 'array',
     ];
