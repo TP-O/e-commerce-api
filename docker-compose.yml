@@ -3,7 +3,7 @@ version: "3.8"
 services:
     api:
         build:
-            context: .
+            context: ./.docker
         image: e-commerce-api
         volumes:
             - ./:/var/www/html

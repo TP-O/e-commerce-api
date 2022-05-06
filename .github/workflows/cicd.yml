@@ -1,0 +1,158 @@
+name: CICD
+
+on:
+  push:
+    branches:
+      - 2.x.x
+      - master
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    branches:
+      - 2.x.x
+    paths-ignore:
+      - '**.md'
+
+env:
+  GHCR_REGISTRY: ghcr.io
+  BRANCH: ${{ github.ref }}
+  IMAGE: ${{ github.repository }}
+  COMMIT_SHA: ${{ github.sha }}
+  COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+
+jobs:
+  php-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+
+      - name: Use phplint
+        uses: overtrue/phplint@8.1
+        with:
+          path: .
+          options: --exclude=*.log
+
+  # unit-test:
+  #   needs:
+  #     - php-lint
+
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Check out repo
+  #       uses: actions/checkout@v2
+
+  #     - name: Install
+  #       run: composer install
+
+  #     - name: Create .env file
+  #       run: cp .env.test .env
+
+  #     - name: Build containers
+  #       run: docker-compose -f docker-compose.test.yml up -d
+
+  #     - name: Unit test
+  #       run: docker-compose -f docker-compose.test.yml exec -T api php artisan test tests/Unit
+
+  # feature-test:
+  #   needs:
+  #     - php-lint
+
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Check out repo
+  #       uses: actions/checkout@v2
+
+  #     - name: Install
+  #       run: composer install
+
+  #     - name: Create .env file
+  #       run: cp .env.test .env
+
+  #     - name: Build containers
+  #       run: docker-compose -f docker-compose.test.yml up -d
+
+  #     - name: Unit test
+  #       run: docker-compose -f docker-compose.test.yml exec -T api php artisan test tests/Feature
+
+  build-image:
+    # needs:
+    #   - unit-test
+    #   - feature-test
+    needs:
+      - php-lint
+
+    if: ${{ github.event_name == 'push' }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.GHCR_REGISTRY }}
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Create tags
+        id: tags
+        run: |
+          if [ "${{ env.BRANCH }}" == "refs/heads/2.x.x" ]; then
+            echo "::set-output name=tags::\
+            ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE }}:2.x.x-latest, \
+            ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE }}:2.x.x-${{ env.COMMIT_SHA }}"
+          else
+            echo "::set-output name=tags::\
+            ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE }}:latest,\
+            ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE }}:${{ env.COMMIT_MESSAGE }}"
+          fi
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: .docker/Dockerfile
+          push: true
+          tags: ${{ steps.tags.outputs.tags }}
+
+  # deploy-staging:
+  #   needs:
+  #     - build-image
+
+  #   if: ${{ github.ref == 'refs/heads/dev' }}
+
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Deploy
+  #       uses: actions-hub/kubectl@master
+  #       env:
+  #         KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+  #       with:
+  #         args: |
+  #           set image deployment/api api=${{ env.GHCR_REGISTRY }}/${{ env.IMAGE }}:dev-${{ env.COMMIT_SHA }}
+
+  # deploy-production:
+  #   needs:
+  #     - build-image
+
+  #   if: ${{ github.ref == 'refs/heads/master' }}
+
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Deploy
+  #       uses: actions-hub/kubectl@master
+  #       env:
+  #         KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+  #       with:
+  #         args: echo "Not yet"
