@@ -34,54 +34,7 @@ jobs:
           path: .
           options: --exclude=*.log
 
-  # unit-test:
-  #   needs:
-  #     - php-lint
-
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Check out repo
-  #       uses: actions/checkout@v2
-
-  #     - name: Install
-  #       run: composer install
-
-  #     - name: Create .env file
-  #       run: cp .env.test .env
-
-  #     - name: Build containers
-  #       run: docker-compose -f docker-compose.test.yml up -d
-
-  #     - name: Unit test
-  #       run: docker-compose -f docker-compose.test.yml exec -T api php artisan test tests/Unit
-
-  # feature-test:
-  #   needs:
-  #     - php-lint
-
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Check out repo
-  #       uses: actions/checkout@v2
-
-  #     - name: Install
-  #       run: composer install
-
-  #     - name: Create .env file
-  #       run: cp .env.test .env
-
-  #     - name: Build containers
-  #       run: docker-compose -f docker-compose.test.yml up -d
-
-  #     - name: Unit test
-  #       run: docker-compose -f docker-compose.test.yml exec -T api php artisan test tests/Feature
-
   build-image:
-    # needs:
-    #   - unit-test
-    #   - feature-test
     needs:
       - php-lint
 
@@ -120,9 +73,41 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: .docker/Dockerfile
+          file: Dockerfile
           push: true
           tags: ${{ steps.tags.outputs.tags }}
+
+  # build-image:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Check out repo
+  #       uses: actions/checkout@v2
+
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v1
+
+  #     - name: Log in to the Container registry
+  #       uses: docker/login-action@v1
+  #       with:
+  #         registry: ${{ env.GHCR_REGISTRY }}
+  #         username: ${{ secrets.GHCR_USERNAME }}
+  #         password: ${{ secrets.GHCR_PERSONAL_ACCESS_TOKEN }}
+
+  #     - name: Create tags
+  #       id: tags
+  #       run: |
+  #         echo "::set-output name=tags::\
+  #           ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE }}:2.x.x-latest, \
+  #           ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE }}:2.x.x-${{ env.COMMIT_SHA }}"
+
+  #     - name: Build and push Docker image
+  #       uses: docker/build-push-action@v2
+  #       with:
+  #         context: .
+  #         file: Dockerfile
+  #         push: true
+  #         tags: ${{ steps.tags.outputs.tags }}
 
   # deploy-staging:
   #   needs:

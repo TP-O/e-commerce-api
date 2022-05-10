@@ -1,5 +1,9 @@
 /.vscode
 /.docker
 /.git
+/.infrastructure
+/.vscode
 /vendor
 /docs
+!/.docker/api/entrypoint.sh
+!/.docker/api/nginx/default.conf

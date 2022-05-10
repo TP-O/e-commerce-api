@@ -3,32 +3,19 @@ version: "3.8"
 services:
     api:
         build:
-            context: ./.docker
+            context: .
         image: e-commerce-api
-        volumes:
-            - ./:/var/www/html
-        networks:
-            - webserver-network
-            - postgres-network
-        depends_on:
-            - postgres
-        restart: unless-stopped
-
-    webserver:
-        image: nginx:1.21.3-alpine
-        working_dir: /var/www/html
-        volumes:
-            - ./public:/var/www/html/public
-            - ./.docker/nginx/ssl:/etc/nginx/ssl
-            - ./.docker/nginx/conf:/etc/nginx/conf.d
-            - ./.docker/nginx/entrypoint.sh:/docker-entrypoint.d/entrypoint.sh
         ports:
             - 8080:80
             - 443:443
+        volumes:
+            - ./:/var/www/html
+            - ./.docker/api/nginx/ssl:/etc/nginx/ssl
+            - ./.docker/api/nginx/default.conf:/etc/nginx/conf.d/default.conf
         networks:
-            - webserver-network
+            - postgres-network
         depends_on:
-            - api
+            - postgres
         restart: unless-stopped
 
     postgres:
@@ -54,5 +41,4 @@ services:
         restart: unless-stopped
 
 networks:
-    webserver-network:
     postgres-network:

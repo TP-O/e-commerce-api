@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-ingress-controller
+  labels:
+    app: nginx-ingress
+    component: ingress
+spec:
+  selector:
+    matchLabels:
+      app: nginx-ingress
+      component: ingress
+  template:
+    metadata:
+      labels:
+        app: nginx-ingress
+        component: ingress
+    spec:
+      serviceAccountName: nginx-ingress
+      containers:
+        - name: nginx-ingress-controller
+          image: nginx/nginx-ingress:2.0.3-alpine
+          ports:
+            - name: http
+              containerPort: 80
+            - name: https
+              containerPort: 443
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          args:
+            - -enable-custom-resources=false
+            - -ingress-class=nginx-ingress
+            - -nginx-configmaps=$(POD_NAMESPACE)/nginx-ingress-config
+            - -default-server-tls-secret=$(POD_NAMESPACE)/ingress-tls-secret
+          resources:
+            limits:
+              cpu: 125m
+              memory: 128Mi

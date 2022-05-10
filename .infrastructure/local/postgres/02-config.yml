@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  labels:
+    app: postgres
+    component: database
+data:
+  POSTGRES_DB: "ww_db"
+  POSTGRES_USER: "ww_username"
