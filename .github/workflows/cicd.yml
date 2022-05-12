@@ -6,11 +6,19 @@ on:
       - 2.x.x
       - master
     paths-ignore:
+      - '.vscode/**'
+      - '.infrastructure/**'
+      - 'storage/**'
+      - '.editorconfig'
       - '**.md'
   pull_request:
     branches:
       - 2.x.x
     paths-ignore:
+      - '.vscode/**'
+      - '.infrastructure/**'
+      - 'storage/**'
+      - '.editorconfig'
       - '**.md'
 
 env:
@@ -77,67 +85,31 @@ jobs:
           push: true
           tags: ${{ steps.tags.outputs.tags }}
 
-  # build-image:
-  #   runs-on: ubuntu-latest
+  deploy-dev:
+    needs:
+      - build-image
 
-  #   steps:
-  #     - name: Check out repo
-  #       uses: actions/checkout@v2
+    if: ${{ github.ref == 'refs/heads/2.x.x' }}
 
-  #     - name: Set up Docker Buildx
-  #       uses: docker/setup-buildx-action@v1
+    runs-on: ubuntu-latest
 
-  #     - name: Log in to the Container registry
-  #       uses: docker/login-action@v1
-  #       with:
-  #         registry: ${{ env.GHCR_REGISTRY }}
-  #         username: ${{ secrets.GHCR_USERNAME }}
-  #         password: ${{ secrets.GHCR_PERSONAL_ACCESS_TOKEN }}
+    steps:
+      - name: Deploy
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+        with:
+          args: |
+            set image deployment/api api=${{ env.GHCR_REGISTRY }}/${{ env.IMAGE }}:2.x.x-${{ env.COMMIT_SHA }}
 
-  #     - name: Create tags
-  #       id: tags
-  #       run: |
-  #         echo "::set-output name=tags::\
-  #           ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE }}:2.x.x-latest, \
-  #           ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE }}:2.x.x-${{ env.COMMIT_SHA }}"
+  deploy-production:
+    needs:
+      - build-image
 
-  #     - name: Build and push Docker image
-  #       uses: docker/build-push-action@v2
-  #       with:
-  #         context: .
-  #         file: Dockerfile
-  #         push: true
-  #         tags: ${{ steps.tags.outputs.tags }}
+    if: ${{ github.ref == 'refs/heads/master' }}
 
-  # deploy-staging:
-  #   needs:
-  #     - build-image
+    runs-on: ubuntu-latest
 
-  #   if: ${{ github.ref == 'refs/heads/dev' }}
-
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Deploy
-  #       uses: actions-hub/kubectl@master
-  #       env:
-  #         KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-  #       with:
-  #         args: |
-  #           set image deployment/api api=${{ env.GHCR_REGISTRY }}/${{ env.IMAGE }}:dev-${{ env.COMMIT_SHA }}
-
-  # deploy-production:
-  #   needs:
-  #     - build-image
-
-  #   if: ${{ github.ref == 'refs/heads/master' }}
-
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Deploy
-  #       uses: actions-hub/kubectl@master
-  #       env:
-  #         KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-  #       with:
-  #         args: echo "Not yet"
+    steps:
+      - name: Deploy
+        run: echo "Not yet"
