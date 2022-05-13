@@ -86,7 +86,7 @@ class ResourceService
             try {
                 return response()->file(
                     storage_path(
-                        'app/' . $this->resourcePaths['image'] . $imageId . '.' . $extension,
+                        'app/' . self::$resourcePaths['image'] . $imageId . '.' . $extension,
                     ),
                 );
             } catch (Exception $_) {
