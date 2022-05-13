@@ -1,0 +1,115 @@
+name: CICD
+
+on:
+  push:
+    branches:
+      - 2.x.x
+      - master
+    paths-ignore:
+      - '.vscode/**'
+      - '.infrastructure/**'
+      - 'storage/**'
+      - '.editorconfig'
+      - '**.md'
+  pull_request:
+    branches:
+      - 2.x.x
+    paths-ignore:
+      - '.vscode/**'
+      - '.infrastructure/**'
+      - 'storage/**'
+      - '.editorconfig'
+      - '**.md'
+
+env:
+  GHCR_REGISTRY: ghcr.io
+  BRANCH: ${{ github.ref }}
+  IMAGE: ${{ github.repository }}
+  COMMIT_SHA: ${{ github.sha }}
+  COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+
+jobs:
+  php-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+
+      - name: Use phplint
+        uses: overtrue/phplint@8.1
+        with:
+          path: .
+          options: --exclude=*.log
+
+  build-image:
+    needs:
+      - php-lint
+
+    if: github.event_name == 'push'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.GHCR_REGISTRY }}
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Create tags
+        id: tags
+        run: |
+          if [ "${{ env.BRANCH }}" == "refs/heads/2.x.x" ]; then
+            echo "::set-output name=tags::\
+            ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE }}:2.x.x-latest, \
+            ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE }}:2.x.x-${{ env.COMMIT_SHA }}"
+          else
+            echo "::set-output name=tags::\
+            ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE }}:latest,\
+            ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE }}:${{ env.COMMIT_MESSAGE }}"
+          fi
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: ${{ steps.tags.outputs.tags }}
+
+  deploy-dev:
+    needs:
+      - build-image
+
+    if: github.ref == 'refs/heads/2.x.x' && contains(github.event.head_commit.message, '[cd-skip]') == false
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+        with:
+          args: |
+            set image deployment/api api=${{ env.GHCR_REGISTRY }}/${{ env.IMAGE }}:2.x.x-${{ env.COMMIT_SHA }}
+
+  deploy-production:
+    needs:
+      - build-image
+
+    if: github.ref == 'refs/heads/master' && contains(github.event.head_commit.message, '[cd-skip]') == false
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy
+        run: echo "Not yet"

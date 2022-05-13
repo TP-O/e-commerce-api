@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  labels:
+    app: api
+    component: api
+data:
+  default.conf: |
+    server {
+      listen   80;
+      listen   [::]:80 default ipv6only=on;
+
+      server_name _;
+
+      index index.php;
+
+      server_tokens off;
+
+      root /var/www/html/public;
+
+      gzip on;
+      gzip_min_length 10240;
+      gzip_proxied expired no-cache no-store private auth;
+      gzip_types text/plain text/css text/xml application/json text/javascript application/x-javascript application/xml;
+      gzip_disable "MSIE [1-6]\.";
+
+      location / {
+          try_files $uri $uri/ /index.php?$query_string;
+      }
+
+      location ~ \.php$ {
+          try_files $uri $uri/ /index.php?$query_string;
+          fastcgi_split_path_info ^(.+\.php)(/.+)$;
+          fastcgi_pass unix:/run/php/php8.1-fpm.sock;
+          fastcgi_index index.php;
+          include fastcgi_params;
+          fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+          fastcgi_param PATH_INFO $fastcgi_path_info;
+      }
+
+      location ~* \.(jpg|jpeg|gif|png|css|js|ico|xml)$ {
+          expires           5d;
+      }
+
+      location ~ /\. {
+          log_not_found off;
+          deny all;
+      }
+    }
