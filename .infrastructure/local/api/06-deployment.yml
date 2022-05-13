@@ -19,6 +19,19 @@ spec:
     spec:
       securityContext:
         fsGroup: 1000
+      initContainers:
+        - name: prepare-storage
+          image: ghcr.io/tpo-project/e-commerce-api:2.x.x-latest
+          command:
+            - "/bin/sh"
+            - "-c"
+            - "if [ -z \"$(ls -A /storage/logs)\" ]; then \
+                cp -R /var/www/html/storage/* /storage; \
+                chown -R nginx:nginx /storage; \
+              fi"
+          volumeMounts:
+            - name: storage
+              mountPath: /storage
       containers:
         - name: api
           image: ghcr.io/tpo-project/e-commerce-api:2.x.x-latest

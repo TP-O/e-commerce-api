@@ -47,9 +47,20 @@ resource "kubernetes_deployment" "api" {
           }
         }
 
+        init_container {
+          name    = "prepare-storage"
+          image   = "ghcr.io/tpo-project/e-commerce-api:2.x.x-38c74b2b481c7d7aad880303f5b87337d8b7ceec"
+          command = ["/bin/sh", "-c", "if [ -z \"$(ls -A /storage/logs)\" ]; then cp -R /var/www/html/storage/* /storage; chown -R nginx:nginx /storage; fi"]
+
+          volume_mount {
+            name       = "storage"
+            mount_path = "/storage"
+          }
+        }
+
         container {
           name  = "api"
-          image = "ghcr.io/tpo-project/e-commerce-api:2.x.x-latest"
+          image = "ghcr.io/tpo-project/e-commerce-api:2.x.x-38c74b2b481c7d7aad880303f5b87337d8b7ceec"
 
           port {
             container_port = 80
@@ -97,6 +108,7 @@ resource "kubernetes_deployment" "api" {
   lifecycle {
     ignore_changes = [
       spec[0].template[0].spec[0].container[0].image,
+      spec[0].template[0].spec[0].init_container[0].image,
     ]
   }
 }

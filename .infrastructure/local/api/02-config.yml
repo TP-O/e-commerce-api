@@ -8,7 +8,7 @@ metadata:
 data:
   APP_NAME: "E-commerce"
   APP_ENV: "production"
-  APP_DEBUG: "false"
+  APP_DEBUG: "true"
   APP_URL: "https://ec.local"
 
   FE_URL: "https://e-commerce-client.local"

@@ -40,6 +40,20 @@ resource "kubernetes_ingress_v1" "ingress" {
         }
 
         path {
+          path = "/resources"
+
+          backend {
+            service {
+              name = "api"
+
+              port {
+                number = 80
+              }
+            }
+          }
+        }
+
+        path {
           path = "/adminer"
 
           backend {
