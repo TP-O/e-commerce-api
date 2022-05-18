@@ -35,24 +35,16 @@ class ExistBelongToRelationshipRule implements Rule
     private $key = null;
 
     /**
-     * Primary key of table.
-     *
-     * @var null|string
-     */
-    private $primaryKey = null;
-
-    /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($model, $foreignKey, $expectedValue, $key = null, $primaryKey = null)
+    public function __construct($model, $foreignKey, $expectedValue, $key = null)
     {
         $this->model = resolve($model);
         $this->foreignKey = $foreignKey;
         $this->expectedValue = $expectedValue;
         $this->key = $key;
-        $this->primaryKey = is_null($primaryKey) ? $key : $primaryKey;
     }
 
     /**

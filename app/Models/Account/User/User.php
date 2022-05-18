@@ -5,6 +5,7 @@ namespace App\Models\Account\User;
 use App\Models\Address;
 use App\Models\BankAccount;
 use App\Models\CreditCard;
+use App\Models\Order\CartItem;
 use App\Models\Shop\Shop;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -58,5 +59,11 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     public function shop()
     {
         return $this->hasOne(Shop::class, 'id');
+    }
+
+    public function cart()
+    {
+        return $this->hasMany(CartItem::class)
+            ->with(['product', 'productModel']);
     }
 }

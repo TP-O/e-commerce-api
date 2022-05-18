@@ -98,7 +98,10 @@ Route::prefix('v2')->namespace('Api')->group(function () {
     });
 
     Route::prefix('products')->namespace('Product')->group(function () {
-        Route::get('/{id}', 'ProductController@get');
+        Route::prefix('/{id}')->group(function () {
+            Route::get('/', 'ProductController@get');
+            Route::get('/price/{quantity}', 'ProductController@price');
+        });
 
         Route::middleware('allow:' . User::class)->group(function () {
             Route::post('/', 'ProductController@create');
@@ -128,5 +131,11 @@ Route::prefix('v2')->namespace('Api')->group(function () {
                 Route::post('/', 'AttributeController@manage')->middleware('allow:' . Admin::class);
             });
         });
+    });
+
+    Route::prefix('cart')->namespace('Order')->middleware('allow:' . User::class)->group(function () {
+        Route::get('/', 'CartController@get');
+        Route::post('/', 'CartController@add');
+        Route::delete('/{product_model_id}', 'CartController@delete');
     });
 });
