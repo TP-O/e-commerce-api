@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreignId('type_id')
                 ->nullable()
                 ->constrained('address_types')
-                ->cascadeOnUpdate()
+                ->onUpdate('set null')
                 ->nullOnDelete();
 
             $table->unique([

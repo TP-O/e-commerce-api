@@ -26,17 +26,17 @@ return new class extends Migration
             $table->foreignId('shop_id')
                 ->nullable()
                 ->constrained('shops')
-                ->cascadeOnUpdate()
+                ->onUpdate('set null')
                 ->nullOnDelete();
             $table->foreignId('brand_id')
                 ->nullable()
                 ->constrained('product_brands')
-                ->cascadeOnUpdate()
+                ->onUpdate('set null')
                 ->nullOnDelete();
             $table->foreignId('status_id')
                 ->nullable()
                 ->constrained('product_status')
-                ->cascadeOnUpdate()
+                ->onUpdate('set null')
                 ->nullOnDelete();
         });
     }

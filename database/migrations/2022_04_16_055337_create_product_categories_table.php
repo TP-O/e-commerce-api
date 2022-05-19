@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreignId('parent_id')
                 ->nullable()
                 ->constrained('product_categories')
-                ->cascadeOnUpdate()
+                ->onUpdate('set null')
                 ->nullOnDelete();
 
             $table->unique(['parent_id', 'name']);
