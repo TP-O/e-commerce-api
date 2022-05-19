@@ -28,7 +28,7 @@ class CartService
 
         $prices = $this->productService->getPrices($cart->toArray()['data']);
 
-        $cart = $cart->map(function ($item, $key) use ($prices) {
+        $cart->getCollection()->transform(function ($item, $key) use ($prices) {
             $item->price = $prices[$key]['price'];
             $item->final_price = $prices[$key]['final_price'];
 
@@ -51,7 +51,7 @@ class CartService
             ['user_id', $userId],
             ['product_model_id', $cartItemData['product_model_id']],
         ])
-            ->get();
+            ->first();
 
         if (is_null($cartItem)) {
             CartItem::create([

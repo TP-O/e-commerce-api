@@ -35,12 +35,13 @@ class OrderService
         $orders = $products->map(function ($product, $key) use ($userId, $orderData, $prices) {
             $variations = collect($prices[$key]['variation_index'])
                 ->map(function ($index, $innerKey) use ($product) {
-                    return $product->variations[$innerKey][$index];
+                    return $product->variations[$innerKey]['options'][$index];
                 });
 
             return [
                 'user_id' => $userId,
                 'product_id' => $product['id'],
+                'product_model_id' => $orderData['orders'][$key]['product_model_id'],
                 'address_id' => $orderData['address_id'],
                 'name' => $product->name,
                 'variations' => $variations,

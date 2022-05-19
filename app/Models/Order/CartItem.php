@@ -11,6 +11,10 @@ class CartItem extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = null;
+
+    public $incrementing = false;
+
     protected $fillable = [
         'user_id',
         'product_model_id',

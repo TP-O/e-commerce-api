@@ -34,7 +34,7 @@ class OrderController extends Controller
             ['user_id', $request->user()->id],
             ['status_id', $orderQuery['status_id']]
         ])
-            ->with('product')
+            ->with(['product', 'address'])
             ->paginate($orderQuery['limit']);
 
         return response()->json([
