@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\OrderStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,25 +14,21 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('addressables', function (Blueprint $table) {
-            $table->morphs('addressable');
+        Schema::create('order_progresses', function (Blueprint $table) {
+            $table->id();
+            $table->text('note')->default('');
+            $table->timestamp('created_at')->useCurrent();
 
-            $table->foreignId('address_id')
-                ->constrained('addresses')
+            $table->foreignId('order_id')
+                ->constrained('orders')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('type_id')
+            $table->foreignId('status_id')
                 ->nullable()
-                ->constrained('address_types')
+                ->default(OrderStatus::Processing->value)
+                ->constrained('order_status')
                 ->onUpdate('set null')
                 ->nullOnDelete();
-
-            $table->unique([
-                'addressable_id',
-                'addressable_type',
-                'address_id',
-                'type_id',
-            ]);
         });
     }
 
@@ -42,6 +39,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('addressables');
+        Schema::dropIfExists('order_progresses');
     }
 };

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name', 120);
             $table->text('description')->default('');
             $table->float('weight', 8, 2, true);
+            $table->integer('sold', false, true)->default(0);
             $table->text('images')->default('[]');
             $table->text('videos')->default('[]');
             $table->text('variations')->default('[]');
@@ -26,17 +27,17 @@ return new class extends Migration
             $table->foreignId('shop_id')
                 ->nullable()
                 ->constrained('shops')
-                ->cascadeOnUpdate()
+                ->onUpdate('set null')
                 ->nullOnDelete();
             $table->foreignId('brand_id')
                 ->nullable()
                 ->constrained('product_brands')
-                ->cascadeOnUpdate()
+                ->onUpdate('set null')
                 ->nullOnDelete();
             $table->foreignId('status_id')
                 ->nullable()
                 ->constrained('product_status')
-                ->cascadeOnUpdate()
+                ->onUpdate('set null')
                 ->nullOnDelete();
         });
     }

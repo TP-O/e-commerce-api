@@ -3,7 +3,9 @@
 namespace App\Http\Requests\Product;
 
 use App\Enums\ProductStatus;
+use App\Models\Product\ProductModel;
 use App\Rules\DistinctArrayKeyRule;
+use App\Rules\ExistBelongToRelationshipRule;
 use App\Rules\Product\ValidNumberOfProducModelsRule;
 use App\Rules\Product\ValidProducModelVariationIndexesRule;
 use App\Rules\Product\ValidProductAttributesRule;
@@ -90,7 +92,14 @@ class UpdateProductRequest extends CreateOrUpdateProductRequest
                 new DistinctArrayKeyRule('variation_index'),
                 new ValidNumberOfProducModelsRule('variations'),
                 new ValidProducModelVariationIndexesRule('variations', 'variation_index'),
+                new ExistBelongToRelationshipRule(
+                    ProductModel::class,
+                    'product_id',
+                    $this->route('product')->id,
+                    'id',
+                ),
             ],
+            'models.*.id' => 'integer', 'min:1',
             'models.*.sku' => 'nullable|string',
             'models.*.price' => 'numeric|min:0.5',
             'models.*.stock' => 'required|integer|min:0',

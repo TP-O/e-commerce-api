@@ -32,7 +32,6 @@ class CreateShopRequest extends CustomFormRequest
             'address.id' => [
                 'integer',
                 'min:1',
-                'exists:addresses,id',
                 new ExistPolymorphicManyToManyOwnedByCurrentUserRule(
                     Addressable::class,
                     'addressable',

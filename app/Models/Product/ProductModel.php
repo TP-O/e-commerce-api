@@ -18,13 +18,14 @@ class ProductModel extends Model
         'is_default',
     ];
 
-    protected $hidden = [
-        'id',
-    ];
-
     protected $casts = [
         'variation_index' => 'array',
     ];
 
     public $timestamps = false;
+
+    public function wholesalePirces()
+    {
+        return $this->hasMany(WholesalePrice::class, 'product_id', 'product_id');
+    }
 }

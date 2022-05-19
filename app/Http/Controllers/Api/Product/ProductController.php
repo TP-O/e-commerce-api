@@ -6,6 +6,7 @@ use App\Enums\ProductStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\CreateProductRequest;
 use App\Http\Requests\Product\DeleteProductRequest;
+use App\Http\Requests\Product\GetProductPriceRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 use App\Models\Product\Product;
 use App\Services\ProductService;
@@ -23,6 +24,7 @@ class ProductController extends Controller
         $this->middleware('auth:sanctum')->except([
             'get',
             'search',
+            'prices',
         ]);
     }
 
@@ -60,16 +62,13 @@ class ProductController extends Controller
      */
     public function create(CreateProductRequest $request)
     {
-        $productId = $this->productService->create(
-            $request->all(),
+        $this->productService->create(
+            $request->validated(),
         );
 
         return response()->json([
             'status' => true,
             'message' => 'Product has been created!',
-            'data' => [
-                'id' => $productId,
-            ],
         ], Response::HTTP_CREATED);
     }
 
@@ -84,7 +83,7 @@ class ProductController extends Controller
     {
         $this->productService->update(
             $product->id,
-            $request->all(),
+            $request->validated(),
         );
 
         return response()->json([
@@ -131,6 +130,24 @@ class ProductController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Product has been recoveried!',
+        ]);
+    }
+
+    /**
+     * Get prices of the product models.
+     *
+     * @param \App\Http\Requests\Product\GetProductPriceRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function prices(GetProductPriceRequest $request)
+    {
+        $getProductQuery = $request->validated();
+
+        $prices = $this->productService->getPrices($getProductQuery['products']);
+
+        return response()->json([
+            'status' => true,
+            'data' => $prices,
         ]);
     }
 }

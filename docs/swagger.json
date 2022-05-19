@@ -2,7 +2,7 @@
     "openapi": "3.0.3",
     "info": {
         "title": "E-Commerce API",
-        "description": "As the title, this is API documentation of my simple E-Commerce API. It has not been deployed on the internet, so clone this [repo](https://github.com/tpo-project/e-commerce-api/tree/2.x.x) and run it before accessing API endpoints",
+        "description": "As the title, this is API documentation of my simple E-Commerce API. We have deployed it on the internet with host `tp-o.tk` (You can choose it in the selection below). Azure for Students account is used to hire the AKS, so the server may be down whenever free credit is run outs. If that happens, clone this [repo](https://github.com/tpo-project/e-commerce-api/tree/2.x.x) and run it on local environment before accessing API endpoints.",
         "version": "2.x.x",
         "license": {
             "name": "MIT",
@@ -11,17 +11,25 @@
     },
     "servers": [
         {
-            "url": "https://{host}:{port}/api/v2",
+            "url": "{protocol}://{host}:{port}/api/v2",
             "variables": {
+                "protocol": {
+                    "default": "https",
+                    "enum": [
+                        "http",
+                        "https"
+                    ]
+                },
                 "host": {
                     "default": "127.0.0.1",
                     "enum": [
                         "127.0.0.1",
-                        "localhost"
+                        "localhost",
+                        "tp-o.tk"
                     ]
                 },
                 "port": {
-                    "default": "80"
+                    "default": "443"
                 }
             },
             "description": "Localhost"
@@ -59,6 +67,14 @@
         {
             "name": "product",
             "description": "Product management"
+        },
+        {
+            "name": "cart",
+            "description": "Cart management"
+        },
+        {
+            "name": "order",
+            "description": "Order management"
         }
     ],
     "components": {
@@ -82,7 +98,7 @@
                 "tags": [
                     "resource"
                 ],
-                "summary": "Upload images",
+                "summary": "Upload images (everyone)",
                 "operationId": "uploadImages",
                 "parameters": [
                     {
@@ -134,7 +150,7 @@
                 "tags": [
                     "auth"
                 ],
-                "summary": "Sign up an user account",
+                "summary": "Sign up an user account (user)",
                 "operationId": "userSignUp",
                 "parameters": [
                     {
@@ -190,7 +206,7 @@
                 "tags": [
                     "auth"
                 ],
-                "summary": "Sign in as an user",
+                "summary": "Sign in as an user (user)",
                 "operationId": "userSignIn",
                 "parameters": [
                     {
@@ -228,7 +244,7 @@
                 "tags": [
                     "auth"
                 ],
-                "summary": "Sign out as an user",
+                "summary": "Sign out as an user (user)",
                 "operationId": "userSignOut",
                 "responses": {
                     "200": {
@@ -245,7 +261,7 @@
                 "tags": [
                     "auth"
                 ],
-                "summary": "Sign in as an admin",
+                "summary": "Sign in as an admin (admin)",
                 "operationId": "adminSignIn",
                 "parameters": [
                     {
@@ -283,7 +299,7 @@
                 "tags": [
                     "auth"
                 ],
-                "summary": "Sign out as an admin",
+                "summary": "Sign out as an admin (admin)",
                 "operationId": "adminSignOut",
                 "responses": {
                     "200": {
@@ -300,7 +316,7 @@
                 "tags": [
                     "oauth"
                 ],
-                "summary": "Sign in with third party (only user)",
+                "summary": "Sign in with third party (user)",
                 "operationId": "oauthRedirect",
                 "parameters": [
                     {
@@ -331,7 +347,7 @@
                 "tags": [
                     "email"
                 ],
-                "summary": "Request to send verification email",
+                "summary": "Request to send verification email (user)",
                 "operationId": "sendVerificationEmail",
                 "responses": {
                     "200": {
@@ -348,7 +364,7 @@
                 "tags": [
                     "email"
                 ],
-                "summary": "Verify an user's email",
+                "summary": "Verify an user's email (user)",
                 "operationId": "verifyUserEmail",
                 "parameters": [
                     {
@@ -397,7 +413,7 @@
                 "tags": [
                     "password"
                 ],
-                "summary": "Update user's password",
+                "summary": "Update user's password (user)",
                 "operationId": "updateUserPassword",
                 "parameters": [
                     {
@@ -446,7 +462,7 @@
                 "tags": [
                     "password"
                 ],
-                "summary": "Request to send reset-user-password email",
+                "summary": "Request to send reset-user-password email (user)",
                 "operationId": "forgotUserPassowrd",
                 "parameters": [
                     {
@@ -475,7 +491,7 @@
                 "tags": [
                     "password"
                 ],
-                "summary": "Reset user's password",
+                "summary": "Reset user's password (user)",
                 "operationId": "resetUserPassword",
                 "parameters": [
                     {
@@ -531,7 +547,7 @@
                 "tags": [
                     "password"
                 ],
-                "summary": "Update admin's password",
+                "summary": "Update admin's password (admin)",
                 "operationId": "updateAdminPassword",
                 "parameters": [
                     {
@@ -580,7 +596,7 @@
                 "tags": [
                     "password"
                 ],
-                "summary": "Request to send reset-admin-password email",
+                "summary": "Request to send reset-admin-password email (admin)",
                 "operationId": "forgotAdminPassword",
                 "parameters": [
                     {
@@ -609,7 +625,7 @@
                 "tags": [
                     "password"
                 ],
-                "summary": "Reset admin's password",
+                "summary": "Reset admin's password (admin)",
                 "operationId": "resetAdminPassword",
                 "parameters": [
                     {
@@ -665,7 +681,7 @@
                 "tags": [
                     "account"
                 ],
-                "summary": "Get user's profile",
+                "summary": "Get user's profile (user)",
                 "operationId": "getUserProfile",
                 "responses": {
                     "200": {
@@ -680,7 +696,7 @@
                 "tags": [
                     "account"
                 ],
-                "summary": "Update user's profile",
+                "summary": "Update user's profile (user)",
                 "operationId": "updateUserProfile",
                 "parameters": [
                     {
@@ -752,7 +768,7 @@
                 "tags": [
                     "account"
                 ],
-                "summary": "Get user's address",
+                "summary": "Get user's address (user)",
                 "operationId": "getAllUserAddresses",
                 "responses": {
                     "200": {
@@ -767,7 +783,7 @@
                 "tags": [
                     "account"
                 ],
-                "summary": "Create user's address",
+                "summary": "Create user's address (user)",
                 "operationId": "createUserAddress",
                 "parameters": [
                     {
@@ -879,7 +895,7 @@
                 "tags": [
                     "account"
                 ],
-                "summary": "Update user's address",
+                "summary": "Update user's address (user)",
                 "operationId": "updateUserAddress",
                 "parameters": [
                     {
@@ -1004,7 +1020,7 @@
                 "tags": [
                     "account"
                 ],
-                "summary": "Delete user's address",
+                "summary": "Delete user's address (user)",
                 "operationId": "deleteUserAddress",
                 "parameters": [
                     {
@@ -1038,7 +1054,7 @@
                 "tags": [
                     "account"
                 ],
-                "summary": "Get user's bank account",
+                "summary": "Get user's bank account (user)",
                 "operationId": "getAllUserBankAccount",
                 "responses": {
                     "200": {
@@ -1053,7 +1069,7 @@
                 "tags": [
                     "account"
                 ],
-                "summary": "Create user's bank account",
+                "summary": "Create user's bank account (user)",
                 "operationId": "createUserBankAccount",
                 "parameters": [
                     {
@@ -1120,7 +1136,7 @@
                 "tags": [
                     "account"
                 ],
-                "summary": "Update user's bank account",
+                "summary": "Update user's bank account (user)",
                 "operationId": "updateUserBankAccount",
                 "parameters": [
                     {
@@ -1200,7 +1216,7 @@
                 "tags": [
                     "account"
                 ],
-                "summary": "Delete user's bank account",
+                "summary": "Delete user's bank account (user)",
                 "operationId": "deleteUserBankAccount",
                 "parameters": [
                     {
@@ -1234,7 +1250,7 @@
                 "tags": [
                     "account"
                 ],
-                "summary": "Get user's credit card",
+                "summary": "Get user's credit card (user)",
                 "operationId": "getAllUseCreditCard",
                 "responses": {
                     "200": {
@@ -1249,7 +1265,7 @@
                 "tags": [
                     "account"
                 ],
-                "summary": "Create user's credit card",
+                "summary": "Create user's credit card (user)",
                 "operationId": "createUserCreditCard",
                 "parameters": [
                     {
@@ -1325,7 +1341,7 @@
                 "tags": [
                     "account"
                 ],
-                "summary": "Update user's credit card",
+                "summary": "Update user's credit card (user)",
                 "operationId": "updateUserCreditCard",
                 "parameters": [
                     {
@@ -1414,7 +1430,7 @@
                 "tags": [
                     "account"
                 ],
-                "summary": "Delete user's credit card",
+                "summary": "Delete user's credit card (user)",
                 "operationId": "deleteUserCreditCard",
                 "parameters": [
                     {
@@ -1448,7 +1464,7 @@
                 "tags": [
                     "shop"
                 ],
-                "summary": "Get public information of the shop",
+                "summary": "Get public information of the shop (everyone)",
                 "operationId": "getShop",
                 "parameters": [
                     {
@@ -1477,7 +1493,7 @@
                 "tags": [
                     "shop"
                 ],
-                "summary": "Get publised products of the shop",
+                "summary": "Get publised products of the shop (everyone)",
                 "operationId": "getPublishedProductsOfShop",
                 "parameters": [
                     {
@@ -1506,7 +1522,7 @@
                 "tags": [
                     "shop"
                 ],
-                "summary": "Get shop of current user",
+                "summary": "Get shop of current user (seller)",
                 "operationId": "getMyShop",
                 "responses": {
                     "200": {
@@ -1521,7 +1537,7 @@
                 "tags": [
                     "shop"
                 ],
-                "summary": "Create a shop for current user",
+                "summary": "Create a shop for current user (seller)",
                 "operationId": "createMyShop",
                 "parameters": [
                     {
@@ -1600,7 +1616,7 @@
                 "tags": [
                     "shop"
                 ],
-                "summary": "Update shop of current user",
+                "summary": "Update shop of current user (seller)",
                 "operationId": "updateMyShop",
                 "parameters": [
                     {
@@ -1695,7 +1711,7 @@
                 "tags": [
                     "shop"
                 ],
-                "summary": "Get products of current user",
+                "summary": "Get products of shop owned by the current user (user)",
                 "operationId": "getMyProducts",
                 "responses": {
                     "200": {
@@ -1712,7 +1728,7 @@
                 "tags": [
                     "product"
                 ],
-                "summary": "Get product by ID",
+                "summary": "Get product by ID (user)",
                 "operationId": "getProduct",
                 "parameters": [
                     {
@@ -1739,7 +1755,7 @@
                 "tags": [
                     "product"
                 ],
-                "summary": "Update product",
+                "summary": "Update product (seller)",
                 "operationId": "updateProduct",
                 "parameters": [
                     {
@@ -1966,7 +1982,7 @@
                 "tags": [
                     "product"
                 ],
-                "summary": "Delete product",
+                "summary": "Delete product (seller)",
                 "operationId": "deleteProduct",
                 "parameters": [
                     {
@@ -2000,7 +2016,7 @@
                 "tags": [
                     "product"
                 ],
-                "summary": "Recovery deleted product",
+                "summary": "Recovery deleted product (admin)",
                 "operationId": "recoveryProduct",
                 "parameters": [
                     {
@@ -2028,7 +2044,7 @@
                 "tags": [
                     "product"
                 ],
-                "summary": "Create product",
+                "summary": "Create product (seller)",
                 "operationId": "createProduct",
                 "parameters": [
                     {
@@ -2240,12 +2256,56 @@
                 }
             }
         },
+        "/products/prices": {
+            "get": {
+                "tags": [
+                    "product"
+                ],
+                "summary": "Get prices of the product models (user)",
+                "operationId": "getProductPirce",
+                "parameters": [
+                    {
+                        "name": "products",
+                        "in": "query",
+                        "description": "List of products to be priced",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "product_model_id": {
+                                        "type": "integer"
+                                    },
+                                    "quantity": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "required": [
+                                    "product_model_id",
+                                    "quantity"
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invliad input"
+                    }
+                },
+                "security": []
+            }
+        },
         "/products/categories/{id}": {
             "get": {
                 "tags": [
                     "product"
                 ],
-                "summary": "Get category by ID",
+                "summary": "Get category by ID (seller)",
                 "operationId": "getCategory",
                 "parameters": [
                     {
@@ -2274,7 +2334,7 @@
                 "tags": [
                     "product"
                 ],
-                "summary": "Get children of category",
+                "summary": "Get children of category (seller)",
                 "operationId": "getCategoryChildren",
                 "parameters": [
                     {
@@ -2303,7 +2363,7 @@
                 "tags": [
                     "product"
                 ],
-                "summary": "Bind attributes to the category",
+                "summary": "Bind attributes to the category (admin)",
                 "operationId": "bindAttributesToCategory",
                 "parameters": [
                     {
@@ -2361,7 +2421,7 @@
                 "tags": [
                     "product"
                 ],
-                "summary": "Create, update, and delete categories",
+                "summary": "Create, update, and delete categories (admin)",
                 "operationId": "manageCategory",
                 "parameters": [
                     {
@@ -2461,7 +2521,7 @@
                 "tags": [
                     "product"
                 ],
-                "summary": "Get all attributes of categories",
+                "summary": "Get all attributes of categories (seller and admin)",
                 "operationId": "getCategoriesAttributes",
                 "parameters": [
                     {
@@ -2491,7 +2551,7 @@
                 "tags": [
                     "product"
                 ],
-                "summary": "Create, update, and delete attributes",
+                "summary": "Create, update, and delete attributes (admin)",
                 "operationId": "manageAttribute",
                 "parameters": [
                     {
@@ -2591,7 +2651,7 @@
                 "tags": [
                     "product"
                 ],
-                "summary": "Search attributes",
+                "summary": "Search attributes (admin)",
                 "operationId": "searchAttributes",
                 "parameters": [
                     {
@@ -2613,6 +2673,196 @@
                     }
                 },
                 "security": []
+            }
+        },
+        "/cart": {
+            "get": {
+                "tags": [
+                    "cart"
+                ],
+                "summary": "Get shopping cart (user)",
+                "operationId": "getCart",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit number of cart items per page",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "cart"
+                ],
+                "summary": "Update or add cart item (user)",
+                "operationId": "updateCart",
+                "parameters": [
+                    {
+                        "name": "product_model_id",
+                        "in": "query",
+                        "description": "Product model's id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "quantity",
+                        "in": "query",
+                        "description": "Number of products",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invliad input"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
+            }
+        },
+        "/cart/{product_model_id}": {
+            "delete": {
+                "tags": [
+                    "cart"
+                ],
+                "summary": "Delete cart item (user)",
+                "operationId": "deleteCartItem",
+                "parameters": [
+                    {
+                        "name": "product_model_id",
+                        "in": "path",
+                        "description": "Product model's id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invliad input"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
+            }
+        },
+        "/orders": {
+            "get": {
+                "tags": [
+                    "order"
+                ],
+                "summary": "Get orders by status (user)",
+                "operationId": "getOrderByStatus",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit number of orders per page",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status_id",
+                        "in": "query",
+                        "description": "Order status's id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invliad input"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "order"
+                ],
+                "summary": "Create orders (user)",
+                "operationId": "createOrder",
+                "parameters": [
+                    {
+                        "name": "address_id",
+                        "in": "query",
+                        "description": "Address's id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "orders",
+                        "in": "query",
+                        "description": "List of orders",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "product_model_id": {
+                                        "type": "integer"
+                                    },
+                                    "quantity": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "required": [
+                                    "product_model_id",
+                                    "quantity"
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invliad input"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
             }
         }
     }
