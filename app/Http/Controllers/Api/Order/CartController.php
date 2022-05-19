@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Order;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\AddToCartRequest;
+use App\Http\Requests\Order\GetCartRequest;
 use App\Models\Order\CartItem;
 use App\Services\CartService;
 use Illuminate\Http\Request;
@@ -19,9 +20,18 @@ class CartController extends Controller
         $this->middleware('auth:sanctum');
     }
 
-    public function get(Request $request)
+    /**
+     * Get all items in cart of the current users.
+     *
+     * @param \App\Http\Requests\Order\GetCartRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get(GetCartRequest $request)
     {
-        $cart = $request->user()->cart;
+        $cart = $this->cartService->getItems(
+            $request->user()->id,
+            $request->validated(),
+        );
 
         return response()->json([
             'status' => true,
@@ -29,6 +39,12 @@ class CartController extends Controller
         ]);
     }
 
+    /**
+     * Add item to cart of the current user.
+     *
+     * @param \App\Http\Requests\Order\AddToCartRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function add(AddToCartRequest $request)
     {
         $this->cartService->addItem(
@@ -42,6 +58,13 @@ class CartController extends Controller
         ]);
     }
 
+    /**
+     * Delete item from cart of the current user.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $productModelId
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function delete(Request $request, int $productModelId)
     {
         CartItem::where([

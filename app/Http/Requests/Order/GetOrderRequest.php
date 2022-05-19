@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Order;
 
+use App\Enums\OrderStatus;
 use App\Http\Requests\CustomFormRequest;
-use App\Rules\Order\ValidProductQuantityRule;
 
-class AddToCartRequest extends CustomFormRequest
+class GetOrderRequest extends CustomFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,13 +25,8 @@ class AddToCartRequest extends CustomFormRequest
     public function rules()
     {
         return [
-            'product_model_id' => 'required|integer|min:1|distinct:strict',
-            'quantity' => [
-                'required',
-                'integer',
-                'min:1',
-                new ValidProductQuantityRule('product_model_id'),
-            ],
+            'limit' => 'required|integer|min:1|max:20',
+            'status_id' => 'required|integer|min:1|exists:order_status,id',
         ];
     }
 }

@@ -23,7 +23,7 @@ class ProductService
      * @param array $productData
      * @return int
      */
-    public function create($productData)
+    public function create(array $productData)
     {
         $product = Product::create([
             'shop_id' => auth()->user()->id,
@@ -67,7 +67,7 @@ class ProductService
      * @param array $producyModelsData
      * @return void
      */
-    private function attachModels($product, $productModelsData)
+    private function attachModels($product, array $productModelsData)
     {
         $product->models()->saveMany(
             array_map(function ($model) {
@@ -85,7 +85,7 @@ class ProductService
      * @param array $producyModelsData
      * @return void
      */
-    private function syncModels($product, $productModelsData)
+    private function syncModels($product, array $productModelsData)
     {
         $retainingModelIds = [];
         $createdModels = [];
@@ -129,7 +129,7 @@ class ProductService
      * @param array $productData
      * @return void
      */
-    public function update($id, $productData)
+    public function update(int $id, array $productData)
     {
         $product = Product::findOrFail($id);
 
@@ -168,5 +168,53 @@ class ProductService
         $product->categories()->sync($productData['category_path']);
 
         return;
+    }
+
+    /**
+     * Get prices of the product models.
+     *
+     * @param array $productData
+     * @return array
+     */
+    public function getPrices(array $productData)
+    {
+        $modelIds = [];
+
+        foreach ($productData as $key => $product) {
+            $modelIds[$key] = $product['product_model_id'];
+        }
+
+        if (empty($modelIds)) {
+            return [];
+        }
+
+        $models = ProductModel::whereIn('id', $modelIds)
+            ->orderByRaw('ARRAY_POSITION(ARRAY[' . join(',', $modelIds) . '], id)')
+            ->with('wholesalePirces')
+            ->get();
+
+        $prices = $models->map(function ($model, $key) use ($productData) {
+            $wholesalePrice = $model->wholesalePirces
+                ->where('min', '<=', $productData[$key]['quantity'])
+                ->firstWhere('max', '>=', $productData[$key]['quantity']);
+
+            $pricePerOne = is_null($wholesalePrice)
+                ? $model->price
+                : $wholesalePrice->price;
+
+            $price = $pricePerOne * $productData[$key]['quantity'];
+            $finalPrice = $price;
+
+            return [
+                'product_id' => $model->product_id,
+                'product_model_id' => $model->id,
+                'variation_index' => $model->variation_index,
+                'price' => round($price, 2),
+                'final_price' => round($finalPrice, 2),
+            ];
+        })
+            ->toArray();
+
+        return $prices;
     }
 }

@@ -23,4 +23,9 @@ class ProductModel extends Model
     ];
 
     public $timestamps = false;
+
+    public function wholesalePirces()
+    {
+        return $this->hasMany(WholesalePrice::class, 'product_id', 'product_id');
+    }
 }

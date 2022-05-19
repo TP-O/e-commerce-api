@@ -16,21 +16,30 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
+            $table->text('variations')->default('[]');
             $table->integer('quantity', false, true);
             $table->float('total', 8, 2, true);
-            $table->timestamp('created_at');
+            $table->timestamp('created_at')->useCurrent();
 
             $table->foreignId('user_id')
+                ->nullable()
                 ->constrained('users')
-                ->cascadeOnUpdate()
+                ->onUpdate('set null')
                 ->nullOnDelete();
             $table->foreignId('product_id')
+                ->nullable()
                 ->constrained('products')
-                ->cascadeOnUpdate()
+                ->onUpdate('set null')
                 ->nullOnDelete();
             $table->foreignId('address_id')
+                ->nullable()
                 ->constrained('addresses')
-                ->cascadeOnUpdate()
+                ->onUpdate('set null')
+                ->nullOnDelete();
+            $table->foreignId('status_id')
+                ->nullable()
+                ->constrained('order_status')
+                ->onUpdate('set null')
                 ->nullOnDelete();
         });
     }

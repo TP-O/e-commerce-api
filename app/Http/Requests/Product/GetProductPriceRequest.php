@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Order;
+namespace App\Http\Requests\Product;
 
 use App\Http\Requests\CustomFormRequest;
+use App\Models\Addressable;
+use App\Rules\ExistPolymorphicManyToManyOwnedByCurrentUserRule;
 use App\Rules\Order\ValidProductQuantityRule;
 
-class AddToCartRequest extends CustomFormRequest
+class GetProductPriceRequest extends CustomFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,13 +27,13 @@ class AddToCartRequest extends CustomFormRequest
     public function rules()
     {
         return [
-            'product_model_id' => 'required|integer|min:1|distinct:strict',
-            'quantity' => [
+            'products' => [
                 'required',
-                'integer',
-                'min:1',
-                new ValidProductQuantityRule('product_model_id'),
+                'array',
+                new ValidProductQuantityRule('product_model_id', 'quantity'),
             ],
+            'products.*.product_model_id' => 'required|integer|min:1',
+            'products.*.quantity' => 'required|integer|min:1',
         ];
     }
 }

@@ -16,15 +16,16 @@ return new class extends Migration
         Schema::create('order_progresses', function (Blueprint $table) {
             $table->id();
             $table->text('note')->default('');
-            $table->timestamp('created_at');
+            $table->timestamp('created_at')->useCurrent();
 
             $table->foreignId('order_id')
                 ->constrained('orders')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('status_id')
+                ->nullable()
                 ->constrained('order_status')
-                ->cascadeOnUpdate()
+                ->onUpdate('set null')
                 ->nullOnDelete();
         });
     }
