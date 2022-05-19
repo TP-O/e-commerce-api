@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\OrderStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -31,6 +32,11 @@ return new class extends Migration
                 ->constrained('products')
                 ->onUpdate('set null')
                 ->nullOnDelete();
+            $table->foreignId('product_model_id')
+                ->nullable()
+                ->constrained('product_models')
+                ->onUpdate('set null')
+                ->nullOnDelete();
             $table->foreignId('address_id')
                 ->nullable()
                 ->constrained('addresses')
@@ -38,6 +44,7 @@ return new class extends Migration
                 ->nullOnDelete();
             $table->foreignId('status_id')
                 ->nullable()
+                ->default(OrderStatus::Processing->value)
                 ->constrained('order_status')
                 ->onUpdate('set null')
                 ->nullOnDelete();
