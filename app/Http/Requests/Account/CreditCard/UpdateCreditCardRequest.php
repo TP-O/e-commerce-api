@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Account\CreditCard;
 
+use App\Models\CreditCard;
 use App\Rules\UniquePolymorphicOneToManyOwnedByCurrentUserRule;
 
 class UpdateCreditCardRequest extends AuthorizedCreditCardRequest

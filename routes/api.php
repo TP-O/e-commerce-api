@@ -41,7 +41,7 @@ Route::prefix('v2')->namespace('Api')->group(function () {
         });
     });
 
-    Route::prefix('email')->namespace('Email')->group(function () {
+    Route::prefix('email')->namespace('Email')->middleware('allow:' . User::class)->group(function () {
         Route::post('/verify', 'EmailVerificationController@sendEmail');
         Route::get('/verify/{id}/{hash}', 'EmailVerificationController@verifyEmail')->name('verification.verify');
     });
