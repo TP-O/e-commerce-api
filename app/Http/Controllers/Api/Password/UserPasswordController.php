@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\Password;
 
 use App\Http\Requests\Password\ForgotPasswordRequest;
 use App\Http\Requests\Password\ResetPasswordRequest;
+use App\Models\Account\User\User;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class UserPasswordController extends PasswordController
 {
@@ -15,7 +17,13 @@ class UserPasswordController extends PasswordController
      */
     public function forgot(ForgotPasswordRequest $request)
     {
-        return $this->forgot($request, 'users');
+        $user = User::where('email', $request->safe()->only('email'))->first();
+
+        if (is_null($user?->email_verified_at)) {
+            throw new BadRequestHttpException('Email has not been verified!');
+        }
+
+        return $this->forgotPassword($request, 'users');
     }
 
     /**
@@ -26,6 +34,6 @@ class UserPasswordController extends PasswordController
      */
     public function reset(ResetPasswordRequest $request)
     {
-        return $this->reset($request, 'users');
+        return $this->resetPassword($request, 'users');
     }
 }

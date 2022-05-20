@@ -10,7 +10,7 @@ class EmailVerificationController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth:sanctum', 'pat.name:user']);
+        $this->middleware('auth:sanctum');
         $this->middleware('signed')->only(['verify']);
     }
 

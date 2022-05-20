@@ -31,7 +31,7 @@ class AdminPasswordController extends PasswordController
      */
     public function forgot(ForgotPasswordRequest $request)
     {
-        return $this->forgot($request, 'admins');
+        return $this->forgotPassword($request, 'admins');
     }
 
     /**
@@ -42,6 +42,6 @@ class AdminPasswordController extends PasswordController
      */
     public function reset(ResetPasswordRequest $request)
     {
-        return $this->reset($request, 'admins');
+        return $this->resetPassword($request, 'admins');
     }
 }
