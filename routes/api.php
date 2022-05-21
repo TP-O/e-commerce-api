@@ -99,7 +99,6 @@ Route::prefix('v2')->namespace('Api')->group(function () {
 
     Route::prefix('products')->namespace('Product')->group(function () {
         Route::get('/{id}', 'ProductController@get');
-        Route::get('/prices', 'ProductController@prices');
 
         Route::middleware('allow:' . User::class)->group(function () {
             Route::post('/', 'ProductController@create');
@@ -114,19 +113,22 @@ Route::prefix('v2')->namespace('Api')->group(function () {
         Route::prefix('categories')->group(function () {
             Route::middleware('allow:' . Admin::class)->group(function () {
                 Route::post('/', 'CategoryController@manage');
-                Route::post('/{category}/attributes', 'CategoryController@bind')
+                Route::post('/{category}/attributes/bind', 'CategoryController@bind')
                     ->where('category', '[1-9]+');
             });
 
-            Route::prefix('{id}')->where(['id', '[0-9]+'])->group(function () {
-                Route::get('/', 'CategoryController@get');
-                Route::get('/children', 'CategoryController@children');
-            });
+            Route::get('{id}/children', 'CategoryController@children')->where(['id', '[0-9]+']);
 
             Route::prefix('attributes')->group(function () {
-                Route::get('/', 'CategoryController@attributes');
-                Route::get('/{input}', 'AttributeController@search');
-                Route::post('/', 'AttributeController@manage')->middleware('allow:' . Admin::class);
+                Route::get('/', 'CategoryController@attributes')
+                    ->middleware('allow:' . join(',', [User::class, Admin::class]));
+
+                Route::middleware('allow:' . Admin::class)->group(function () {
+                    Route::get('/{input}', 'AttributeController@search');
+                    Route::post('/', 'AttributeController@create');
+                    Route::put('/{id}', 'AttributeController@update');
+                    Route::delete('/{id}', 'AttributeController@delete');
+                });
             });
         });
     });
