@@ -25,4 +25,14 @@ class CategoryAttribute extends Model
     ];
 
     public $timestamps = false;
+
+    public function categories()
+    {
+        return $this->belongsToMany(
+            Category::class,
+            'product_category_product_category_attribute',
+            'attribute_id',
+            'category_id',
+        );
+    }
 }

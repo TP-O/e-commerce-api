@@ -17,53 +17,53 @@ class ProductCategoryAttributeSeeder extends Seeder
         DB::table('product_category_attributes')->insert([
             [
                 'name' => 'Material',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Style',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Country of Origin',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Season',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //5
             [
                 'name' => 'Suit Style',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Vent Style',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Collar Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Bottoms Length',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Waist Height',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //10
             [
                 'name' => 'Shorts Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Underwear Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Neckline',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Volume',
@@ -76,158 +76,158 @@ class ProductCategoryAttributeSeeder extends Seeder
             //15
             [
                 'name' => 'Ingredient',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Formulation',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Body Care Benefits',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Ingredient Preference',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Hair Care Benefits',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //20
             [
                 'name' => 'Scent',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Gender',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Fragrance Concentration',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Lip Benefits',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Application Area',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //25
             [
                 'name' => 'Skin Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Makeup Remover Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Warranty Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Power Source',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Tool Function',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //30
             [
                 'name' => 'Skin Care Benefits',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Cleanser Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Skin Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Nutrient Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Food Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //35
             [
                 'name' => 'Specialty Diet',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Serial',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Warranty Duration',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Circulation number',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Scale & Body Fat Analyzers Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //40
             [
                 'name' => 'Smart TV',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Resolution',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'TV Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Dimension (L x W x H)',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'TV Screen Size',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //45
             [
                 'name' => 'TV Port Input',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Antenna Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Coffee Machine Capacity',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Coffee Machine Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Mixer Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //50
             [
                 'name' => 'Mixer Features',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Battery Size',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Battery Capacity',
@@ -235,11 +235,11 @@ class ProductCategoryAttributeSeeder extends Seeder
             ],
             [
                 'name' => 'Sim Card Region',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'SIM Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //55
             [
@@ -248,11 +248,11 @@ class ProductCategoryAttributeSeeder extends Seeder
             ],
             [
                 'name' => 'Mobile Cable Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Tablet Model',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Screen Size',
@@ -265,7 +265,7 @@ class ProductCategoryAttributeSeeder extends Seeder
             //60
             [
                 'name' => 'Condition',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'RAM',
@@ -273,83 +273,83 @@ class ProductCategoryAttributeSeeder extends Seeder
             ],
             [
                 'name' => 'Phone Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Supported Operating System',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Number of Primary Cameras',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //65
             [
                 'name' => 'Processor Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Phone Model',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Number of SIM Card Slots',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'VR Features',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Memory Card Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //70
             [
                 'name' => 'Screen Protector Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Applicable Mobile Brand',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Screen Protector Material',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Connection Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Audio Compatibility',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //75
             [
                 'name' => 'Input Connectivity',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Microphone Connectivity',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Microphone Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Amplifier Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Dog Size',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //80
             [
                 'name' => 'Bird Food Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Volume Capacity',
@@ -357,15 +357,15 @@ class ProductCategoryAttributeSeeder extends Seeder
             ],
             [
                 'name' => 'Pet Weight',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Pet Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Playstation Model',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //85
             [
@@ -374,32 +374,32 @@ class ProductCategoryAttributeSeeder extends Seeder
             ],
             [
                 'name' => 'Xbox Model',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Nintendo DS Model',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Connection',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Platform Compatibility',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //90
             [
                 'name' => 'Accessory Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Game Genre',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Game Genre Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Line Weight',
@@ -407,33 +407,33 @@ class ProductCategoryAttributeSeeder extends Seeder
             ],
             [
                 'name' => 'Ink Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //95
             [
                 'name' => 'Pen Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Lead Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Pencil Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Correction Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Calculator Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //100
             [
                 'name' => 'Clips, Pins & Tacks Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Length',
@@ -445,7 +445,7 @@ class ProductCategoryAttributeSeeder extends Seeder
             ],
             [
                 'name' => 'Paper Size',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Paper Grammage',
@@ -454,23 +454,23 @@ class ProductCategoryAttributeSeeder extends Seeder
             //105
             [
                 'name' => 'Number of Sheets',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Storage Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Ports/ Interface',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Gaming Focused',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Operating System',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //110
             [
@@ -479,11 +479,11 @@ class ProductCategoryAttributeSeeder extends Seeder
             ],
             [
                 'name' => 'Number of Cores',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Monitor Interface Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Monitor Response Time',
@@ -491,20 +491,20 @@ class ProductCategoryAttributeSeeder extends Seeder
             ],
             [
                 'name' => 'Monitor Screen Size',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //115
             [
                 'name' => 'Panel Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Fan RGB Lighting',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'CPU Socket Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Core Clock Speed',
@@ -512,16 +512,16 @@ class ProductCategoryAttributeSeeder extends Seeder
             ],
             [
                 'name' => 'Graphics Chipset Manufacturer',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //120
             [
                 'name' => 'Graphics Card Model',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Video Memory Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Graphics Memory',
@@ -533,20 +533,20 @@ class ProductCategoryAttributeSeeder extends Seeder
             ],
             [
                 'name' => 'Memory Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //125
             [
                 'name' => 'Form Factor',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'PC Cases Chassis Structure',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Internal/External',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Rotation Speed',
@@ -554,7 +554,7 @@ class ProductCategoryAttributeSeeder extends Seeder
             ],
             [
                 'name' => 'SSD Form Factor',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //130
             [
@@ -563,24 +563,24 @@ class ProductCategoryAttributeSeeder extends Seeder
             ],
             [
                 'name' => 'Keyboard & Mouse Model',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Keyboard Key Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Laptop Model',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             [
                 'name' => 'Laptop Screen Size',
-                'units' => '[""]',
+                'units' => '[]',
             ],
             //135
             [
                 'name' => 'Laptop Type',
-                'units' => '[""]',
+                'units' => '[]',
             ],
         ]);
     }
