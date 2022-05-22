@@ -8,9 +8,19 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.org/location-snippets: |
-      if ($http_origin ~ "^(http://localhost:3333|https://www.shopest.tk|https://e-shopee.vercel.app|https://tpo-project.github.io)$") {
-        add_header 'Access-Control-Allow-Origin' $http_origin;
-        add_header 'Access-Control-Allow-Methods' "PUT, POST, GET, DELETE, OPTIONS";
+      set $check 0;
+
+      if ($http_origin ~ ^(http://localhost:3333|https://www.shopest.tk|https://e-shopee.vercel.app|https://tpo-project.github.io)$) {
+          set $check 1;
+      }
+
+      if ($uri ~ ^/resources) {
+          set $check 1$check;
+      }
+
+      if ($check = 11) {
+          add_header "Access-Control-Allow-Origin" $http_origin;
+          add_header 'Access-Control-Allow-Methods' "GET, POST, OPTIONS";
       }
 
 spec:
