@@ -150,4 +150,4 @@ jobs:
         run: terraform validate -no-color
 
       - name: Terraform Apply
-        run: terraform apply -auto-approvee
+        run: terraform apply -auto-approve
