@@ -28,17 +28,24 @@ class ManageProductCategoryRequest extends CustomFormRequest
     public function rules()
     {
         return [
-            $this->requireAtLeastOne([
-                'create' => 'array|min:1',
-                'update' => 'array|min:1',
-                'delete' => 'array|min:1',
+            ...$this->requireAtLeastOne([
+                'create' => [
+                    'array',
+                    new BatchExistsRule(Category::class, 'parent_id', 'id'),
+                    new BatchUniqueRule(Category::class, 'name'),
+                ],
+                'update' => [
+                    'array',
+                    new BatchExistsRule(Category::class, 'id'),
+                    new BatchExistsRule(Category::class, 'parent_id', 'id'),
+                    new BatchUniqueRule(Category::class, 'name'),
+                ],
+                'delete' => [
+                    'array',
+                    new BatchExistsRule(Category::class, 'id'),
+                ],
             ]),
 
-            // Create
-            'create' => [
-                new BatchExistsRule(Category::class, 'parent_id', 'id'),
-                new BatchUniqueRule(Category::class, 'name'),
-            ],
             'create.*.parent_id' => 'nullable|integer|min:1',
             'create.*.name' => 'required|string|min:5|max:50|distinct:strict',
             'create.*.cover_image' => [
@@ -47,12 +54,6 @@ class ManageProductCategoryRequest extends CustomFormRequest
                 new ExistImageRule(),
             ],
 
-            // Update
-            'update' => [
-                new BatchExistsRule(Category::class, 'id'),
-                new BatchExistsRule(Category::class, 'parent_id', 'id'),
-                new BatchUniqueRule(Category::class, 'name'),
-            ],
             'update.*.id' => 'required|integer|min:1|distinct:strict',
             'update.*.parent_id' => 'nullable|integer|min:1',
             'update.*.name' => 'required|string|min:5|max:50|distinct:strict',
@@ -62,10 +63,6 @@ class ManageProductCategoryRequest extends CustomFormRequest
                 new ExistImageRule(),
             ],
 
-            // Delete
-            'delete' => [
-                new BatchExistsRule(Category::class, 'id'),
-            ],
             'delete.*.id' => 'required|integer|min:1|distinct:strict',
         ];
     }

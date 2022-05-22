@@ -10,6 +10,12 @@ resource "kubernetes_ingress_v1" "ingress" {
 
     annotations = {
       "nginx.ingress.kubernetes.io/rewrite-target" = "/"
+      "nginx.org/location-snippets"                = <<EOF
+        if ($http_origin ~ "^(http://localhost:3333|https://www.shopest.tk|https://e-shopee.vercel.app|https://tpo-project.github.io)$") {
+            add_header "Access-Control-Allow-Origin" $http_origin;
+            add_header "Access-Control-Allow-Methods" "PUT, POST, GET, DELETE, OPTIONS";
+        }
+       EOF
     }
   }
 

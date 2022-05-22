@@ -2,7 +2,7 @@
     "openapi": "3.0.3",
     "info": {
         "title": "E-Commerce API",
-        "description": "As the title, this is API documentation of my simple E-Commerce API. We have deployed it on the internet with host `tp-o.tk` (You can choose it in the selection below). Azure for Students account is used to hire the AKS, so the server may be down whenever free credit is run outs. If that happens, clone this [repo](https://github.com/tpo-project/e-commerce-api/tree/2.x.x) and run it on local environment before accessing API endpoints.",
+        "description": "As the title, this is API documentation of my simple E-Commerce API. We have deployed it on the internet with host `tp-o.tk` (You can choose it in the selection below). Azure for Students account is used to hire the AKS, so the server may be down whenever free credits run out. If that happens, clone this [repo](https://github.com/tpo-project/e-commerce-api/tree/2.x.x) and run it on local environment before accessing API endpoints.",
         "version": "2.x.x",
         "license": {
             "name": "MIT",
@@ -2256,79 +2256,6 @@
                 }
             }
         },
-        "/products/prices": {
-            "get": {
-                "tags": [
-                    "product"
-                ],
-                "summary": "Get prices of the product models (user)",
-                "operationId": "getProductPirce",
-                "parameters": [
-                    {
-                        "name": "products",
-                        "in": "query",
-                        "description": "List of products to be priced",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "product_model_id": {
-                                        "type": "integer"
-                                    },
-                                    "quantity": {
-                                        "type": "integer"
-                                    }
-                                },
-                                "required": [
-                                    "product_model_id",
-                                    "quantity"
-                                ]
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success"
-                    },
-                    "400": {
-                        "description": "Invliad input"
-                    }
-                },
-                "security": []
-            }
-        },
-        "/products/categories/{id}": {
-            "get": {
-                "tags": [
-                    "product"
-                ],
-                "summary": "Get category by ID (seller)",
-                "operationId": "getCategory",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "Category's id",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success"
-                    },
-                    "404": {
-                        "description": "Not found"
-                    }
-                },
-                "security": []
-            }
-        },
         "/products/categories/{id}/children": {
             "get": {
                 "tags": [
@@ -2358,7 +2285,7 @@
                 "security": []
             }
         },
-        "/products/categories/{id}/attributes": {
+        "/products/categories/{id}/attributes/bind": {
             "post": {
                 "tags": [
                     "product"
@@ -2551,82 +2478,43 @@
                 "tags": [
                     "product"
                 ],
-                "summary": "Create, update, and delete attributes (admin)",
-                "operationId": "manageAttribute",
+                "summary": "Create attribute and bind it with the category (admin)",
+                "operationId": "createAttribute",
                 "parameters": [
                     {
-                        "name": "create",
+                        "name": "name",
                         "in": "query",
-                        "description": "Create attributes",
+                        "description": "Name of attribute",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "units",
+                        "in": "query",
+                        "description": "Units of attribute",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "object",
-                                "properties": {
-                                    "name": {
-                                        "type": "string"
-                                    },
-                                    "units": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string"
-                                        }
-                                    }
-                                },
-                                "required": [
-                                    "name",
-                                    "units"
-                                ]
+                                "type": "string"
                             }
                         }
                     },
                     {
-                        "name": "update",
+                        "name": "category_id",
                         "in": "query",
-                        "description": "Update attributes",
+                        "description": "ID of category bound wiht the attribute",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "id": {
-                                        "type": "integer"
-                                    },
-                                    "name": {
-                                        "type": "string"
-                                    },
-                                    "units": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string"
-                                        }
-                                    }
-                                },
-                                "required": [
-                                    "id",
-                                    "name",
-                                    "units"
-                                ]
-                            }
+                            "type": "integer"
                         }
                     },
                     {
-                        "name": "delete",
+                        "name": "is_required",
                         "in": "query",
-                        "description": "Delete attributes",
+                        "description": "Decide if the attribute is required or optional (must be filled in if category_id is presented)",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "id": {
-                                        "type": "integer"
-                                    }
-                                },
-                                "required": [
-                                    "id"
-                                ]
-                            }
+                            "type": "boolean"
                         }
                     }
                 ],
@@ -2636,6 +2524,78 @@
                     },
                     "400": {
                         "description": "Invliad input"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/products/categories/attributes/{id}": {
+            "put": {
+                "tags": [
+                    "product"
+                ],
+                "summary": "Update attribute (admin)",
+                "operationId": "updateAttribute",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Name of attribute",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "units",
+                        "in": "query",
+                        "description": "Units of attribute",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invliad input"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "product"
+                ],
+                "summary": "Delete attribute (admin)",
+                "operationId": "deleteAttribute",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of attribute",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
                     },
                     "401": {
                         "description": "Missing bearer token"
@@ -2668,11 +2628,13 @@
                     "200": {
                         "description": "Success"
                     },
-                    "404": {
-                        "description": "Not found"
+                    "401": {
+                        "description": "Missing bearer token"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
                     }
-                },
-                "security": []
+                }
             }
         },
         "/cart": {

@@ -26,22 +26,6 @@ class CategoryController extends Controller
     }
 
     /**
-     * Get the category by id.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function get(int $id)
-    {
-        $category = Category::findOrFail($id);
-
-        return response()->json([
-            'status' => true,
-            'data' => $category,
-        ]);
-    }
-
-    /**
      * Get children of the category.
      *
      * @return \Illuminate\Http\JsonResponse
@@ -90,7 +74,7 @@ class CategoryController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Attributes have been binded!',
-        ], Response::HTTP_CREATED);
+        ]);
     }
 
     /**

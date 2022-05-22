@@ -15,7 +15,7 @@ class BatchUniqueRule extends BatchSomethingRule
             ? ''
             : '.' . $this->validatedKey;
 
-        return 'The :attribute.*.' . $validatedKey . ' fields have taken value.';
+        return 'The :attribute.*' . $validatedKey . ' fields have taken value.';
     }
 
     protected function validate(array $validatedValues)

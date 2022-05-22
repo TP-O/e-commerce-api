@@ -4,7 +4,6 @@ namespace App\Rules;
 
 use Exception;
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Database\Eloquent\Model;
 
 abstract class BatchSomethingRule implements Rule
 {
