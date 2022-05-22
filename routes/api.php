@@ -16,9 +16,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v2')->namespace('Api')->group(function () {
-    Route::prefix('resources')->group(function () {
-        Route::post('/images', 'ResourceController@uploadImage');
-    });
+    Route::prefix('resources')->middleware('allow:' . join(',', [User::class, Admin::class]))
+        ->group(function () {
+            Route::post('/images', 'ResourceController@uploadImage');
+        });
 
     Route::namespace('Auth')->group(function () {
         Route::prefix('auth')->group(function () {

@@ -98,51 +98,44 @@
                 "tags": [
                     "resource"
                 ],
-                "summary": "Upload images (everyone)",
+                "summary": "Upload images (user, seller and admin)",
                 "operationId": "uploadImages",
-                "parameters": [
-                    {
-                        "name": "images",
-                        "in": "query",
-                        "description": "List of uploaded images",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
                                 "type": "object",
                                 "properties": {
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "description": "Uploaded image"
+                                    },
                                     "ratio": {
                                         "type": "integer",
                                         "enum": [
                                             0,
                                             1
-                                        ]
-                                    },
-                                    "is_demo": {
-                                        "type": "boolean"
-                                    },
-                                    "file": {
-                                        "type": "string",
-                                        "default": "this is just an example - Don't upload images here =)"
+                                        ],
+                                        "description": "0 is square - 1 is rectangle"
                                     }
                                 },
                                 "required": [
-                                    "ratio",
-                                    "file"
+                                    "image",
+                                    "ratio"
                                 ]
                             }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
                         "description": "Success"
                     },
                     "400": {
-                        "description": "Invalid images"
+                        "description": "Invalid input"
                     }
-                },
-                "security": []
+                }
             }
         },
         "/auth/sign-up": {
@@ -2543,6 +2536,15 @@
                 "operationId": "updateAttribute",
                 "parameters": [
                     {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Attribute's ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
                         "name": "name",
                         "in": "query",
                         "description": "Name of attribute",
@@ -2588,6 +2590,7 @@
                         "name": "id",
                         "in": "path",
                         "description": "ID of attribute",
+                        "required": true,
                         "schema": {
                             "type": "integer"
                         }

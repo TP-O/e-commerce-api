@@ -181,7 +181,7 @@ class ResourceService
 
         foreach ($images as $image) {
             $imageId = $this->storeImage(
-                $image['file'],
+                $image['image'],
                 $image['ratio'],
                 $image['is_demo'] ?? false,
             );

@@ -36,21 +36,16 @@ class ResourceController extends Controller
      */
     public function uploadImage(UploadImageRequest $request)
     {
-        $imageData = [];
-
-        foreach ($request->input('images') as $key => $image) {
-            array_push($imageData, [
-                ...$image,
-                'file' => $request->file('images')[$key]['file'],
-            ]);
-        }
-
-        $imageIds = $this->resourceService->storeImages($imageData);
+        $imageId = $this->resourceService->storeImage(
+            $request->file('image'),
+            $request->input('ratio'),
+            $request->input('is_demo'),
+        );
 
         return response()->json([
             'status' => true,
             'data' => [
-                'image_ids' => $imageIds,
+                'id' => $imageId,
             ],
         ]);
     }

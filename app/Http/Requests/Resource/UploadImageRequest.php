@@ -24,10 +24,9 @@ class UploadImageRequest extends CustomFormRequest
     public function rules()
     {
         return [
-            'images' => 'required|array',
-            'images.*.ratio' => 'required|integer|min:0|max:1',
-            'images.*.file' => 'required|image|mimes:jpg,jpeg,png|max:1024',
-            'images.*.is_demo' => 'boolean',
+            'ratio' => 'required|integer|min:0|max:1',
+            'image' => 'required|image|mimes:jpg,jpeg,png|max:1024|dimensions:min_width=360,min_height=180',
+            'is_demo' => 'boolean',
         ];
     }
 }
