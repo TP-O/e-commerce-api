@@ -36,6 +36,7 @@ spec:
                   fieldPath: metadata.name
           args:
             - -enable-custom-resources=false
+            - -enable-snippets=true
             - -ingress-class=nginx-ingress
             - -nginx-configmaps=$(POD_NAMESPACE)/nginx-ingress-config
             - -default-server-tls-secret=$(POD_NAMESPACE)/ingress-tls-secret

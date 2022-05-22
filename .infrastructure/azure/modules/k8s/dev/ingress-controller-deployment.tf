@@ -31,7 +31,7 @@ resource "kubernetes_deployment" "nginx_ingress_controller" {
         container {
           name  = "nginx-ingress-controller"
           image = "nginx/nginx-ingress:2.0.3-alpine"
-          args  = ["-enable-custom-resources=false", "-ingress-class=nginx-ingress", "-nginx-configmaps=$(POD_NAMESPACE)/nginx-ingress-config", "-default-server-tls-secret=$(POD_NAMESPACE)/ingress-tls-secret"]
+          args  = ["-enable-custom-resources=false", "-enable-snippets=true", "-ingress-class=nginx-ingress", "-nginx-configmaps=$(POD_NAMESPACE)/nginx-ingress-config", "-default-server-tls-secret=$(POD_NAMESPACE)/ingress-tls-secret"]
 
           port {
             name           = "http"
