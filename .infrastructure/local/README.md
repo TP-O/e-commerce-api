@@ -1,11 +1,14 @@
 # Guide
 
-## Fill in secret
+## Prepare
 
-Rename all files ending with `.template` to `.yml`, then fill in the secrets.
+```bash
+$ ./init.sh
+```
 
-- api/04-secret.template
-- postgres/03-secret.template
+Then fill in the secrets:
+- api/04-secret.yml
+- postgres/03-secret.yml
 
 ## Start
 

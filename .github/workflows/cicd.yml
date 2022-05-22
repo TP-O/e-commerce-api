@@ -8,6 +8,7 @@ on:
     paths-ignore:
       - '.vscode/**'
       - '.infrastructure/**'
+      - 'docs/**'
       - 'storage/**'
       - '.editorconfig'
       - '**.md'
