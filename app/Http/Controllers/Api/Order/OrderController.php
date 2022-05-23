@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Order;
 
+use App\Enums\Pagination;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\CreateOrderRequest;
 use App\Http\Requests\Order\GetOrderRequest;
@@ -35,7 +36,7 @@ class OrderController extends Controller
             ['status_id', $orderQuery['status_id']]
         ])
             ->with(['product', 'address'])
-            ->paginate($orderQuery['limit']);
+            ->paginate($orderQuery['limit'] ?? Pagination::Default);
 
         return response()->json([
             'status' => true,

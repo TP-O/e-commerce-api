@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Api\Shop;
 
+use App\Enums\Pagination;
+use App\Enums\ProductStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Product\GetProductRequest;
 use App\Http\Requests\Shop\CreateShopRequest;
 use App\Http\Requests\Shop\UpdateShopRequest;
+use App\Models\Product\Product;
 use App\Models\Shop\Shop;
 use App\Services\ShopService;
 use Illuminate\Http\Response;
@@ -47,41 +51,22 @@ class ShopController extends Controller
     /**
      * Get published products of the shop.
      *
-     * @param int}string $idOrSlug
+     * @param \App\Http\Requests\Product\GetProductRequest $request
+     * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function publishedProducts($idOrSlug)
+    public function publishedProducts(GetProductRequest $request, int $id)
     {
-        $shop = Shop::where('id', (int) $idOrSlug)
-            ->orWhere('slug', $idOrSlug)
-            ->firstOrFail();
-
-        $publishedProducts = $shop
-            ->publishedProducts()
-            ->paginate(10);
+        $publishedProducts = Product::where([
+            ['shop_id', $id],
+            ['status_id', ProductStatus::Published],
+        ])
+            ->with('models')
+            ->paginate($request->input('limit') ?? Pagination::Default);
 
         return response()->json([
             'status' => true,
             'data' => $publishedProducts,
-        ]);
-    }
-
-    /**
-     * Get products of the current shop.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function products()
-    {
-        $products = request()
-            ->user()
-            ->shop
-            ->products()
-            ->paginate(10);
-
-        return response()->json([
-            'status' => true,
-            'data' => $products ?? [],
         ]);
     }
 
@@ -92,11 +77,28 @@ class ShopController extends Controller
      */
     public function mine()
     {
-        $shop = request()->user()->shop?->with('statistic')->get();
+        $shop = request()->user()->shop;
 
         return response()->json([
             'status' => true,
             'data' => $shop,
+        ]);
+    }
+
+    /**
+     * Get products of the current shop.
+     *
+     * @param \App\Http\Requests\Product\GetProductRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function products(GetProductRequest $request)
+    {
+        $products = Product::where('shop_id', request()->user()->id)
+            ->paginate($request->input('limit') ?? Pagination::Default);
+
+        return response()->json([
+            'status' => true,
+            'data' => $products,
         ]);
     }
 

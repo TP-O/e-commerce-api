@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\Pagination;
 use App\Models\Order\CartItem;
 
 class CartService
@@ -24,7 +25,7 @@ class CartService
     {
         $cart = CartItem::where('user_id', $userId)
             ->with(['product', 'productModel'])
-            ->paginate($cartQuery['limit']);
+            ->paginate($cartQuery['limit'] ?? Pagination::Default);
 
         $prices = $this->productService->getPrices($cart->toArray()['data']);
 

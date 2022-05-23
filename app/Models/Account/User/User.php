@@ -58,7 +58,8 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 
     public function shop()
     {
-        return $this->hasOne(Shop::class, 'id');
+        return $this->hasOne(Shop::class, 'id')
+            ->with('statistic');
     }
 
     public function cart()

@@ -95,7 +95,7 @@ Route::prefix('v2')->namespace('Api')->group(function () {
         });
 
         Route::get('/{id_or_slug}', 'ShopController@get');
-        Route::get('/{id_or_slug}/products', 'ShopController@publishedProducts');
+        Route::get('/{id}/products', 'ShopController@publishedProducts');
     });
 
     Route::prefix('products')->namespace('Product')->group(function () {
