@@ -2,7 +2,7 @@
 
 This repository is an E-Commerce API used as my `Principle of Database Management` and `Web Application Development` projects at International University (HCMIU). In order to not waste time on system design, I decided to make it based on [Shopee](https://shopee.vn/). Because of API's simplicity, only some of Shopee basic features are covered in the project.
 
-# Feature
+# Features
 
 - [x] Resource uploading
     - [x] Images
@@ -14,9 +14,9 @@ This repository is an E-Commerce API used as my `Principle of Database Managemen
         - [x] Google account
         - [x] Github account
     - [x] Sign-out
-    - [x] Email verification (only user)
+    - [x] Email verification
     - [x] Password reset
-- [x] User account management
+- [x] Account management
     - [x] Profile
     - [x] Addresses
     - [x] Bank accounts
@@ -35,7 +35,7 @@ This repository is an E-Commerce API used as my `Principle of Database Managemen
     - [ ] Credit card
     - [ ] On delivered
 
-# Technology
+# Tools And Technologies
 
 - [Laravel (PHP Framework)](https://laravel.com/)
 - [NGINX Web Server](https://en.wikipedia.org/wiki/Nginx)
@@ -52,7 +52,7 @@ This repository is an E-Commerce API used as my `Principle of Database Managemen
 - [Github Actions](https://github.com/features/actions)
 - [draw.io](https://app.diagrams.net/)
 
-# Detail
+# Details
 
 ## Database Design
 
@@ -67,13 +67,16 @@ Read [here](https://tpo-project.github.io/e-commerce-api/).
 # Setup
 
 ## Clone repo
+
 ```bash
 $ git clone git@github.com:tpo-project/e-commerce-api.git
+
+$ cd e-commerce-api
 ```
 
 ### Run with Docker Compose
 
-> Install Docker & Docker Compose
+> Install Docker & Docker Compose: [https://docs.docker.com/desktop/#download-and-install](https://docs.docker.com/desktop/#download-and-install)
 
 ```bash
 $ cp .env.example .env
@@ -85,7 +88,7 @@ Then fill in:
 - `FACEBOOK_CLIENT_ID` and `FACEBOOK_CLIENT_SECRET` if you want users to be able sign in with Facebook (the same with Google and Github).
 
 ```bash
-$ docker-compose -f docker-compose.demo.yml up -d
+$ docker-compose -f docker-compose.demo.yml up -d --build
 
 $ docker-compose -f docker-compose.demo.yml exec api php artisan key:generate
 
@@ -96,11 +99,11 @@ Access `https://127.0.0.1/api/v2` or `https://localhost/api/v2` to interact with
 
 ### Run with minikube
 
-> Install Docker
+> Install Docker: [https://docs.docker.com/desktop/#download-and-install](https://docs.docker.com/desktop/#download-and-install)
 
-> Install minikube
+> Install minikube: [https://minikube.sigs.k8s.io/docs/start/](https://minikube.sigs.k8s.io/docs/start/)
 
-> Install kubectl
+> Install kubectl: [https://kubernetes.io/docs/tasks/tools/](https://kubernetes.io/docs/tasks/tools/)
 
 ```bash
 $ minikube start
@@ -114,28 +117,36 @@ $ cd .infrastructure/local
 
 ### Run with AKS
 
-> Install Terraform
+> Install Terraform: [https://learn.hashicorp.com/tutorials/terraform/install-cli](https://learn.hashicorp.com/tutorials/terraform/install-cli)
 
 ```bash
-$ cd .infrastructure/local
+$ cd .infrastructure/azure
 ```
 
 [Next steps](https://github.com/tpo-project/e-commerce-api/tree/2.x.x/.infrastructure/azure)
 
-# Contributor
+# Contributors
 
 ## Version 1.x.x (Principle of Database Management project)
 
-- [duythinh26](duythinh26)
-- [Titactics](https://github.com/Titactics)
-- [nhatnguyen510](https://github.com/nhatnguyen510)
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/nhatnguyen510"><img src="https://avatars.githubusercontent.com/u/71200617?v=4?s=100" width="100px;" alt=""/><br /><sub><b>nhatnguyen510</b></sub></a></td>
+    <td align="center"><a href="https://github.com/Titactics"><img src="https://avatars.githubusercontent.com/u/71199588?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Titactics</b></sub></a></td>
+    <td align="center"><a href="https://github.com/duythinh26"><img src="https://avatars.githubusercontent.com/u/67096386?v=4?s=100" width="100px;" alt=""/><br /><sub><b>duythinh26</b></sub></a></td>
+  </tr>
+</table>
 
 ## Version 2.x.x (Web Application Development project)
 
-- [thanhson1207](https://github.com/thanhson1207)
-- [thuongtruong1009](thuongtruong1009)
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/thanhson1207"><img src="https://avatars.githubusercontent.com/u/68525507?v=4?s=100" width="100px;" alt=""/><br /><sub><b>thanhson1207</b></sub></a></td>
+    <td align="center"><a href="https://github.com/thuongtruong1009"><img src="https://avatars.githubusercontent.com/u/71834167?v=4?s=100" width="100px;" alt=""/><br /><sub><b>thuongtruong1009</b></sub></a></td>
+  </tr>
+</table>
 
-# 📰 [License](LICENSE)
+# License
 
 - ##### This project is distributed under the [MIT License](LICENSE).
 - ##### Copyright of [@TP-O](https://github.com/TP-O), 2022.
