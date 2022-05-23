@@ -14,9 +14,9 @@ This repository is an E-Commerce API used as my `Principle of Database Managemen
         - [x] Google account
         - [x] Github account
     - [x] Sign-out
-    - [x] Email verification
+    - [x] Email verification (only user)
     - [x] Password reset
-- [x] Account management
+- [x] User account management
     - [x] Profile
     - [x] Addresses
     - [x] Bank accounts

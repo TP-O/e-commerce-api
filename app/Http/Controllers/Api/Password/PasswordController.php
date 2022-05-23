@@ -6,16 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Password\ForgotPasswordRequest;
 use App\Http\Requests\Password\ResetPasswordRequest;
 use App\Http\Requests\Password\UpdatePasswordRequest;
+use App\Models\Account\User\User;
 use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-abstract class PasswordController extends Controller
+class PasswordController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:sanctum')->only('updatePassword');
+        $this->middleware('auth:sanctum')->only('update');
     }
 
     /**
@@ -48,14 +49,29 @@ abstract class PasswordController extends Controller
     }
 
     /**
-     * Set reset password url.
+     * Set user reset password url.
      *
      * @return void
      */
-    protected function setResetUrl()
+    private function setUserResetUrl()
     {
         ResetPasswordNotification::createUrlUsing(function ($notifiable, $token) {
-            return url(route('password.reset', [
+            return url(route('user.password.reset', [
+                'token' => $token,
+                'email' => $notifiable->getEmailForPasswordReset(),
+            ], false));
+        });
+    }
+
+    /**
+     * Set admin reset password url.
+     *
+     * @return void
+     */
+    private function setAdminResetUrl()
+    {
+        ResetPasswordNotification::createUrlUsing(function ($notifiable, $token) {
+            return url(route('admin.password.reset', [
                 'token' => $token,
                 'email' => $notifiable->getEmailForPasswordReset(),
             ], false));
@@ -73,8 +89,6 @@ abstract class PasswordController extends Controller
      */
     protected function forgotPassword(ForgotPasswordRequest $request, string $broker)
     {
-        $this->setResetUrl();
-
         $status = Password::broker($broker)->sendResetLink(
             $request->safe()->only('email'),
         );
@@ -105,7 +119,7 @@ abstract class PasswordController extends Controller
         $status = Password::broker($broker)->reset(
             $request->safe()->only('email', 'token', 'password'),
             function ($user, $password) {
-                $user()->update([
+                $user->update([
                     'password' => Hash::make($password, ['rounds' => 10]),
                 ]);
 
@@ -124,18 +138,56 @@ abstract class PasswordController extends Controller
     }
 
     /**
-     * Send the reset password email with the specific broker.
+     * Send the reset password email to an user.
      *
      * @param \App\Http\Requests\Password\ForgotPasswordRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    abstract public function forgot(ForgotPasswordRequest $request);
+    public function forgotUserPassword(ForgotPasswordRequest $request)
+    {
+        $this->setUserResetUrl();
+
+        $user = User::where('email', $request->safe()->only('email'))->first();
+
+        if (is_null($user?->email_verified_at)) {
+            throw new BadRequestHttpException('Email has not been verified!');
+        }
+
+        return $this->forgotPassword($request, 'users');
+    }
 
     /**
-     * Reset the password with the specific broker.
+     * Reset the user's password.
      *
      * @param \App\Http\Requests\Password\ResetPasswordRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    abstract public function reset(ResetPasswordRequest $request);
+    public function resetUserPassword(ResetPasswordRequest $request)
+    {
+        return $this->resetPassword($request, 'users');
+    }
+
+    /**
+     * Send the reset password email to an admin.
+     *
+     * @param \App\Http\Requests\Password\ForgotPasswordRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function forgotAdminPassword(ForgotPasswordRequest $request)
+    {
+        $this->setAdminResetUrl();
+
+        return $this->forgotPassword($request, 'admins');
+    }
+
+    /**
+     * Reset the admin's password.
+     *
+     * @param \App\Http\Requests\Password\ResetPasswordRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function resetAdminPassword(ResetPasswordRequest $request)
+    {
+        return $this->resetPassword($request, 'admins');
+    }
 }

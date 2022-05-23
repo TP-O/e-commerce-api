@@ -54,7 +54,7 @@ class ProductService
             }, $productData['wholesale_prices'] ?? []),
         );
 
-        $product->attributes()->attach($productData['attributes']);
+        $product->attributes()->attach($productData['attributes'] ?? []);
         $product->categories()->attach($productData['category_path']);
 
         return $product->id;
@@ -163,7 +163,7 @@ class ProductService
         );
 
         $product->attributes()->sync(
-            collect($productData['attributes'])->keyBy('attribute_id'),
+            collect($productData['attributes'] ?? [])->keyBy('attribute_id'),
         );
         $product->categories()->sync($productData['category_path']);
 

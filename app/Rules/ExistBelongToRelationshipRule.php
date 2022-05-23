@@ -94,7 +94,7 @@ class ExistBelongToRelationshipRule implements Rule
     public function message()
     {
         return is_null($this->key)
-            ? 'The :attribute field is invalid.'
-            : 'The :attribute fields have invalid value';
+            ? 'The :attribute field has invalid ' . $this->foreignKey
+            : 'The :attribute fields have at least one model containing invalid ' . $this->foreignKey;
     }
 }

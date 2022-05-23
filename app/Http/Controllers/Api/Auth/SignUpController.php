@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Auth\SignUp;
+namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\SignUpUserRequest;
@@ -13,7 +13,7 @@ use Illuminate\Http\Response;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class UserSignUpController extends Controller
+class SignUpController extends Controller
 {
     private AuthService $authService;
 

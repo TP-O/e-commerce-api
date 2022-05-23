@@ -18,7 +18,10 @@ class AllowAccounts
      */
     public function handle(Request $request, Closure $next, ...$accountTypes)
     {
-        if (!in_array($request->user()->currentAccessToken()->tokenable_type, $accountTypes)) {
+        if (
+            !in_array($request->user()->currentAccessToken()->tokenable_type, $accountTypes) &&
+            !in_array('*', $accountTypes)
+        ) {
             throw new UnauthorizedHttpException('', 'Not for you, kid!');
         }
 

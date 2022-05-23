@@ -22,17 +22,17 @@ class OrderController extends Controller
     }
 
     /**
-     * Get the order by ID.
+     * Get the order by id.
      *
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function get(int $id)
     {
-        $order = Order::where(
+        $order = Order::where([
             ['user_id', request()->user()->id],
             ['id', $id],
-        )
+        ])
             ->with([
                 'product',
                 'receivedAddress',
@@ -53,11 +53,11 @@ class OrderController extends Controller
      * @param \App\Http\Requests\Order\GetOrderListRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getList(GetOrderListRequest $request)
+    public function belongToUser(GetOrderListRequest $request)
     {
         $orderQuery = $request->validated();
 
-        $orders = isset($orderQuery['status_id'])
+        $orders = !isset($orderQuery['status_id'])
             ? Order::where('user_id', $request->user()->id)
             : Order::where([
                 ['user_id', $request->user()->id],
@@ -66,6 +66,33 @@ class OrderController extends Controller
 
         $orders = $orders
             ->with(['product', 'receivedAddress', 'pickupAddress'])
+            ->paginate($orderQuery['limit'] ?? Pagination::Default);
+
+        return response()->json([
+            'status' => true,
+            'data' => $orders,
+        ]);
+    }
+
+    /**
+     * Get the orders of the current shop by status.
+     *
+     * @param \App\Http\Requests\Order\GetOrderListRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function belongToShop(GetOrderListRequest $request)
+    {
+        $orderQuery = $request->validated();
+
+        $orders = !isset($orderQuery['status_id'])
+            ? Order::where('shop_id', $request->user()->id)
+            : Order::where([
+                ['shop_id', $request->user()->id],
+                ['status_id', $orderQuery['status_id']]
+            ]);
+
+        $orders = $orders
+            ->with(['product', 'receivedAddress'])
             ->paginate($orderQuery['limit'] ?? Pagination::Default);
 
         return response()->json([

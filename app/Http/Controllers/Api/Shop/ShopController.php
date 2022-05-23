@@ -2,15 +2,9 @@
 
 namespace App\Http\Controllers\Api\Shop;
 
-use App\Enums\Pagination;
-use App\Enums\ProductStatus;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Order\GetOrderListRequest;
-use App\Http\Requests\Product\GetProductRequest;
 use App\Http\Requests\Shop\CreateShopRequest;
 use App\Http\Requests\Shop\UpdateShopRequest;
-use App\Models\Order\Order;
-use App\Models\Product\Product;
 use App\Models\Shop\Shop;
 use App\Services\ShopService;
 use Illuminate\Http\Response;
@@ -51,56 +45,17 @@ class ShopController extends Controller
     }
 
     /**
-     * Get published products of the shop.
-     *
-     * @param \App\Http\Requests\Product\GetProductRequest $request
-     * @param int $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function publishedProducts(GetProductRequest $request, int $id)
-    {
-        $publishedProducts = Product::where([
-            ['shop_id', $id],
-            ['status_id', ProductStatus::Published],
-        ])
-            ->with('models')
-            ->paginate($request->input('limit') ?? Pagination::Default);
-
-        return response()->json([
-            'status' => true,
-            'data' => $publishedProducts,
-        ]);
-    }
-
-    /**
      * Get the owned shop.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function mine()
+    public function myShop()
     {
         $shop = request()->user()->shop;
 
         return response()->json([
             'status' => true,
             'data' => $shop,
-        ]);
-    }
-
-    /**
-     * Get products of the current shop.
-     *
-     * @param \App\Http\Requests\Product\GetProductRequest $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function products(GetProductRequest $request)
-    {
-        $products = Product::where('shop_id', request()->user()->id)
-            ->paginate($request->input('limit') ?? Pagination::Default);
-
-        return response()->json([
-            'status' => true,
-            'data' => $products,
         ]);
     }
 
@@ -112,7 +67,7 @@ class ShopController extends Controller
      */
     public function create(CreateShopRequest $request)
     {
-        $shop = $this->shopService->create(
+        $this->shopService->create(
             auth()->user()->id,
             $request->validated(),
         );
@@ -120,7 +75,6 @@ class ShopController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Shop has been created!',
-            'data' => $shop,
         ], Response::HTTP_CREATED);
     }
 
@@ -140,33 +94,6 @@ class ShopController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Shop has been updated!',
-        ]);
-    }
-
-    /**
-     * Get the orders of the current shop by status.
-     *
-     * @param \App\Http\Requests\Order\GetOrderListRequest $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function orders(GetOrderListRequest $request)
-    {
-        $orderQuery = $request->validated();
-
-        $orders = isset($orderQuery['status_id'])
-            ? Order::where('shop_id', $request->user()->id)
-            : Order::where([
-                ['user_id', $request->user()->id],
-                ['status_id', $orderQuery['status_id']]
-            ]);
-
-        $orders = $orders
-            ->with(['product', 'receivedAddress'])
-            ->paginate($orderQuery['limit'] ?? Pagination::Default);
-
-        return response()->json([
-            'status' => true,
-            'data' => $orders,
         ]);
     }
 }

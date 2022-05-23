@@ -6,6 +6,7 @@ use App\Enums\ResourceType;
 use App\Models\Shop\Shop;
 use App\Models\Account\User\Profile;
 use App\Models\Account\User\User;
+use Illuminate\Support\Arr;
 
 class ShopService
 {
@@ -79,7 +80,10 @@ class ShopService
                 return isset($banner['image'])
                     ? [
                         'type' => ResourceType::Image,
-                        ...$banner['image'],
+                        ...Arr::only(
+                            $banner['image'],
+                            ['id', 'hyper_link'],
+                        ),
                     ]
                     : [
                         'type' => ResourceType::Video,

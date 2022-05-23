@@ -21,7 +21,6 @@ class CategoryController extends Controller
         $this->middleware('auth:sanctum')->except([
             'get',
             'children',
-            'attributes',
         ]);
     }
 
@@ -65,7 +64,7 @@ class CategoryController extends Controller
      * @param \App\Models\Product\Category $category
      * @return \Illuminate\Http\JsonResponse
      */
-    public function bind(BindCategoryAttributeRequest $request, Category $category)
+    public function bindAttributes(BindCategoryAttributeRequest $request, Category $category)
     {
         $category->attributes()->sync(
             collect($request->input('binds'))->keyBy('attribute_id'),

@@ -40,6 +40,7 @@ class OrderService
 
             return [
                 'user_id' => $userId,
+                'shop_id' => $product['shop_id'],
                 'product_id' => $product['id'],
                 'product_model_id' => $orderData['orders'][$key]['product_model_id'],
                 'received_address_id' => $orderData['address_id'],
@@ -47,6 +48,7 @@ class OrderService
                 'variations' => $variations,
                 'quantity' => $orderData['orders'][$key]['quantity'],
                 'total' => $prices[$key]['final_price'],
+                'grand_total' => $prices[$key]['final_price'],
             ];
         });
 

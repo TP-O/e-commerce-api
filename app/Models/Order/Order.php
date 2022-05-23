@@ -18,9 +18,11 @@ class Order extends Model
         'received_address_id',
         'pickup_address_id',
         'status_id',
+        'shop_id',
         'name',
         'quantity',
         'total',
+        'grand_total',
         'variations',
     ];
 
