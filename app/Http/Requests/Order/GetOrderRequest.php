@@ -25,7 +25,7 @@ class GetOrderRequest extends CustomFormRequest
     {
         return [
             'limit' => 'required|integer|min:1|max:20',
-            'status_id' => 'required|integer|min:1|exists:order_status,id',
+            'status_id' => 'integer|min:1|exists:order_status,id',
         ];
     }
 }

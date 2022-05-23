@@ -37,9 +37,14 @@ return new class extends Migration
                 ->constrained('product_models')
                 ->onUpdate('set null')
                 ->nullOnDelete();
-            $table->foreignId('address_id')
+            $table->foreignId('received_address_id')
                 ->nullable()
-                ->constrained('addresses')
+                ->constrained('received_address_id')
+                ->onUpdate('set null')
+                ->nullOnDelete();
+            $table->foreignId('pickup_address_id')
+                ->nullable()
+                ->constrained('pickup_address_id')
                 ->onUpdate('set null')
                 ->nullOnDelete();
             $table->foreignId('status_id')

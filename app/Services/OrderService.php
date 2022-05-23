@@ -42,7 +42,7 @@ class OrderService
                 'user_id' => $userId,
                 'product_id' => $product['id'],
                 'product_model_id' => $orderData['orders'][$key]['product_model_id'],
-                'address_id' => $orderData['address_id'],
+                'received_address_id' => $orderData['address_id'],
                 'name' => $product->name,
                 'variations' => $variations,
                 'quantity' => $orderData['orders'][$key]['quantity'],

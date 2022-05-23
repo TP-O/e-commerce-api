@@ -31,11 +31,15 @@ class OrderController extends Controller
     {
         $orderQuery = $request->validated();
 
-        $orders = Order::where([
-            ['user_id', $request->user()->id],
-            ['status_id', $orderQuery['status_id']]
-        ])
-            ->with(['product', 'address'])
+        $orders = isset($orderQuery['status_id'])
+            ? Order::where('user_id', $request->user()->id)
+            : Order::where([
+                ['user_id', $request->user()->id],
+                ['status_id', $orderQuery['status_id']]
+            ]);
+
+        $orders = $orders
+            ->with(['product', 'receivedAddress', 'pickupAddress'])
             ->paginate($orderQuery['limit'] ?? Pagination::Default);
 
         return response()->json([
