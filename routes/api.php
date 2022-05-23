@@ -92,6 +92,7 @@ Route::prefix('v2')->namespace('Api')->group(function () {
             Route::get('/products', 'ShopController@products');
             Route::post('/', 'ShopController@create');
             Route::put('/', 'ShopController@update');
+            Route::get('/orders', 'ShopController@orders');
         });
 
         Route::get('/{id_or_slug}', 'ShopController@get');
@@ -141,7 +142,8 @@ Route::prefix('v2')->namespace('Api')->group(function () {
     });
 
     Route::prefix('orders')->namespace('Order')->middleware('allow:' . User::class)->group(function () {
-        Route::get('/', 'OrderController@get');
+        Route::get('/', 'OrderController@getList');
+        Route::get('/{id}', 'OrderController@get');
         Route::post('/', 'OrderController@create');
     });
 });

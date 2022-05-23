@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api\Shop;
 use App\Enums\Pagination;
 use App\Enums\ProductStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Order\GetOrderListRequest;
 use App\Http\Requests\Product\GetProductRequest;
 use App\Http\Requests\Shop\CreateShopRequest;
 use App\Http\Requests\Shop\UpdateShopRequest;
+use App\Models\Order\Order;
 use App\Models\Product\Product;
 use App\Models\Shop\Shop;
 use App\Services\ShopService;
@@ -138,6 +140,33 @@ class ShopController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Shop has been updated!',
+        ]);
+    }
+
+    /**
+     * Get the orders of the current shop by status.
+     *
+     * @param \App\Http\Requests\Order\GetOrderListRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function orders(GetOrderListRequest $request)
+    {
+        $orderQuery = $request->validated();
+
+        $orders = isset($orderQuery['status_id'])
+            ? Order::where('shop_id', $request->user()->id)
+            : Order::where([
+                ['user_id', $request->user()->id],
+                ['status_id', $orderQuery['status_id']]
+            ]);
+
+        $orders = $orders
+            ->with(['product', 'receivedAddress'])
+            ->paginate($orderQuery['limit'] ?? Pagination::Default);
+
+        return response()->json([
+            'status' => true,
+            'data' => $orders,
         ]);
     }
 }

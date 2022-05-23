@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Order;
 use App\Enums\Pagination;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\CreateOrderRequest;
-use App\Http\Requests\Order\GetOrderRequest;
+use App\Http\Requests\Order\GetOrderListRequest;
 use App\Models\Order\Order;
 use App\Services\OrderService;
 use Illuminate\Http\Response;
@@ -22,12 +22,38 @@ class OrderController extends Controller
     }
 
     /**
-     * Get orders of the current user by status.
+     * Get the order by ID.
      *
-     * @param \App\Http\Requests\Order\GetOrderRequest $request
+     * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function get(GetOrderRequest $request)
+    public function get(int $id)
+    {
+        $order = Order::where(
+            ['user_id', request()->user()->id],
+            ['id', $id],
+        )
+            ->with([
+                'product',
+                'receivedAddress',
+                'pickupAddress',
+                'progresses',
+            ])
+            ->firstOrFail();
+
+        return response()->json([
+            'status' => true,
+            'data' => $order,
+        ]);
+    }
+
+    /**
+     * Get the orders of the current user by status.
+     *
+     * @param \App\Http\Requests\Order\GetOrderListRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getList(GetOrderListRequest $request)
     {
         $orderQuery = $request->validated();
 

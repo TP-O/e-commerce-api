@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Order;
+namespace App\Models\Product;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +9,7 @@ class Progress extends Model
 {
     use HasFactory;
 
-    protected $table = 'order_status';
+    protected $table = 'order_progresses';
 
     protected $fillable = [
         'order_id',

@@ -44,4 +44,9 @@ class Order extends Model
     {
         return $this->belongsTo(Address::class, 'pickup_address_id');
     }
+
+    public function progresses()
+    {
+        return $this->hasMany(Progress::class);
+    }
 }

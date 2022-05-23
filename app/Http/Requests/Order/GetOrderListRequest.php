@@ -4,7 +4,7 @@ namespace App\Http\Requests\Order;
 
 use App\Http\Requests\CustomFormRequest;
 
-class GetOrderRequest extends CustomFormRequest
+class GetOrderListRequest extends CustomFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
