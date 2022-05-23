@@ -25,7 +25,7 @@ class OrderStatusSeeder extends Seeder
                 'name' => 'Ready',
             ],
             [
-                'id' => OrderStatus::Shipping,
+                'id' => OrderStatus::Delivering,
                 'name' => 'Shipping',
             ],
             [
@@ -35,6 +35,10 @@ class OrderStatusSeeder extends Seeder
             [
                 'id' => OrderStatus::Cancelled,
                 'name' => 'Cancelled',
+            ],
+            [
+                'id' => OrderStatus::Return,
+                'name' => 'Return',
             ],
         ]);
     }

@@ -9,12 +9,17 @@ class Progress extends Model
 {
     use HasFactory;
 
-    protected $table = 'order_status';
+    protected $table = 'order_progresses';
 
     protected $fillable = [
         'order_id',
         'status_id',
         'note',
+    ];
+
+    protected $hidden = [
+        'id',
+        'order_id',
     ];
 
     public $timestamps = false;

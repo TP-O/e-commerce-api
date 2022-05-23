@@ -15,11 +15,14 @@ class Order extends Model
         'user_id',
         'product_id',
         'product_model_id',
-        'address_id',
+        'received_address_id',
+        'pickup_address_id',
         'status_id',
+        'shop_id',
         'name',
         'quantity',
         'total',
+        'grand_total',
         'variations',
     ];
 
@@ -34,8 +37,18 @@ class Order extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function address()
+    public function receivedAddress()
     {
-        return $this->belongsTo(Address::class);
+        return $this->belongsTo(Address::class, 'received_address_id');
+    }
+
+    public function pickupAddress()
+    {
+        return $this->belongsTo(Address::class, 'pickup_address_id');
+    }
+
+    public function progresses()
+    {
+        return $this->hasMany(Progress::class);
     }
 }

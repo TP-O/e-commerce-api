@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api\Order;
 
+use App\Enums\Pagination;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\CreateOrderRequest;
-use App\Http\Requests\Order\GetOrderRequest;
+use App\Http\Requests\Order\GetOrderListRequest;
 use App\Models\Order\Order;
 use App\Services\OrderService;
 use Illuminate\Http\Response;
@@ -21,21 +22,78 @@ class OrderController extends Controller
     }
 
     /**
-     * Get orders of the current user by status.
+     * Get the order by id.
      *
-     * @param \App\Http\Requests\Order\GetOrderRequest $request
+     * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function get(GetOrderRequest $request)
+    public function get(int $id)
+    {
+        $order = Order::where([
+            ['user_id', request()->user()->id],
+            ['id', $id],
+        ])
+            ->with([
+                'product',
+                'receivedAddress',
+                'pickupAddress',
+                'progresses',
+            ])
+            ->firstOrFail();
+
+        return response()->json([
+            'status' => true,
+            'data' => $order,
+        ]);
+    }
+
+    /**
+     * Get the orders of the current user by status.
+     *
+     * @param \App\Http\Requests\Order\GetOrderListRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function belongToUser(GetOrderListRequest $request)
     {
         $orderQuery = $request->validated();
 
-        $orders = Order::where([
-            ['user_id', $request->user()->id],
-            ['status_id', $orderQuery['status_id']]
-        ])
-            ->with(['product', 'address'])
-            ->paginate($orderQuery['limit']);
+        $orders = !isset($orderQuery['status_id'])
+            ? Order::where('user_id', $request->user()->id)
+            : Order::where([
+                ['user_id', $request->user()->id],
+                ['status_id', $orderQuery['status_id']]
+            ]);
+
+        $orders = $orders
+            ->with(['product', 'receivedAddress', 'pickupAddress'])
+            ->paginate($orderQuery['limit'] ?? Pagination::Default);
+
+        return response()->json([
+            'status' => true,
+            'data' => $orders,
+        ]);
+    }
+
+    /**
+     * Get the orders of the current shop by status.
+     *
+     * @param \App\Http\Requests\Order\GetOrderListRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function belongToShop(GetOrderListRequest $request)
+    {
+        $orderQuery = $request->validated();
+
+        $orders = !isset($orderQuery['status_id'])
+            ? Order::where('shop_id', $request->user()->id)
+            : Order::where([
+                ['shop_id', $request->user()->id],
+                ['status_id', $orderQuery['status_id']]
+            ]);
+
+        $orders = $orders
+            ->with(['product', 'receivedAddress'])
+            ->paginate($orderQuery['limit'] ?? Pagination::Default);
 
         return response()->json([
             'status' => true,

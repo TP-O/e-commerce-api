@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Order;
+namespace App\Http\Requests\Product;
 
-use App\Enums\OrderStatus;
+use App\Enums\OrderProductBy;
 use App\Http\Requests\CustomFormRequest;
+use App\Models\Product\Category;
+use App\Rules\BatchExistsRule;
 
-class GetOrderRequest extends CustomFormRequest
+class GetProductRequest extends CustomFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +28,6 @@ class GetOrderRequest extends CustomFormRequest
     {
         return [
             'limit' => 'required|integer|min:1|max:20',
-            'status_id' => 'required|integer|min:1|exists:order_status,id',
         ];
     }
 }

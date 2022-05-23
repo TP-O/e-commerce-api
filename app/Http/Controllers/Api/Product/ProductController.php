@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api\Product;
 
+use App\Enums\Pagination;
 use App\Enums\ProductStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\CreateProductRequest;
 use App\Http\Requests\Product\DeleteProductRequest;
-use App\Http\Requests\Product\GetProductPriceRequest;
+use App\Http\Requests\Product\GetProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 use App\Models\Product\Product;
 use App\Services\ProductService;
@@ -24,7 +25,7 @@ class ProductController extends Controller
         $this->middleware('auth:sanctum')->except([
             'get',
             'search',
-            'prices',
+            'publishedBelongToShop',
         ]);
     }
 
@@ -37,10 +38,10 @@ class ProductController extends Controller
     public function get(int $id)
     {
         $product = Product::where([
-                ['id', $id],
-                ['status_id', '<>', ProductStatus::Delisted->value],
-                ['status_id', '<>', ProductStatus::Deleted->value],
-            ])
+            ['id', $id],
+            ['status_id', '<>', ProductStatus::Delisted->value],
+            ['status_id', '<>', ProductStatus::Deleted->value],
+        ])
             ->with([
                 'attributes',
                 'models',
@@ -51,6 +52,48 @@ class ProductController extends Controller
         return response()->json([
             'status' => true,
             'data' => $product,
+        ]);
+    }
+
+    /**
+     * Get published products of the shop.
+     *
+     * @param \App\Http\Requests\Product\GetProductRequest $request
+     * @param int $shopId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function publishedBelongToShop(GetProductRequest $request, int $shopId)
+    {
+        $publishedProducts = Product::where([
+            ['shop_id', $shopId],
+            ['status_id', ProductStatus::Published],
+        ])
+            ->with('models')
+            ->paginate($request->input('limit') ?? Pagination::Default);
+
+        return response()->json([
+            'status' => true,
+            'data' => $publishedProducts,
+        ]);
+    }
+
+    /**
+     * Get products of the current shop.
+     *
+     * @param \App\Http\Requests\Product\GetProductRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function belongToShop(GetProductRequest $request)
+    {
+        $products = Product::where([
+            ['shop_id', request()->user()->id],
+            ['status_id', '<>', ProductStatus::Deleted],
+        ])
+            ->paginate($request->input('limit') ?? Pagination::Default);
+
+        return response()->json([
+            'status' => true,
+            'data' => $products,
         ]);
     }
 
@@ -130,24 +173,6 @@ class ProductController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Product has been recoveried!',
-        ]);
-    }
-
-    /**
-     * Get prices of the product models.
-     *
-     * @param \App\Http\Requests\Product\GetProductPriceRequest $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function prices(GetProductPriceRequest $request)
-    {
-        $getProductQuery = $request->validated();
-
-        $prices = $this->productService->getPrices($getProductQuery['products']);
-
-        return response()->json([
-            'status' => true,
-            'data' => $prices,
         ]);
     }
 }

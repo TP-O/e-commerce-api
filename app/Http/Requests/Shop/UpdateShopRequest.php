@@ -37,9 +37,9 @@ class UpdateShopRequest extends CustomFormRequest
                 new ExistImageRule(),
             ],
             'banners' => 'array|max:5',
-            'banners.*.image' => 'required_without:banners.*.video',
+            'banners.*.image' => 'required_without:banners.*.video|filled',
             'banners.*.image.id' => [
-                'required_without:banners.*.image',
+                'required_with:banners.*.image',
                 'string',
                 new ExistImageRule(),
             ],

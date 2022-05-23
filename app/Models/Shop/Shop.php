@@ -43,10 +43,7 @@ class Shop extends Model
     public function publishedProducts()
     {
         return $this->hasMany(Product::class)
-            ->where([
-                ['status_id', '<>', ProductStatus::Delisted],
-                ['status_id', '<>', ProductStatus::Deleted],
-            ])
+            ->where('status_id', ProductStatus::Published)
             ->with('models');
     }
 }

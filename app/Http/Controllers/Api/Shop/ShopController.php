@@ -45,54 +45,13 @@ class ShopController extends Controller
     }
 
     /**
-     * Get published products of the shop.
-     *
-     * @param int}string $idOrSlug
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function publishedProducts($idOrSlug)
-    {
-        $shop = Shop::where('id', (int) $idOrSlug)
-            ->orWhere('slug', $idOrSlug)
-            ->firstOrFail();
-
-        $publishedProducts = $shop
-            ->publishedProducts()
-            ->paginate(10);
-
-        return response()->json([
-            'status' => true,
-            'data' => $publishedProducts,
-        ]);
-    }
-
-    /**
-     * Get products of the current shop.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function products()
-    {
-        $products = request()
-            ->user()
-            ->shop
-            ->products()
-            ->paginate(10);
-
-        return response()->json([
-            'status' => true,
-            'data' => $products ?? [],
-        ]);
-    }
-
-    /**
      * Get the owned shop.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function mine()
+    public function myShop()
     {
-        $shop = request()->user()->shop?->with('statistic')->get();
+        $shop = request()->user()->shop;
 
         return response()->json([
             'status' => true,
@@ -108,7 +67,7 @@ class ShopController extends Controller
      */
     public function create(CreateShopRequest $request)
     {
-        $shop = $this->shopService->create(
+        $this->shopService->create(
             auth()->user()->id,
             $request->validated(),
         );
@@ -116,7 +75,6 @@ class ShopController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Shop has been created!',
-            'data' => $shop,
         ], Response::HTTP_CREATED);
     }
 

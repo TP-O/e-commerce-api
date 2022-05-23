@@ -76,30 +76,33 @@ class ValidProductAttributesRule implements Rule, DataAwareRule
             ->whereIn('id', $inputAttributeIds)
             ->count() !== count($inputAttributeIds)
         ) {
-            $this->message = 'The :attribute fields have invalid value.';
+            $this->message = 'The :attribute fields have unexpected attribute(s).';
 
             return false;
         }
 
         for ($i = 0; $i < $categoryAttributes->count(); $i++) {
+            // Check if the attribute id is contained in input attribute ids
             $exists = array_search($categoryAttributes[$i]['id'], $inputAttributeIds);
             $isRequired = $categoryAttributes[$i]['is_required'];
 
             // Check if the required attribute is missed
             if ($exists === false && $isRequired) {
-                $this->message = 'The :attribute fields are missing required attributes.';
+                $this->message = 'The :attribute fields are missing required attribute(s).';
 
                 return false;
             }
             // Check if the unit is correct
             else if (
                 $exists !== false &&
-                array_search(
-                    $value[$exists]['unit'] ?? '',
-                    $categoryAttributes[$i]['units'],
-                ) === false
+                ((is_null($value[$exists]['unit']) &&
+                    count($categoryAttributes[$i]['units']) === 0) ||
+                    array_search(
+                        $value[$exists]['unit'],
+                        $categoryAttributes[$i]['units'],
+                    ) === false)
             ) {
-                $this->message = 'The :attribute fields have incorrect units.';
+                $this->message = 'The :attribute fields have incorrect unit(s).';
 
                 return false;
             }

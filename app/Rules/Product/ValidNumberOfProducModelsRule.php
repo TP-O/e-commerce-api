@@ -71,6 +71,6 @@ class ValidNumberOfProducModelsRule implements Rule, DataAwareRule
      */
     public function message()
     {
-        return 'The :attribute field has incorrect size.';
+        return 'The :attribute field has incorrect quantity.';
     }
 }

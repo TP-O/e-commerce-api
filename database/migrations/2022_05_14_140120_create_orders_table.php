@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('variations')->default('[]');
             $table->integer('quantity', false, true);
             $table->float('total', 8, 2, true);
+            $table->float('grand_total', 8, 2, true);
             $table->timestamp('created_at')->useCurrent();
 
             $table->foreignId('user_id')
@@ -37,7 +38,12 @@ return new class extends Migration
                 ->constrained('product_models')
                 ->onUpdate('set null')
                 ->nullOnDelete();
-            $table->foreignId('address_id')
+            $table->foreignId('received_address_id')
+                ->nullable()
+                ->constrained('addresses')
+                ->onUpdate('set null')
+                ->nullOnDelete();
+            $table->foreignId('pickup_address_id')
                 ->nullable()
                 ->constrained('addresses')
                 ->onUpdate('set null')
@@ -46,6 +52,11 @@ return new class extends Migration
                 ->nullable()
                 ->default(OrderStatus::Processing->value)
                 ->constrained('order_status')
+                ->onUpdate('set null')
+                ->nullOnDelete();
+            $table->foreignId('shop_id')
+                ->nullable()
+                ->constrained('shops')
                 ->onUpdate('set null')
                 ->nullOnDelete();
         });

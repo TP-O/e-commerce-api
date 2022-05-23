@@ -16,115 +16,149 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v2')->namespace('Api')->group(function () {
-    Route::prefix('resources')->middleware('allow:' . join(',', [User::class, Admin::class]))
+    Route::prefix('resource')->middleware('allow:*')
         ->group(function () {
             Route::post('/images', 'ResourceController@uploadImage');
         });
 
-    Route::namespace('Auth')->group(function () {
-        Route::prefix('auth')->group(function () {
-            Route::post('/sign-up', 'SignUp\UserSignUpController@signUp');
+    Route::middleware('allow:' . User::class)->group(function () {
+        // User endpoints
+        Route::prefix('user')->group(function () {
+            Route::prefix('auth')->namespace('Auth')->group(function () {
+                Route::post('/sign-up', 'SignUpController@signUp')
+                    ->withoutMiddleware('allow:' . User::class);
+                Route::post('/sign-in', 'SignInController@signInAsUser')
+                    ->withoutMiddleware('allow:' . User::class);
+                Route::post('/sign-out', 'SignInController@signOut');
 
-            Route::namespace('SignIn')->group(function () {
-                Route::post('/sign-in', 'UserSignInController@signIn');
-                Route::post('/sign-out', 'UserSignInController@signOut')->middleware('allow:' . User::class);
+                Route::prefix('oauth/{driver}')->group(function () {
+                    Route::get('/redirect', 'SignUpController@OAuthRedirect');
+                    Route::get('/callback', 'SignUpController@OAuthCallback');
+                });
             });
 
-            Route::prefix('admin')->namespace('SignIn')->group(function () {
-                Route::post('/sign-in', 'AdminSignInController@signIn');
-                Route::post('/sign-out', 'AdminSignInController@signOut')->middleware('allow:' . Admin::class);
+            Route::prefix('email')->namespace('Email')->group(function () {
+                Route::post('/verify', 'EmailVerificationController@sendEmail')
+                    ->middleware('throttle:10,1');
+                Route::get('/verify/{id}/{hash}', 'EmailVerificationController@verifyEmail')
+                    ->name('verification.verify');
+            });
+
+            Route::prefix('password')->namespace('Password')->group(function () {
+                Route::put('/', 'PasswordController@update');
+
+                Route::post('/forgot', 'PasswordController@forgotUserPassword')
+                    ->withoutMiddleware('allow:' . User::class);
+                Route::post('/reset', 'PasswordController@resetUserPassword')
+                    ->name('user.password.reset')
+                    ->withoutMiddleware('allow:' . User::class);
+            });
+
+            Route::prefix('account')->namespace('Account')->group(function () {
+                Route::prefix('profile')->namespace('Profile')->group(function () {
+                    Route::get('/', 'UserProfileController@me');
+                    Route::put('/', 'UserProfileController@update');
+                });
+
+                Route::prefix('addresses')->namespace('Address')->group(function () {
+                    Route::get('/', 'UserAddressController@all');
+                    Route::post('/', 'UserAddressController@create');
+                    Route::put('/{id}', 'UserAddressController@update');
+                    Route::delete('/{address}', 'UserAddressController@delete');
+                });
+
+                Route::prefix('bank-accounts')->group(function () {
+                    Route::get('/', 'BankAccountController@all');
+                    Route::post('/', 'BankAccountController@create');
+                    Route::put('/{bank_account}', 'BankAccountController@update');
+                    Route::delete('/{bank_account}', 'BankAccountController@delete');
+                });
+                Route::prefix('credit-cards')->group(function () {
+                    Route::get('/', 'CreditCardController@show');
+                    Route::post('/', 'CreditCardController@create');
+                    Route::put('/{credit_card}', 'CreditCardController@update');
+                    Route::delete('/{credit_card}', 'CreditCardController@delete');
+                });
+            });
+
+            Route::namespace('Order')->group(function () {
+                Route::prefix('cart')->group(function () {
+                    Route::get('/', 'CartController@get');
+                    Route::post('/', 'CartController@add');
+                    Route::delete('/{product_model_id}', 'CartController@delete');
+                });
+
+                Route::prefix('orders')->group(function () {
+                    Route::get('/', 'OrderController@belongToUser');
+                    Route::get('/{id}', 'OrderController@get');
+                    Route::post('/', 'OrderController@create');
+
+                    Route::prefix('/{order}')->group(function () {
+                        Route::post('/cancel', 'ProgressController@cancel');
+                    });
+                });
             });
         });
 
-        Route::prefix('oauth/{driver}')->namespace('SignUp')->group(function () {
-            Route::get('/redirect', 'UserSignUpController@OAuthRedirect');
-            Route::get('/callback', 'UserSignUpController@OAuthCallback');
+        // Shop endpoints
+        Route::prefix('/shop')->group(function () {
+            Route::namespace('Shop')->group(function () {
+                Route::get('/', 'ShopController@myShop');
+                Route::post('/', 'ShopController@create');
+                Route::put('/', 'ShopController@update');
+            });
+
+            Route::prefix('products')->namespace('Product')->group(function () {
+                Route::get('/', 'ProductController@belongToShop');
+                Route::post('/', 'ProductController@create');
+                Route::put('/{product}', 'ProductController@update');
+                Route::delete('/{product}', 'ProductController@delete');
+
+                Route::prefix('categories')->group(function () {
+                    Route::get('/attributes', 'CategoryController@attributes');
+                });
+            });
+
+            Route::prefix('orders')->namespace('Order')->group(function () {
+                Route::get('/', 'OrderController@belongToShop');
+
+                Route::prefix('/{order}')->group(function () {
+                    Route::post('/ready', 'ProgressController@ready');
+                    Route::post('/cancel', 'ProgressController@cancel');
+                });
+            });
         });
     });
 
-    Route::prefix('email')->namespace('Email')->middleware('allow:' . User::class)->group(function () {
-        Route::post('/verify', 'EmailVerificationController@sendEmail');
-        Route::get('/verify/{id}/{hash}', 'EmailVerificationController@verifyEmail')->name('verification.verify');
-    });
-
-    Route::prefix('password')->namespace('Password')->group(function () {
-        Route::put('/', 'UserPasswordController@update')->middleware('allow:' . User::class);
-        Route::post('/forgot', 'UserPasswordController@forgot');
-        Route::post('/reset', 'UserPasswordController@reset')->name('password.reset');
-
-        Route::prefix('admin')->group(function () {
-            Route::put('/', 'AdminPasswordController@update')->middleware('allow:' . Admin::class);
-            Route::post('/forgot', 'AdminPasswordController@forgot');
-            Route::post('/reset', 'AdminPasswordController@reset')->name('admin.password.reset');
-        });
-    });
-
-    Route::prefix('account')->namespace('Account')->middleware('allow:' . User::class)->group(function () {
-        Route::prefix('profile')->namespace('Profile')->group(function () {
-            Route::get('/', 'UserProfileController@me');
-            Route::put('/', 'UserProfileController@update');
+    // Admin endpoints
+    Route::prefix('/admin')->middleware('allow:' . Admin::class)->group(function () {
+        Route::prefix('auth')->namespace('Auth')->group(function () {
+            Route::post('/sign-in', 'SignInController@signInAsAdmin')
+                ->withoutMiddleware('allow:' . Admin::class);
+            Route::post('/sign-out', 'SignInController@signOut');
         });
 
-        Route::prefix('addresses')->namespace('Address')->group(function () {
-            Route::get('/', 'UserAddressController@all');
-            Route::post('/', 'UserAddressController@create');
-            Route::put('/{id}', 'UserAddressController@update');
-            Route::delete('/{address}', 'UserAddressController@delete');
+        Route::prefix('password')->namespace('Password')->group(function () {
+            Route::put('/', 'PasswordController@update');
+
+            Route::post('/forgot', 'PasswordController@forgotAdminPassword')
+                ->withoutMiddleware('allow:' . Admin::class);
+            Route::post('/reset', 'PasswordController@resetAdminPassword')
+                ->name('admin.password.reset')
+                ->withoutMiddleware('allow:' . Admin::class);
         });
 
-        Route::prefix('bank-accounts')->group(function () {
-            Route::get('/', 'BankAccountController@all');
-            Route::post('/', 'BankAccountController@create');
-            Route::put('/{bank_account}', 'BankAccountController@update');
-            Route::delete('/{bank_account}', 'BankAccountController@delete');
-        });
-        Route::prefix('credit-cards')->group(function () {
-            Route::get('/', 'CreditCardController@show');
-            Route::post('/', 'CreditCardController@create');
-            Route::put('/{credit_card}', 'CreditCardController@update');
-            Route::delete('/{credit_card}', 'CreditCardController@delete');
-        });
-    });
-
-    Route::prefix('shops')->namespace('Shop')->group(function () {
-        Route::middleware('allow:' . User::class)->group(function () {
-            Route::get('/', 'ShopController@mine');
-            Route::get('/products', 'ShopController@products');
-            Route::post('/', 'ShopController@create');
-            Route::put('/', 'ShopController@update');
-        });
-
-        Route::get('/{id_or_slug}', 'ShopController@get');
-        Route::get('/{id_or_slug}/products', 'ShopController@publishedProducts');
-    });
-
-    Route::prefix('products')->namespace('Product')->group(function () {
-        Route::get('/{id}', 'ProductController@get');
-
-        Route::middleware('allow:' . User::class)->group(function () {
-            Route::post('/', 'ProductController@create');
-            Route::put('/{product}', 'ProductController@update');
-            Route::delete('/{product}', 'ProductController@delete');
-        });
-
-        Route::middleware('allow:' . Admin::class)->group(function () {
+        Route::prefix('products')->namespace('Product')->group(function () {
             Route::post('/{product}/recovery', 'ProductController@recovery');
-        });
 
-        Route::prefix('categories')->group(function () {
-            Route::middleware('allow:' . Admin::class)->group(function () {
+            Route::prefix('categories')->group(function () {
                 Route::post('/', 'CategoryController@manage');
-                Route::post('/{category}/attributes/bind', 'CategoryController@bind')
+
+                Route::get('/attributes', 'CategoryController@attributes');
+                Route::post('/{category}/bind-attributes', 'CategoryController@bindAttributes')
                     ->where('category', '[1-9]+');
-            });
 
-            Route::get('{id}/children', 'CategoryController@children')->where(['id', '[0-9]+']);
-
-            Route::prefix('attributes')->group(function () {
-                Route::get('/', 'CategoryController@attributes')
-                    ->middleware('allow:' . join(',', [User::class, Admin::class]));
-
-                Route::middleware('allow:' . Admin::class)->group(function () {
+                Route::prefix('attributes')->group(function () {
                     Route::get('/{input}', 'AttributeController@search');
                     Route::post('/', 'AttributeController@create');
                     Route::put('/{id}', 'AttributeController@update');
@@ -132,16 +166,31 @@ Route::prefix('v2')->namespace('Api')->group(function () {
                 });
             });
         });
+
+        Route::prefix('orders')->namespace('Order')->group(function () {
+            Route::prefix('/{order}')->group(function () {
+                Route::post('/cancel', 'ProgressController@cancel');
+            });
+        });
     });
 
-    Route::prefix('cart')->namespace('Order')->middleware('allow:' . User::class)->group(function () {
-        Route::get('/', 'CartController@get');
-        Route::post('/', 'CartController@add');
-        Route::delete('/{product_model_id}', 'CartController@delete');
+    // Publish shop endpoints
+    Route::prefix('shops')->group(function () {
+        Route::namespace('Shop')->group(function () {
+            Route::get('/{id_or_slug}', 'ShopController@get');
+        });
+        Route::namespace('Product')->group(function () {
+            Route::get('/{shop_id}/products', 'ProductController@publishedBelongToShop');
+        });
     });
 
-    Route::prefix('orders')->namespace('Order')->middleware('allow:' . User::class)->group(function () {
-        Route::get('/', 'OrderController@get');
-        Route::post('/', 'OrderController@create');
+    // Publish product endpoint
+    Route::prefix('products')->namespace('Product')->group(function () {
+        Route::get('/{id}', 'ProductController@get');
+
+        Route::prefix('categories')->group(function () {
+            Route::get('{id}/children', 'CategoryController@children')
+                ->where(['id', '[0-9]+']);
+        });
     });
 });
