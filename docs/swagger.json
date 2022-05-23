@@ -46,15 +46,39 @@
         },
         {
             "name": "user",
-            "description": "Suport users"
+            "description": "For users"
         },
         {
             "name": "shop",
-            "description": "Support users having shop"
+            "description": "For users having shop"
         },
         {
             "name": "admin",
-            "description": "Support admins"
+            "description": "For admins"
+        },
+        {
+            "name": "resource",
+            "description": "Resource management"
+        },
+        {
+            "name": "auth",
+            "description": "Authentication"
+        },
+        {
+            "name": "account",
+            "description": "Account management"
+        },
+        {
+            "name": "product",
+            "description": "Product and related resources management"
+        },
+        {
+            "name": "cart",
+            "description": "Shopping cart"
+        },
+        {
+            "name": "order",
+            "description": "Order management"
         }
     ],
     "components": {
@@ -105,7 +129,8 @@
         "/shops/{id_or_slug}/products": {
             "get": {
                 "tags": [
-                    "publish"
+                    "publish",
+                    "product"
                 ],
                 "summary": "Get publised products of the shop",
                 "operationId": "getPublishedProductsOfShop",
@@ -134,7 +159,8 @@
         "/products/{id}": {
             "get": {
                 "tags": [
-                    "publish"
+                    "publish",
+                    "product"
                 ],
                 "summary": "Get product by ID",
                 "operationId": "getProduct",
@@ -163,7 +189,8 @@
         "/products/categories/{id}/children": {
             "get": {
                 "tags": [
-                    "publish"
+                    "publish",
+                    "product"
                 ],
                 "summary": "Get children of category",
                 "operationId": "getCategoryChildren",
@@ -192,7 +219,8 @@
         "/resource/images": {
             "post": {
                 "tags": [
-                    "signed-in"
+                    "signed-in",
+                    "resource"
                 ],
                 "summary": "Upload images (Access /resources/images/<id> to get the image)",
                 "operationId": "uploadImages",
@@ -237,7 +265,8 @@
         "/user/auth/sign-up": {
             "post": {
                 "tags": [
-                    "user"
+                    "user",
+                    "auth"
                 ],
                 "summary": "Sign up an user account",
                 "operationId": "userSignUp",
@@ -293,7 +322,8 @@
         "/user/auth/sign-in": {
             "post": {
                 "tags": [
-                    "user"
+                    "user",
+                    "auth"
                 ],
                 "summary": "Sign in as an user",
                 "operationId": "userSignIn",
@@ -331,7 +361,8 @@
         "/user/auth/sign-out": {
             "post": {
                 "tags": [
-                    "user"
+                    "user",
+                    "auth"
                 ],
                 "summary": "Sign out as an user",
                 "operationId": "userSignOut",
@@ -348,7 +379,8 @@
         "/user/oauth/{driver}/redirect": {
             "get": {
                 "tags": [
-                    "user"
+                    "user",
+                    "auth"
                 ],
                 "summary": "Sign in with third party",
                 "operationId": "oauthRedirect",
@@ -379,7 +411,8 @@
         "/user/email/verify": {
             "post": {
                 "tags": [
-                    "user"
+                    "user",
+                    "auth"
                 ],
                 "summary": "Request to send verification email",
                 "operationId": "sendVerificationEmail",
@@ -396,7 +429,8 @@
         "/user/email/verify/{id}/{hash}": {
             "get": {
                 "tags": [
-                    "user"
+                    "user",
+                    "auth"
                 ],
                 "summary": "Verify an user's email",
                 "operationId": "verifyUserEmail",
@@ -445,7 +479,8 @@
         "/user/password": {
             "put": {
                 "tags": [
-                    "user"
+                    "user",
+                    "auth"
                 ],
                 "summary": "Update user's password",
                 "operationId": "updateUserPassword",
@@ -494,7 +529,8 @@
         "/user/password/forgot": {
             "post": {
                 "tags": [
-                    "user"
+                    "user",
+                    "auth"
                 ],
                 "summary": "Request to send reset-user-password email",
                 "operationId": "forgotUserPassowrd",
@@ -523,7 +559,8 @@
         "/user/password/reset": {
             "post": {
                 "tags": [
-                    "user"
+                    "user",
+                    "auth"
                 ],
                 "summary": "Reset user's password",
                 "operationId": "resetUserPassword",
@@ -579,7 +616,8 @@
         "/user/account/profile": {
             "get": {
                 "tags": [
-                    "user"
+                    "user",
+                    "account"
                 ],
                 "summary": "Get user's profile",
                 "operationId": "getUserProfile",
@@ -594,7 +632,8 @@
             },
             "put": {
                 "tags": [
-                    "user"
+                    "user",
+                    "account"
                 ],
                 "summary": "Update user's profile",
                 "operationId": "updateUserProfile",
@@ -666,7 +705,8 @@
         "/user/account/addresses": {
             "get": {
                 "tags": [
-                    "user"
+                    "user",
+                    "account"
                 ],
                 "summary": "Get user's address",
                 "operationId": "getAllUserAddresses",
@@ -681,7 +721,8 @@
             },
             "post": {
                 "tags": [
-                    "user"
+                    "user",
+                    "account"
                 ],
                 "summary": "Create user's address",
                 "operationId": "createUserAddress",
@@ -793,7 +834,8 @@
         "/user/account/addresses/{id}": {
             "put": {
                 "tags": [
-                    "user"
+                    "user",
+                    "account"
                 ],
                 "summary": "Update user's address",
                 "operationId": "updateUserAddress",
@@ -918,7 +960,8 @@
             },
             "delete": {
                 "tags": [
-                    "user"
+                    "user",
+                    "account"
                 ],
                 "summary": "Delete user's address",
                 "operationId": "deleteUserAddress",
@@ -952,7 +995,8 @@
         "/user/account/bank-accounts": {
             "get": {
                 "tags": [
-                    "user"
+                    "user",
+                    "account"
                 ],
                 "summary": "Get user's bank account",
                 "operationId": "getAllUserBankAccount",
@@ -967,7 +1011,8 @@
             },
             "post": {
                 "tags": [
-                    "user"
+                    "user",
+                    "account"
                 ],
                 "summary": "Create user's bank account",
                 "operationId": "createUserBankAccount",
@@ -1034,7 +1079,8 @@
         "/user/account/bank-accounts/{id}": {
             "put": {
                 "tags": [
-                    "user"
+                    "user",
+                    "account"
                 ],
                 "summary": "Update user's bank account",
                 "operationId": "updateUserBankAccount",
@@ -1114,7 +1160,8 @@
             },
             "delete": {
                 "tags": [
-                    "user"
+                    "user",
+                    "account"
                 ],
                 "summary": "Delete user's bank account",
                 "operationId": "deleteUserBankAccount",
@@ -1148,7 +1195,8 @@
         "/user/account/credit-cards": {
             "get": {
                 "tags": [
-                    "user"
+                    "user",
+                    "account"
                 ],
                 "summary": "Get user's credit card",
                 "operationId": "getAllUseCreditCard",
@@ -1163,7 +1211,8 @@
             },
             "post": {
                 "tags": [
-                    "user"
+                    "user",
+                    "account"
                 ],
                 "summary": "Create user's credit card",
                 "operationId": "createUserCreditCard",
@@ -1239,7 +1288,8 @@
         "/user/account/credit-cards/{id}": {
             "put": {
                 "tags": [
-                    "user"
+                    "user",
+                    "account"
                 ],
                 "summary": "Update user's credit card",
                 "operationId": "updateUserCreditCard",
@@ -1328,7 +1378,8 @@
             },
             "delete": {
                 "tags": [
-                    "user"
+                    "user",
+                    "account"
                 ],
                 "summary": "Delete user's credit card",
                 "operationId": "deleteUserCreditCard",
@@ -1362,7 +1413,8 @@
         "/user/cart": {
             "get": {
                 "tags": [
-                    "user"
+                    "user",
+                    "cart"
                 ],
                 "summary": "Get shopping cart",
                 "operationId": "getCart",
@@ -1388,7 +1440,8 @@
             },
             "post": {
                 "tags": [
-                    "user"
+                    "user",
+                    "cart"
                 ],
                 "summary": "Update or add cart item",
                 "operationId": "updateCart",
@@ -1428,7 +1481,8 @@
         "/user/cart/{product_model_id}": {
             "delete": {
                 "tags": [
-                    "user"
+                    "user",
+                    "cart"
                 ],
                 "summary": "Delete cart item",
                 "operationId": "deleteCartItem",
@@ -1459,7 +1513,8 @@
         "/user/orders": {
             "get": {
                 "tags": [
-                    "user"
+                    "user",
+                    "order"
                 ],
                 "summary": "Get orders by status",
                 "operationId": "getOrderByStatus",
@@ -1497,7 +1552,8 @@
             },
             "post": {
                 "tags": [
-                    "user"
+                    "user",
+                    "order"
                 ],
                 "summary": "Create orders",
                 "operationId": "createOrder",
@@ -1552,9 +1608,10 @@
         "/user/orders/{id}": {
             "get": {
                 "tags": [
-                    "user"
+                    "user",
+                    "order"
                 ],
-                "summary": "Get orders by status",
+                "summary": "Get orders by ID",
                 "operationId": "getOrderById",
                 "parameters": [
                     {
@@ -1583,7 +1640,8 @@
         "/user/orders/{id}/cancel": {
             "post": {
                 "tags": [
-                    "user"
+                    "user",
+                    "order"
                 ],
                 "summary": "Mark order as cancelled",
                 "operationId": "markOrderAsCancelledByUser",
@@ -1811,7 +1869,8 @@
         "/shop/products": {
             "get": {
                 "tags": [
-                    "shop"
+                    "shop",
+                    "product"
                 ],
                 "summary": "Get products of shop owned by the current user",
                 "operationId": "getMyProducts",
@@ -1837,7 +1896,8 @@
             },
             "post": {
                 "tags": [
-                    "shop"
+                    "shop",
+                    "product"
                 ],
                 "summary": "Create product",
                 "operationId": "createProduct",
@@ -2054,7 +2114,8 @@
         "/shop/products/{id}": {
             "put": {
                 "tags": [
-                    "shop"
+                    "shop",
+                    "product"
                 ],
                 "summary": "Update product",
                 "operationId": "updateProduct",
@@ -2315,9 +2376,10 @@
         "/shop/products/categories/attributes": {
             "get": {
                 "tags": [
-                    "shop"
+                    "shop",
+                    "product"
                 ],
-                "summary": "Get all attributes of categories (seller and admin)",
+                "summary": "Get all attributes of categories",
                 "operationId": "getCategoriesAttributesForShop",
                 "parameters": [
                     {
@@ -2349,7 +2411,8 @@
         "/shop/orders": {
             "get": {
                 "tags": [
-                    "shop"
+                    "shop",
+                    "order"
                 ],
                 "summary": "Get orders by status",
                 "operationId": "getShopOrderByStatus",
@@ -2389,7 +2452,8 @@
         "/shop/orders/{id}/ready": {
             "post": {
                 "tags": [
-                    "shop"
+                    "shop",
+                    "order"
                 ],
                 "summary": "Mark order as ready",
                 "operationId": "markOrderAsReady",
@@ -2437,7 +2501,8 @@
         "/shop/orders/{id}/cancel": {
             "post": {
                 "tags": [
-                    "shop"
+                    "shop",
+                    "order"
                 ],
                 "summary": "Mark order as cancelled",
                 "operationId": "markOrderAsCancelled",
@@ -2476,7 +2541,8 @@
         "/admin/auth/sign-in": {
             "post": {
                 "tags": [
-                    "admin"
+                    "admin",
+                    "auth"
                 ],
                 "summary": "Sign in as an admin",
                 "operationId": "adminSignIn",
@@ -2514,7 +2580,8 @@
         "/admin/auth/sign-out": {
             "post": {
                 "tags": [
-                    "admin"
+                    "admin",
+                    "auth"
                 ],
                 "summary": "Sign out as an admin",
                 "operationId": "adminSignOut",
@@ -2531,9 +2598,10 @@
         "/admin/password": {
             "put": {
                 "tags": [
-                    "admin"
+                    "admin",
+                    "auth"
                 ],
-                "summary": "Update admin's password (admin)",
+                "summary": "Update admin's password",
                 "operationId": "updateAdminPassword",
                 "parameters": [
                     {
@@ -2580,9 +2648,10 @@
         "/admin/password/forgot": {
             "post": {
                 "tags": [
-                    "admin"
+                    "admin",
+                    "auth"
                 ],
-                "summary": "Request to send reset-admin-password email (admin)",
+                "summary": "Request to send reset-admin-password email",
                 "operationId": "forgotAdminPassword",
                 "parameters": [
                     {
@@ -2609,9 +2678,10 @@
         "/admin/password/reset": {
             "post": {
                 "tags": [
-                    "admin"
+                    "admin",
+                    "auth"
                 ],
-                "summary": "Reset admin's password (admin)",
+                "summary": "Reset admin's password",
                 "operationId": "resetAdminPassword",
                 "parameters": [
                     {
@@ -2665,9 +2735,10 @@
         "/admin/products/{id}/recovery": {
             "post": {
                 "tags": [
-                    "admin"
+                    "admin",
+                    "product"
                 ],
-                "summary": "Recovery deleted product (admin)",
+                "summary": "Recovery deleted product",
                 "operationId": "recoveryProduct",
                 "parameters": [
                     {
@@ -2693,9 +2764,10 @@
         "/admin/products/categories": {
             "post": {
                 "tags": [
-                    "admin"
+                    "admin",
+                    "product"
                 ],
-                "summary": "Create, update, and delete categories (admin)",
+                "summary": "Create, update, and delete categories",
                 "operationId": "manageCategory",
                 "parameters": [
                     {
@@ -2793,7 +2865,8 @@
         "/admin/products/categories/{id}/bind-attributes": {
             "post": {
                 "tags": [
-                    "admin"
+                    "admin",
+                    "product"
                 ],
                 "summary": "Bind attributes to the category",
                 "operationId": "bindAttributesToCategory",
@@ -2851,7 +2924,8 @@
         "/admin/products/categories/attributes": {
             "get": {
                 "tags": [
-                    "admin"
+                    "admin",
+                    "product"
                 ],
                 "summary": "Get all attributes of categories",
                 "operationId": "getCategoriesAttributesForAdmin",
@@ -2880,7 +2954,8 @@
             },
             "post": {
                 "tags": [
-                    "admin"
+                    "admin",
+                    "product"
                 ],
                 "summary": "Create attribute and bind it to the category",
                 "operationId": "createAttribute",
@@ -2941,7 +3016,8 @@
         "/admin/products/categories/attributes/{input}": {
             "get": {
                 "tags": [
-                    "admin"
+                    "admin",
+                    "product"
                 ],
                 "summary": "Search attributes",
                 "operationId": "searchAttributes",
@@ -2972,7 +3048,8 @@
         "/admin/products/categories/attributes/{id}": {
             "put": {
                 "tags": [
-                    "admin"
+                    "admin",
+                    "product"
                 ],
                 "summary": "Update attribute",
                 "operationId": "updateAttribute",
@@ -3023,7 +3100,8 @@
             },
             "delete": {
                 "tags": [
-                    "admin"
+                    "admin",
+                    "product"
                 ],
                 "summary": "Delete attribute",
                 "operationId": "deleteAttribute",
@@ -3054,7 +3132,8 @@
         "/admin/orders/{id}/cancel": {
             "post": {
                 "tags": [
-                    "admin"
+                    "admin",
+                    "order"
                 ],
                 "summary": "Mark order as cancelled",
                 "operationId": "markOrderAsCancelledByAdmin",

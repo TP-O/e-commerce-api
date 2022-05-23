@@ -1,6 +1,6 @@
 # Overview
 
-This repository is an E-Commerce API used as my `Principle of Database Management` and `Web Application Development` projects at International University (HCMIU). In order to not waste time on system design, I decided to make it based on [Shopee](https://shopee.vn/). Because of API's simplicity, only some of Shopee basic features are covered in the project.
+This repository is an E-Commerce API used as my `Principle of Database Management` and `Web Application Development` projects at International University (HCMIU). In order to not waste time on system design, I decided to make it based on [Shopee](https://shopee.vn). Because of API's simplicity, only some of Shopee basic features are covered in the project.
 
 # Features
 
@@ -21,36 +21,36 @@ This repository is an E-Commerce API used as my `Principle of Database Managemen
     - [x] Addresses
     - [x] Bank accounts
     - [x] Credit cards
-- [ ] Shop management
+- [x] Shop management
     - [x] Profile
     - [x] Products
-    - [ ] Orders
-    - [ ] Statistics
+    - [x] Orders
+    - [x] Statistics
 - [ ] Product management
     - [ ] Searching
     - [x] CRUD
-- [ ] Order management
-    - [ ] Progress
+- [x] Order management
+    - [x] Progress
 - [ ] Payment management
     - [ ] Credit card
     - [ ] On delivered
 
 # Tools And Technologies
 
-- [Laravel (PHP Framework)](https://laravel.com/)
+- [Laravel (PHP Framework)](https://laravel.com)
 - [NGINX Web Server](https://en.wikipedia.org/wiki/Nginx)
 - [PHP-FPM](https://www.php.net/manual/en/install.fpm.php)
-- [PostgreSQL](https://www.postgresql.org/)
-- [Adminer](https://www.adminer.org/)
-- [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
-- [Kubernetes](https://kubernetes.io/)
-- [minikube](https://minikube.sigs.k8s.io/docs/)
-- [kubectl](https://kubernetes.io/docs/tasks/tools/)
-- [Terraform](https://www.terraform.io/)
-- [Microsoft Azure](https://azure.microsoft.com/en-us/)
+- [PostgreSQL](https://www.postgresql.org)
+- [Adminer](https://www.adminer.org)
+- [Docker](https://www.docker.com)
+- [Docker Compose](https://docs.docker.com/compose)
+- [Kubernetes](https://kubernetes.io)
+- [minikube](https://minikube.sigs.k8s.io/docs)
+- [kubectl](https://kubernetes.io/docs/tasks/tools)
+- [Terraform](https://www.terraform.io)
+- [Microsoft Azure](https://azure.microsoft.com/en-us)
 - [Github Actions](https://github.com/features/actions)
-- [draw.io](https://app.diagrams.net/)
+- [draw.io](https://app.diagrams.net)
 
 # Details
 
@@ -62,7 +62,7 @@ I just referred to Shopee's workflows and assumed that the tables below are used
 
 ## API Documentaion
 
-Read [here](https://tpo-project.github.io/e-commerce-api/).
+Read [here](https://tpo-project.github.io/e-commerce-api).
 
 # Setup
 
@@ -101,9 +101,9 @@ Access `https://127.0.0.1/api/v2` or `https://localhost/api/v2` to interact with
 
 > Install Docker: [https://docs.docker.com/desktop/#download-and-install](https://docs.docker.com/desktop/#download-and-install)
 
-> Install minikube: [https://minikube.sigs.k8s.io/docs/start/](https://minikube.sigs.k8s.io/docs/start/)
+> Install minikube: [https://minikube.sigs.k8s.io/docs/start/](https://minikube.sigs.k8s.io/docs/start)
 
-> Install kubectl: [https://kubernetes.io/docs/tasks/tools/](https://kubernetes.io/docs/tasks/tools/)
+> Install kubectl: [https://kubernetes.io/docs/tasks/tools/](https://kubernetes.io/docs/tasks/tools)
 
 ```bash
 $ minikube start
