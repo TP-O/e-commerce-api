@@ -186,6 +186,60 @@
                 "security": []
             }
         },
+        "/products/search": {
+            "get": {
+                "tags": [
+                    "publish",
+                    "product"
+                ],
+                "summary": "Search product by keyword and filter",
+                "operationId": "searchProduct",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit number of cart items per page",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Product's keyword (required if filter is not presented)",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Product's filter (required if keyword is not presented)",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "category_ids": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invliad input"
+                    }
+                },
+                "security": []
+            }
+        },
         "/products/categories/{id}/children": {
             "get": {
                 "tags": [
