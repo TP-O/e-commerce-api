@@ -17,7 +17,6 @@ class Order extends Model
         'product_model_id',
         'received_address_id',
         'pickup_address_id',
-        'status_id',
         'shop_id',
         'name',
         'quantity',
