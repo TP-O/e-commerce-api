@@ -24,7 +24,11 @@ class CartService
     public function getItems(int $userId, array $cartQuery)
     {
         $cart = CartItem::where('user_id', $userId)
-            ->with(['product', 'productModel'])
+            ->with([
+                'shop',
+                'product',
+                'productModel',
+            ])
             ->paginate($cartQuery['limit'] ?? Pagination::Default);
 
         $prices = $this->productService->getPrices($cart->toArray()['data']);

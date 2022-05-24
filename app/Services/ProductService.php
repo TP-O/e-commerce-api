@@ -208,9 +208,10 @@ class ProductService
             return [
                 'product_id' => $model->product_id,
                 'product_model_id' => $model->id,
+                'is_wholesale_price_applied' => isset($wholesalePrice),
                 'variation_index' => $model->variation_index,
-                'price' => round($price, 2),
-                'final_price' => round($finalPrice, 2),
+                'total_price' => round($price, 2),
+                'final_total_price' => round($finalPrice, 2),
             ];
         })
             ->toArray();
