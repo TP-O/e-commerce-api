@@ -231,11 +231,13 @@ class ProductService
     public function search(array $productQuery)
     {
         $products = $this->filterBy(
-            Product::where(
-                'name',
-                'like',
-                '%' . ($productQuery['keyword'] ?? '') . '%'
-            ),
+            isset($productQuery['keyword'])
+                ? Product::whereRaw(
+                    'LOWER(name) LIKE ?',
+                    ['%' . strtolower($productQuery['keyword'] ?? '') . '%'],
+                )
+                : Product::query()
+            ,
             $productQuery['filter'] ?? [],
         );
 
