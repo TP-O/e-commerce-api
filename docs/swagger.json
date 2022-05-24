@@ -227,6 +227,20 @@
                                 }
                             }
                         }
+                    },
+                    {
+                        "name": "order_by",
+                        "in": "query",
+                        "description": "Order by newest, high price to low price,or low price to high price",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                1,
+                                2,
+                                3
+                            ]
+                        }
                     }
                 ],
                 "responses": {
