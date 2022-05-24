@@ -19,7 +19,7 @@ class CartService
      *
      * @param int $userId
      * @param int $cartQuery
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Pagination\LengthAwarePaginator
      */
     public function getItems(int $userId, array $cartQuery)
     {

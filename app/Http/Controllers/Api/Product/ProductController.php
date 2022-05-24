@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\CreateProductRequest;
 use App\Http\Requests\Product\DeleteProductRequest;
 use App\Http\Requests\Product\GetProductRequest;
+use App\Http\Requests\Product\SearchProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 use App\Models\Product\Product;
 use App\Services\ProductService;
@@ -52,6 +53,24 @@ class ProductController extends Controller
         return response()->json([
             'status' => true,
             'data' => $product,
+        ]);
+    }
+
+    /**
+     * Search the products by text.
+     *
+     * @param \App\Http\Requests\Product\SearchProductRequest
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function search(SearchProductRequest $request)
+    {
+        $products = $this->productService->search(
+            $request->validated(),
+        );
+
+        return response()->json([
+            'status' => true,
+            'data' => $products,
         ]);
     }
 

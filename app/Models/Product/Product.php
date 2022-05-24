@@ -27,6 +27,10 @@ class Product extends Model
         'variations' => 'array',
     ];
 
+    protected $hidden = [
+        'avg_price',
+    ];
+
     public $timestamps = false;
 
     public function categories()

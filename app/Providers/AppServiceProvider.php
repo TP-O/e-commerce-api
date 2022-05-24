@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\PersonalAccessToken;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;
 
@@ -26,5 +27,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
+
+        if (config('app.debug') === true) {
+            DB::enableQueryLog();
+        }
     }
 }

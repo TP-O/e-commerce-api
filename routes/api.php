@@ -187,6 +187,7 @@ Route::prefix('v2')->namespace('Api')->group(function () {
     // Publish product endpoint
     Route::prefix('products')->namespace('Product')->group(function () {
         Route::get('/{id}', 'ProductController@get');
+        Route::get('/search', 'ProductController@search');
 
         Route::prefix('categories')->group(function () {
             Route::get('{id}/children', 'CategoryController@children')

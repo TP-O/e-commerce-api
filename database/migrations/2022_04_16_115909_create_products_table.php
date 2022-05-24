@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name', 120);
             $table->text('description')->default('');
             $table->float('weight', 8, 2, true);
+            $table->float('avg_price', false, true)->default(0);
             $table->integer('sold', false, true)->default(0);
             $table->text('images')->default('[]');
             $table->text('videos')->default('[]');
