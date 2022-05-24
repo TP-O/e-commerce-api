@@ -9,5 +9,5 @@ enum OrderStatus: int
     case Delivering = 3;
     case Delivered = 4;
     case Cancelled = 5;
-    case Return = 6;
+    case Returned = 6;
 }

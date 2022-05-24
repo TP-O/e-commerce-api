@@ -93,18 +93,23 @@ class ValidProductAttributesRule implements Rule, DataAwareRule
                 return false;
             }
             // Check if the unit is correct
-            else if (
-                $exists !== false &&
-                ((is_null($value[$exists]['unit']) &&
-                    count($categoryAttributes[$i]['units']) === 0) ||
-                    array_search(
-                        $value[$exists]['unit'],
-                        $categoryAttributes[$i]['units'],
-                    ) === false)
-            ) {
-                $this->message = 'The :attribute fields have incorrect unit(s).';
+            else if ($exists !== false) {
+                // Skip if unit could be null
+                if (
+                    !isset($value[$exists]['unit']) &&
+                    count($categoryAttributes[$i]['units']) === 0
+                ) {
+                    continue;
+                }
+                // Error if unit is unavailable
+                else if (array_search(
+                    $value[$exists]['unit'],
+                    $categoryAttributes[$i]['units'],
+                ) === false) {
+                    $this->message = 'The :attribute fields have incorrect unit(s).';
 
-                return false;
+                    return false;
+                }
             }
         }
 

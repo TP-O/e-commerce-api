@@ -30,8 +30,8 @@ This repository is an E-Commerce API used as my `Principle of Database Managemen
     - [x] Wholesale price
     - [ ] Apply voucher
     - [ ] Discount product
-- [ ] Product management
-    - [ ] Searching
+- [x] Product management
+    - [x] Searching (using Wildcard Characters - Elasticsearch in future)
     - [x] CRUD
 - [x] Order management
     - [x] Progress

@@ -2,10 +2,13 @@
 
 namespace App\Services;
 
+use App\Enums\Pagination;
+use App\Enums\ProductOrder;
 use App\Enums\ProductStatus;
 use App\Models\Product\Product;
 use App\Models\Product\ProductModel;
 use App\Models\Product\WholesalePrice;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 
 class ProductService
@@ -217,5 +220,121 @@ class ProductService
             ->toArray();
 
         return $prices;
+    }
+
+    /**
+     * Search the products.
+     *
+     * @param array $productQuery
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function search(array $productQuery)
+    {
+        $products = $this->filterBy(
+            Product::where(
+                'name',
+                'like',
+                '%' . ($productQuery['keyword'] ?? '') . '%'
+            ),
+            $productQuery['filter'] ?? [],
+        );
+
+        $products = $this->orderBy($products, $productQuery['order_by'])
+            ->with('models')
+            ->paginate($productQuery['limit'] ?? Pagination::Default);
+
+        return $products;
+    }
+
+    /**
+     * Sort the products.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $product
+     * @param int $sortId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function orderBy(Builder $product, int $sortId)
+    {
+        switch (ProductOrder::from($sortId)) {
+            case ProductOrder::Newest:
+                return $this->orderByNewest($product);
+
+            case ProductOrder::HighToLow:
+                return $this->orderByHighToLow($product);
+
+            case ProductOrder::LowToHigh:
+                return $this->orderByLowToHigh($product);
+
+            default:
+                return $product;
+        }
+    }
+
+    /**
+     * Sort from new to old.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $product
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function orderByNewest(Builder $product)
+    {
+        return $product->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Sort from high price to low price.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $product
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function orderByHighToLow(Builder $product)
+    {
+        return $product->orderBy('avg_price', 'desc');
+    }
+
+    /**
+     * Sort from low price to high price.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $product
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function orderByLowToHigh(Builder $product)
+    {
+        return $product->orderBy('avg_price', 'asc');
+    }
+
+    /**
+     * Filter the products.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $product
+     * @param array $filter
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function filterBy(Builder $product, array $filter)
+    {
+        if (isset($filter['category_ids'])) {
+            $product = $this->filterByCategories($product, $filter['category_ids']);
+        }
+
+        return $product;
+    }
+
+    /**
+     * Filter the products by categories.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $product
+     * @param array $categoryIds
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function filterByCategories(Builder $product, array $categoryIds)
+    {
+        return $product
+            ->join(
+                'product_category_paths',
+                'products.id',
+                '=',
+                'product_category_paths.product_id',
+            )
+            ->whereIn('product_category_paths.category_id', $categoryIds);
     }
 }
