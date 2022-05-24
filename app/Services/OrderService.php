@@ -47,8 +47,8 @@ class OrderService
                 'name' => $product->name,
                 'variations' => $variations,
                 'quantity' => $orderData['orders'][$key]['quantity'],
-                'total' => $prices[$key]['final_price'],
-                'grand_total' => $prices[$key]['final_price'],
+                'total' => $prices[$key]['final_total_price'],
+                'grand_total' => $prices[$key]['final_total_price'],
             ];
         });
 

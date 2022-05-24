@@ -34,8 +34,8 @@ class CartService
         $prices = $this->productService->getPrices($cart->toArray()['data']);
 
         $cart->getCollection()->transform(function ($item, $key) use ($prices) {
-            $item->price = $prices[$key]['price'];
-            $item->final_price = $prices[$key]['final_price'];
+            $item->total_price = $prices[$key]['total_price'];
+            $item->final_total_price = $prices[$key]['final_total_price'];
 
             return $item;
         });
