@@ -143,6 +143,14 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -205,6 +213,14 @@
                         }
                     },
                     {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
                         "name": "keyword",
                         "in": "query",
                         "description": "Product's keyword (required if filter is not presented)",
@@ -231,7 +247,7 @@
                     {
                         "name": "order_by",
                         "in": "query",
-                        "description": "Order by newest, high price to low price,or low price to high price",
+                        "description": "Order by newest, high price to low price, or low price to high price",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -260,7 +276,7 @@
                     "publish",
                     "product"
                 ],
-                "summary": "Get children of category",
+                "summary": "Get children of the category",
                 "operationId": "getCategoryChildren",
                 "parameters": [
                     {
@@ -1495,6 +1511,14 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -1592,6 +1616,14 @@
                         "in": "query",
                         "description": "Limit number of orders per page",
                         "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
                         "schema": {
                             "type": "integer"
                         }
@@ -2490,6 +2522,14 @@
                         "in": "query",
                         "description": "Limit number of orders per page",
                         "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
                         "schema": {
                             "type": "integer"
                         }

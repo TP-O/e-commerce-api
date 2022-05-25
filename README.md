@@ -34,6 +34,7 @@ This repository is an E-Commerce API used as my `Principle of Database Managemen
     - [x] Searching (currently using Wildcard Characters - Elasticsearch in future)
     - [x] CRUD
 - [x] Order management
+    - [x] CRUD
     - [x] Progress
 - [ ] Payment management
     - [ ] Credit card
@@ -57,6 +58,10 @@ This repository is an E-Commerce API used as my `Principle of Database Managemen
 - [draw.io](https://app.diagrams.net)
 
 # Details
+
+## Use Case Diagram
+
+Updating...
 
 ## Database Design
 
