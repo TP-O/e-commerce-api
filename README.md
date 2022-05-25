@@ -16,7 +16,7 @@ This repository is an E-Commerce API used as my `Principle of Database Managemen
     - [x] Sign-out
     - [x] Email verification
     - [x] Password reset
-- [x] Account management
+- [x] User account management
     - [x] Profile
     - [x] Addresses
     - [x] Bank accounts
@@ -31,8 +31,9 @@ This repository is an E-Commerce API used as my `Principle of Database Managemen
     - [ ] Apply voucher
     - [ ] Discount product
 - [x] Product management
-    - [x] Searching (currently using Wildcard Characters - Elasticsearch in future)
     - [x] CRUD
+    - [x] Searching (currently using Wildcard Characters - Elasticsearch in future)
+    - [x] Review
 - [x] Order management
     - [x] CRUD
     - [x] Progress

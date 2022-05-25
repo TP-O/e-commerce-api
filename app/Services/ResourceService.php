@@ -18,6 +18,7 @@ class ResourceService
         'jpg',
         'jpeg',
         'png',
+        'jfif',
     ];
 
     /**

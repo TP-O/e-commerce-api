@@ -17,7 +17,7 @@ return new class extends Migration
             RETURNS TRIGGER AS
             $$
             DECLARE
-            calculated_avg_price float;
+                calculated_avg_price float;
             BEGIN
                 IF TG_OP = 'DELETE' OR TG_OP = 'INSERT' OR TG_OP = 'UPDATE' AND NEW.price <> OLD.price THEN
                     SELECT AVG(price) INTO calculated_avg_price FROM product_models

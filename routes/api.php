@@ -98,6 +98,12 @@ Route::prefix('v2')->namespace('Api')->group(function () {
                     });
                 });
             });
+
+            Route::namespace('Product')->group(function () {
+                Route::prefix('reviews')->group(function () {
+                    Route::post('/', 'ReviewController@create');
+                });
+            });
         });
 
         // Shop endpoints
@@ -116,6 +122,11 @@ Route::prefix('v2')->namespace('Api')->group(function () {
 
                 Route::prefix('categories')->group(function () {
                     Route::get('/attributes', 'CategoryController@attributes');
+                });
+
+                Route::prefix('reviews')->group(function () {
+                    Route::get('/', 'ReviewController@belongToShop');
+                    Route::post('/{review}/reply', 'ReviewController@reply');
                 });
             });
 
@@ -186,8 +197,12 @@ Route::prefix('v2')->namespace('Api')->group(function () {
 
     // Publish product endpoint
     Route::prefix('products')->namespace('Product')->group(function () {
-        Route::get('/{id}', 'ProductController@get');
         Route::get('/search', 'ProductController@search');
+
+        Route::prefix('{id}')->group(function () {
+            Route::get('/', 'ProductController@get');
+            Route::get('/reviews', 'ReviewController@belongToProduct');
+        });
 
         Route::prefix('categories')->group(function () {
             Route::get('{id}/children', 'CategoryController@children')

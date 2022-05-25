@@ -2,10 +2,7 @@
 
 namespace App\Http\Requests\Product;
 
-use App\Enums\OrderProductBy;
 use App\Http\Requests\CustomFormRequest;
-use App\Models\Product\Category;
-use App\Rules\BatchExistsRule;
 
 class GetProductRequest extends CustomFormRequest
 {

@@ -60,6 +60,7 @@ class ExistBelongToRelationshipRule implements Rule
         if (is_null($this->key)) {
             $foreignKeyValue = $this->model
                 ->where('id', $value)
+                ->first()
                 ?->{$this->foreignKey};
 
             return $foreignKeyValue === $this->expectedValue;
@@ -94,7 +95,7 @@ class ExistBelongToRelationshipRule implements Rule
     public function message()
     {
         return is_null($this->key)
-            ? 'The :attribute field has invalid ' . $this->foreignKey
+            ? 'The :attribute field is invalid'
             : 'The :attribute fields have at least one model containing invalid ' . $this->foreignKey;
     }
 }

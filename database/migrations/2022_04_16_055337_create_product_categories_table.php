@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name', 50);
             $table->integer('number_of_items')->default(0);
             $table->integer('number_of_children')->default(0);
-            $table->text('cover_image')->default('');
+            $table->string('cover_image', 255)->nullable();
 
             $table->foreignId('parent_id')
                 ->nullable()

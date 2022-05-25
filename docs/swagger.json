@@ -194,6 +194,36 @@
                 "security": []
             }
         },
+        "/products/{id}/reviews": {
+            "get": {
+                "tags": [
+                    "publish",
+                    "product"
+                ],
+                "summary": "Get reviews of the product",
+                "operationId": "getProductReview",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Product's id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": []
+            }
+        },
         "/products/search": {
             "get": {
                 "tags": [
@@ -1777,6 +1807,62 @@
                 }
             }
         },
+        "/user/reviews": {
+            "post": {
+                "tags": [
+                    "user",
+                    "product"
+                ],
+                "summary": "Create a product review",
+                "operationId": "createProductReview",
+                "parameters": [
+                    {
+                        "name": "order_id",
+                        "in": "query",
+                        "description": "Order's id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "rating",
+                        "in": "query",
+                        "description": "Rating star",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "enum": [
+                                1,
+                                2,
+                                3,
+                                4,
+                                5
+                            ]
+                        }
+                    },
+                    {
+                        "name": "comment",
+                        "in": "query",
+                        "description": "Comment",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invliad input"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
+            }
+        },
         "/shop": {
             "get": {
                 "tags": [
@@ -2492,6 +2578,79 @@
                             "items": {
                                 "type": "integer"
                             }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invliad input"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
+            }
+        },
+        "/shop/products/reviews": {
+            "get": {
+                "tags": [
+                    "shop",
+                    "product"
+                ],
+                "summary": "Get review of the current shop",
+                "operationId": "getShopReviews",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit number of orders per page",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invliad input"
+                    },
+                    "401": {
+                        "description": "Missing bearer token"
+                    }
+                }
+            }
+        },
+        "/shop/products/reviews/{id}/reply": {
+            "get": {
+                "tags": [
+                    "shop",
+                    "product"
+                ],
+                "summary": "Reply product review",
+                "operationId": "replyReview",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Product's ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "reply",
+                        "in": "query",
+                        "description": "Reply content",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
