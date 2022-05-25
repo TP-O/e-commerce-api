@@ -76,7 +76,7 @@ class ShopSeeder extends Seeder
                 'slug' => 'bagsworldsg',
                 'name' => 'BAGSWORLDSG',
                 'description' => '',
-                'avatar_image' => '',
+                'avatar_image' => null,
                 'cover_image' => 'demo-default-cover_tn',
                 'banners' => json_encode([]),
             ],

@@ -28,7 +28,7 @@ class CreateProductRequest extends CreateOrUpdateProductRequest
                 new ValidProductBrandRule('category_path'),
             ],
             'is_published' => 'required|boolean',
-            'name' => 'required|string|min:10|max:120',
+            'name' => 'required|string|min:10|max:255',
             'description' => 'string|min:50',
             'weight' => 'required|numeric|min:0.1|max:999999',
             'images' => 'required|array|min:1|max:9',
