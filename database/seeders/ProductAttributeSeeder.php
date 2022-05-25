@@ -15,12 +15,6 @@ class ProductAttributeSeeder extends Seeder
     public function run()
     {
         DB::table('product_attributes')->insert([
-            // [
-            //     'product_id' => 1,
-            //     'attribute_id' => 52,
-            //     'value' => '4 cell',
-            // ],
-
             [
                 'product_id' => 1,
                 'attribute_id' => 73,

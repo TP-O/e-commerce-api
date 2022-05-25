@@ -15,18 +15,11 @@ class ProductWholeSalePriceSeeder extends Seeder
     public function run()
     {
         DB::table('product_wholesale_prices')->insert([
-            // [
-            //     'product_id' => 1,
-            //     'min' => 5,
-            //     'max' => 10,
-            //     'price' => 500.00,
-            // ]
-
             [
                 'product_id' => 1,
                 'min' => 5,
                 'max' => 10,
-                'price' => 22.00,
+                'price' => 500.00,
             ],
             [
                 'product_id' => 2,

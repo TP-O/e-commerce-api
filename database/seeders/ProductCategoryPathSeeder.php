@@ -15,15 +15,14 @@ class ProductCategoryPathSeeder extends Seeder
     public function run()
     {
         DB::table('product_category_paths')->insert([
-            // [
-            //     'product_id' => 1,
-            //     'category_id' => 72,
-            // ],
-            // [
-            //     'product_id' => 1,
-            //     'category_id' => 75,
-            // ]
-
+            [
+                'product_id' => 1,
+                'category_id' => 72,
+            ],
+            [
+                'product_id' => 1,
+                'category_id' => 75,
+            ],
             [
                 'product_id' => 1,
                 'category_id' => 134,
@@ -59,7 +58,7 @@ class ProductCategoryPathSeeder extends Seeder
                 'product_id' => 4,
                 'category_id' => 60,
             ],
-        
+
             [
                 'product_id' => 5,
                 'category_id' => 85,
@@ -87,7 +86,7 @@ class ProductCategoryPathSeeder extends Seeder
             ],
 
             //
-            
+
             [
                 'product_id' => 7,
                 'category_id' => 134,

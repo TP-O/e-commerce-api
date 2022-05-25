@@ -16,36 +16,35 @@ class ProductSeeder extends Seeder
     public function run()
     {
         DB::table('products')->insert([
-            // [
-            //     'shop_id' => 1,
-            //     'brand_id' => 1,
-            //     'status_id' => ProductStatus::Published,
-            //     'name' => 'Samsung Galaxy A53 5G | A52s 5G (8GB+128GB/256GB) with 1 Year Warranty by Samsung',
-            //     'description' => 'Samsung A52s 5G Key Specs:\nDisplay : 6.5 inches (Super AMOLED,120Hz)\nCPU : Octa-core (4x2.4 GHz Kryo 670 & 4x1.9 GHz Kryo 670)\nMain Camera : 64MP + 12MP + 5MP + 5MP\nSelfie Camera : 32MP\nRAM : 8GB\nStorage : 128GB/256GB\nBattery Capacity : 4500 mAh (Fast Charging 25W)\n\nFor more details, please check at :\nhttps://www.samsung.com/sg/smartphones/galaxy-a/galaxy-a52s-5g-awesomemint-256gb-sm-a528blgixsp/\n\nSamsung A53 5G Key Specs :\nDisplay : 6.5 inches (Super AMOLED,120Hz)\nCPU : Octa-core (2x2.4 GHz Cortex-A78 & 6x2.0 GHz Cortex-A55)\nMain Camera : 64MP + 12MP + 5MP + 5MP\nSelfie Camera : 32MP\nRAM : 8GB\nStorage : 128GB/256GB\nBattery Capacity : 5000 mAh (Fast Charging 25W)\n\nFor more details,please check at\nhttps://www.samsung.com/sg/smartphones/galaxy-a/galaxy-a53-5g-awesome-blue-128gb-sm-a536elbgxsp/\n\n-All products are 100% authentic.\n-Local Singapore set.\n-All products are sourced from authorised dealers,official stores and telcos (M1,Singtel,Starhub & etc).\n-Some products are unsealed to check for manufacturer defect.\n-All products warranty based on manufactured date.\n-Some products might less than 1 year warranty due to activation policy from dealers or telcos.\n-If you wish to purchase Samsung Care+,please request by leave a message when placing order.\n-Telcos receipt or official dealers receipt will be provided if available.\n-Store soft copy receipt can be issue upon request.\n-For products that comes with manufacturer warranty,buyer must contact manufacturer or visit manufacturer’s service center for repair/exchange or any technical support.\n-All products sold are not exchangeable and not refundable.',
-            //     'weight' => 500,
-            //     'images' => json_encode([
-            //         '93bc5fa42886e635fd9f103d03c9c31d',
-            //         '6085df7be931e1ef9d79ce125cacdb8b',
-            //     ]),
-            //     'videos' => json_encode([]),
-            //     'variation' => json_encode([
-            //         [
-            //             'name' => 'Colour',
-            //             'options' => [
-            //                 'Awesome Black',
-            //                 'Awesome White',
-            //             ]
-            //         ],
-            //         [
-            //             'name' => 'Model',
-            //             'options' => [
-            //                 'A52s 8GB+128GB',
-            //                 'A53 8GB+128GB',
-            //             ],
-            //         ],
-            //     ]),
-            // ],
-
+            [
+                'shop_id' => 1,
+                'brand_id' => 1,
+                'status_id' => ProductStatus::Published,
+                'name' => 'Samsung Galaxy A53 5G | A52s 5G (8GB+128GB/256GB) with 1 Year Warranty by Samsung',
+                'description' => 'Samsung A52s 5G Key Specs:\nDisplay : 6.5 inches (Super AMOLED,120Hz)\nCPU : Octa-core (4x2.4 GHz Kryo 670 & 4x1.9 GHz Kryo 670)\nMain Camera : 64MP + 12MP + 5MP + 5MP\nSelfie Camera : 32MP\nRAM : 8GB\nStorage : 128GB/256GB\nBattery Capacity : 4500 mAh (Fast Charging 25W)\n\nFor more details, please check at :\nhttps://www.samsung.com/sg/smartphones/galaxy-a/galaxy-a52s-5g-awesomemint-256gb-sm-a528blgixsp/\n\nSamsung A53 5G Key Specs :\nDisplay : 6.5 inches (Super AMOLED,120Hz)\nCPU : Octa-core (2x2.4 GHz Cortex-A78 & 6x2.0 GHz Cortex-A55)\nMain Camera : 64MP + 12MP + 5MP + 5MP\nSelfie Camera : 32MP\nRAM : 8GB\nStorage : 128GB/256GB\nBattery Capacity : 5000 mAh (Fast Charging 25W)\n\nFor more details,please check at\nhttps://www.samsung.com/sg/smartphones/galaxy-a/galaxy-a53-5g-awesome-blue-128gb-sm-a536elbgxsp/\n\n-All products are 100% authentic.\n-Local Singapore set.\n-All products are sourced from authorised dealers,official stores and telcos (M1,Singtel,Starhub & etc).\n-Some products are unsealed to check for manufacturer defect.\n-All products warranty based on manufactured date.\n-Some products might less than 1 year warranty due to activation policy from dealers or telcos.\n-If you wish to purchase Samsung Care+,please request by leave a message when placing order.\n-Telcos receipt or official dealers receipt will be provided if available.\n-Store soft copy receipt can be issue upon request.\n-For products that comes with manufacturer warranty,buyer must contact manufacturer or visit manufacturer’s service center for repair/exchange or any technical support.\n-All products sold are not exchangeable and not refundable.',
+                'weight' => 500,
+                'images' => json_encode([
+                    '93bc5fa42886e635fd9f103d03c9c31d',
+                    '6085df7be931e1ef9d79ce125cacdb8b',
+                ]),
+                'videos' => json_encode([]),
+                'variations' => json_encode([
+                    [
+                        'name' => 'Colour',
+                        'options' => [
+                            'Awesome Black',
+                            'Awesome White',
+                        ]
+                    ],
+                    [
+                        'name' => 'Model',
+                        'options' => [
+                            'A52s 8GB+128GB',
+                            'A53 8GB+128GB',
+                        ],
+                    ],
+                ]),
+            ],
             [
                 'shop_id' => 3,
                 'brand_id' => 1,
@@ -58,7 +57,7 @@ class ProductSeeder extends Seeder
                     'ecf68a0e351256c3589211483005f9ac',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Theme',
                         'options' => [
@@ -80,7 +79,7 @@ class ProductSeeder extends Seeder
                     '4cc279abec8e74f480bc3968989be311',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Switch Type',
                         'options' => [
@@ -102,7 +101,7 @@ class ProductSeeder extends Seeder
                     '5d428c67197abda913f95b5e29da189f',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Colour',
                         'options' => [
@@ -125,7 +124,7 @@ class ProductSeeder extends Seeder
                     'eaa6b336a5cb84383b6f991f32b89256',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Size',
                         'options' => [
@@ -148,7 +147,7 @@ class ProductSeeder extends Seeder
                     '6c5485a694fff40b1e55265f68f6d9ba',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Colour',
                         'options' => [
@@ -158,7 +157,7 @@ class ProductSeeder extends Seeder
                     ],
                 ]),
             ],
-        
+
             [
                 'shop_id' => 5,
                 'brand_id' => 1,
@@ -171,7 +170,7 @@ class ProductSeeder extends Seeder
                     '347cb1e930a2ed5e08edac1aa0e70e07',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Colour',
                         'options' => [
@@ -194,7 +193,7 @@ class ProductSeeder extends Seeder
                     'b8183953f66801b0b6fd0ffdddf07872',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Colour',
                         'options' => [
@@ -224,7 +223,7 @@ class ProductSeeder extends Seeder
                     '146c64c60f2bbe68a4bfa93a1f590545',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Colour',
                         'options' => [
@@ -254,7 +253,7 @@ class ProductSeeder extends Seeder
                     'f8271c808c2d51c8183b0854526c179f',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Model',
                         'options' => [
@@ -277,7 +276,7 @@ class ProductSeeder extends Seeder
                     '59fb7142427406f53e628cb35d006082',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Model',
                         'options' => [
@@ -300,7 +299,7 @@ class ProductSeeder extends Seeder
                     '1a3abca44b320378246750ff2412efbb',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([]),
+                'variations' => json_encode([]),
             ],
 
             [
@@ -315,7 +314,7 @@ class ProductSeeder extends Seeder
                     'c8602c9bc1c254b54767d4e5cea10629',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Colour',
                         'options' => [
@@ -338,7 +337,7 @@ class ProductSeeder extends Seeder
                     'a568c54efecb2e85e61987285246b8b6',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Colour',
                         'options' => [
@@ -361,7 +360,7 @@ class ProductSeeder extends Seeder
                     'ae04e3897975468d76d8eba733786add',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Specifications',
                         'options' => [
@@ -384,7 +383,7 @@ class ProductSeeder extends Seeder
                     '85e30e4328cb04fc5d985be402555227',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Type',
                         'options' => [
@@ -407,7 +406,7 @@ class ProductSeeder extends Seeder
                     '82c407de214ff8e7e321b6f9c621470d',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Type',
                         'options' => [
@@ -430,7 +429,7 @@ class ProductSeeder extends Seeder
                     'f064e526fa596512fe7707021b4fc8fd',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'PROMAT&MYSLE',
                         'options' => [
@@ -453,7 +452,7 @@ class ProductSeeder extends Seeder
                     '713b8696e36d70a5e243b4cbb9830db6',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Hotel Series',
                         'options' => [
@@ -476,7 +475,7 @@ class ProductSeeder extends Seeder
                     '77e5aff4eff9e51ec08c69f192678e14',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'W18 Colour',
                         'options' => [
@@ -505,7 +504,7 @@ class ProductSeeder extends Seeder
                     '8e4b897d0641d4b46de628fc37e82315',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'W18 Colour',
                         'options' => [
@@ -534,7 +533,7 @@ class ProductSeeder extends Seeder
                     '8c97455b2865f616a75b66d819d4c04c',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Colour',
                         'options' => [
@@ -556,7 +555,7 @@ class ProductSeeder extends Seeder
                     '5ddd4032f8277d4dbce1ac20b904f6b7',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Size',
                         'options' => [
@@ -571,14 +570,14 @@ class ProductSeeder extends Seeder
                 'brand_id' => 1,
                 'status_id' => ProductStatus::Published,
                 'name' => 'KEF Kube 12B 12" Subwoofer',
-                'description' => '• The Kube 12b effortlessly unleashes explosive power. iBX technology dynamically extends bass depth and KEF's unique ability to design, build and integrate the driver in-house takes optimisation to a whole new level. Delivering immersive music and home theatre sound that takes you to the heart of the performance.\n• Go deep or go home. KEF's design and engineering team worked in chorus to develop iBX. This Intelligent Bass Extension algorithm creates an extended depth that unlocks the full potential of the custom driver. Giving you unparalleled precision and ultimate synchronicity between amplifier, driver and sealed cabinet.',
+                'description' => '• The Kube 12b effortlessly unleashes explosive power. iBX technology dynamically extends bass depth and KEF\'s unique ability to design, build and integrate the driver in-house takes optimisation to a whole new level. Delivering immersive music and home theatre sound that takes you to the heart of the performance.\n• Go deep or go home. KEF\'s design and engineering team worked in chorus to develop iBX. This Intelligent Bass Extension algorithm creates an extended depth that unlocks the full potential of the custom driver. Giving you unparalleled precision and ultimate synchronicity between amplifier, driver and sealed cabinet.',
                 'weight' => 7000,
                 'images' => json_encode([
                     'b50e6f66a2154fd513f25a1464f026f0',
                     '67d3e33d1327f98273762d8aad392bbf',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([]),
+                'variations' => json_encode([]),
             ],
 
             [
@@ -593,7 +592,7 @@ class ProductSeeder extends Seeder
                     '57e75a92ec7668c4fee7fc1314bbf69e',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Color',
                         'options' => [
@@ -614,7 +613,7 @@ class ProductSeeder extends Seeder
                     'f39c78e56c9493ff2de1aa0445bd85b3',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Colour',
                         'options' => [
@@ -636,7 +635,7 @@ class ProductSeeder extends Seeder
                     'bb01a64c7cdea0c457206a0eb17c7b0b',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Colour',
                         'options' => [
@@ -658,7 +657,7 @@ class ProductSeeder extends Seeder
                     '5109ab4cafc532591504fed2a8b83759',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Colour',
                         'options' => [
@@ -680,7 +679,7 @@ class ProductSeeder extends Seeder
                     '90f57004b42869e2cf0b78999855bd45',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Type',
                         'options' => [
@@ -702,7 +701,7 @@ class ProductSeeder extends Seeder
                     '338ed342e58ee2d93b657794ca66f8fc',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Type',
                         'options' => [
@@ -724,7 +723,7 @@ class ProductSeeder extends Seeder
                     '6a50e63534c7b80a4f2922368be686c7',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Calista 10"Inc',
                         'options' => [
@@ -746,7 +745,7 @@ class ProductSeeder extends Seeder
                     'f5c2a0f343333c3826e6b799afe97a82',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Faucet Colour',
                         'options' => [
@@ -768,7 +767,7 @@ class ProductSeeder extends Seeder
                     'f5c2a0f343333c3826e6b799afe97a82 (1)',
                 ]),
                 'videos' => json_encode([]),
-                'variation' => json_encode([
+                'variations' => json_encode([
                     [
                         'name' => 'Faucet Colour',
                         'options' => [
