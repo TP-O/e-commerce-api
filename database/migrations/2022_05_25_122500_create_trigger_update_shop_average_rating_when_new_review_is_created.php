@@ -17,22 +17,21 @@ return new class extends Migration
             RETURNS TRIGGER AS
             $$
             DECLARE
-                shop_id int;
-                calculated_avg_rating float;
+                calculated_shop_avg_rating float;
+                calculated_product_avg_rating float;
             BEGIN
                 IF TG_OP = 'DELETE' OR TG_OP = 'INSERT' OR TG_OP = 'UPDATE' AND NEW.rating <> OLD.rating THEN
-                    SELECT AVG(rating) INTO calculated_avg_rating FROM product_reviews
+                    SELECT AVG(rating) INTO calculated_shop_avg_rating FROM product_reviews
                     WHERE shop_id = NEW.shop_id;
+                    SELECT AVG(rating) INTO calculated_product_avg_rating FROM product_reviews
+                    WHERE product_id = NEW.product_id;
 
                     UPDATE shop_statistics
-                        SET avg_raiting = calculated_avg_rating
+                        SET avg_rating = calculated_shop_avg_rating
                     WHERE shop_id = NEW.shop_id;
-                END IF;
-
-                IF TG_OP = 'INSERT' THEN
-                    SELECT products.shop_id INTO shop_id FROM products WHERE id = NEW.product_id;
-
-                    NEW.shop_id := shop_id;
+                    UPDATE products
+                        SET avg_rating = calculated_product_avg_rating
+                    WHERE id = NEW.product_id;
                 END IF;
 
                 RETURN NEW;
@@ -40,7 +39,7 @@ return new class extends Migration
             $$ LANGUAGE plpgsql;
 
             CREATE TRIGGER update_shop_average_rating_when_new_review_is_created
-            BEFORE INSERT OR UPDATE OR DELETE ON product_reviews
+            AFTER INSERT OR UPDATE OR DELETE ON product_reviews
             FOR EACH ROW
             EXECUTE PROCEDURE update_shop_average_rating_when_new_review_is_created();
         ");

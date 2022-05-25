@@ -14,11 +14,11 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
+        'shop_id',
         'product_id',
         'product_model_id',
         'received_address_id',
         'pickup_address_id',
-        'shop_id',
         'name',
         'quantity',
         'total',

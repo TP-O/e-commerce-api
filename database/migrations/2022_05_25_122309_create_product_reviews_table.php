@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('rating', false, true)->default(1);
             $table->text('comment')->default('');
             $table->text('reply')->default('');
-            $table->text('variation')->default('[]');
+            $table->text('variations')->default('[]');
 
             $table->foreignId('user_id')
                 ->nullable()
@@ -33,6 +33,11 @@ return new class extends Migration
                 ->constrained('products')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->foreignId('order_id')
+                ->nullable()
+                ->constrained('orders')
+                ->onUpdate('set null')
+                ->nullOnDelete();
 
             $table->timestamp('create_at')->useCurrent();
         });

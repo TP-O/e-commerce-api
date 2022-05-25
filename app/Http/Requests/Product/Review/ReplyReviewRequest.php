@@ -13,7 +13,8 @@ class ReplyReviewRequest extends CustomFormRequest
      */
     public function authorize()
     {
-        return $this->route('review')->shop_id === $this->user()->id;
+        return $this->route('review')->shop_id === $this->user()->id &&
+            !empty($this->route('review')->review);
     }
 
     /**
