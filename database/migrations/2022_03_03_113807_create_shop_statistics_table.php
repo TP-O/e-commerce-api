@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('shop_statistics', function (Blueprint $table) {
             $table->integer('product_count', false, true)->default(0);
             $table->integer('all_product_count', false, true)->default(0);
-            $table->float('average_raiting', 8, 2, true)->default(0);
+            $table->float('avg_rating', 8, 2, true)->default(0);
             $table->float('nonfulfilment_rate', 8, 2, true)->default(0);
 
             $table->foreignId('shop_id')

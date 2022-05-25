@@ -4,6 +4,7 @@ namespace App\Models\Order;
 
 use App\Models\Address;
 use App\Models\Product\Product;
+use App\Models\Product\Review;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -49,5 +50,10 @@ class Order extends Model
     public function progresses()
     {
         return $this->hasMany(Progress::class);
+    }
+
+    public function review()
+    {
+        return $this->hasOne(Review::class);
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Product;
+namespace App\Http\Requests\Product\Review;
 
 use App\Http\Requests\CustomFormRequest;
 
-class GetProductRequest extends CustomFormRequest
+class ReplyReviewRequest extends CustomFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class GetProductRequest extends CustomFormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->route('review')->shop_id === $this->user()->id;
     }
 
     /**
@@ -24,7 +24,7 @@ class GetProductRequest extends CustomFormRequest
     public function rules()
     {
         return [
-            'limit' => 'required|integer|min:1|max:20',
+            'reply' => 'required|string|min:25',
         ];
     }
 }

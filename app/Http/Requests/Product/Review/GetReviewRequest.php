@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Product;
+namespace App\Http\Requests\Product\Review;
 
 use App\Http\Requests\CustomFormRequest;
 
-class GetProductRequest extends CustomFormRequest
+class GetReviewRequest extends CustomFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

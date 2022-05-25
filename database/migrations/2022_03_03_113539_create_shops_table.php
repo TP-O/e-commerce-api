@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('slug', 40)->unique();
             $table->string('name', 30);
             $table->text('description')->default('');
-            $table->text('avatar_image')->default('');
-            $table->text('cover_image')->default('');
+            $table->string('avatar_image', 255)->nullable();
+            $table->string('cover_image', 255)->nullable();
             $table->text('banners')->default('["images":[],"videos":[]]');
             $table->timestamp('created_at')->useCurrent();
 
