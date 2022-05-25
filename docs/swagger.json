@@ -211,6 +211,15 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit number of cart items per page",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -2627,7 +2636,7 @@
             }
         },
         "/shop/products/reviews/{id}/reply": {
-            "get": {
+            "post": {
                 "tags": [
                     "shop",
                     "product"
@@ -2638,7 +2647,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Product's ID",
+                        "description": "Review's ID",
                         "required": true,
                         "schema": {
                             "type": "integer"
