@@ -215,7 +215,7 @@
                     {
                         "name": "limit",
                         "in": "query",
-                        "description": "Limit number of cart items per page",
+                        "description": "Limit number of reviews per page",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -245,7 +245,7 @@
                     {
                         "name": "limit",
                         "in": "query",
-                        "description": "Limit number of cart items per page",
+                        "description": "Limit number of products per page",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -295,6 +295,44 @@
                                 2,
                                 3
                             ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invliad input"
+                    }
+                },
+                "security": []
+            }
+        },
+        "/products/feature": {
+            "get": {
+                "tags": [
+                    "publish",
+                    "product"
+                ],
+                "summary": "Get feature products",
+                "operationId": "getFeatureProduct",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit number of products per page",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "schema": {
+                            "type": "integer"
                         }
                     }
                 ],
@@ -2073,7 +2111,7 @@
                     {
                         "name": "limit",
                         "in": "query",
-                        "description": "Limit number of cart items per page",
+                        "description": "Limit number of products per page",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -2615,7 +2653,7 @@
                     {
                         "name": "limit",
                         "in": "query",
-                        "description": "Limit number of orders per page",
+                        "description": "Limit number of reviews per page",
                         "required": true,
                         "schema": {
                             "type": "integer"

@@ -25,6 +25,7 @@ class ProductController extends Controller
 
         $this->middleware('auth:sanctum')->except([
             'get',
+            'feature',
             'search',
             'publishedBelongToShop',
         ]);
@@ -40,8 +41,7 @@ class ProductController extends Controller
     {
         $product = Product::where([
             ['id', $id],
-            ['status_id', '<>', ProductStatus::Delisted->value],
-            ['status_id', '<>', ProductStatus::Deleted->value],
+            ['status_id', ProductStatus::Published->value],
         ])
             ->with([
                 'attributes',
@@ -53,6 +53,23 @@ class ProductController extends Controller
         return response()->json([
             'status' => true,
             'data' => $product,
+        ]);
+    }
+
+    /**
+     * Get featured products.
+     *
+     * @param \App\Http\Requests\Product\GetProductRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function feature(GetProductRequest $request)
+    {
+        $featuredProducts = Product::with('models')
+            ->paginate($request->input('limit') ?? Pagination::Default);
+
+        return response()->json([
+            'status' => true,
+            'data' => $featuredProducts,
         ]);
     }
 
