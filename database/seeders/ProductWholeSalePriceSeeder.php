@@ -19,7 +19,7 @@ class ProductWholeSalePriceSeeder extends Seeder
                 'product_id' => 1,
                 'min' => 5,
                 'max' => 10,
-                'price' => 500.00,
+                'price' => 23.00,
             ],
             [
                 'product_id' => 2,

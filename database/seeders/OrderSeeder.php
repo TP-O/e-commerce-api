@@ -17,7 +17,7 @@ class OrderSeeder extends Seeder
         DB::table('orders')->insert([
             [
                 'user_id' => 2,
-                'product_id' => 5,
+                'product_id' => 4,
                 'received_address_id' => 3,
                 'pickup_address_id' => 5,
                 'shop_id' => 4,
@@ -31,7 +31,7 @@ class OrderSeeder extends Seeder
             ],
             [
                 'user_id' => 2,
-                'product_id' => 14,
+                'product_id' => 13,
                 'received_address_id' => 3,
                 'pickup_address_id' => 10,
                 'shop_id' => 9,
@@ -45,7 +45,7 @@ class OrderSeeder extends Seeder
             ],
             [
                 'user_id' => 2,
-                'product_id' => 20,
+                'product_id' => 19,
                 'received_address_id' => 3,
                 'pickup_address_id' => 13,
                 'shop_id' => 12,

@@ -17,14 +17,6 @@ class ProductCategoryPathSeeder extends Seeder
         DB::table('product_category_paths')->insert([
             [
                 'product_id' => 1,
-                'category_id' => 72,
-            ],
-            [
-                'product_id' => 1,
-                'category_id' => 75,
-            ],
-            [
-                'product_id' => 1,
                 'category_id' => 134,
             ],
             [
@@ -396,7 +388,14 @@ class ProductCategoryPathSeeder extends Seeder
                 'product_id' => 32,
                 'category_id' => 66,
             ],
-
+            [
+                'product_id' => 33,
+                'category_id' => 72,
+            ],
+            [
+                'product_id' => 33,
+                'category_id' => 75,
+            ],
         ]);
     }
 }

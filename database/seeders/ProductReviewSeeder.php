@@ -17,7 +17,7 @@ class ProductReviewSeeder extends Seeder
         DB::table('product_reviews')->insert([
             [
                 'user_id' => 2,
-                'product_id' => 5,
+                'product_id' => 4,
                 'order_id' => 1,
                 'shop_id' => 4,
                 'rating' => 4,
