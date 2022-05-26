@@ -47,7 +47,7 @@ class CartController extends Controller
      */
     public function add(AddToCartRequest $request)
     {
-        $this->cartService->addItem(
+        $newPirce = $this->cartService->addItem(
             $request->user()->id,
             $request->validated(),
         );
@@ -55,6 +55,7 @@ class CartController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Cart has been updated!',
+            'data' => $newPirce,
         ]);
     }
 

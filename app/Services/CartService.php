@@ -73,8 +73,8 @@ class CartService
                 ]);
         }
 
-        $price = $this->productService->getPrices([$cartItemData]);
+        $prices = $this->productService->getPrices([$cartItemData]);
 
-        return $price;
+        return $prices[0];
     }
 }
