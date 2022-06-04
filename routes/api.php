@@ -206,8 +206,7 @@ Route::prefix('v2')->namespace('Api')->group(function () {
         });
 
         Route::prefix('categories')->group(function () {
-            Route::get('{id}/children', 'CategoryController@children')
-                ->where(['id', '[0-9]+']);
+            Route::get('/tree', 'CategoryController@tree');
         });
     });
 });

@@ -19,23 +19,24 @@ class CategoryController extends Controller
         $this->productCategoryService = $productCategoryService;
 
         $this->middleware('auth:sanctum')->except([
-            'get',
-            'children',
+            'tree',
         ]);
     }
 
     /**
-     * Get children of the category.
+     * Get category tree.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function children(int $id)
+    public function tree()
     {
-        $children = $this->productCategoryService->getChildren($id);
+        $categoryTree = Category::whereNull('parent_id')
+            ->with('children')
+            ->get();
 
         return response()->json([
             'status' => true,
-            'data' => $children,
+            'data' => $categoryTree,
         ]);
     }
 

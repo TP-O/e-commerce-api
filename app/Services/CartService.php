@@ -18,10 +18,9 @@ class CartService
      * Get all items in cart of the user.
      *
      * @param int $userId
-     * @param int $cartQuery
-     * @return \Illuminate\Pagination\LengthAwarePaginator
+     * @return \Illuminate\Support\Collection
      */
-    public function getItems(int $userId, array $cartQuery)
+    public function getItems(int $userId)
     {
         $cart = CartItem::where('user_id', $userId)
             ->with([
@@ -29,11 +28,11 @@ class CartService
                 'product',
                 'productModel',
             ])
-            ->paginate($cartQuery['limit'] ?? Pagination::Default);
+            ->get();
 
-        $prices = $this->productService->getPrices($cart->toArray()['data']);
+        $prices = $this->productService->getPrices($cart->toArray());
 
-        $cart->getCollection()->transform(function ($item, $key) use ($prices) {
+        $cart->transform(function ($item, $key) use ($prices) {
             $item->total_price = $prices[$key]['total_price'];
             $item->final_total_price = $prices[$key]['final_total_price'];
 

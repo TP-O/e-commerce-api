@@ -14,25 +14,6 @@ class ProductCategoryService
     }
 
     /**
-     * Get children of the category.
-     *
-     * @param int $id
-     * @return array
-     */
-    public function getChildren($id)
-    {
-        $category = $id == 0
-            ? $id = null
-            : Category::findOrFail($id);
-        $children = Category::where('parent_id', $id)->get();
-
-        return [
-            'parent' => $category,
-            'children' => $children,
-        ];
-    }
-
-    /**
      * Get all attributes of the categories.
      *
      * @param array $ids

@@ -23,14 +23,12 @@ class CartController extends Controller
     /**
      * Get all items in cart of the current users.
      *
-     * @param \App\Http\Requests\Order\GetCartRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function get(GetCartRequest $request)
+    public function get()
     {
         $cart = $this->cartService->getItems(
-            $request->user()->id,
-            $request->validated(),
+            request()->user()->id,
         );
 
         return response()->json([

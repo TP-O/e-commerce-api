@@ -2,6 +2,7 @@
 
 namespace App\Models\Product;
 
+use App\Models\Shop\Shop;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -66,5 +67,11 @@ class Product extends Model
             'product_attributes.value as value',
             'product_attributes.unit as unit',
         );
+    }
+
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class)
+            ->with('statistic');
     }
 }

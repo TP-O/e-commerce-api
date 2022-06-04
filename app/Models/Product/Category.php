@@ -33,4 +33,10 @@ class Category extends Model
             )
             ->distinct('product_category_attributes.id');
     }
+
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id')
+            ->with('children');
+    }
 }

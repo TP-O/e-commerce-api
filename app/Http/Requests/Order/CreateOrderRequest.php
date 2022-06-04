@@ -32,7 +32,7 @@ class CreateOrderRequest extends CustomFormRequest
                 'array',
                 new ValidProductQuantityRule('product_model_id', 'quantity'),
             ],
-            'orders.*.product_model_id' => 'required|integer|min:1',
+            'orders.*.product_model_id' => 'required|integer|min:1|distinct:strict',
             'orders.*.quantity' => 'required|integer|min:1',
             'address_id' => [
                 'required',

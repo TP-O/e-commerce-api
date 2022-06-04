@@ -47,6 +47,7 @@ class ProductController extends Controller
                 'attributes',
                 'models',
                 'wholesalePrices',
+                'shop',
             ])
             ->firstOrFail();
 
