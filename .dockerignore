@@ -3,6 +3,7 @@
 /.git
 /.infrastructure
 /.vscode
+/.client
 /vendor
 /docs
 !/.docker/api/entrypoint.sh
