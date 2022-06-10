@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\OrderStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
@@ -13,27 +12,23 @@ return new class extends Migration
      */
     public function up()
     {
-        $delivered = OrderStatus::Delivered->value;
-
         DB::unprepared("
-            CREATE OR REPLACE FUNCTION trgieer_update_sold_product_when_order_is_completed()
+            CREATE OR REPLACE FUNCTION trgieer_update_sold_product_when_order_is_created()
             RETURNS TRIGGER AS
             $$
             BEGIN
-                IF NEW.status_id = $delivered THEN
-                    UPDATE products
-                        SET sold = sold + NEW.quantity
-                    WHERE id = NEW.product_id;
-                END IF;
+                UPDATE products
+                    SET sold = sold + NEW.quantity
+                WHERE id = NEW.product_id;
 
                 RETURN NEW;
             END;
             $$ LANGUAGE plpgsql;
 
-            CREATE TRIGGER trgieer_update_sold_product_when_order_is_completed
-            AFTER UPDATE ON orders
+            CREATE TRIGGER trgieer_update_sold_product_when_order_is_created
+            AFTER INSERT ON orders
             FOR EACH ROW
-            EXECUTE PROCEDURE trgieer_update_sold_product_when_order_is_completed();
+            EXECUTE PROCEDURE trgieer_update_sold_product_when_order_is_created();
         ");
     }
 
@@ -45,8 +40,8 @@ return new class extends Migration
     public function down()
     {
         DB::unprepared('
-            DROP TRIGGER IF EXISTS trgieer_update_sold_product_when_order_is_completed ON orders;
-            DROP FUNCTION IF EXISTS trgieer_update_sold_product_when_order_is_completed;
+            DROP TRIGGER IF EXISTS trgieer_update_sold_product_when_order_is_created ON orders;
+            DROP FUNCTION IF EXISTS trgieer_update_sold_product_when_order_is_created;
         ');
     }
 };

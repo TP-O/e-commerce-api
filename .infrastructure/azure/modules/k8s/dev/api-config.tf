@@ -20,7 +20,7 @@ resource "kubernetes_config_map" "api_config" {
 
     FE_URL = "https://e-shopee.vercel.app"
 
-    CORS_ORIGIN = "http://localhost:3333,https://www.shopest.tk,https://e-shopee.vercel.app,https://tpo-project.github.io"
+    CORS_ORIGIN = "*"
 
     DB_CONNECTION = "pgsql"
 
