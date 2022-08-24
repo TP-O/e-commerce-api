@@ -13,7 +13,7 @@ resource "kubernetes_ingress_v1" "ingress" {
       "nginx.org/location-snippets"                = <<EOF
             set $check 0;
 
-            if ($http_origin ~ ^(http://localhost:3333|https://www.shopest.tk|https://e-shopee.vercel.app|https://tpo-project.github.io)$) {
+            if ($http_origin ~ ^(http://localhost:3333|https://www.shopest.tk|https://e-shopee.vercel.app|https://tp-o.github.io)$) {
                 set $check 1;
             }
 

@@ -2,11 +2,11 @@
     "openapi": "3.0.3",
     "info": {
         "title": "E-Commerce API",
-        "description": "As the title, this is API documentation of my simple E-Commerce API. We have deployed it on the internet with host `tp-o.tk` (You can choose it in the selection below). Azure for Students account is used to hire the AKS, so the server may be down whenever free credits run out. If that happens, clone this [repo](https://github.com/tpo-project/e-commerce-api/tree/2.x.x) and run it on local environment before accessing API endpoints.",
+        "description": "As the title, this is API documentation of my simple E-Commerce API. We have deployed it on the internet with host `tp-o.tk` (You can choose it in the selection below). Azure for Students account is used to hire the AKS, so the server may be down whenever free credits run out. If that happens, clone this [repo](https://github.com/tp-o/e-commerce-api/tree/2.x.x) and run it on local environment before accessing API endpoints.",
         "version": "2.x.x",
         "license": {
             "name": "MIT",
-            "url": "https://github.com/tpo-project/e-commerce-api/blob/2.x.x/LICENSE"
+            "url": "https://github.com/tp-o/e-commerce-api/blob/2.x.x/LICENSE"
         }
     },
     "servers": [

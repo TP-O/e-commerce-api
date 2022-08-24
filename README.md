@@ -72,14 +72,14 @@ I just referred to Shopee's workflows and assumed that the tables below are used
 
 ## API Documentaion
 
-Read [here](https://tpo-project.github.io/e-commerce-api).
+Read [here](https://tp-o.github.io/e-commerce-api).
 
 # Setup
 
 ## Clone repo
 
 ```bash
-$ git clone git@github.com:tpo-project/e-commerce-api.git
+$ git clone git@github.com:tp-o/e-commerce-api.git
 
 $ cd e-commerce-api
 ```
@@ -123,7 +123,7 @@ $ minikube start
 $ cd .infrastructure/local
 ```
 
-[Next steps](https://github.com/tpo-project/e-commerce-api/tree/2.x.x/.infrastructure/local)
+[Next steps](https://github.com/tp-o/e-commerce-api/tree/2.x.x/.infrastructure/local)
 
 ### Run with AKS
 
@@ -133,7 +133,7 @@ $ cd .infrastructure/local
 $ cd .infrastructure/azure
 ```
 
-[Next steps](https://github.com/tpo-project/e-commerce-api/tree/2.x.x/.infrastructure/azure)
+[Next steps](https://github.com/tp-o/e-commerce-api/tree/2.x.x/.infrastructure/azure)
 
 # Contributors
 

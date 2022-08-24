@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
     api:
-        image: ghcr.io/tpo-project/e-commerce-api:2.x.x-latest
+        image: ghcr.io/tp-o/e-commerce-api:2.x.x-latest
         ports:
             - 8080:80
             - 443:443

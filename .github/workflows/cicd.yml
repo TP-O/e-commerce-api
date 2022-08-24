@@ -65,6 +65,10 @@ jobs:
           username: ${{ secrets.GHCR_USERNAME }}
           password: ${{ secrets.GHCR_PERSONAL_ACCESS_TOKEN }}
 
+      - name: Set lower case image name
+        run: |
+          echo "IMAGE=${IMAGE,,}" >>${GITHUB_ENV}
+
       - name: Create tags
         id: tags
         run: |
@@ -95,6 +99,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set lower case image name
+        run: |
+          echo "IMAGE=${IMAGE,,}" >>${GITHUB_ENV}
+
       - name: Deploy
         uses: actions-hub/kubectl@master
         env:

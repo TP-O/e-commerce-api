@@ -21,7 +21,7 @@ spec:
         fsGroup: 1000
       initContainers:
         - name: prepare-storage
-          image: ghcr.io/tpo-project/e-commerce-api:2.x.x-latest
+          image: ghcr.io/tp-o/e-commerce-api:2.x.x-latest
           command:
             - "/bin/sh"
             - "-c"
@@ -34,7 +34,7 @@ spec:
               mountPath: /storage
       containers:
         - name: api
-          image: ghcr.io/tpo-project/e-commerce-api:2.x.x-latest
+          image: ghcr.io/tp-o/e-commerce-api:2.x.x-latest
           ports:
             - containerPort: 80
           envFrom:
